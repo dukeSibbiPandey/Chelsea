@@ -1,0 +1,24 @@
+.header_wrapper {
+    background: white;
+    padding: 25px 0;
+    border-bottom: 1px #dbdcdf solid;
+}
+.logo{
+    cursor: pointer;
+}
+.__h_i {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.__menuitem {
+    display: flex;
+    align-items: center;
+    li {
+        margin-left: 30px;
+        span {
+            display: inline-block;
+            cursor: pointer;
+        }
+    }
+}

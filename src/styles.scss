@@ -1,1 +1,89 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    outline: none !important;
+    font-family: "Roboto";
+}
+body {
+    background: #f9f9f9;
+}
+html,
+body {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    min-height: 100vh;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.main_contaner {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .__page_content {
+        height: 300px;
+        overflow: auto;
+        padding: 10px 0;
+        flex-grow: 2;
+        /* width */
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    }
+}
+
+ul,
+ul li,
+ol,
+ol li {
+    list-style: none;
+    margin: 0px;
+}
+a {
+    text-decoration: none;
+}
+.table > :not(:first-child) {
+    border: 0px;
+}
+.__chelsea_tbl {
+    width: 100%;
+    border-collapse: collapse;
+    th {
+        border-top: 1px #9cc3e2 solid;
+        border-bottom: 1px #9cc3e2 solid;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 16px;
+        color: #707070;
+        padding: 5px;
+        vertical-align: top;
+    }
+    td {
+        border-top: 1px #9cc3e2 solid !important;
+        border-bottom: 1px #9cc3e2 solid;
+        padding: 10px 5px;
+        vertical-align: top;
+    }
+}
+.flex {
+    display: flex;
+}
