@@ -87,3 +87,101 @@ a {
 .flex {
     display: flex;
 }
+
+.row-same-height {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    position: relative;
+    width: 100%;
+}
+
+.row-same-height.no-wrap {
+    -webkit-flex-wrap: nowrap;
+    -ms-flex-wrap: nowrap;
+}
+
+.row-same-height .col-same-height {
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+}
+
+.row-same-height .col-same-height .content {
+    width: 100%;
+}
+
+.form-control._placeholder {
+    padding: 15px;
+}
+.form-group {
+    margin-bottom: 20px;
+    label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+        color: #707070;
+        margin-bottom: 5px;
+        &.__dark {
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 8px;
+        }
+    }
+    .form-control {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+        color: #333333;
+    }
+}
+
+.__custom_select {
+    position: relative;
+    &::after {
+        position: absolute;
+        right: 2px;
+        top: 1px;
+        width: 28px;
+        height: 28px;
+        content: "";
+        pointer-events: none;
+        background: url("./assets/images/select_arrow.svg") white center center no-repeat;
+    }
+}
+.action_wrapper {
+    margin-top: 20px;
+    padding-top: 20px;
+    background: #f9f9f9;
+    box-shadow: 0px -1px 0px #dbdcdf;
+    border-radius: 0px 0px 8px 8px;
+    .__btn {
+        margin-right: 10px;
+        padding: 6px 14px;
+        &:last-child {
+            margin-right: 0px;
+        }
+    }
+}
+.__btn {
+    height: 32px;
+    border-radius: 40px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+}
+.__theme {
+    background: #e8442d;
+    border: 1px solid #e8442d;
+    color: #ffffff;
+}
+.__default {
+    background: #ffffff;
+    border: 1px solid #333333;
+    color: #333333;
+}
