@@ -179,11 +179,17 @@ a {
     background: #e8442d;
     border: 1px solid #e8442d;
     color: #ffffff;
+    &:hover{
+        color: white;
+    }
 }
 .__default {
     background: #ffffff;
     border: 1px solid #333333;
     color: #333333;
+    &:hover{
+        color: #333333;
+    }
 }
 
 .pointer{
