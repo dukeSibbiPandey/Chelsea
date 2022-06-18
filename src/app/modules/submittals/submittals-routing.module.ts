@@ -15,7 +15,7 @@ const routes: Routes = [
         path: 'list', component: SubmittalsListComponent
       },
       {
-        path: 'form/:action/:id', component: SubmittalsFormComponent
+        path: 'form/:action/:id/step/:step', component: SubmittalsFormComponent
       },
     ]
   }
