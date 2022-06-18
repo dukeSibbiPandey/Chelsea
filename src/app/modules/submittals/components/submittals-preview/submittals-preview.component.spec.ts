@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PreviewSubmittalsComponent } from './preview-submittals.component';
+import { SubmittalsPreviewComponent } from './submittals-preview.component';
 
-describe('PreviewSubmittalsComponent', () => {
-  let component: PreviewSubmittalsComponent;
-  let fixture: ComponentFixture<PreviewSubmittalsComponent>;
+describe('SubmittalsPreviewComponent', () => {
+  let component: SubmittalsPreviewComponent;
+  let fixture: ComponentFixture<SubmittalsPreviewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PreviewSubmittalsComponent ]
+      declarations: [ SubmittalsPreviewComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PreviewSubmittalsComponent);
+    fixture = TestBed.createComponent(SubmittalsPreviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

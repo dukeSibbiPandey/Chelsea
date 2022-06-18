@@ -9,6 +9,8 @@ import { SubmittalsFormStep1Component } from './components/submittals-form-step1
 import { SubmittalsFormStep2Component } from './components/submittals-form-step2/submittals-form-step2.component';
 import { SubmittalsStepperComponent } from './components/submittals-stepper/submittals-stepper.component';
 import { SubmittalsSectionsComponent } from './components/submittals-form-step2/submittals-sections/submittals-sections.component';
+import { SubmittalsPreviewContentComponent } from './components/submittals-preview-content/submittals-preview-content.component';
+import { SubmittalsPreviewComponent } from './components/submittals-preview/submittals-preview.component';
 
 
 @NgModule({
@@ -19,7 +21,9 @@ import { SubmittalsSectionsComponent } from './components/submittals-form-step2/
     SubmittalsFormStep1Component,
     SubmittalsFormStep2Component,
     SubmittalsStepperComponent,
-    SubmittalsSectionsComponent
+    SubmittalsSectionsComponent,
+    SubmittalsPreviewComponent,
+    SubmittalsPreviewContentComponent,
   ],
   imports: [
     CommonModule,
