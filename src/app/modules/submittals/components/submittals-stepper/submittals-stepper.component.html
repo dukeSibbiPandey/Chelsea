@@ -1,13 +1,14 @@
 <section class="step-indicator">
-    <div class="step step1 active">
+    <div class="step step1 {{activeStep >= 1 ?' active':''}}">
         <div class="step-icon">1</div>
         <!-- <p>Delivery</p> -->
     </div>
-    <div class="indicator-line active"></div>
-    <div class="step step2 active">
+    <div class="indicator-line {{activeStep >= 2 ?' active':''}}"></div>
+    <div class="step step2 {{activeStep >= 2 ?' active':''}}">
         <div class="step-icon">2</div>
         <!-- <p>Payment</p> -->
     </div>
+    <!-- <div class="indicator-line" *ngIf="activeStep >= 2"></div> -->
     <!-- <div class="indicator-line"></div>
     <div class="step step3">
         <div class="step-icon">3</div>

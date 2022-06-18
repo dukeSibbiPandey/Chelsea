@@ -24,8 +24,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     .__page_content {
-        height: 300px;
-        overflow: auto;
+        overflow-x: hidden;
         padding: 10px 0;
         flex-grow: 2;
         /* width */
@@ -56,6 +55,7 @@ ol,
 ol li {
     list-style: none;
     margin: 0px;
+    padding: 0px;
 }
 a {
     text-decoration: none;
@@ -199,4 +199,14 @@ a {
 .steps_wrapper {
     max-width: 600px;
     margin: 0px auto;
+}
+
+.v_center{
+    align-items: center;
+}
+.space_between{
+    justify-content: space-between;
+}
+._ml_10{
+    margin-left: 10px;
 }

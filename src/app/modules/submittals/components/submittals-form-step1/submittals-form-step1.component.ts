@@ -8,7 +8,6 @@ import { Component, OnInit } from '@angular/core';
 export class SubmittalsFormStep1Component implements OnInit {
   activeAddressInde = 0
   constructor() { }
-
   ngOnInit(): void {
   }
   selectAddress = (index: any) => {
