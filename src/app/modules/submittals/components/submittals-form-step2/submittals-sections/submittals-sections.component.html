@@ -1,8 +1,11 @@
 <div class="__s_s_wrapper">
     <div class="__t_b">
         <div class="__left">
-            <span>
+            <span (click)="handleEdit(true)" *ngIf="!isEdit">
                 {{title}}
+            </span>
+            <span class="editable" *ngIf="isEdit">
+                <input type="text" class="form-control" (blur)="handleEdit(false)">
             </span>
         </div>
         <div class="__right">

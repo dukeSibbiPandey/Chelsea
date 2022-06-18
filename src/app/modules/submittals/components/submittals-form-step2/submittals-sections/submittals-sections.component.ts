@@ -6,8 +6,9 @@ import { Component, Input, Output, OnInit } from '@angular/core';
   styleUrls: ['./submittals-sections.component.scss']
 })
 export class SubmittalsSectionsComponent implements OnInit {
-  @Input() title='';
-  templateList: any = []
+  @Input() title = '';
+  templateList: any = [];
+  isEdit = false;
   constructor() { }
 
   ngOnInit(): void {
@@ -33,5 +34,8 @@ export class SubmittalsSectionsComponent implements OnInit {
         createdAt: '06/05/2022'
       }
     ]
+  }
+  handleEdit = (value: boolean) => {
+    this.isEdit = value
   }
 }
