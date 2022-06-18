@@ -191,6 +191,14 @@ a {
         color: #333333;
     }
 }
+.__gray {
+    background: #EEEEEE;
+    border: 1px solid #EEEEEE;
+    color: #333333;
+    &:hover {
+        color: #333333;
+    }
+}
 
 .pointer {
     cursor: pointer;

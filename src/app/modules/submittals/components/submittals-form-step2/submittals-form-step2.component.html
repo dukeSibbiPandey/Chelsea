@@ -1,8 +1,12 @@
 <div class="form_wrapper">
-  <div class="form-group">
-    <app-submittals-sections title="F1"></app-submittals-sections>
+  <div class="form-group" *ngFor="let item of template">
+    <app-submittals-sections title={{item.name}}></app-submittals-sections>
   </div>
-  <div class="form-group">
-    <app-submittals-sections title="F2"></app-submittals-sections>
+  <div class="__more">
+    <span class="__add">
+      <button class="btn __btn __gray">
+        + Add more
+      </button>
+    </span>
   </div>
 </div>

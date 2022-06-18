@@ -6,7 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./submittals-form-step2.component.scss']
 })
 export class SubmittalsFormStep2Component implements OnInit {
-  activeAddressInde = 1
+  activeAddressInde = 1;
+  template=[
+    {
+      name:'F1'
+    },
+    {
+      name:'F2'
+    }
+  ]
   constructor() { }
 
   ngOnInit(): void {
