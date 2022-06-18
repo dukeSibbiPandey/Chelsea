@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/login/login.component';
-import { SubmittalsComponent } from './components/submittals/submittals.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { TncComponent } from './components/tnc/tnc.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
@@ -17,7 +16,6 @@ import { SubmittalsFormComponent } from './components/submittals-form/submittals
     AppComponent,
     HeaderComponent,
     LoginComponent,
-    SubmittalsComponent,
     FooterComponent,
     TncComponent,
     PrivacyComponent,
