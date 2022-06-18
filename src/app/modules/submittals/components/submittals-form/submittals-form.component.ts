@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./submittals-form.component.scss']
 })
 export class SubmittalsFormComponent implements OnInit {
-  activeAddressInde = 0
+  activeAddressInde = 1
   constructor() { }
 
   ngOnInit(): void {
