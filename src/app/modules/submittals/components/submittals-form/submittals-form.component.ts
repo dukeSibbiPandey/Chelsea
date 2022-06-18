@@ -6,10 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./submittals-form.component.scss']
 })
 export class SubmittalsFormComponent implements OnInit {
-
+  activeAddressInde = 0
   constructor() { }
 
   ngOnInit(): void {
+  }
+  selectAddress = (index: any) => {
+    this.activeAddressInde = index;
   }
 
 }

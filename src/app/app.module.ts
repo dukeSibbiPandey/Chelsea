@@ -9,7 +9,6 @@ import { FooterComponent } from './components/footer/footer.component';
 import { TncComponent } from './components/tnc/tnc.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
 import { LayoutComponent } from './components/layout/layout.component';
-import { SubmittalsFormComponent } from './components/submittals-form/submittals-form.component';
 
 @NgModule({
   declarations: [
@@ -19,8 +18,7 @@ import { SubmittalsFormComponent } from './components/submittals-form/submittals
     FooterComponent,
     TncComponent,
     PrivacyComponent,
-    LayoutComponent,
-    SubmittalsFormComponent
+    LayoutComponent
   ],
   imports: [
     BrowserModule,

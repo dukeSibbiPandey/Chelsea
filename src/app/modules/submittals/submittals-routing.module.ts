@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { SubmittalsFormComponent } from './components/submittals-form/submittals-form.component';
 import { SubmittalsListComponent } from './components/submittals-list/submittals-list.component';
 import { SubmittalsRouterOutletComponent } from './submittals-router-outlet/submittals-router-outlet.component';
 
@@ -12,7 +13,10 @@ const routes: Routes = [
       },
       {
         path: 'list', component: SubmittalsListComponent
-      }
+      },
+      {
+        path: 'form/:action/:id', component: SubmittalsFormComponent
+      },
     ]
   }
 ];
