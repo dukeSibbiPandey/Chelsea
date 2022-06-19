@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChelseaApp", "ChelseaApp.csproj", "{331BE246-F90E-46BC-95CD-D88135BC9926}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChelseaApp", "ChelseaApp\ChelseaApp.csproj", "{331BE246-F90E-46BC-95CD-D88135BC9926}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chelsea.Repository", "..\Chelsea.Repository\Chelsea.Repository.csproj", "{864CC5B2-F514-4819-B24A-7F9576AE4D34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chelsea.Repository", "Chelsea.Repository\Chelsea.Repository.csproj", "{864CC5B2-F514-4819-B24A-7F9576AE4D34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

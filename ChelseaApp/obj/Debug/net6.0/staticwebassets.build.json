@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "Hash": "aZJFy4TOUA0QpMMACLsbUpJ1qfKTxHzIiHqB1r6QatA=",
+  "Source": "ChelseaApp",
+  "BasePath": "_content/ChelseaApp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "ChelseaApp\\wwwroot",
+      "Source": "ChelseaApp",
+      "ContentRoot": "C:\\Projects\\Chelsea\\ChelseaApp\\wwwroot\\",
+      "BasePath": "_content/ChelseaApp",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Projects\\Chelsea\\ChelseaApp\\wwwroot\\favicon.ico",
+      "SourceId": "ChelseaApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Projects\\Chelsea\\ChelseaApp\\wwwroot\\",
+      "BasePath": "_content/ChelseaApp",
+      "RelativePath": "favicon.ico",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\favicon.ico"
+    }
+  ]
+}

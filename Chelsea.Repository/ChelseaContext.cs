@@ -14,7 +14,10 @@ namespace Chelsea.Repository
         {
         }
 
-        //public virtual DbSet<Results> Results { get; set; }
+        public virtual DbSet<Submittal> Submittal { get; set; }
+        public virtual DbSet<AddressMaster> AddressMaster { get; set; }
+        public virtual DbSet<CityMaster> CityMaster { get; set; }
+        public virtual DbSet<StateMaster> StateMaster { get; set; }
     }
     
 }
