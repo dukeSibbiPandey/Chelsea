@@ -12,6 +12,8 @@ import { SubmittalsSectionsComponent } from './components/submittals-form-step2/
 import { SubmittalsPreviewContentComponent } from './components/submittals-preview-content/submittals-preview-content.component';
 import { SubmittalsPreviewComponent } from './components/submittals-preview/submittals-preview.component';
 import { PreviewPageTwoComponent } from './components/submittals-preview-content/preview-page-two/preview-page-two.component';
+import {CheckboxModule} from 'primeng/checkbox';
+import { FormsModule }    from '@angular/forms';
 
 
 @NgModule({
@@ -29,7 +31,9 @@ import { PreviewPageTwoComponent } from './components/submittals-preview-content
   ],
   imports: [
     CommonModule,
-    SubmittalsRoutingModule
+    SubmittalsRoutingModule,
+    FormsModule,
+    CheckboxModule
   ]
 })
 export class SubmittalsModule { }
