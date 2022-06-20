@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { SubmittalsComponent } from './components/submittals/submittals.component';
 import { TncComponent } from './components/tnc/tnc.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
-import { SubmittalsFormComponent } from './components/submittals-form/submittals-form.component';
 const routes: Routes = [
   {
     path: '', redirectTo: 'login', pathMatch: 'full'
@@ -13,10 +11,8 @@ const routes: Routes = [
     path: 'login', component: LoginComponent
   },
   {
-    path: 'submittals', component: SubmittalsComponent
-  },
-  {
-    path: 'submittals/:action/:id', component: SubmittalsFormComponent
+    path: 'submittals',
+    loadChildren: () => import('./modules/submittals/submittals.module').then(mod => mod.SubmittalsModule)
   },
   {
     path: 'tnc', component: TncComponent

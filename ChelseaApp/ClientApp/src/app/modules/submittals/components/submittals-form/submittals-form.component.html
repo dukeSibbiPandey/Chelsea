@@ -1,0 +1,18 @@
+<div class="chelsa_form_wrapper">
+    <div class="container">
+        <div class="__title">
+            <svg class="pointer" [routerLink]="['/submittals/list']" width="17" height="16" viewBox="0 0 17 16"
+                fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M7.9001 15.45L1.1501 8.7C1.03343 8.6 0.954264 8.49167 0.912598 8.375C0.870931 8.25833 0.850098 8.13333 0.850098 8C0.850098 7.86667 0.870931 7.74167 0.912598 7.625C0.954264 7.50833 1.03343 7.4 1.1501 7.3L7.9251 0.524999C8.1251 0.324999 8.35843 0.229166 8.6251 0.2375C8.89176 0.245833 9.11677 0.35 9.3001 0.55C9.5001 0.75 9.6001 0.983333 9.6001 1.25C9.6001 1.51667 9.5001 1.75 9.3001 1.95L4.2501 7H15.7751C16.0584 7 16.2959 7.09583 16.4876 7.2875C16.6793 7.47917 16.7751 7.71667 16.7751 8C16.7751 8.28333 16.6793 8.52083 16.4876 8.7125C16.2959 8.90417 16.0584 9 15.7751 9H4.2501L9.3251 14.075C9.5251 14.275 9.62093 14.5042 9.6126 14.7625C9.60427 15.0208 9.5001 15.25 9.3001 15.45C9.1001 15.65 8.86677 15.75 8.6001 15.75C8.33343 15.75 8.1001 15.65 7.9001 15.45Z"
+                    fill="#333333" />
+            </svg>
+            New Submittal
+        </div>
+        <div class="steps_wrapper">
+            <app-submittals-stepper [activeStep]=activeStep></app-submittals-stepper>
+        </div>
+        <app-submittals-form-step1 *ngIf="activeStep==1"></app-submittals-form-step1>
+        <app-submittals-form-step2 *ngIf="activeStep==2"></app-submittals-form-step2>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-submittals-form',
@@ -6,13 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./submittals-form.component.scss']
 })
 export class SubmittalsFormComponent implements OnInit {
-  activeAddressInde=0
-  constructor() { }
+  activeStep: any=0;
+  constructor(private _ActivatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this._ActivatedRoute.params.subscribe(params => {
+      this.activeStep = params.step
+    });
   }
-  selectAddress=(index:any)=>{
-    this.activeAddressInde=index;
-    
+  selectAddress = (index: any) => {
+    this.activeStep = index;
   }
 }
