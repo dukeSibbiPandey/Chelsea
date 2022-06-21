@@ -1,145 +1,151 @@
-<div class="form-group">
-    <label for="" class="__dark">Chelsea Address</label>
-    <div class="form-control">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="">Address Line 1</label>
-                    <input type="text" class="form-control" placeholder="Enter Here">
+<form [formGroup]="submittalDetailForm" autocomplete="off" novalidate>
+    <div class="form-group" formGroupName="address">
+        <label for="" class="__dark">Chelsea Address</label>
+        <div class="form-control">
+            <div class="form-group">
+                <label for="">Address Line 1</label>
+                <input type="text" class="form-control" placeholder="Enter Here" name="address"
+                    formControlName="addressLine1">
+            </div>
+            <div class="form-group">
+                <label for="">Address Line 2</label>
+                <input type="text" class="form-control" placeholder="Enter Here" name="address"
+                    formControlName="addressLine2">
+            </div>
+            <div class="form-group">
+                <label for="">State</label>
+                <div class="__custom_select">
+                    <select class="form-control" name="address" formControlName="state">
+                        <option value="">Select</option>
+                    </select>
                 </div>
             </div>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="">Address Line 2</label>
-                    <input type="text" class="form-control" placeholder="Enter Here">
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="">State</label>
-                    <div class="__custom_select">
-                        <select class="form-control">
-                            <option value="">Select</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="">City</label>
-                            <div class="__custom_select">
-                                <select class="form-control">
-                                    <option value="">Select</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="">Zip</label>
-                            <input type="text" class="form-control" placeholder="Enter Here">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="">City</label>
+                        <div class="__custom_select" name="address" formControlName="city">
+                            <select class="form-control">
+                                <option value="">Select</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-12">
-        <div class="form-group">
-            <label for="">Submittal Date</label>
-            <input type="text" class="form-control" placeholder="Enter here">
-        </div>
-    </div>
-    <div class="col-sm-12">
-        <div class="form-group">
-            <label for="">Job Name</label>
-            <input type="text" class="form-control" placeholder="Enter here">
-        </div>
-    </div>
-    <div class="col-sm-12">
-        <div class="form-group">
-            <label for="">Submittal #</label>
-            <input type="text" class="form-control" placeholder="Enter here">
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="" class="__dark">Project Manager</label>
-    <div class="form-control">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="">Project Manager Name</label>
-                    <input type="text" class="form-control" placeholder="Enter Here">
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="">Phone</label>
-                    <input type="text" class="form-control" placeholder="Enter Here">
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="">Email</label>
-                    <input type="text" class="form-control" placeholder="Enter Here">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="" class="__dark">Contractor</label>
-    <div class="form-control">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="">Contractor Name</label>
-                    <input type="text" class="form-control" placeholder="Enter Here">
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="">Address Line 1</label>
-                    <input type="text" class="form-control" placeholder="Enter Here">
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="">Address Line 2</label>
-                    <input type="text" class="form-control" placeholder="Enter Here">
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="">State</label>
-                    <div class="__custom_select">
-                        <select class="form-control">
-                            <option value="">Select</option>
-                        </select>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="">Zip</label>
+                        <input type="text" class="form-control" placeholder="Enter Here" name="address"
+                            formControlName="postalCode">
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="">City</label>
-                    <div class="__custom_select">
-                        <select class="form-control">
-                            <option value="">Select</option>
-                        </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="">Submittal Date</label>
+                <input type="text" class="form-control" placeholder="Enter here" name="submittalDate"
+                    formControlName="submittalDate">
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="">Job Name</label>
+                <input type="text" class="form-control" placeholder="Enter here" name="jobName"
+                    formControlName="jobName">
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="">Submittal #</label>
+                <input type="text" class="form-control" placeholder="Enter here" name="submittals"
+                    formControlName="submittals">
+            </div>
+        </div>
+    </div>
+    <div class="form-group" formGroupName="projectManager">
+        <label for="" class="__dark">Project Manager</label>
+        <div class="form-control">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="">Project Manager Name</label>
+                        <input type="text" class="form-control" placeholder="Enter Here" name="projectManager"
+                            formControlName="name">
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="">Zip</label>
-                    <input type="text" class="form-control" placeholder="Enter Here">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="">Phone</label>
+                        <input type="text" class="form-control" placeholder="Enter Here" name="projectManager"
+                            formControlName="phone">
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="">Email</label>
+                        <input type="text" class="form-control" placeholder="Enter Here" name="projectManager"
+                            formControlName="email">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="form-group" formGroupName="contractor">
+        <label for="" class="__dark">Contractor</label>
+        <div class="form-control">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="">Contractor Name</label>
+                        <input type="text" class="form-control" placeholder="Enter Here" name="contractor"
+                            formControlName="name">
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="">Address Line 1</label>
+                        <input type="text" class="form-control" placeholder="Enter Here" name="contractor"
+                            formControlName="addressLine1">
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="">Address Line 2</label>
+                        <input type="text" class="form-control" placeholder="Enter Here" name="contractor"
+                            formControlName="addressLine2">
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="">State</label>
+                        <div class="__custom_select">
+                            <select class="form-control" name="contractor" formControlName="state">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="">City</label>
+                        <div class="__custom_select">
+                            <select class="form-control" name="contractor" formControlName="city">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="">Zip</label>
+                        <input type="text" class="form-control" placeholder="Enter Here" name="contractor"
+                            formControlName="postalCode">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<p-toast position="top-center" key="headerFormToast"></p-toast>
