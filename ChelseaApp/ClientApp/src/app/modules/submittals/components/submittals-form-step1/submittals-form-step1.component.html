@@ -1,147 +1,245 @@
-<div class="form_wrapper row-same-height row">
-    <div class="col-same-height col-sm-8">
-        <div class="content __cell __left">
-            <div class="__b_p form-control _placeholder form-group">
-                <label for="" class="__dark">Chelsea Address</label>
-                <div class="row-same-height __address_grid">
-                    <div class="col-same-height">
-                        <div class="content __a_list" (click)="selectAddress(0)">
-                            <span class="__r_btn {{activeAddressInde==0?' checked':''}}"></span>
-                            <div class="__a_c">
-                                <p class="__title">
-                                    <strong>CHELSEA LIGHTING</strong>
-                                </p>
-                                <p class="__address">14 Penn Plaza, New York, NY 10122</p>
-                                <p class="__contact"><strong>Phone:</strong> (212) 356-5100</p>
-                                <p class="__contact"><strong>Fax:</strong> N/A</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-same-height">
-                        <div class="content __a_list" (click)="selectAddress(1)">
-                            <span class="__r_btn {{activeAddressInde==1?' checked':''}}"></span>
-                            <div class="__a_c">
-                                <p class="__title">
-                                    <strong>CHELSEA LIGHTING</strong>
-                                </p>
-                                <p class="__address">14 Penn Plaza, New York, NY 10122</p>
-                                <p class="__contact"><strong>Phone:</strong> (212) 356-5100</p>
-                                <p class="__contact"><strong>Fax:</strong> N/A</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="">Submittal Date</label>
-                        <input type="text" class="form-control" placeholder="Enter here">
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="">Job Name</label>
-                        <input type="text" class="form-control" placeholder="Enter here">
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="">Submittal #</label>
-                        <input type="text" class="form-control" placeholder="Enter here">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="" class="__dark">Project Manager</label>
-                <div class="form-control">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="">Project Manager Name</label>
-                                <input type="text" class="form-control" placeholder="Enter Here">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="">Phone</label>
-                                <input type="text" class="form-control" placeholder="Enter Here">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="">Email</label>
-                                <input type="text" class="form-control" placeholder="Enter Here">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="" class="__dark">Contractor</label>
-                <div class="form-control">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="">Contractor Name</label>
-                                <input type="text" class="form-control" placeholder="Enter Here">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="">Address Line 1</label>
-                                <input type="text" class="form-control" placeholder="Enter Here">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="">Address Line 2</label>
-                                <input type="text" class="form-control" placeholder="Enter Here">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="">State</label>
-                                <div class="__custom_select">
-                                    <select class="form-control">
-                                        <option value="">Select</option>
-                                    </select>
+<form [formGroup]="submittalDetailForm" autocomplete="off" novalidate>
+    <div class="form_wrapper row-same-height row">
+        <div class="col-same-height col-sm-8">
+            <div class="content __cell __left">
+                <div class="__b_p form-control _placeholder form-group">
+                    <label for="" class="__dark">Chelsea Address</label>
+                    <div class="row-same-height __address_grid">
+                        <div class="col-same-height">
+                            <div class="content __a_list" (click)="selectAddress(0, 'id')">
+                                <span class="__r_btn {{activeAddressInde==0?' checked':''}}"></span>
+                                <div class="__a_c">
+                                    <p class="__title">
+                                        <strong>CHELSEA LIGHTING</strong>
+                                    </p>
+                                    <p class="__address">14 Penn Plaza, New York, NY 10122</p>
+                                    <p class="__contact"><strong>Phone:</strong> (212) 356-5100</p>
+                                    <p class="__contact"><strong>Fax:</strong> N/A</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="">City</label>
-                                <div class="__custom_select">
-                                    <select class="form-control">
-                                        <option value="">Select</option>
-                                    </select>
+                        <div class="col-same-height">
+                            <div class="content __a_list" (click)="selectAddress(1, 'id')">
+                                <span class="__r_btn {{activeAddressInde==1?' checked':''}}"></span>
+                                <div class="__a_c">
+                                    <p class="__title">
+                                        <strong>CHELSEA LIGHTING</strong>
+                                    </p>
+                                    <p class="__address">14 Penn Plaza, New York, NY 10122</p>
+                                    <p class="__contact"><strong>Phone:</strong> (212) 356-5100</p>
+                                    <p class="__contact"><strong>Fax:</strong> N/A</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="">Zip</label>
-                                <input type="text" class="form-control" placeholder="Enter Here">
+                    </div>
+                    <input type="hidden" placeholder="Enter here" formControlName="addressId">
+                    <div class="msgError text-danger"
+                        *ngIf="formControl.addressId.invalid && (formControl.addressId.dirty || submitted)">
+                        <small class="text-danger" *ngIf="formControl.addressId.hasError('required')">
+                            Required Field.
+                        </small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="">Submittal Date</label>
+                            <input type="text" class="form-control" placeholder="Enter here"
+                                formControlName="submittalDate">
+                            <div class="msgError text-danger"
+                                *ngIf="formControl.submittalDate.invalid && (formControl.submittalDate.dirty || submitted)">
+                                <small class="text-danger" *ngIf="formControl.submittalDate.hasError('required')">
+                                    Required Field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="">Job Name</label>
+                            <input type="text" class="form-control" placeholder="Enter here" formControlName="jobName">
+                            <div class="msgError text-danger"
+                                *ngIf="formControl.jobName.invalid && (formControl.jobName.dirty || submitted)">
+                                <small class="text-danger" *ngIf="formControl.jobName.hasError('required')">
+                                    Required Field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="">Submittal #</label>
+                            <input type="text" class="form-control" placeholder="Enter here"
+                                formControlName="submittals">
+                            <div class="msgError text-danger"
+                                *ngIf="formControl.submittals.invalid && (formControl.submittals.dirty || submitted)">
+                                <small class="text-danger" *ngIf="formControl.submittals.hasError('required')">
+                                    Required Field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="__dark">Project Manager</label>
+                    <div class="form-control" formGroupName="projectManager">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Project Manager Name</label>
+                                    <input type="text" class="form-control" placeholder="Enter Here"
+                                        formControlName="name">
+                                    <div class="msgError text-danger"
+                                        *ngIf="submittalDetailForm.get('projectManager.name').invalid && (submittalDetailForm.get('projectManager.name').dirty || submitted)">
+                                        <small class="text-danger"
+                                            *ngIf="submittalDetailForm.get('projectManager.name').hasError('required')">
+                                            Required Field.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Phone</label>
+                                    <input type="text" class="form-control" placeholder="Enter Here"
+                                        formControlName="phone">
+                                    <div class="msgError text-danger"
+                                        *ngIf="submittalDetailForm.get('projectManager.phone').invalid && (submittalDetailForm.get('projectManager.phone').dirty || submitted)">
+                                        <small class="text-danger"
+                                            *ngIf="submittalDetailForm.get('projectManager.phone').hasError('required')">
+                                            Required Field.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Email</label>
+                                    <input type="text" class="form-control" placeholder="Enter Here"
+                                        formControlName="email">
+                                    <div class="msgError text-danger"
+                                        *ngIf="submittalDetailForm.get('projectManager.email').invalid && (submittalDetailForm.get('projectManager.email').dirty || submitted)">
+                                        <small class="text-danger"
+                                            *ngIf="submittalDetailForm.get('projectManager.email').hasError('required')">
+                                            Required Field.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="__dark">Contractor</label>
+                    <div class="form-control" formGroupName="contractor">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Contractor Name</label>
+                                    <input type="text" class="form-control" placeholder="Enter Here"
+                                        formControlName="name">
+                                    <div class="msgError text-danger"
+                                        *ngIf="submittalDetailForm.get('contractor.name').invalid && (submittalDetailForm.get('contractor.name').dirty || submitted)">
+                                        <small class="text-danger"
+                                            *ngIf="submittalDetailForm.get('contractor.name').hasError('required')">
+                                            Required Field.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Address Line 1</label>
+                                    <input type="text" class="form-control" placeholder="Enter Here"
+                                        formControlName="addressLine1">
+                                    <div class="msgError text-danger"
+                                        *ngIf="submittalDetailForm.get('contractor.addressLine1').invalid && (submittalDetailForm.get('contractor.addressLine1').dirty || submitted)">
+                                        <small class="text-danger"
+                                            *ngIf="submittalDetailForm.get('contractor.addressLine1').hasError('required')">
+                                            Required Field.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Address Line 2</label>
+                                    <input type="text" class="form-control" placeholder="Enter Here"
+                                        formControlName="addressLine2">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">State</label>
+                                    <div class="__custom_select">
+                                        <select class="form-control" name="contractor" formControlName="state">
+                                            <option value="">Select</option>
+                                            <option value="1">value 1</option>
+                                        </select>
+                                    </div>
+                                    <div class="msgError text-danger"
+                                        *ngIf="submittalDetailForm.get('contractor.state').invalid && (submittalDetailForm.get('contractor.state').dirty || submitted)">
+                                        <small class="text-danger"
+                                            *ngIf="submittalDetailForm.get('contractor.state').hasError('required')">
+                                            Required Field.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">City</label>
+                                    <div class="__custom_select">
+                                        <select class="form-control" formControlName="city">
+                                            <option value="">Select</option>
+                                            <option value="1">value 1</option>
+                                        </select>
+                                    </div>
+                                    <div class="msgError text-danger"
+                                        *ngIf="submittalDetailForm.get('contractor.city').invalid && (submittalDetailForm.get('contractor.city').dirty || submitted)">
+                                        <small class="text-danger"
+                                            *ngIf="submittalDetailForm.get('contractor.city').hasError('required')">
+                                            Required Field.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Zip</label>
+                                    <input type="text" class="form-control" placeholder="Enter Here"
+                                        formControlName="postalCode">
+                                    <div class="msgError text-danger"
+                                        *ngIf="submittalDetailForm.get('contractor.postalCode').invalid && (submittalDetailForm.get('contractor.postalCode').dirty || submitted)">
+                                        <small class="text-danger"
+                                            *ngIf="submittalDetailForm.get('contractor.postalCode').hasError('required')">
+                                            Required Field.
+                                        </small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-same-height col-sm-4">
-        <div class="content __cell __right">
-            <div class="__c_p form-group">
-                <label for="" class="__dark">Cover Page Preview</label>
-                <div class="preview_wrapper">
-                    <app-submittals-preview-content></app-submittals-preview-content>
+        <div class="col-same-height col-sm-4">
+            <div class="content __cell __right">
+                <div class="__c_p form-group">
+                    <label for="" class="__dark">Cover Page Preview</label>
+                    <div class="preview_wrapper">
+                        <app-submittals-preview-content></app-submittals-preview-content>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="action_wrapper">
-    <button class="btn __btn __theme" [routerLink]="['/submittals/form/add/0/step/2']">Save & Next</button>
-    <button class="btn __btn __default" [routerLink]="['/submittals/list']">Cancel</button>
-</div>
+    <div class="action_wrapper">
+        <!-- [routerLink]="['/submittals/form/add/0/step/2']" -->
+        <button class="btn __btn __theme" (click)="handleSubmit()">Save & Next</button>
+        <button class="btn __btn __default" [routerLink]="['/submittals/list']">Cancel</button>
+    </div>
+</form>
+
+
+<p-toast position="top-center" key="detailFormToast"></p-toast>
