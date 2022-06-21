@@ -31,10 +31,10 @@ export class SubmittalsDetailFormComponent implements OnInit {
         submittals: ['', Validators.required],
         address: this._FormBuilder.group({
           addressLine1: ['', [Validators.required]],
-          addressLine2: ['', [Validators.required]],
+          addressLine2: [''],
           state: ['', [Validators.required]],
           city: ['', [Validators.required]],
-          postalCode: [Validators.required],
+          postalCode: ['', Validators.required],
         }),
         projectManager: this._FormBuilder.group({
           name: ['', [Validators.required]],
@@ -44,7 +44,7 @@ export class SubmittalsDetailFormComponent implements OnInit {
         contractor: this._FormBuilder.group({
           name: ['', [Validators.required]],
           addressLine1: ['', [Validators.required]],
-          addressLine2: ['', [Validators.required]],
+          addressLine2: [''],
           state: ['', [Validators.required]],
           city: ['', [Validators.required]],
           postalCode: ['', [Validators.required]],
@@ -68,6 +68,7 @@ export class SubmittalsDetailFormComponent implements OnInit {
   }
 
   handleSubmit = () => {
+    debugger
     if (this.submittalDetailForm.invalid) {
       this.toastMsg('error', 'Form Validation Error', 'Please fill all required fields', 1000)
       this.submitted = true;

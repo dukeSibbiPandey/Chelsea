@@ -116,12 +116,29 @@ a {
 .row-same-height .col-same-height .content {
     width: 100%;
 }
-
+.form-control {
+    box-shadow: none !important;
+    outline: none !important;
+    border: 1px solid #dbdcdf;
+    &:focus {
+        box-shadow: none !important;
+        outline: none !important;
+        border: 1px solid #dbdcdf;
+    }
+}
 .form-control._placeholder {
     padding: 15px;
 }
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    position: relative;
+    .msgError {
+        position: absolute;
+        left: 0;
+        top: 100%;
+        width: 100%;
+        white-space: normal;
+    }
     label {
         font-style: normal;
         font-weight: 400;
@@ -323,9 +340,6 @@ a {
     font-size: 12px;
 }
 
-.p-toast.p-component{
-  z-index: 999999!important;
+.p-toast.p-component {
+    z-index: 999999 !important;
 }
-
-
-

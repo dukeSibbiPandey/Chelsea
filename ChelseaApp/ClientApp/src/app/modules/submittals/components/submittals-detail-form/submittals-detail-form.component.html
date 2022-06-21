@@ -1,41 +1,65 @@
 <form [formGroup]="submittalDetailForm" autocomplete="off" novalidate>
-    <div class="form-group" formGroupName="address">
+    <div class="form-group">
         <label for="" class="__dark">Chelsea Address</label>
-        <div class="form-control">
+        <div class="form-control" formGroupName="address">
             <div class="form-group">
                 <label for="">Address Line 1</label>
-                <input type="text" class="form-control" placeholder="Enter Here" name="address"
-                    formControlName="addressLine1">
+                <input type="text" class="form-control" placeholder="Enter Here" formControlName="addressLine1">
+                <div class="msgError text-danger"
+                    *ngIf="submittalDetailForm.get('address.addressLine1').invalid && (submittalDetailForm.get('address.addressLine1').dirty || submitted)">
+                    <small class="text-danger"
+                        *ngIf="submittalDetailForm.get('address.addressLine1').hasError('required')">
+                        Required Field.
+                    </small>
+                </div>
             </div>
             <div class="form-group">
                 <label for="">Address Line 2</label>
-                <input type="text" class="form-control" placeholder="Enter Here" name="address"
-                    formControlName="addressLine2">
+                <input type="text" class="form-control" placeholder="Enter Here" formControlName="addressLine2">
             </div>
             <div class="form-group">
                 <label for="">State</label>
                 <div class="__custom_select">
-                    <select class="form-control" name="address" formControlName="state">
+                    <select class="form-control" formControlName="state">
                         <option value="">Select</option>
                     </select>
+                </div>
+                <div class="msgError text-danger"
+                    *ngIf="submittalDetailForm.get('address.state').invalid && (submittalDetailForm.get('address.state').dirty || submitted)">
+                    <small class="text-danger" *ngIf="submittalDetailForm.get('address.state').hasError('required')">
+                        Required Field.
+                    </small>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="">City</label>
-                        <div class="__custom_select" name="address" formControlName="city">
-                            <select class="form-control">
+                        <div class="__custom_select">
+                            <select class="form-control" formControlName="city">
                                 <option value="">Select</option>
                             </select>
+                        </div>
+                        <div class="msgError text-danger"
+                            *ngIf="submittalDetailForm.get('address.city').invalid && (submittalDetailForm.get('address.city').dirty || submitted)">
+                            <small class="text-danger"
+                                *ngIf="submittalDetailForm.get('address.city').hasError('required')">
+                                Required Field.
+                            </small>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="">Zip</label>
-                        <input type="text" class="form-control" placeholder="Enter Here" name="address"
-                            formControlName="postalCode">
+                        <input type="text" class="form-control" placeholder="Enter Here" formControlName="postalCode">
+                        <div class="msgError text-danger"
+                            *ngIf="submittalDetailForm.get('address.postalCode').invalid && (submittalDetailForm.get('address.postalCode').dirty || submitted)">
+                            <small class="text-danger"
+                                *ngIf="submittalDetailForm.get('address.postalCode').hasError('required')">
+                                Required Field.
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -131,7 +155,7 @@
                     <div class="form-group">
                         <label for="">City</label>
                         <div class="__custom_select">
-                            <select class="form-control" name="contractor" formControlName="city">
+                            <select class="form-control" name="city" formControlName="city">
                                 <option value="">Select</option>
                             </select>
                         </div>
