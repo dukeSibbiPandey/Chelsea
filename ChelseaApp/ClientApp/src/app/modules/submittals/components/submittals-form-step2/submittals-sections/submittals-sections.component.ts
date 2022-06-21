@@ -1,4 +1,5 @@
 import { Component, Input, Output, OnInit } from '@angular/core';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-submittals-sections',
@@ -9,10 +10,17 @@ export class SubmittalsSectionsComponent implements OnInit {
   @Input() title = '';
   templateList: any = [];
   isEdit = false;
+  items: MenuItem[]=[];
   transmittedFor: string = '';
   constructor() { }
 
   ngOnInit(): void {
+    this.items = [
+      {label: 'Update', icon: 'pi pi-refresh'},
+      {label: 'Delete', icon: 'pi pi-times'},
+      {label: 'Angular.io', icon: 'pi pi-info'},
+      {label: 'Setup', icon: 'pi pi-cog'}
+  ];
     this.templateList = [
       {
         info: {
