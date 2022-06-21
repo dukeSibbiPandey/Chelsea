@@ -313,6 +313,9 @@ a {
     }
 }
 .p-dialog{
-    border: 1px #DBDCDF solid;
-    box-shadow: -1px 0px 0px #DBDCDF;
+    border: 2px #DBDCDF solid;
+    // box-shadow: -1px 0px 0px #DBDCDF;
+}
+.p-dialog .p-dialog-content{
+    padding: 15px;
 }
