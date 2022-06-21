@@ -5,6 +5,9 @@
     outline: none !important;
     font-family: "Roboto";
 }
+html{
+    overflow: hidden;
+}
 body {
     background: #f9f9f9;
 }
@@ -14,9 +17,10 @@ body {
     padding: 0px;
     box-sizing: border-box;
     min-height: 100vh;
-    height: auto;
-    overflow-x: hidden;
-    overflow-y: auto;
+    height: 100vh;
+}
+body {
+    overflow: auto;
 }
 .main_contaner {
     min-height: 100vh;
@@ -307,4 +311,8 @@ a {
     .dropdown-menu{
         display: block;
     }
+}
+.p-dialog{
+    border: 1px #DBDCDF solid;
+    box-shadow: -1px 0px 0px #DBDCDF;
 }
