@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./submittals-preview.component.scss']
 })
 export class SubmittalsPreviewComponent implements OnInit {
-  saveDialogTitle='Save PDP';
+  saveDialogTitle='Save PDF';
   isDetailEditDialog=false;
   constructor() { }
 
