@@ -10,6 +10,8 @@ import { PrimeNGConfig } from 'primeng/api';
 export class MergeSubmittalsComponent implements OnInit {
   position = 'right'
   isEditDialog = false;
+  headerDialogtitle='Edit Header';
+  detailDialogtitle='Edit Submittal Details';
   isDetailEditDialog = false;
   constructor(private primengConfig: PrimeNGConfig) { }
 
