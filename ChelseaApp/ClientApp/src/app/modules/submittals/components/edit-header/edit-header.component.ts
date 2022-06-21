@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./edit-header.component.scss']
 })
 export class EditHeaderComponent implements OnInit {
-
+  transmittedFor: string = '';
+  
   constructor() { }
 
   ngOnInit(): void {

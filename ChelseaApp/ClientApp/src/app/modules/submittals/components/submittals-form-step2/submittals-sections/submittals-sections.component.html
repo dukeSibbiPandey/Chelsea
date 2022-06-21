@@ -34,7 +34,18 @@
     <ul class="__filter">
         <li class="form-group">
             <label for="">These are Transmitted for</label>
-            <input type="text" class="form-control" placeholder="Enter here" style="width:170px">
+            <div class="flex v_center">
+                <div class="field-radiobutton flex v_center">
+                    <p-radioButton name="transmittedFor" value="Chicago" [(ngModel)]="transmittedFor" inputId="city1">
+                    </p-radioButton>
+                    <label class="_ml_10 mb_0" for="city1">Approval</label>
+                </div>
+                <div class="field-radiobutton flex v_center _ml_10">
+                    <p-radioButton name="transmittedFor" value="Los Angeles" [(ngModel)]="transmittedFor"
+                        inputId="city2"></p-radioButton>
+                    <label class="_ml_10 mb_0" for="city2">Record</label>
+                </div>
+            </div>
         </li>
         <li class="form-group">
             <label for="">MFG</label>

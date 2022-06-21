@@ -9,6 +9,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   @Input() title = '';
   templateList: any = [];
   isEdit = false;
+  transmittedFor: string = '';
   constructor() { }
 
   ngOnInit(): void {
