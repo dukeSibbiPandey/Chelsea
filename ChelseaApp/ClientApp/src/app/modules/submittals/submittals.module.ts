@@ -14,6 +14,7 @@ import { SubmittalsPreviewComponent } from './components/submittals-preview/subm
 import { PreviewPageTwoComponent } from './components/submittals-preview-content/preview-page-two/preview-page-two.component';
 import {CheckboxModule} from 'primeng/checkbox';
 import { FormsModule }    from '@angular/forms';
+import { MergeSubmittalsComponent } from './components/merge-submittals/merge-submittals.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { FormsModule }    from '@angular/forms';
     SubmittalsPreviewComponent,
     SubmittalsPreviewContentComponent,
     PreviewPageTwoComponent,
+    MergeSubmittalsComponent,
   ],
   imports: [
     CommonModule,

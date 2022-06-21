@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MergeSubmittalsComponent } from './components/merge-submittals/merge-submittals.component';
 import { SubmittalsFormComponent } from './components/submittals-form/submittals-form.component';
 import { SubmittalsListComponent } from './components/submittals-list/submittals-list.component';
 import { SubmittalsPreviewComponent } from './components/submittals-preview/submittals-preview.component';
@@ -20,6 +21,9 @@ const routes: Routes = [
       },
       {
         path: 'preview/:id', component: SubmittalsPreviewComponent
+      },
+      {
+        path: 'merge/:id', component: MergeSubmittalsComponent
       },
     ]
   }
