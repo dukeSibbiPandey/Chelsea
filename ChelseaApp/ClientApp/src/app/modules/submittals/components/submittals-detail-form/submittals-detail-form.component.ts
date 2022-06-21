@@ -57,13 +57,34 @@ export class SubmittalsDetailFormComponent implements OnInit {
   get formControl() { return this.submittalDetailForm.controls };
 
   toastMsg(severity: any, summary: any, detail: any, life: any) {
-    this.messageService.add({ key: 'headerFormToast', severity: severity, summary: summary, detail: detail, life: life, closable: true });
+    this.messageService.add({ key: 'detailFormToast', severity: severity, summary: summary, detail: detail, life: life, closable: true });
   }
 
 
   setFormValue = () => {
     const res: any = {};
     // this.submittalDetailForm.controls['types'].setValue(res['types']);
+  }
+
+  handleSubmit = () => {
+    if (this.submittalDetailForm.invalid) {
+      this.toastMsg('error', 'Form Validation Error', 'Please fill all required fields', 1000)
+      this.submitted = true;
+      return
+    } else {
+      this.submitted = false;
+      this.toastMsg('success', 'Success', 'Form submitted successfully', 2000);
+      setTimeout(() => {
+        this.postAjax()
+      }, 3000);
+    }
+  }
+
+  postAjax = () => {
+    let data: any = {
+      isDialogOpen: false
+    }
+    //this.editDialogSubmitCallback.emit(data)
   }
 
 }
