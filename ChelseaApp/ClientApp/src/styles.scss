@@ -5,7 +5,7 @@
     outline: none !important;
     font-family: "Roboto";
 }
-html{
+html {
     overflow: hidden;
 }
 body {
@@ -307,15 +307,25 @@ a {
     }
 }
 
-.__custom_dropdown:hover{
-    .dropdown-menu{
+.__custom_dropdown:hover {
+    .dropdown-menu {
         display: block;
     }
 }
-.p-dialog{
-    border: 2px #DBDCDF solid;
+.p-dialog {
+    border: 2px #dbdcdf solid;
     // box-shadow: -1px 0px 0px #DBDCDF;
 }
-.p-dialog .p-dialog-content{
+.p-dialog .p-dialog-content {
     padding: 15px;
 }
+.msgError {
+    font-size: 12px;
+}
+
+.p-toast.p-component{
+  z-index: 999999!important;
+}
+
+
+
