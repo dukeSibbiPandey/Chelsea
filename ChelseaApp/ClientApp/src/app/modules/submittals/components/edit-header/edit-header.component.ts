@@ -59,6 +59,10 @@ export class EditHeaderComponent implements OnInit {
       return
     } else {
       this.submitted = false;
+      let postDto:any={
+        ... this.registerForm.value
+      }
+      console.log('postDto====', postDto)
       this.toastMsg('success', 'Success', 'Form submitted successfully', 2000);
       setTimeout(() => {
         this.postAjax()

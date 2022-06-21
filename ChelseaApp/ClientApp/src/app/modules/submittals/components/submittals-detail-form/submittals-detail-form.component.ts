@@ -69,13 +69,16 @@ export class SubmittalsDetailFormComponent implements OnInit {
   }
 
   handleSubmit = () => {
-    debugger
     if (this.submittalDetailForm.invalid) {
       this.toastMsg('error', 'Form Validation Error', 'Please fill all required fields', 1000)
       this.submitted = true;
       return
     } else {
       this.submitted = false;
+      let postDto: any = {
+        ... this.submittalDetailForm.value
+      }
+      console.log('postDto====', postDto)
       this.toastMsg('success', 'Success', 'Form submitted successfully', 2000);
       setTimeout(() => {
         this.postAjax()
