@@ -14,7 +14,10 @@ import { SubmittalsPreviewComponent } from './components/submittals-preview/subm
 import { PreviewPageTwoComponent } from './components/submittals-preview-content/preview-page-two/preview-page-two.component';
 import {CheckboxModule} from 'primeng/checkbox';
 import { FormsModule }    from '@angular/forms';
+import {DialogModule} from 'primeng/dialog';
 import { MergeSubmittalsComponent } from './components/merge-submittals/merge-submittals.component';
+import { EditHeaderComponent } from './components/edit-header/edit-header.component';
+import { EditSubmittalsComponent } from './components/edit-submittals/edit-submittals.component';
 
 
 @NgModule({
@@ -30,12 +33,15 @@ import { MergeSubmittalsComponent } from './components/merge-submittals/merge-su
     SubmittalsPreviewContentComponent,
     PreviewPageTwoComponent,
     MergeSubmittalsComponent,
+    EditHeaderComponent,
+    EditSubmittalsComponent,
   ],
   imports: [
     CommonModule,
     SubmittalsRoutingModule,
     FormsModule,
-    CheckboxModule
+    CheckboxModule,
+    DialogModule
   ]
 })
 export class SubmittalsModule { }
