@@ -31,13 +31,13 @@ export class MergeSubmittalsComponent implements OnInit {
     this.isEditDialog = $event.isDialogOpen
   }
   handleDetailEditDialog(value: boolean) {
-
-    this.isDetailEditDialog = value;
+    this._SubmittalsDetailFormComponent.createForm(() => {
+      this.isDetailEditDialog = value;
+    });
   }
 
-
   /* detail form */
-  detailFormSubmitHndler=()=>{
+  detailFormSubmitHndler = () => {
     this._SubmittalsDetailFormComponent.handleSubmit();
   }
 

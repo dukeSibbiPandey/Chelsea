@@ -23,6 +23,7 @@ export class SubmittalsDetailFormComponent implements OnInit {
     })
   }
   createForm = (callback: any): void => {
+    this.submitted = false;
     this.submittalDetailForm = this._FormBuilder.group(
       {
         id: [0],

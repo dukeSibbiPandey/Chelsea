@@ -69,76 +69,120 @@
         <div class="col-sm-12">
             <div class="form-group">
                 <label for="">Submittal Date</label>
-                <input type="text" class="form-control" placeholder="Enter here" name="submittalDate"
-                    formControlName="submittalDate">
+                <input type="text" class="form-control" placeholder="Enter here" formControlName="submittalDate">
+                <div class="msgError text-danger"
+                    *ngIf="formControl.submittalDate.invalid && (formControl.submittalDate.dirty || submitted)">
+                    <small class="text-danger" *ngIf="formControl.submittalDate.hasError('required')">
+                        Required Field.
+                    </small>
+                </div>
             </div>
         </div>
         <div class="col-sm-12">
             <div class="form-group">
                 <label for="">Job Name</label>
-                <input type="text" class="form-control" placeholder="Enter here" name="jobName"
-                    formControlName="jobName">
+                <input type="text" class="form-control" placeholder="Enter here" formControlName="jobName">
+                <div class="msgError text-danger"
+                    *ngIf="formControl.jobName.invalid && (formControl.jobName.dirty || submitted)">
+                    <small class="text-danger" *ngIf="formControl.jobName.hasError('required')">
+                        Required Field.
+                    </small>
+                </div>
             </div>
         </div>
         <div class="col-sm-12">
             <div class="form-group">
                 <label for="">Submittal #</label>
-                <input type="text" class="form-control" placeholder="Enter here" name="submittals"
-                    formControlName="submittals">
+                <input type="text" class="form-control" placeholder="Enter here" formControlName="submittals">
+                <div class="msgError text-danger"
+                    *ngIf="formControl.submittals.invalid && (formControl.submittals.dirty || submitted)">
+                    <small class="text-danger" *ngIf="formControl.submittals.hasError('required')">
+                        Required Field.
+                    </small>
+                </div>
             </div>
         </div>
     </div>
-    <div class="form-group" formGroupName="projectManager">
+    <div class="form-group">
         <label for="" class="__dark">Project Manager</label>
-        <div class="form-control">
+        <div class="form-control" formGroupName="projectManager">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="">Project Manager Name</label>
-                        <input type="text" class="form-control" placeholder="Enter Here" name="projectManager"
-                            formControlName="name">
+                        <input type="text" class="form-control" placeholder="Enter Here" formControlName="name">
+                        <div class="msgError text-danger"
+                            *ngIf="submittalDetailForm.get('projectManager.name').invalid && (submittalDetailForm.get('projectManager.name').dirty || submitted)">
+                            <small class="text-danger"
+                                *ngIf="submittalDetailForm.get('projectManager.name').hasError('required')">
+                                Required Field.
+                            </small>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="">Phone</label>
-                        <input type="text" class="form-control" placeholder="Enter Here" name="projectManager"
-                            formControlName="phone">
+                        <input type="text" class="form-control" placeholder="Enter Here" formControlName="phone">
+                        <div class="msgError text-danger"
+                            *ngIf="submittalDetailForm.get('projectManager.phone').invalid && (submittalDetailForm.get('projectManager.phone').dirty || submitted)">
+                            <small class="text-danger"
+                                *ngIf="submittalDetailForm.get('projectManager.phone').hasError('required')">
+                                Required Field.
+                            </small>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="">Email</label>
-                        <input type="text" class="form-control" placeholder="Enter Here" name="projectManager"
-                            formControlName="email">
+                        <input type="text" class="form-control" placeholder="Enter Here" formControlName="email">
+                        <div class="msgError text-danger"
+                            *ngIf="submittalDetailForm.get('projectManager.email').invalid && (submittalDetailForm.get('projectManager.email').dirty || submitted)">
+                            <small class="text-danger"
+                                *ngIf="submittalDetailForm.get('projectManager.email').hasError('required')">
+                                Required Field.
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="form-group" formGroupName="contractor">
+    <div class="form-group">
         <label for="" class="__dark">Contractor</label>
-        <div class="form-control">
+        <div class="form-control" formGroupName="contractor">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="">Contractor Name</label>
-                        <input type="text" class="form-control" placeholder="Enter Here" name="contractor"
-                            formControlName="name">
+                        <input type="text" class="form-control" placeholder="Enter Here" formControlName="name">
+                        <div class="msgError text-danger"
+                            *ngIf="submittalDetailForm.get('contractor.name').invalid && (submittalDetailForm.get('contractor.name').dirty || submitted)">
+                            <small class="text-danger"
+                                *ngIf="submittalDetailForm.get('contractor.name').hasError('required')">
+                                Required Field.
+                            </small>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="">Address Line 1</label>
-                        <input type="text" class="form-control" placeholder="Enter Here" name="contractor"
-                            formControlName="addressLine1">
+                        <input type="text" class="form-control" placeholder="Enter Here" formControlName="addressLine1">
+                        <div class="msgError text-danger"
+                            *ngIf="submittalDetailForm.get('contractor.addressLine1').invalid && (submittalDetailForm.get('contractor.addressLine1').dirty || submitted)">
+                            <small class="text-danger"
+                                *ngIf="submittalDetailForm.get('contractor.addressLine1').hasError('required')">
+                                Required Field.
+                            </small>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="">Address Line 2</label>
-                        <input type="text" class="form-control" placeholder="Enter Here" name="contractor"
-                            formControlName="addressLine2">
+                        <input type="text" class="form-control" placeholder="Enter Here" formControlName="addressLine2">
                     </div>
                 </div>
                 <div class="col-sm-12">
@@ -149,23 +193,43 @@
                                 <option value="">Select</option>
                             </select>
                         </div>
+                        <div class="msgError text-danger"
+                            *ngIf="submittalDetailForm.get('contractor.state').invalid && (submittalDetailForm.get('contractor.state').dirty || submitted)">
+                            <small class="text-danger"
+                                *ngIf="submittalDetailForm.get('contractor.state').hasError('required')">
+                                Required Field.
+                            </small>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="">City</label>
                         <div class="__custom_select">
-                            <select class="form-control" name="city" formControlName="city">
+                            <select class="form-control" formControlName="city">
                                 <option value="">Select</option>
                             </select>
+                        </div>
+                        <div class="msgError text-danger"
+                            *ngIf="submittalDetailForm.get('contractor.city').invalid && (submittalDetailForm.get('contractor.city').dirty || submitted)">
+                            <small class="text-danger"
+                                *ngIf="submittalDetailForm.get('contractor.city').hasError('required')">
+                                Required Field.
+                            </small>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="">Zip</label>
-                        <input type="text" class="form-control" placeholder="Enter Here" name="contractor"
-                            formControlName="postalCode">
+                        <input type="text" class="form-control" placeholder="Enter Here" formControlName="postalCode">
+                        <div class="msgError text-danger"
+                            *ngIf="submittalDetailForm.get('contractor.postalCode').invalid && (submittalDetailForm.get('contractor.postalCode').dirty || submitted)">
+                            <small class="text-danger"
+                                *ngIf="submittalDetailForm.get('contractor.postalCode').hasError('required')">
+                                Required Field.
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
