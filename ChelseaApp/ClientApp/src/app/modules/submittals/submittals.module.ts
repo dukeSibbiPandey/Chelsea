@@ -19,7 +19,6 @@ import {SplitButtonModule} from 'primeng/splitbutton';
 import { ToastModule } from 'primeng/toast';
 import { MergeSubmittalsComponent } from './components/merge-submittals/merge-submittals.component';
 import { EditHeaderComponent } from './components/edit-header/edit-header.component';
-import { EditSubmittalsComponent } from './components/edit-submittals/edit-submittals.component';
 import { SubmittalsDetailFormComponent } from './components/submittals-detail-form/submittals-detail-form.component';
 
 
@@ -37,7 +36,6 @@ import { SubmittalsDetailFormComponent } from './components/submittals-detail-fo
     PreviewPageTwoComponent,
     MergeSubmittalsComponent,
     EditHeaderComponent,
-    EditSubmittalsComponent,
     SubmittalsDetailFormComponent,
   ],
   imports: [
