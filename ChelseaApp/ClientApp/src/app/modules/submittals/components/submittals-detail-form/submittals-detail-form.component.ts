@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
@@ -10,6 +10,7 @@ import { PrimeNGConfig } from 'primeng/api';
   providers: [PrimeNGConfig, MessageService]
 })
 export class SubmittalsDetailFormComponent implements OnInit {
+  @Output() detailFormSubmitCallbck: EventEmitter<any> = new EventEmitter();
   submittalDetailForm: FormGroup;
   submitted = false;
   toastPosition = 'top-center';
@@ -84,7 +85,7 @@ export class SubmittalsDetailFormComponent implements OnInit {
     let data: any = {
       isDialogOpen: false
     }
-    //this.editDialogSubmitCallback.emit(data)
+    this.detailFormSubmitCallbck.emit(data)
   }
 
 }

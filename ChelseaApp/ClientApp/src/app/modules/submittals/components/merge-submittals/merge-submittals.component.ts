@@ -40,4 +40,8 @@ export class MergeSubmittalsComponent implements OnInit {
   detailFormSubmitHndler=()=>{
     this._SubmittalsDetailFormComponent.handleSubmit();
   }
+
+  detailFormSubmitCallbck = ($event: any) => {
+    this.isDetailEditDialog = $event.isDialogOpen
+  }
 }

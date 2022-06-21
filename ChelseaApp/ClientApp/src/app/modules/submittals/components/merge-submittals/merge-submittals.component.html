@@ -156,7 +156,7 @@
         </div>
     </ng-template>
     <div class="dialog_body">
-        <app-submittals-detail-form></app-submittals-detail-form>
+        <app-submittals-detail-form (detailFormSubmitCallbck)="detailFormSubmitCallbck($event)"></app-submittals-detail-form>
     </div>
     <ng-template pTemplate="footer">
         <div class="listing-footer-actions text-left">
