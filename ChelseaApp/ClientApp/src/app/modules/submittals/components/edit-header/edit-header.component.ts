@@ -25,7 +25,7 @@ export class EditHeaderComponent implements OnInit {
     })
   }
   toastMsg(severity: any, summary: any, detail: any, life: any) {
-    this.messageService.add({ key: 'unitFormToast', severity: severity, summary: summary, detail: detail, life: life, closable: true });
+    this.messageService.add({ key: 'headerFormToast', severity: severity, summary: summary, detail: detail, life: life, closable: true });
   }
   getDetails = () => {
     const res: any = {};
