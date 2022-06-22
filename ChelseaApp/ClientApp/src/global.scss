@@ -5,9 +5,6 @@
     outline: none !important;
     font-family: "Roboto";
 }
-html {
-    overflow: hidden;
-}
 body {
     background: #f9f9f9;
 }
@@ -17,10 +14,9 @@ body {
     padding: 0px;
     box-sizing: border-box;
     min-height: 100vh;
-    height: 100vh;
-}
-body {
-    overflow: auto;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 .main_contaner {
     min-height: 100vh;
@@ -116,29 +112,12 @@ a {
 .row-same-height .col-same-height .content {
     width: 100%;
 }
-.form-control {
-    box-shadow: none !important;
-    outline: none !important;
-    border: 1px solid #dbdcdf;
-    &:focus {
-        box-shadow: none !important;
-        outline: none !important;
-        border: 1px solid #dbdcdf;
-    }
-}
+
 .form-control._placeholder {
     padding: 15px;
 }
 .form-group {
-    margin-bottom: 25px;
-    position: relative;
-    .msgError {
-        position: absolute;
-        left: 0;
-        top: 100%;
-        width: 100%;
-        white-space: normal;
-    }
+    margin-bottom: 20px;
     label {
         font-style: normal;
         font-weight: 400;
@@ -146,9 +125,6 @@ a {
         line-height: 16px;
         color: #707070;
         margin-bottom: 5px;
-        &.mb_0 {
-            margin-bottom: 0px;
-        }
         &.__dark {
             font-weight: 600;
             color: #333333;
@@ -263,83 +239,4 @@ a {
             box-shadow: none !important;
         }
     }
-}
-
-.text-left {
-    text-align: left;
-}
-
-.p-dialog-footer {
-    border-top: 1px solid #dee2e6 !important;
-    padding: 16px !important;
-}
-.p-dialog .p-dialog-footer {
-    button:last-child {
-        margin: 0px !important;
-    }
-}
-.p-dialog .p-dialog-header {
-    background: #ffffff;
-    box-shadow: 0px 1px 0px #dbdcdf !important;
-    border-bottom: 2px #dbdcdf solid;
-}
-.custom-dialog-header {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: space-between;
-    font-family: "Roboto";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
-    color: #707070;
-}
-
-.p-radiobutton .p-radiobutton-box {
-    border-color: 1px #707070 solid !important;
-}
-.p-radiobutton .p-radiobutton-box:not(.p-disabled):not(.p-highlight):hover {
-    border-color: #e8442d !important;
-}
-.p-radiobutton .p-radiobutton-box.p-highlight {
-    background: #e8442d !important;
-    border: 1px #e8442d solid !important;
-    box-shadow: none !important;
-    outline: none !important;
-}
-
-.p-radiobutton-icon {
-    position: relative;
-    &::after {
-        position: absolute;
-        width: 6px;
-        height: 6px;
-        content: "";
-        border-radius: 100%;
-        background: #e8442d;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-    }
-}
-
-.__custom_dropdown:hover {
-    .dropdown-menu {
-        display: block;
-    }
-}
-.p-dialog {
-    border: 2px #dbdcdf solid;
-    // box-shadow: -1px 0px 0px #DBDCDF;
-}
-.p-dialog .p-dialog-content {
-    padding: 15px;
-}
-.msgError {
-    font-size: 12px;
-}
-
-.p-toast.p-component {
-    z-index: 999999 !important;
 }

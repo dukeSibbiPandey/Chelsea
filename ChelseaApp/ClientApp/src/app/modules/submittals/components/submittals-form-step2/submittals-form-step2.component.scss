@@ -1,0 +1,19 @@
+.__more {
+    position: relative;
+    .__add {
+        position: relative;
+        z-index: 10;
+        padding-right: 10px;
+        background: #f9f9f9;
+    }
+    &::after {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        content: "";
+        transform: translateY(-50%);
+        height: 1px;
+        width: 100%;
+        background: #dcdcdc;
+    }
+}

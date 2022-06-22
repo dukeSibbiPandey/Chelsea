@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
 
 @Component({
-  selector: 'app-submittals',
-  templateUrl: './submittals.component.html',
-  styleUrls: ['./submittals.component.scss']
+  selector: 'app-submittals-list',
+  templateUrl: './submittals-list.component.html',
+  styleUrls: ['./submittals-list.component.scss']
 })
 export class SubmittalsComponent implements OnInit {
   list: any = [];
