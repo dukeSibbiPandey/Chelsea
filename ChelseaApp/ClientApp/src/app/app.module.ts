@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -11,7 +11,8 @@ import { TncComponent } from './components/tnc/tnc.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { SubmittalsFormComponent } from './components/submittals-form/submittals-form.component';
-
+import { HttpClientModule } from '@angular/common/http';
+import { HttpService } from './components/http.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,9 +27,11 @@ import { SubmittalsFormComponent } from './components/submittals-form/submittals
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    HttpClientModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [HttpService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -9,6 +9,7 @@ namespace ChelseaApp
         public AutoMapperProfile()
         {
             CreateMap<Submittal, SubmittalModel>();
+            CreateMap<SubmittalList, SubmittalModel>();
             CreateMap<AddressMaster, AddressModel>();
             CreateMap<CityMaster, CityModel>();
             CreateMap<StateMaster, StateModel>();

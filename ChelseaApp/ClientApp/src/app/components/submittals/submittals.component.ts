@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpService } from '../http.service';
 
 @Component({
   selector: 'app-submittals',
@@ -6,64 +7,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./submittals.component.scss']
 })
 export class SubmittalsComponent implements OnInit {
-  list: any = [
-
-  ]
-  constructor() { }
-
-  ngOnInit(): void {
-    this.list = [
-      {
-        info: {
-          image: '../../../assets/images/thumb_1.jpg',
-          fileName: '010622 Sample file.pdf',
-          fileSize: '2.5 mb'
-        },
-        noSamples: 5,
-        owner: 'John Smith',
-        createdAt: '06/06/2022'
-      },
-      {
-        info: {
-          image: '../../../assets/images/thumb_2.jpg',
-          fileName: '020622 Sample file.pdf',
-          fileSize: '3.0 mb'
-        },
-        noSamples: 4,
-        owner: 'Jane Doe',
-        createdAt: '06/05/2022'
-      },
-      {
-        info: {
-          image: '../../../assets/images/thumb_3.jpg',
-          fileName: '030622 Sample file.pdf',
-          fileSize: '2.7 mb'
-        },
-        noSamples: 6,
-        owner: 'Michael S.',
-        createdAt: '05/24/2022'
-      },
-      {
-        info: {
-          image: '../../../assets/images/thumb_4.jpg',
-          fileName: '030622 Sample file.pdf',
-          fileSize: '2.7 mb'
-        },
-        noSamples: 5,
-        owner: 'Heather R.',
-        createdAt: '05/12/2022'
-      },
-      {
-        info: {
-          image: '../../../assets/images/thumb_4.jpg',
-          fileName: '030622 Sample file.pdf',
-          fileSize: '2.7 mb'
-        },
-        noSamples: 3,
-        owner: 'Robin Raszka',
-        createdAt: '04/18/2022'
-      }
-    ]
+  list: any = [];
+  searchText: string= "";
+  httpService: HttpService;
+  constructor(httpService: HttpService)
+  {
+    this.httpService = httpService;
+    
   }
 
+  bindSubmittalsGrid(){
+    this.httpService.get("Home/submittal/list").toPromise().then(value => {
+      this.list = value;
+    });
+  }
+  searchList() {
+    this.httpService.get("Home/submittal/list/" + this.searchText).toPromise().then(value => {
+      this.list = value;
+    });
+  }
+
+  ngOnInit(): void {
+    this.bindSubmittalsGrid();    
+  }
 }

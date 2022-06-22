@@ -18,6 +18,7 @@ namespace Chelsea.Repository
         public virtual DbSet<AddressMaster> AddressMaster { get; set; }
         public virtual DbSet<CityMaster> CityMaster { get; set; }
         public virtual DbSet<StateMaster> StateMaster { get; set; }
+        public virtual DbSet<SubmittalList> vwSubmittals { get; set; }
     }
     
 }

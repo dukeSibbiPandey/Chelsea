@@ -7,8 +7,8 @@
                 </div>
                 <div class="_t_right">
                     <div class="_t_sarch">
-                        <input type="text" class="search_input" placeholder="Search">
-                        <img class="search-icon" src="../../../assets/images/search_icon.png" alt="search icon">
+                        <input type="text" class="search_input" placeholder="Search" [(ngModel)]="searchText">
+                        <img (click)="this.searchList()" class="search-icon" src="../../../assets/images/search_icon.png" alt="search icon"/>
                     </div>
                     <button type="button" class="__a_btn __b">Submittals</button>
                     <button [routerLink]="['/submittals/add/0']" type="button" class="__a_btn __w">New
@@ -30,23 +30,23 @@
                         <tr *ngFor="let item of list">
                             <td>
                                 <div class="flex">
-                                    <img src="{{item.info.image}}" alt="">
+                                    <img src="../../../assets/images/{{item.thumbnail}}" alt="">
                                     <div class="__info">
-                                        <p class="item_name">{{item.info.fileName}}</p>
-                                        <p class="__size">{{item.info.fileSize}}</p>
+                                        <p class="item_name">{{item.fileName}}</p>
+                                        <p class="__size">{{item.fileSize}}</p>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <p>
-                                    {{item.noSamples}}
-                                </p>
+                              <p>
+                                {{item.submittalCount}}
+                              </p>
                             </td>
                             <td>
-                                <p class="__name">{{item.owner}}</p>
+                              <p class="__name">{{item.firstName}} {{item.lastName}}</p>
                             </td>
                             <td>
-                                <p class="__date">{{item.createdAt}}</p>
+                              <p class="__date">{{item.createdDate | date:'MM/d/yyyy' }}</p>
                             </td>
                             <td class="action-cell">
                                 <span class="__a_cta">
