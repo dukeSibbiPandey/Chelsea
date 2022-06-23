@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
+import { HttpService } from '../../../../components/http.service';
 
 @Component({
   selector: 'app-submittals-detail-form',
@@ -14,14 +15,33 @@ export class SubmittalsDetailFormComponent implements OnInit {
   submittalDetailForm: FormGroup;
   submitted = false;
   toastPosition = 'top-center';
-
-  constructor(private _FormBuilder: FormBuilder, private messageService: MessageService) { }
+  addressMaster: any = [];
+  cityMaster: any = [];
+  stateMaster: any = [];
+  constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private httpService: HttpService) { }
 
   ngOnInit(): void {
     this.createForm(() => {
       // this.setFormValue()
     })
   }
+
+  bindAddressOptions() {
+    this.httpService.get("Home/master/data/address").toPromise().then(value => {
+      this.addressMaster = value;
+    });
+  }
+  bindCityOptions() {
+    this.httpService.get("Home/master/data/city").toPromise().then(value => {
+      this.cityMaster = value;
+    });
+  }
+  bindStateOptions() {
+    this.httpService.get("Home/master/data/state").toPromise().then(value => {
+      this.stateMaster = value;
+    });
+  }
+
   createForm = (callback: any): void => {
     this.submitted = false;
     this.submittalDetailForm = this._FormBuilder.group(

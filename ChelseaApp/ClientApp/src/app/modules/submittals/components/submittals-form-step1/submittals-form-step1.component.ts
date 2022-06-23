@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
+import { HttpService } from '../../../../components/http.service';
 @Component({
   selector: 'app-submittals-form-step1',
   templateUrl: './submittals-form-step1.component.html',
@@ -13,11 +14,33 @@ export class SubmittalsFormStep1Component implements OnInit {
   activeAddressInde = -1;
   submittalDetailForm: FormGroup;
   submitted = false;
-  constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
+  addressMaster: any = [];
+  cityMaster: any = [];
+  stateMaster: any = [];
+  constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService) { }
   ngOnInit(): void {
     this.createForm(() => {
 
     })
+
+    this.bindAddressOptions();
+    this.bindCityOptions();
+    this.bindStateOptions();
+  }
+  bindAddressOptions() {
+    this.httpService.get("Home/master/data/address").toPromise().then(value => {
+      this.addressMaster = value;
+    });
+  }
+  bindCityOptions() {
+    this.httpService.get("Home/master/data/city").toPromise().then(value => {
+      this.cityMaster = value;
+    });
+  }
+  bindStateOptions() {
+    this.httpService.get("Home/master/data/state").toPromise().then(value => {
+      this.stateMaster = value;
+    });
   }
   createForm = (callback: any): void => {
     this.submitted = false;

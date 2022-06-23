@@ -27,7 +27,7 @@ namespace ChelseaApp.Controllers
         [HttpGet("submittal/list")]
         public async Task<ActionResult> Get()
         {
-            var dataList  = await _context.vwSubmittals.ToListAsync();
+            var dataList = await _context.vwSubmittals.ToListAsync();
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
             return Ok(modelList);
         }
@@ -37,6 +37,34 @@ namespace ChelseaApp.Controllers
             var dataList = await _context.vwSubmittals.AsQueryable().Where(t => t.FileName.Contains(searchText) || t.LastName.Contains(searchText)).ToListAsync();
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
             return Ok(modelList);
+        }
+
+        [HttpGet("master/data/{type}")]
+        public async Task<ActionResult> GetMaster(string type)
+        {
+            if (type == "address")
+            {
+                var dataList = await _context.vwAddress.ToListAsync();
+                var modelList = this._mapper.Map<List<AddressModel>>(dataList);
+                return Ok(modelList);
+            }
+            if (type == "city")
+            {
+                var dataList = await _context.CityMaster.ToListAsync();
+                var modelList = this._mapper.Map<List<CityMaster>>(dataList);
+                return Ok(modelList);
+            }
+            if (type == "state")
+            {
+                var dataList = await _context.StateMaster.ToListAsync();
+                var modelList = this._mapper.Map<List<StateModel>>(dataList);
+                return Ok(modelList);
+            }
+            else
+            {
+                return Ok(string.Empty);
+            }
+
         }
     }
 }

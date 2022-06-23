@@ -5,32 +5,20 @@
                 <div class="__b_p form-control _placeholder form-group">
                     <label for="" class="__dark">Chelsea Address</label>
                     <div class="row-same-height __address_grid">
-                        <div class="col-same-height">
+                        <div class="col-same-height" *ngFor="let item of addressMaster">
                             <div class="content __a_list" (click)="selectAddress(0, 'id')">
-                                <span class="__r_btn {{activeAddressInde==0?' checked':''}}"></span>
+                                <span class="__r_btn {{item.isPrimary?' checked':''}}"></span>
                                 <div class="__a_c">
                                     <p class="__title">
-                                        <strong>CHELSEA LIGHTING</strong>
+                                      <strong>{{item.name}}</strong>
                                     </p>
-                                    <p class="__address">14 Penn Plaza, New York, NY 10122</p>
-                                    <p class="__contact"><strong>Phone:</strong> (212) 356-5100</p>
-                                    <p class="__contact"><strong>Fax:</strong> N/A</p>
+                                    <p class="__address">{{item.address}}, {{item.state}}, {{item.city}} {{item.zipCode}}</p>
+                                    <p class="__contact"><strong>Phone:</strong> {{item.phone}}</p>
+                                    <p class="__contact"><strong>Fax:</strong> {{item.fax}}</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-same-height">
-                            <div class="content __a_list" (click)="selectAddress(1, 'id')">
-                                <span class="__r_btn {{activeAddressInde==1?' checked':''}}"></span>
-                                <div class="__a_c">
-                                    <p class="__title">
-                                        <strong>CHELSEA LIGHTING</strong>
-                                    </p>
-                                    <p class="__address">14 Penn Plaza, New York, NY 10122</p>
-                                    <p class="__contact"><strong>Phone:</strong> (212) 356-5100</p>
-                                    <p class="__contact"><strong>Fax:</strong> N/A</p>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                     <input type="hidden" placeholder="Enter here" formControlName="addressId">
                     <div class="msgError text-danger"
@@ -174,7 +162,7 @@
                                     <div class="__custom_select">
                                         <select class="form-control" name="contractor" formControlName="state">
                                             <option value="">Select</option>
-                                            <option value="1">value 1</option>
+                                            <option value="{{item.id}}" *ngFor="let item of stateMaster">{{item.name}}</option>
                                         </select>
                                     </div>
                                     <div class="msgError text-danger"
@@ -192,7 +180,7 @@
                                     <div class="__custom_select">
                                         <select class="form-control" formControlName="city">
                                             <option value="">Select</option>
-                                            <option value="1">value 1</option>
+                                            <option value="{{item.id}}" *ngFor="let item of cityMaster">{{item.name}}</option>
                                         </select>
                                     </div>
                                     <div class="msgError text-danger"
