@@ -27,7 +27,7 @@
             </svg>
             <div class="__submitted">
                 <p>Submittal Date</p>
-                <P><strong>Mar 30, 2022</strong></P>
+                <P><strong>{{formValueOne?.submittalDate}}</strong></P>
             </div>
         </div>
         <div class="addresss">
@@ -37,25 +37,31 @@
         </div>
     </div>
     <div class="__p_content">
-        <div class="form-group text-center">
+        <div class="form-group text-center" *ngIf="formValueOne?.jobName">
             <label for="">Job Name</label>
-            <p class="value">Google 25th Street</p>
+            <p class="value">{{formValueOne?.jobName}}</p>
         </div>
-        <div class="form-group text-center">
+        <div class="form-group text-center" *ngIf="formValueOne?.submittals">
             <label for="">Submittal #</label>
-            <p class="value">1</p>
+            <p class="value">{{formValueOne?.submittals}}</p>
         </div>
-        <div class="form-group text-center">
+        <div class="form-group text-center"
+            *ngIf="formValueOne?.projectManager?.name || formValueOne?.projectManager?.phone || formValueOne?.projectManager?.email">
             <label for="">Project Manager</label>
-            <p class="value">Eric Sackman</p>
-            <p class="value">P:212-356-5134</p>
-            <p class="value">E:Sackman@chelsealighting.com</p>
+            <p class="value">{{formValueOne?.projectManager?.name}}</p>
+            <p class="value">{{formValueOne?.projectManager?.phone}}</p>
+            <p class="value">{{formValueOne?.projectManager?.email}}</p>
         </div>
-        <div class="form-group text-center">
+        <div class="form-group text-center"
+            *ngIf="formValueOne?.contractor?.name || formValueOne?.contractor?.addressLine1 || formValueOne?.contractor?.addressLine2 || formValueOne?.contractor?.state || formValueOne?.contractor?.city || formValueOne?.contractor?.postalCode">
             <label for="">Contractor</label>
-            <p class="value">JRM</p>
-            <p class="value">242 West 36th Street,</p>
-            <p class="value">New York NY 10018</p>
+            <p class="value">{{formValueOne?.contractor?.name}}</p>
+            <p class="value">{{formValueOne?.contractor?.addressLine1}} {{formValueOne?.contractor?.addressLine2}}</p>
+            <p class="value">
+                {{formValueOne?.contractor?.state}}
+                {{formValueOne?.contractor?.city}}
+                {{formValueOne?.contractor?.postalCode}}
+            </p>
         </div>
     </div>
 </div>
