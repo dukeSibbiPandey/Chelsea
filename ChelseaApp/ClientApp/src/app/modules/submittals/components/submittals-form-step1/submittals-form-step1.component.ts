@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { HttpService } from '../../../../components/http.service';
+
 @Component({
   selector: 'app-submittals-form-step1',
   templateUrl: './submittals-form-step1.component.html',
@@ -17,6 +18,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   addressMaster: any = [];
   cityMaster: any = [];
   stateMaster: any = [];
+  
   constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService) { }
   ngOnInit(): void {
     this.createForm(() => {
@@ -27,6 +29,7 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.bindCityOptions();
     this.bindStateOptions();
   }
+  
   bindAddressOptions() {
     this.httpService.get("Home/master/data/address").toPromise().then(value => {
       this.addressMaster = value;
@@ -79,8 +82,12 @@ export class SubmittalsFormStep1Component implements OnInit {
   }
   get formControl() { return this.submittalDetailForm.controls };
 
-  selectAddress = (index: any, id: any) => {
-    this.submittalDetailForm.controls['addressId'].setValue(id);
+  selectAddress = (index: any, item: any) => {
+    for (let i = 0; i < this.addressMaster.length; i++) {
+      this.addressMaster[i].isPrimary = false;
+    }
+    item.isPrimary = true;
+    this.submittalDetailForm.controls['addressId'].setValue(item.id);
     this.activeAddressInde = index;
   }
 
@@ -105,18 +112,20 @@ export class SubmittalsFormStep1Component implements OnInit {
         ... this.submittalDetailForm.value
       }
       console.log('postDto====', postDto)
-      this.toastMsg('success', 'Success', 'Form submitted successfully', 2000);
-      setTimeout(() => {
-        this.postAjax()
-      }, 3000);
+      this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
+        this.toastMsg('success', 'Success', 'Form submitted successfully', 2000);
+        setTimeout(() => {
+          this.postAjax(value);
+        }, 3000);
+      });
     }
   }
 
-  postAjax = () => {
+  postAjax = (id: any) => {
     let data: any = {
       isDialogOpen: false
     }
-    let url = '/submittals/form/add/1/step/2';
+    let url = '/submittals/form/add/' + id + '/step/2';
     this.router.navigate([url]);
     // this.detailFormSubmitCallbck.emit(data)
   }

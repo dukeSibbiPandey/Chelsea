@@ -6,7 +6,7 @@
                     <label for="" class="__dark">Chelsea Address</label>
                     <div class="row-same-height __address_grid">
                         <div class="col-same-height" *ngFor="let item of addressMaster">
-                            <div class="content __a_list" (click)="selectAddress(0, 'id')">
+                            <div class="content __a_list" (click)="selectAddress(0, item)">
                                 <span class="__r_btn {{item.isPrimary?' checked':''}}"></span>
                                 <div class="__a_c">
                                     <p class="__title">
@@ -215,7 +215,7 @@
             <div class="content __cell __right">
                 <div class="__c_p form-group">
                     <label for="" class="__dark">Cover Page Preview</label>
-                    <div class="preview_wrapper">
+                    <div class="preview_wrapper" id="contentToConvert">
                         <app-submittals-preview-content></app-submittals-preview-content>
                     </div>
                 </div>
