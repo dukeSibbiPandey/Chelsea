@@ -90,7 +90,7 @@
                                 <div class="form-group">
                                     <label for="">Phone</label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
-                                        formControlName="phone">
+                                        formControlName="phone" digitOnly>
                                     <div class="msgError text-danger"
                                         *ngIf="submittalDetailForm.get('projectManager.phone').invalid && (submittalDetailForm.get('projectManager.phone').dirty || submitted)">
                                         <small class="text-danger"
@@ -196,7 +196,7 @@
                                 <div class="form-group">
                                     <label for="">Zip</label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
-                                        formControlName="postalCode">
+                                        formControlName="postalCode" digitOnly>
                                     <div class="msgError text-danger"
                                         *ngIf="submittalDetailForm.get('contractor.postalCode').invalid && (submittalDetailForm.get('contractor.postalCode').dirty || submitted)">
                                         <small class="text-danger"

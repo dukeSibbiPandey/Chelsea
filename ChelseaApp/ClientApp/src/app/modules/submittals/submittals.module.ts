@@ -20,10 +20,13 @@ import { ToastModule } from 'primeng/toast';
 import { MergeSubmittalsComponent } from './components/merge-submittals/merge-submittals.component';
 import { EditHeaderComponent } from './components/edit-header/edit-header.component';
 import { SubmittalsDetailFormComponent } from './components/submittals-detail-form/submittals-detail-form.component';
+import { SharedModule } from 'primeng/api';
+import { DigitOnlyDirective } from 'src/app/directives/digit-only.directive';
 
 
 @NgModule({
   declarations: [
+    DigitOnlyDirective,
     SubmittalsRouterOutletComponent,
     SubmittalsComponent,
     SubmittalsFormComponent,
@@ -47,7 +50,8 @@ import { SubmittalsDetailFormComponent } from './components/submittals-detail-fo
     DialogModule,
     RadioButtonModule,
     SplitButtonModule,
-    ToastModule
+    ToastModule,
+    SharedModule
   ]
 })
 export class SubmittalsModule { }
