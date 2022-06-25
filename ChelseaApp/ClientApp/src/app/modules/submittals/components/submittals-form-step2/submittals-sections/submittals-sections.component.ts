@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 
 @Component({
@@ -8,6 +8,8 @@ import { MenuItem } from 'primeng/api';
 })
 export class SubmittalsSectionsComponent implements OnInit {
   @Input() title = '';
+  @Input() itmindex = 0;
+  @Output() removeFn = new EventEmitter();
   templateList: any = [];
   isEdit = false;
   items: MenuItem[]=[];
@@ -46,5 +48,9 @@ export class SubmittalsSectionsComponent implements OnInit {
   }
   handleEdit = (value: boolean) => {
     this.isEdit = value
+  }
+  handleDelete() {
+    console.log("chaild delete called");
+    this.removeFn.emit(this.itmindex);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpService } from '../../../../components/http.service';
 @Component({
@@ -34,9 +34,13 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
 
   addMoreOption = () => {
-    this.template.push({ name: "F" + this.template.length})
+    this.template.push({ name: "F" + (this.template.length+1)})
   }
   removePdfOption = (idx: any) => {
+    console.log("parent delete called", idx);
     this.template.splice(idx, idx + 1);
+    for (let i = 0; i < this.template.length; i++) {
+      this.template[i].name = "F" + (i + 1);
+    }
   }
 }
