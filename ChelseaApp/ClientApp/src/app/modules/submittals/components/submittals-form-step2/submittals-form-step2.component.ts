@@ -38,7 +38,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
   removePdfOption = (idx: any) => {
     console.log("parent delete called", idx);
-    this.template.splice(idx, idx + 1);
+    this.template.splice(idx, 1);
     for (let i = 0; i < this.template.length; i++) {
       this.template[i].name = "F" + (i + 1);
     }

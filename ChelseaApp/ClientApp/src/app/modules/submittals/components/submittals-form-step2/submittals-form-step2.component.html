@@ -1,6 +1,6 @@
 <div class="form_wrapper">
   <div class="form-group" *ngFor="let item of template;let i = index">
-    <app-submittals-sections title={{item.name}} itmindex={{i}} (removeFn)="removePdfOption()"></app-submittals-sections>
+    <app-submittals-sections title={{item.name}} itmindex={{i}} (removeFn)="removePdfOption($event)"></app-submittals-sections>
   </div>
   <div class="__more">
     <span class="__add">

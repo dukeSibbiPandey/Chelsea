@@ -8,7 +8,7 @@ import { MenuItem } from 'primeng/api';
 })
 export class SubmittalsSectionsComponent implements OnInit {
   @Input() title = '';
-  @Input() itmindex = 0;
+  @Input() itmindex = '0';
   @Output() removeFn = new EventEmitter();
   templateList: any = [];
   isEdit = false;
