@@ -160,7 +160,7 @@
                                 <div class="form-group">
                                     <label for="">State</label>
                                     <div class="__custom_select">
-                                        <select class="form-control" name="contractor" formControlName="state">
+                                        <select class="form-control" (change)="selectState()" name="contractor" formControlName="state">
                                             <option value="">Select</option>
                                             <option value="{{item.id}}" *ngFor="let item of stateMaster">{{item.name}}</option>
                                         </select>
@@ -178,7 +178,7 @@
                                 <div class="form-group">
                                     <label for="">City</label>
                                     <div class="__custom_select">
-                                        <select class="form-control" formControlName="city">
+                                        <select class="form-control" formControlName="city" (change)="selectCity()">
                                             <option value="">Select</option>
                                             <option value="{{item.id}}" *ngFor="let item of cityMaster">{{item.name}}</option>
                                         </select>
