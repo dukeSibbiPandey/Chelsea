@@ -32,8 +32,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="">Submittal Date</label>
-                            <input class="form-control" formControlName="submittalDate" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1">
-                            <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                            <input class="form-control" formControlName="submittalDate" [owlDateTimeTrigger]="submittalDate" [owlDateTime]="submittalDate" placeholder="dd/mm/yyyy">
+                            <owl-date-time [pickerType]="'calendar'" #submittalDate></owl-date-time>
                             <!-- <input type="text" class="form-control" placeholder="Enter here"
                                 formControlName="submittalDate"> -->
                             <div class="msgError text-danger"
