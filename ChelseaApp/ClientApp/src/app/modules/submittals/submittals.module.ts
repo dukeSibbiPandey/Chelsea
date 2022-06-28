@@ -22,6 +22,9 @@ import { EditHeaderComponent } from './components/edit-header/edit-header.compon
 import { SubmittalsDetailFormComponent } from './components/submittals-detail-form/submittals-detail-form.component';
 import { SharedModule } from 'primeng/api';
 import { DigitOnlyDirective } from 'src/app/directives/digit-only.directive';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
+
 @NgModule({
   declarations: [
     DigitOnlyDirective,
@@ -49,7 +52,13 @@ import { DigitOnlyDirective } from 'src/app/directives/digit-only.directive';
     RadioButtonModule,
     SplitButtonModule,
     ToastModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
     SharedModule
+  ],
+  providers: [
+    { provide: OWL_DATE_TIME_LOCALE, useValue: 'in' }
   ]
+
 })
 export class SubmittalsModule { }
