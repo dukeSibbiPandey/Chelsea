@@ -11,11 +11,11 @@ import { SubmittalsSectionsComponent } from './components/submittals-form-step2/
 import { SubmittalsPreviewContentComponent } from './components/submittals-preview-content/submittals-preview-content.component';
 import { SubmittalsPreviewComponent } from './components/submittals-preview/submittals-preview.component';
 import { PreviewPageTwoComponent } from './components/submittals-preview-content/preview-page-two/preview-page-two.component';
-import {CheckboxModule} from 'primeng/checkbox';
-import { FormsModule, ReactiveFormsModule }    from '@angular/forms';
-import {DialogModule} from 'primeng/dialog';
-import {RadioButtonModule} from 'primeng/radiobutton';
-import {SplitButtonModule} from 'primeng/splitbutton';
+import { CheckboxModule } from 'primeng/checkbox';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SplitButtonModule } from 'primeng/splitbutton';
 import { ToastModule } from 'primeng/toast';
 import { MergeSubmittalsComponent } from './components/merge-submittals/merge-submittals.component';
 import { EditHeaderComponent } from './components/edit-header/edit-header.component';
@@ -23,6 +23,7 @@ import { SubmittalsDetailFormComponent } from './components/submittals-detail-fo
 import { SharedModule } from 'primeng/api';
 import { DigitOnlyDirective } from 'src/app/directives/digit-only.directive';
 
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,9 @@ import { DigitOnlyDirective } from 'src/app/directives/digit-only.directive';
     RadioButtonModule,
     SplitButtonModule,
     ToastModule,
-    SharedModule
+    SharedModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
   ]
 })
 export class SubmittalsModule { }
