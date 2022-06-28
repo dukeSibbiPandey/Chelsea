@@ -33,6 +33,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   bindAddressOptions() {
     this.httpService.get("Home/master/data/address").toPromise().then(value => {
       this.addressMaster = value;
+      this.selectAddress(0, this.addressMaster[0]);
     });
   }
   bindCityOptions() {
@@ -60,6 +61,8 @@ export class SubmittalsFormStep1Component implements OnInit {
           state: [''],
           city: [''],
           postalCode: [''],
+          phone: [''],
+          fax: [''],
         }),
         projectManager: this._FormBuilder.group({
           name: ['', [Validators.required]],
@@ -72,8 +75,10 @@ export class SubmittalsFormStep1Component implements OnInit {
           addressLine2: [''],
           state: ['', [Validators.required]],
           city: ['', [Validators.required]],
-          postalCode: ['', [Validators.required]],
+          postalCode: ['', [Validators.required]]         
         }),
+        stateName: [''],
+        cityName: [''],
       }
     )
     if (callback) {
@@ -84,11 +89,26 @@ export class SubmittalsFormStep1Component implements OnInit {
 
   selectAddress = (index: any, item: any) => {
     for (let i = 0; i < this.addressMaster.length; i++) {
-      this.addressMaster[i].isPrimary = false;
+      this.addressMaster[i].isPrimary = false;  
     }
     item.isPrimary = true;
     this.submittalDetailForm.controls['addressId'].setValue(item.id);
+    this.submittalDetailForm.controls['address'].setValue({ addressLine1: item.address, addressLine2: item.name, state: item.state, city: item.city, postalCode: item.zipCode, phone: item.phone, fax: item.fax });    
     this.activeAddressInde = index;
+  }
+  selectCity = () => {
+    let cityId = this.submittalDetailForm.controls['contractor'].value.city;
+    let cityObj = this.cityMaster.filter(function (item: any) {
+      return item.id >= cityId;
+    });
+    this.submittalDetailForm.controls['cityName'].setValue(cityObj[0].name);
+  }
+  selectState = () => {
+    let stateId = this.submittalDetailForm.controls['contractor'].value.state;
+    let stateObj = this.stateMaster.filter(function (item: any) {
+      return item.id >= stateId;
+    });
+    this.submittalDetailForm.controls['stateName'].setValue(stateObj[0].name);
   }
 
   toastMsg(severity: any, summary: any, detail: any, life: any) {

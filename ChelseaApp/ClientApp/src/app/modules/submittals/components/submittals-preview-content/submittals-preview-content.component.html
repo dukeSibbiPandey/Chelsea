@@ -31,9 +31,9 @@
             </div>
         </div>
         <div class="addresss">
-            <p class="__title">CHELSEA LIGHTING</p>
-            <p>14 Penn Plaza, New York, NY 10122</p>
-            <p><strong>Phone:</strong> (212) 356-5100, <strong>Fax:</strong> N/A</p>
+          <p class="__title">{{formValueOne?.address?.addressLine2}}</p>
+          <p>{{formValueOne?.address?.addressLine1}}, {{formValueOne?.address?.state}}, {{formValueOne?.address?.city}} {{formValueOne?.address?.postalCode}}</p>
+          <p><strong>Phone:</strong> {{formValueOne?.address?.phone}}, <strong>Fax:</strong> {{formValueOne?.address?.fax }}</p>
         </div>
     </div>
     <div class="__p_content">
@@ -58,9 +58,9 @@
             <p class="value">{{formValueOne?.contractor?.name}}</p>
             <p class="value">{{formValueOne?.contractor?.addressLine1}} {{formValueOne?.contractor?.addressLine2}}</p>
             <p class="value">
-                {{formValueOne?.contractor?.state}}
-                {{formValueOne?.contractor?.city}}
-                {{formValueOne?.contractor?.postalCode}}
+              {{formValueOne?.stateName}}
+              {{formValueOne?.cityName}}
+              {{formValueOne?.contractor?.postalCode}}
             </p>
         </div>
     </div>
