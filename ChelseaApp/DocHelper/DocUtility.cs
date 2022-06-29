@@ -339,5 +339,62 @@ namespace ChelseaApp.DocHelper
                 }
             }
         }
+
+        [Obsolete]
+        public string CombineMultiplePDFs(List<string> fileNames, string outFile)
+        {
+            if (File.Exists(outFile))
+            {
+                File.Delete(outFile);
+            }
+
+            FileStream stream = new FileStream(outFile, FileMode.Create);
+
+            iTextSharp.text.Document document = new iTextSharp.text.Document();
+            iTextSharp.text.pdf.PdfCopy pdf = new iTextSharp.text.pdf.PdfCopy(document, stream);
+            iTextSharp.text.pdf.PdfReader reader = null;
+            try
+            {
+                document.Open();
+
+                foreach (string file in fileNames)
+                {
+                    reader = new iTextSharp.text.pdf.PdfReader(file);
+                    pdf.AddDocument(reader);
+                    reader.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                if (reader != null)
+                {
+                    reader.Close();
+                }
+            }
+            finally
+            {
+                if (document != null)
+                {
+                    document.Close();
+                }
+            }
+            string reportPath = "Content/MergePdf";
+            string contentRootPath = _environment.ContentRootPath;
+            if (!Directory.Exists(contentRootPath + reportPath))
+            {
+                Directory.CreateDirectory(contentRootPath + reportPath);
+            }
+
+            string rooPath = contentRootPath + reportPath;
+
+
+            string pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
+
+            string pdfFileUrl = string.Format("{0}/{1}", rooPath, pdfFileName);
+            var fileByte = StreamHelper.ReadToEnd(stream);
+            System.IO.File.WriteAllBytes(pdfFileUrl, fileByte);
+            return pdfFileName;
+        }
     }
 }

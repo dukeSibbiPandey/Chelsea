@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace ChelseaApp.Controllers
@@ -77,7 +79,7 @@ namespace ChelseaApp.Controllers
         [System.Obsolete]
         public async Task<ActionResult> SaveCoverPage(CoverPageModel coverPage)
         {
-            var dataList = await _context.vwAddress.AsQueryable().Where(t=>t.Id == coverPage.AddressId).FirstOrDefaultAsync();
+            var dataList = await _context.vwAddress.AsQueryable().Where(t => t.Id == coverPage.AddressId).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<AddressModel>(dataList);
             var cityObj = await _context.CityMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.City)).FirstOrDefaultAsync();
             var stateObj = await _context.StateMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.State)).FirstOrDefaultAsync();
@@ -100,7 +102,7 @@ namespace ChelseaApp.Controllers
             entity.AddressLine2 = coverPage.Contractor.AddressLine2;
             entity.StateId = Convert.ToInt32(coverPage.Contractor.State);
             entity.CityId = Convert.ToInt32(coverPage.Contractor.City);
-            entity.CreatedDate= DateTime.Now;
+            entity.CreatedDate = DateTime.Now;
             entity.Zip = Convert.ToInt32(coverPage.Contractor.PostalCode);
             if (entity.Id > 0)
             {
@@ -110,8 +112,8 @@ namespace ChelseaApp.Controllers
             {
                 _context.Submittal.Add(entity);
             }
-            var result = await _context.SaveChangesAsync();
-            return Ok(result);
+            await _context.SaveChangesAsync();
+            return Ok(entity.Id);
         }
 
         [HttpGet("submittal/get/{id}")]
@@ -119,6 +121,80 @@ namespace ChelseaApp.Controllers
         {
             var dataList = await _context.vwSubmittals.AsQueryable().Where(t => t.Id == Convert.ToInt32(id)).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<SubmittalModel>(dataList);
+            return Ok(modelList);
+        }
+
+        [HttpPost("upload")]
+        [Obsolete]
+        public ActionResult Upload([FromForm] IFormFile file)
+        {
+            var message = string.Empty;
+            var newFileName = string.Empty;
+            try
+            {
+
+                file = this.Request.Form.Files[0];
+
+                string[] acceptFileTypes = new[] { ".pdf" };
+                if (file != null && acceptFileTypes.Count(t => t == Path.GetExtension(file.FileName).ToLower()) > 0)
+                {
+                    byte[] fileBytes = new byte[file.Length];
+                    file.OpenReadStream().Read(fileBytes, 0, int.Parse(file.Length.ToString()));
+
+
+                    string folderPath = this._environment.ContentRootPath + "/Content/TempPdf";
+                    if (!Directory.Exists(folderPath))
+                    {
+                        Directory.CreateDirectory(folderPath);
+                    }
+                    var fileExtension = Path.GetExtension(file.FileName).ToLower();
+                    var fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                    newFileName = string.Format("{0}{1}", fileName + "_" + Guid.NewGuid().ToString(), fileExtension);
+                    var fileUrl = string.Format("{0}/{1}", folderPath, newFileName);
+                    System.IO.File.WriteAllBytes(fileUrl, fileBytes);
+                }
+                else
+                {
+                    message = "Invalid file type " + Path.GetExtension(file.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+
+            }
+            return this.Ok(newFileName);
+        }
+
+        [HttpGet("files/merge")]
+        [Obsolete]
+        public async Task<ActionResult> FileMerge(PdfFileMasterModel pdfFileMaster)
+        {
+            var dataList = await _context.vwSubmittals.AsQueryable().Where(t => t.Id == pdfFileMaster.SubmittalId).FirstOrDefaultAsync();
+            var modelList = this._mapper.Map<SubmittalModel>(dataList);
+            string reportPath = "Content/Scan";
+            var contentRootPath = this._environment.ContentRootPath + '\\';
+            if (!Directory.Exists(contentRootPath + reportPath))
+            {
+                Directory.CreateDirectory(contentRootPath + reportPath);
+            }
+
+            var files = Directory.GetFiles(contentRootPath + '\\' + "Content/Files");
+            string rooPath = contentRootPath + reportPath;
+            var outputFile = string.Format("{0}/{1}", rooPath, "mergedbyitext.pdf");
+
+            var allfiles = pdfFileMaster.PdfFiles.SelectMany(t => t.Files).ToList();
+            DocUtility utility = new DocUtility(this._environment);
+            string mergedFileName = utility.CombineMultiplePDFs(allfiles, outputFile);
+            foreach (var model in pdfFileMaster.PdfFiles)
+            {
+                var modeObj = this._mapper.Map<PdfFiles>(model);
+                modeObj.SubmittalId = pdfFileMaster.SubmittalId;
+                modeObj.FileName = mergedFileName;
+                _context.PdfFiles.Add(modeObj);
+                await _context.SaveChangesAsync();
+            }
+
             return Ok(modelList);
         }
     }

@@ -20,6 +20,7 @@ namespace Chelsea.Repository
         public virtual DbSet<StateMaster> StateMaster { get; set; }
         public virtual DbSet<SubmittalList> vwSubmittals { get; set; }
         public virtual DbSet<AddressMasterList> vwAddress { get; set; }
+        public virtual DbSet<PdfFiles> PdfFiles { get; set; }
     }
     
 }
