@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,26 +24,30 @@ namespace ChelseaApp.Controllers
         private readonly IMapper _mapper;
         [System.Obsolete]
         private readonly IHostingEnvironment _environment;
+        public readonly AppConfig _appSetting;
+        private readonly IAzureBlobServices _azureBlobServices;
 
-        [System.Obsolete]
-        public HomeController(ChelseaContext context, IMapper mapper, IHostingEnvironment environment)
+       [System.Obsolete]
+        public HomeController(ChelseaContext context, IMapper mapper, IHostingEnvironment environment, IOptions<AppConfig> appSettings, IAzureBlobServices azureBlobServices)
         {
             _context = context;
             _mapper = mapper;
             this._environment = environment;
+            _appSetting = appSettings.Value;
+            _azureBlobServices = azureBlobServices;
         }
 
         [HttpGet("submittal/list")]
         public async Task<ActionResult> Get()
         {
-            var dataList = await _context.vwSubmittals.ToListAsync();
+            var dataList = await _context.vwSubmittals.Where(t => t.IsTempRecord == null || t.IsTempRecord == false).ToListAsync();
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
             return Ok(modelList);
         }
         [HttpGet("submittal/list/{searchText}")]
         public async Task<ActionResult> Get(string searchText)
         {
-            var dataList = await _context.vwSubmittals.AsQueryable().Where(t => t.FileName.Contains(searchText) || t.LastName.Contains(searchText)).ToListAsync();
+            var dataList = await _context.vwSubmittals.AsQueryable().Where(t => (t.FileName.Contains(searchText) || t.LastName.Contains(searchText)) && (t.IsTempRecord == null || t.IsTempRecord == false)).ToListAsync();
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
             return Ok(modelList);
         }
@@ -86,7 +91,9 @@ namespace ChelseaApp.Controllers
             coverPage.Contractor.StateName = stateObj.Name;
             coverPage.Contractor.CityName = cityObj.Name;
             DocUtility utility = new DocUtility(this._environment);
-            utility.SaveCoverPage(coverPage, modelList);
+            var stream = utility.SaveCoverPage(coverPage, modelList);
+            string fileName = "cover_" + Guid.NewGuid().ToString() + ".doc";
+            await _azureBlobServices.UploadFile(stream, "/Content/"+ fileName, _appSetting.AzureBlobDocContainer, false);
 
             Submittal entity = new Submittal();
             entity.Id = Convert.ToInt64(coverPage.Id);
@@ -103,6 +110,8 @@ namespace ChelseaApp.Controllers
             entity.StateId = Convert.ToInt32(coverPage.Contractor.State);
             entity.CityId = Convert.ToInt32(coverPage.Contractor.City);
             entity.CreatedDate = DateTime.Now;
+            entity.IsTempRecord = true;
+            entity.CoverPageName = fileName;
             entity.Zip = Convert.ToInt32(coverPage.Contractor.PostalCode);
             if (entity.Id > 0)
             {
@@ -126,7 +135,7 @@ namespace ChelseaApp.Controllers
 
         [HttpPost("upload")]
         [Obsolete]
-        public ActionResult Upload([FromForm] IFormFile file)
+        public async Task<ActionResult> Upload([FromForm] IFormFile file)
         {
             var message = string.Empty;
             var newFileName = string.Empty;
@@ -142,16 +151,20 @@ namespace ChelseaApp.Controllers
                     file.OpenReadStream().Read(fileBytes, 0, int.Parse(file.Length.ToString()));
 
 
-                    string folderPath = this._environment.ContentRootPath + "/Content/TempPdf";
-                    if (!Directory.Exists(folderPath))
-                    {
-                        Directory.CreateDirectory(folderPath);
-                    }
+                    //string folderPath = this._environment.ContentRootPath + "/Content/TempPdf";
+                    //if (!Directory.Exists(folderPath))
+                    //{
+                    //    Directory.CreateDirectory(folderPath);
+                    //}
+
+                    Stream stream = new MemoryStream(fileBytes);
+
                     var fileExtension = Path.GetExtension(file.FileName).ToLower();
                     var fileName = Path.GetFileNameWithoutExtension(file.FileName);
                     newFileName = string.Format("{0}{1}", fileName + "_" + Guid.NewGuid().ToString(), fileExtension);
-                    var fileUrl = string.Format("{0}/{1}", folderPath, newFileName);
-                    System.IO.File.WriteAllBytes(fileUrl, fileBytes);
+                    var fileUrl = string.Format("{0}/{1}", "Content", newFileName);
+                    // System.IO.File.WriteAllBytes(fileUrl, fileBytes);
+                    await _azureBlobServices.UploadFile(stream, fileUrl, _appSetting.AzureBlobTempContainer, false);
                 }
                 else
                 {
@@ -172,27 +185,54 @@ namespace ChelseaApp.Controllers
         {
             var dataList = await _context.vwSubmittals.AsQueryable().Where(t => t.Id == pdfFileMaster.SubmittalId).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<SubmittalModel>(dataList);
-            string reportPath = "Content/Scan";
-            var contentRootPath = this._environment.ContentRootPath + '\\';
-            if (!Directory.Exists(contentRootPath + reportPath))
-            {
-                Directory.CreateDirectory(contentRootPath + reportPath);
-            }
+            //string reportPath = "Content/Scan";
+            //var contentRootPath = this._environment.ContentRootPath + '\\';
+            //if (!Directory.Exists(contentRootPath + reportPath))
+            //{
+            //    Directory.CreateDirectory(contentRootPath + reportPath);
+            //}
 
-            var files = Directory.GetFiles(contentRootPath + '\\' + "Content/Files");
-            string rooPath = contentRootPath + reportPath;
-            var outputFile = string.Format("{0}/{1}", rooPath, "mergedbyitext.pdf");
+            //var files = Directory.GetFiles(contentRootPath + '\\' + "Content/Files");
+            //string rooPath = contentRootPath + reportPath;
+
+            // var outputFile = string.Format("{0}/{1}", "Content", "mergedbyitext.pdf");
+            List<Stream> files = new List<Stream>();
+            
+
+            
 
             var allfiles = pdfFileMaster.PdfFiles.SelectMany(t => t.Files).ToList();
+            foreach (var file in allfiles)
+            {
+                var fileUrl = string.Format("{0}/{1}", "Content", file);
+                var fileStream = await _azureBlobServices.DownloadFile(fileUrl, _appSetting.AzureBlobTempContainer);
+                files.Add(fileStream);
+            }
+
             DocUtility utility = new DocUtility(this._environment);
-            string mergedFileName = utility.CombineMultiplePDFs(allfiles, outputFile);
+            Stream mergedFileName = utility.CombineMultiplePDFs(files);
+            string pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
+            var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);
+            await _azureBlobServices.UploadFile(mergedFileName, pdffileUrl, _appSetting.AzureBlobDocContainer, false);
+
             foreach (var model in pdfFileMaster.PdfFiles)
             {
                 var modeObj = this._mapper.Map<PdfFiles>(model);
                 modeObj.SubmittalId = pdfFileMaster.SubmittalId;
-                modeObj.FileName = mergedFileName;
+                modeObj.FileName = pdfFileName;
                 _context.PdfFiles.Add(modeObj);
                 await _context.SaveChangesAsync();
+
+                foreach(var file in model.Files)
+                {
+                    PdfFileDetails pdfFile = new PdfFileDetails();
+                    pdfFile.FileName = file;
+                    pdfFile.SubmittalId = pdfFileMaster.SubmittalId;
+                    pdfFile.PdfFileId = modeObj.Id;
+                    pdfFile.Name = modeObj.Name;
+                    _context.PdfFileDetails.Add(pdfFile);
+                    await _context.SaveChangesAsync();
+                }
             }
 
             return Ok(modelList);

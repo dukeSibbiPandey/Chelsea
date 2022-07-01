@@ -1,5 +1,6 @@
 using AutoMapper;
 using Chelsea.Repository;
+using ChelseaApp.DocHelper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace ChelseaApp
 {
@@ -24,9 +26,13 @@ namespace ChelseaApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            var appSettingsSection = this.Configuration.GetSection("AppSettings");
+            var appSettings = appSettingsSection.Get<AppConfig>();
 
+            services.AddScoped<IAzureBlobServices, AzureBlobServices>();
+            services.AddSingleton<IOptions<AppConfig>>(x => Options.Create<AppConfig>(appSettings));
             services.AddDbContext<ChelseaContext>(options =>
-                              options.UseSqlServer(Configuration.GetConnectionString("Default")));
+                              options.UseSqlServer(appSettings.DatabaseConnection));
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

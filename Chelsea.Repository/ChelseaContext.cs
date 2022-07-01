@@ -21,6 +21,7 @@ namespace Chelsea.Repository
         public virtual DbSet<SubmittalList> vwSubmittals { get; set; }
         public virtual DbSet<AddressMasterList> vwAddress { get; set; }
         public virtual DbSet<PdfFiles> PdfFiles { get; set; }
+        public virtual DbSet<PdfFileDetails> PdfFileDetails { get; set; }
     }
     
 }

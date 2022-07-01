@@ -26,7 +26,7 @@ namespace ChelseaApp.DocHelper
         }
 
         [System.Obsolete]
-        public bool SaveCoverPage(CoverPageModel coverPage, AddressModel addressModel)
+        public Stream SaveCoverPage(CoverPageModel coverPage, AddressModel addressModel)
         {
             string sourceDoc = this._environment.ContentRootPath + "/Content/Template/CoverPage.docx";
             Stream document = new MemoryStream();
@@ -129,7 +129,7 @@ namespace ChelseaApp.DocHelper
                 }
             }
 
-            byte[] tempms = StreamHelper.ReadToEnd(document);
+            /*byte[] tempms = StreamHelper.ReadToEnd(document);
 
             var docFile = this._environment.ContentRootPath + "/Content/cover_" + Guid.NewGuid().ToString() + ".doc";
             var pdfFile = this._environment.ContentRootPath + "/Content/cover.pdf";
@@ -138,9 +138,9 @@ namespace ChelseaApp.DocHelper
             {
                 Directory.CreateDirectory(outputDir);
             }
-            File.WriteAllBytes(docFile, tempms);
+            File.WriteAllBytes(docFile, tempms);*/
             //ConvertPdf(docFile, pdfFile, outputDir, outputDir + "/images", "letter");
-            return true;
+            return document;
         }
 
         [System.Obsolete]
@@ -341,14 +341,14 @@ namespace ChelseaApp.DocHelper
         }
 
         [Obsolete]
-        public string CombineMultiplePDFs(List<string> fileNames, string outFile)
+        public Stream CombineMultiplePDFs(List<Stream> fileNames)
         {
-            if (File.Exists(outFile))
-            {
-                File.Delete(outFile);
-            }
+            //if (File.Exists(outFile))
+            //{
+            //    File.Delete(outFile);
+            //}
 
-            FileStream stream = new FileStream(outFile, FileMode.Create);
+            Stream stream = new MemoryStream();
 
             iTextSharp.text.Document document = new iTextSharp.text.Document();
             iTextSharp.text.pdf.PdfCopy pdf = new iTextSharp.text.pdf.PdfCopy(document, stream);
@@ -357,7 +357,7 @@ namespace ChelseaApp.DocHelper
             {
                 document.Open();
 
-                foreach (string file in fileNames)
+                foreach (Stream file in fileNames)
                 {
                     reader = new iTextSharp.text.pdf.PdfReader(file);
                     pdf.AddDocument(reader);
@@ -379,7 +379,7 @@ namespace ChelseaApp.DocHelper
                     document.Close();
                 }
             }
-            string reportPath = "Content/MergePdf";
+            /*string reportPath = "Content/MergePdf";
             string contentRootPath = _environment.ContentRootPath;
             if (!Directory.Exists(contentRootPath + reportPath))
             {
@@ -393,8 +393,8 @@ namespace ChelseaApp.DocHelper
 
             string pdfFileUrl = string.Format("{0}/{1}", rooPath, pdfFileName);
             var fileByte = StreamHelper.ReadToEnd(stream);
-            System.IO.File.WriteAllBytes(pdfFileUrl, fileByte);
-            return pdfFileName;
+            System.IO.File.WriteAllBytes(pdfFileUrl, fileByte);*/
+            return stream;
         }
     }
 }

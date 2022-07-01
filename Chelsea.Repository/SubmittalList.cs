@@ -31,5 +31,7 @@ namespace Chelsea.Repository
         public DateTime? UpdatedDate { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string CoverPageName { get; set; }
+        public bool? IsTempRecord { get; set; }
     }
 }
