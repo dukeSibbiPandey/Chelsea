@@ -32,10 +32,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="">Submittal Date</label>
-                            <input class="form-control" formControlName="submittalDate" [owlDateTimeTrigger]="submittalDate" [owlDateTime]="submittalDate" placeholder="dd/mm/yyyy">
-                            <owl-date-time [pickerType]="'calendar'" #submittalDate></owl-date-time>
-                            <!-- <input type="text" class="form-control" placeholder="Enter here"
-                                formControlName="submittalDate"> -->
+                            <p-calendar formControlName="submittalDate" placeholder="dd/mm/yy" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
                             <div class="msgError text-danger"
                                 *ngIf="formControl.submittalDate.invalid && (formControl.submittalDate.dirty || submitted)">
                                 <small class="text-danger" *ngIf="formControl.submittalDate.hasError('required')">
@@ -60,7 +57,7 @@
                         <div class="form-group">
                             <label for="">Submittal #</label>
                             <input type="text" class="form-control" placeholder="Enter here"
-                                formControlName="submittals">
+                                formControlName="submittals" digitOnly>
                             <div class="msgError text-danger"
                                 *ngIf="formControl.submittals.invalid && (formControl.submittals.dirty || submitted)">
                                 <small class="text-danger" *ngIf="formControl.submittals.hasError('required')">

@@ -24,7 +24,7 @@ import { SharedModule } from 'primeng/api';
 import { DigitOnlyDirective } from 'src/app/directives/digit-only.directive';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
-
+import {CalendarModule} from 'primeng/calendar';
 @NgModule({
   declarations: [
     DigitOnlyDirective,
@@ -54,7 +54,8 @@ import { OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
     ToastModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    SharedModule
+    SharedModule,
+    CalendarModule
   ],
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'in' }
