@@ -142,6 +142,10 @@ namespace ChelseaApp.Controllers
         {
             var message = string.Empty;
             var newFileName = string.Empty;
+            string thumbnail = string.Empty;
+            string pdfPath =  string.Empty;
+            string fileSize = string.Empty;
+            string orgFileName = string.Empty;
             try
             {
 
@@ -161,13 +165,22 @@ namespace ChelseaApp.Controllers
                     //}
 
                     Stream stream = new MemoryStream(fileBytes);
-
+                  
                     var fileExtension = Path.GetExtension(file.FileName).ToLower();
                     var fileName = Path.GetFileNameWithoutExtension(file.FileName);
-                    newFileName = string.Format("{0}{1}", fileName + "_" + Guid.NewGuid().ToString(), fileExtension);
+                    string fileId = fileName + "_" + Guid.NewGuid().ToString();
+
+                    newFileName = string.Format("{0}{1}", fileId, fileExtension);
                     var fileUrl = string.Format("{0}/{1}", "Content", newFileName);
                     // System.IO.File.WriteAllBytes(fileUrl, fileBytes);
-                    await _azureBlobServices.UploadFile(stream, fileUrl, _appSetting.AzureBlobTempContainer, false);
+                    var fileInfo = await _azureBlobServices.UploadFile(stream, fileUrl, _appSetting.AzureBlobTempContainer, false);
+
+                    fileSize = file.Length.ToString();
+                    pdfPath = fileInfo.Path;
+                    DocUtility utility = new DocUtility(this._environment, this._azureBlobServices);
+                    string thName = fileId + ".png";
+                    thumbnail = utility.ConvertPDFtoJPG(stream, thName);
+                    orgFileName = file.FileName;
                 }
                 else
                 {
@@ -179,7 +192,7 @@ namespace ChelseaApp.Controllers
                 message = ex.Message;
 
             }
-            return this.Ok(newFileName);
+            return this.Ok(new { fileName = newFileName, filePath = pdfPath, fileSize = fileSize, thumbnail = thumbnail, orgFileName = orgFileName });
         }
 
         [HttpGet("files/merge")]

@@ -3,9 +3,11 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Hosting;
 using OpenXmlPowerTools;
+using PDFLibNet64;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -427,6 +429,57 @@ namespace ChelseaApp.DocHelper
             var fileByte = StreamHelper.ReadToEnd(stream);
             System.IO.File.WriteAllBytes(pdfFileUrl, fileByte);*/
             return stream;
+        }
+
+        public string ConvertPDFtoJPG(Stream fileStream, string fileName)
+        {
+            PDFWrapper _pdfDoc = new PDFWrapper();
+            _pdfDoc.LoadPDF(fileStream);
+
+            Image img = RenderPage(_pdfDoc, 0);
+
+            Stream stream = new MemoryStream();
+
+            img.Save(stream, ImageFormat.Png);
+
+            var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/"+ fileName, "chelseapublicurl", false).GetAwaiter().GetResult();
+
+            //for (int i = 0; i < _pdfDoc.PageCount; i++)
+            //{
+
+            //    Image img = RenderPage(_pdfDoc, i);
+
+            //    img.Save(Path.Combine(dirOut, string.Format("{0}{1}.jpg", i, DateTime.Now.ToString("mmss"))));
+
+            //}
+            _pdfDoc.Dispose();
+            return fileUploadInfo.Path;
+        }
+        public Image RenderPage(PDFWrapper doc, int page)
+        {
+            doc.CurrentPage = page + 1;
+            doc.CurrentX = 0;
+            doc.CurrentY = 0;
+
+            doc.RenderPage(IntPtr.Zero);
+
+            // create an image to draw the page into
+            var buffer = new Bitmap(doc.PageWidth, doc.PageHeight);
+            doc.ClientBounds = new Rectangle(0, 0, doc.PageWidth, doc.PageHeight);
+            using (var g = Graphics.FromImage(buffer))
+            {
+                var hdc = g.GetHdc();
+                try
+                {
+                    doc.DrawPageHDC(hdc);
+                }
+                finally
+                {
+                    g.ReleaseHdc();
+                }
+            }
+            return buffer;
+
         }
     }
 }

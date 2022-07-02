@@ -29,7 +29,7 @@
                 containerName = subdirectory;
             // Create the container and return a container client object
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
-            await containerClient.CreateIfNotExistsAsync();
+            await containerClient.CreateIfNotExistsAsync(PublicAccessType.BlobContainer);
             return containerClient;
         }
         public async Task<FileUploadInfo> UploadFile(Stream stream, string fileName, string subdirectory = Constants.Empty, bool isTemp = false)

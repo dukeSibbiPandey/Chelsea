@@ -68,16 +68,18 @@ export class SubmittalsSectionsComponent implements OnInit {
       fileName: 'abc.png',
       itmindex: this.itmindex
     }
-    this.uploadSubmittalsCallback.emit(data)
-    // event.files.forEach((element: any, index: any) => {
-    //   this.fileData = <File>event.files[index];
-    //   const formData = new FormData();
-    //   formData.append('file', this.fileData);
-    //   this.httpService.fileupload(url, formData, null, null).subscribe(res => {
-    //     debugger
-    //   })
+  
+     event.files.forEach((element: any, index: any) => {
+       this.fileData = <File>event.files[index];
+       const formData = new FormData();
+       formData.append('file', this.fileData);
+       this.httpService.fileupload(url, formData, null, null).subscribe(res => {
+         debugger
+         data.fileName = res;
+         this.uploadSubmittalsCallback.emit(data)
+       })
 
-    // })
+     })
   }
   onFileSelected = (event: any) => {
     debugger

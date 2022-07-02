@@ -9,7 +9,7 @@ export class HttpService {
   private baseUrl: string;
 
   constructor(private _http: HttpClient, private httpBackend: HttpBackend) {
-    this.baseUrl = 'https://chelsea.skdedu.in/api/';
+    this.baseUrl = 'https://localhost:44339/api/';
   }
 
   httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
