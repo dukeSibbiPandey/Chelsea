@@ -26,7 +26,29 @@ export class SubmittalsFormStep2Component implements OnInit {
       mfg: '',
       part: '',
       description: '',
-      files: [],
+      files: [
+      //   {
+      //   "fileName": "sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+      //   "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+      //   "fileSize": "3028",
+      //   "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
+      //   "orgFileName": "sample.pdf",
+      //   "noSamples": 0,
+      //   "owner": "John Smith",
+      //   "createdAt": "2022-07-02T15:32:15.209Z",
+      //   "itmindex": "0"
+      // },{
+      //   "fileName": "sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+      //   "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+      //   "fileSize": "3028",
+      //   "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
+      //   "orgFileName": "sample.pdf",
+      //   "noSamples": 0,
+      //   "owner": "John Smith",
+      //   "createdAt": "2022-07-02T15:32:15.209Z",
+      //   "itmindex": "0"
+      // }
+    ],
       isOpen:true
     }
   ]
@@ -85,5 +107,16 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
   toggleCallbackHandler=(res:any)=>{
     this.submittalsTpl[res.itmindex]['isOpen']=res.isOpen
+  }
+  removeSubmittals=(res:any)=>{
+    res.selectedIndex.map((item:any, index:number)=>{
+      this.submittalsTpl[res.itmindex]['files'].splice(res.itemIndex, 1)
+    })
+    this.submittalsTpl[res.itmindex]['files']
+  }
+  selectedActionCallbackAction=(res:any)=>{
+    // if(res.action=='delete'){
+    //   this.removeSubmittals(res)
+    // }
   }
 }

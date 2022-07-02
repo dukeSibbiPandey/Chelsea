@@ -20,7 +20,7 @@
                         </svg>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item" href="javascript:void(0)">Duplicate</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)">Delete</a>
+                            <li><a class="dropdown-item" href="javascript:void(0)" (click)="handleRemoveSelected()">Delete</a>
                             </li>
                             <li><a class="dropdown-item" href="javascript:void(0)">Move Up</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0)">Move Down</a></li>
@@ -80,7 +80,7 @@
                             <div class="__overlay">
                                 <div class="_top_b flex v_center space_between">
                                     <div class="field-checkbox">
-                                        <p-checkbox name="group1" value="New York" [(ngModel)]="item.isActive">
+                                        <p-checkbox name="group1" value="yes" [(ngModel)]="item.isSelected" (onChange)="handleSelectTiles()">
                                         </p-checkbox>
                                     </div>
                                     <ul class="flex">
