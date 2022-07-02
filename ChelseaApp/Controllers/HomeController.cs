@@ -196,7 +196,7 @@ namespace ChelseaApp.Controllers
             return this.Ok(new FileModel { FileName = newFileName, FilePath = pdfPath, FileSize = fileSize, Thumbnail = thumbnail, OrgFileName = orgFileName });
         }
 
-        [HttpGet("files/merge")]
+        [HttpPost("files/merge")]
         [Obsolete]
         public async Task<ActionResult> FileMerge(PdfFileMasterModel pdfFileMaster)
         {
@@ -227,15 +227,24 @@ namespace ChelseaApp.Controllers
                 var fileStream = await _azureBlobServices.DownloadFile(fileUrl, _appSetting.AzureBlobTempContainer);
                 files.Add(fileStream);
             }
-            
-            Stream mergedFileName = _docUtility.CombineMultiplePDFs(files);
+
+            byte[] mergedByte = _docUtility.CombineMultiplePDFs(files);
             string pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
-            var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);
-            await _azureBlobServices.UploadFile(mergedFileName, pdffileUrl, _appSetting.AzureBlobDocContainer, false);
-            var thumbnail = _docUtility.ConvertPDFtoJPG(mergedFileName, Path.GetFileNameWithoutExtension(pdfFileName) + ".png", 2);
+            var thumbnail = string.Empty;
+            using (MemoryStream pdfStream = new MemoryStream())
+            {
+                pdfStream.Write(mergedByte, 0, mergedByte.Length);
+                
+                var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);
+                await _azureBlobServices.UploadFile(pdfStream, pdffileUrl, _appSetting.AzureBlobDocContainer, false);
+                thumbnail = _docUtility.ConvertPDFtoJPG(pdfStream, Path.GetFileNameWithoutExtension(pdfFileName) + ".png", 2);
+            }
+
+           
 
             var submittalModel = this._mapper.Map<Submittal>(dataList);
             submittalModel.Thumbnail = thumbnail;
+            submittalModel.FileName = pdfFileName;
             _context.Submittal.Update(submittalModel);
             await _context.SaveChangesAsync();
 
