@@ -20,7 +20,7 @@
                         </svg>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item" href="javascript:void(0)">Duplicate</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)" (click)="handleDelete()">Delete</a>
+                            <li><a class="dropdown-item" href="javascript:void(0)">Delete</a>
                             </li>
                             <li><a class="dropdown-item" href="javascript:void(0)">Move Up</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0)">Move Down</a></li>
@@ -73,7 +73,7 @@
     </ul>
     <div class="__template_wrapper">
         <ul class="row-same-height row">
-            <li class="col-same-height col-sm-3" *ngFor="let item of submittal.listItems">
+            <li class="col-same-height col-sm-3" *ngFor="let item of submittal.listItems; ;let i = index">
                 <div class="content">
                     <div class="_img_wrap">
                         <div class="__overlay">
@@ -82,7 +82,7 @@
                                     <p-checkbox name="group1" value="New York" [(ngModel)]="item.isActive"></p-checkbox>
                                 </div>
                                 <ul class="flex">
-                                    <li>
+                                    <li (click)="handleDelete(i)">
                                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <circle cx="16" cy="16" r="16" transform="rotate(90 16 16)"

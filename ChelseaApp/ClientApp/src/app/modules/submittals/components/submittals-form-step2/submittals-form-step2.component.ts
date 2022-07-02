@@ -67,7 +67,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
   uploadSubmittalsCallbackHandler = (res: any) => {
     const index = res.itmindex;
-    const fileName=res.info && res.info.fileName ||'';
+    const fileName = res.info && res.info.fileName || '';
     this.submittalsTpl[index].files.push(fileName)
     this.submittalsTpl[index].listItems.push(res)
 
@@ -78,16 +78,29 @@ export class SubmittalsFormStep2Component implements OnInit {
     item.name = "F" + (this.submittalsTpl.length + 1);
     this.submittalsTpl.push(item)
   }
-  removePdfOption = (idx: any) => {
-    this.submittalsTpl.splice(idx, 1);
-    for (let i = 0; i < this.submittalsTpl.length; i++) {
-      this.submittalsTpl[i].name = "F" + (i + 1);
-    }
+  removePdfOption = (res: any) => {
+    this.submittalsTpl[res.submittalIndex]['listItems'].splice(res.itemIndex, 1)
+    // this.submittalsTpl.splice(idx, 1);
+    // for (let i = 0; i < this.submittalsTpl.length; i++) {
+    //   this.submittalsTpl[i].name = "F" + (i + 1);
+    // }
   }
   handleMergePdp = () => {
+    let temp: any = [];
+    this.submittalsTpl.map((ele: any, index: number) => {
+      let item: any = {
+        name: ele.name,
+        status: ele.status,
+        mfg: ele.mfg,
+        part: ele.part,
+        description: ele.description,
+        files: ele.files
+      }
+      temp.push(item)
+    })
     let postDto = {
       submittalId: this.id,
-      pdfFiles: this.submittalsTpl
+      pdfFiles: temp
     }
     this.httpService.post("home/files/merge", postDto).toPromise().then(value => {
 

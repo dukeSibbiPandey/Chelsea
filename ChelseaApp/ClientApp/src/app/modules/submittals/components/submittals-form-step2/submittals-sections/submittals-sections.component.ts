@@ -31,9 +31,13 @@ export class SubmittalsSectionsComponent implements OnInit {
   handleEdit = (value: boolean) => {
     this.isEdit = value
   }
-  handleDelete() {
+  handleDelete(index:number) {
     console.log("chaild delete called");
-    this.removeFn.emit(this.itmindex);
+    let res={
+      submittalIndex:this.itmindex,
+      itemIndex:index
+    }
+    this.removeFn.emit(res);
   }
   onUpload = (event: any) => {
     for (let file of event.files) {
@@ -56,7 +60,6 @@ export class SubmittalsSectionsComponent implements OnInit {
           createdAt: new Date(),
           itmindex: this.itmindex
         }
-        debugger
         this.uploadSubmittalsCallback.emit(data)
       })
     })
