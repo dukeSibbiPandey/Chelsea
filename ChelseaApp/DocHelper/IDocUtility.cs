@@ -7,7 +7,7 @@ namespace ChelseaApp.DocHelper
     public interface IDocUtility
     {
         FileUploadInfo SaveCoverPage(CoverPageModel coverPage, AddressModel addressModel);
-        Stream CombineMultiplePDFs(List<Stream> fileNames);
+        byte[] CombineMultiplePDFs(List<Stream> fileNames);
         string ConvertPDFtoJPG(Stream fileStream, string fileName, int pageNumber);
     }
 }

@@ -15,6 +15,7 @@ namespace ChelseaApp
             CreateMap<CityMaster, CityModel>();
             CreateMap<StateMaster, StateModel>();
             CreateMap<PdfFileModel, PdfFiles>();
+            CreateMap<SubmittalList, Submittal>();
         }
     }
 }

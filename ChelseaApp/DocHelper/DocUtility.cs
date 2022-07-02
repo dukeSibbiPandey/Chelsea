@@ -34,7 +34,7 @@ namespace ChelseaApp.DocHelper
         [System.Obsolete]
         public FileUploadInfo SaveCoverPage(CoverPageModel coverPage, AddressModel addressModel)
         {
-            string sourceDoc = this._environment.ContentRootPath + "/Content/Template/CoverPage_Pdf.docx";
+            string sourceDoc = this._environment.WebRootPath + "/Template/CoverPage_Pdf.docx";
             Stream document = new MemoryStream();
 
             using (var source = WordprocessingDocument.Open(sourceDoc, false))
@@ -377,17 +377,21 @@ namespace ChelseaApp.DocHelper
         }
 
         [Obsolete]
-        public Stream CombineMultiplePDFs(List<Stream> fileNames)
+        public byte[] CombineMultiplePDFs(List<Stream> fileNames)
         {
             //if (File.Exists(outFile))
             //{
             //    File.Delete(outFile);
             //}
 
-            Stream stream = new MemoryStream();
+            byte[] pdfBytes = null;
+
+            var outputFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
+
+            var pdfStream = File.Create(outputFilePath);
 
             iTextSharp.text.Document document = new iTextSharp.text.Document();
-            iTextSharp.text.pdf.PdfCopy pdf = new iTextSharp.text.pdf.PdfCopy(document, stream);
+            iTextSharp.text.pdf.PdfCopy pdf = new iTextSharp.text.pdf.PdfCopy(document, pdfStream);
             iTextSharp.text.pdf.PdfReader reader = null;
             try
             {
@@ -399,6 +403,10 @@ namespace ChelseaApp.DocHelper
                     pdf.AddDocument(reader);
                     reader.Close();
                 }
+                //string pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
+                //var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);
+                //_azureBlobServices.UploadFile(pdfStream, pdffileUrl, _appSetting.AzureBlobDocContainer, false).GetAwaiter().GetResult();
+                //pdfBytes = StreamHelper.ReadToEnd(pdfStream);
             }
             catch (Exception ex)
             {
@@ -415,6 +423,7 @@ namespace ChelseaApp.DocHelper
                     document.Close();
                 }
             }
+
             /*string reportPath = "Content/MergePdf";
             string contentRootPath = _environment.ContentRootPath;
             if (!Directory.Exists(contentRootPath + reportPath))
@@ -430,13 +439,15 @@ namespace ChelseaApp.DocHelper
             string pdfFileUrl = string.Format("{0}/{1}", rooPath, pdfFileName);
             var fileByte = StreamHelper.ReadToEnd(stream);
             System.IO.File.WriteAllBytes(pdfFileUrl, fileByte);*/
-            return stream;
+            pdfBytes = System.IO.File.ReadAllBytes(outputFilePath);
+            File.Delete(outputFilePath);
+            return pdfBytes;
         }
         public string ConvertPDFtoJPG(Stream fileStream, string fileName, int pageNumber)
         {
-            if(Environment.Is64BitOperatingSystem)
+            if(Environment.Is64BitProcess)
             {
-                return ConvertPDFtoJPG32Bit(fileStream, fileName, pageNumber);
+                return ConvertPDFtoJPG64Bit(fileStream, fileName, pageNumber);
             }
             else
             {
