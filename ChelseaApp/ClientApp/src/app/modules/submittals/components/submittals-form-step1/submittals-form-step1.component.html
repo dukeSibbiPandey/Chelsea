@@ -89,7 +89,7 @@
                                 <div class="form-group">
                                     <label for="">Phone</label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
-                                        formControlName="phone" digitOnly>
+                                        formControlName="phone" maxlength="10" digitOnly>
                                     <div class="msgError text-danger"
                                         *ngIf="submittalDetailForm.get('projectManager.phone').invalid && (submittalDetailForm.get('projectManager.phone').dirty || submitted)">
                                         <small class="text-danger"
@@ -109,6 +109,10 @@
                                         <small class="text-danger"
                                             *ngIf="submittalDetailForm.get('projectManager.email').hasError('required')">
                                             Required Field.
+                                        </small>
+                                        <small class="text-danger"
+                                            *ngIf="submittalDetailForm.get('projectManager.email').hasError('pattern')">
+                                            Invalid Email.
                                         </small>
                                     </div>
                                 </div>
