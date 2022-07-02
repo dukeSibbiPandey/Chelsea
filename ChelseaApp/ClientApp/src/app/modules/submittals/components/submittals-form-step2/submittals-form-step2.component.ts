@@ -47,7 +47,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
 
   addMoreOption = () => {
-    let item = submittalItem;
+    let item = JSON.parse(JSON.stringify(submittalItem));
     item.name = "F" + (this.submittalsTpl.length + 1);
     this.submittalsTpl.push(item)
   }
