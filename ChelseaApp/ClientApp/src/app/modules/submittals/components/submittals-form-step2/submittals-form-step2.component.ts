@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpService } from '../../../../components/http.service';
 const submittalItem: any = {
@@ -43,7 +43,6 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.activeAddressInde = index;
   }
   uploadSubmittalsCallbackHandler = (res: any) => {
-    debugger
     this.submittalsTpl[res.itmindex].files.push(res.fileName)
   }
 
@@ -57,5 +56,14 @@ export class SubmittalsFormStep2Component implements OnInit {
     for (let i = 0; i < this.submittalsTpl.length; i++) {
       this.submittalsTpl[i].name = "F" + (i + 1);
     }
+  }
+  handleMergePdp = () => {
+    let postDto = {
+      submittalId: this.id,
+      pdfFiles: this.submittalsTpl
+    }
+    this.httpService.post("home/files/merge", postDto).toPromise().then(value => {
+
+    });
   }
 }
