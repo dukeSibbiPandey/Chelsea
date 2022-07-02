@@ -50,11 +50,7 @@ export class SubmittalsSectionsComponent implements OnInit {
       formData.append('file', this.fileData);
       this.httpService.fileupload(url, formData, null, null).subscribe(res => {
         let data: any = {
-          info: {
-            image: res.filePath,
-            fileName: res.fileName,
-            fileSize: res.fileSize
-          },
+          ...res,
           noSamples: 0,
           owner: 'John Smith',
           createdAt: new Date(),

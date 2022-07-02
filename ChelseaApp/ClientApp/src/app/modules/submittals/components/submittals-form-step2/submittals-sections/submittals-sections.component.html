@@ -39,6 +39,9 @@
             </ul>
         </div>
     </div>
+    <div>
+
+    </div>
     <ul class="__filter">
         <li class="form-group">
             <label for="">These are Transmitted for</label>
@@ -73,7 +76,7 @@
     </ul>
     <div class="__template_wrapper">
         <ul class="row-same-height row">
-            <li class="col-same-height col-sm-3" *ngFor="let item of submittal.listItems; ;let i = index">
+            <li class="col-same-height col-sm-3" *ngFor="let item of submittal.files; ;let i = index">
                 <div class="content">
                     <div class="_img_wrap">
                         <div class="__overlay">
@@ -126,11 +129,10 @@
                                 View
                             </button>
                         </div>
-                        <img src="../../../../../../assets/images/thumbnails/thumb_1.svg" alt=""
-                            class="img-responsive template_img">
+                        <img src="{{item.thumbnail}}" alt="" class="img-responsive template_img">
                     </div>
-                    <p>{{item.info.fileName}}</p>
-                    <p class="__size">{{item.info.fileSize}}</p>
+                    <p>{{item.fileName}}</p>
+                    <p class="__size">{{item.fileSize}}</p>
                 </div>
             </li>
             <li class="col-same-height col-sm-3 custom-file-upload">

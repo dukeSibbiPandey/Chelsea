@@ -27,8 +27,7 @@ export class SubmittalsFormStep2Component implements OnInit {
       mfg: '',
       part: '',
       description: '',
-      files: [],
-      listItems: []
+      files: []
     }
   ]
   constructor(private route: ActivatedRoute, private httpService: HttpService) { }
@@ -46,10 +45,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
   uploadSubmittalsCallbackHandler = (res: any) => {
     const index = res.itmindex;
-    const fileName = res.info && res.info.fileName || '';
-    this.submittalsTpl[index].files.push(fileName)
-    this.submittalsTpl[index].listItems.push(res)
-
+    this.submittalsTpl[index].files.push(res);
   }
 
   addMoreOption = () => {
