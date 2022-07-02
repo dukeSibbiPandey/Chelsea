@@ -131,6 +131,7 @@ export class SubmittalsSectionsComponent implements OnInit {
     })
   }
   handleMove = (action: any) => {
+    debugger
     let fIdx: any = this.itmindex;
     let toIdx: any;
     if (action == 'down') {

@@ -162,3 +162,27 @@
 .rotate_180{
     transform: rotate(180deg);
 }
+.list_icon{
+    margin-left: 0px!important;
+    a{
+        display: flex;
+        align-items: center;
+        .icon_block{
+            display: inline-block;
+            width: 30px;
+            text-align: left;
+            background: transparent;
+            i{
+                font-size: 24px;
+            }
+        }
+        &:hover .icon_block, &:focus .icon_block{
+            background: #e9ecef;
+        }
+    }
+    
+}
+
+.dropdown-item.active, .dropdown-item:active{
+    background: transparent;
+}
