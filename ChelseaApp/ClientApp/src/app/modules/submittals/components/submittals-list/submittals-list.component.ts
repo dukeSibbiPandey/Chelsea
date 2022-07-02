@@ -8,15 +8,17 @@ import { HttpService } from '../../../../components/http.service';
 })
 export class SubmittalsComponent implements OnInit {
   list: any = [];
-  searchText: string= "";
+  placeholder = 'http://placehold.it/200x200';
+  searchText: string = "";
+  limit = 10;
+  page = 0;
   httpService: HttpService;
-  constructor(httpService: HttpService)
-  {
+  constructor(httpService: HttpService) {
     this.httpService = httpService;
-    
+
   }
 
-  bindSubmittalsGrid(){
+  bindSubmittalsGrid() {
     this.httpService.get("Home/submittal/list").toPromise().then(value => {
       this.list = value;
     });
@@ -28,6 +30,17 @@ export class SubmittalsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.bindSubmittalsGrid();    
+    this.bindSubmittalsGrid();
   }
+
+  paginate(event: any) {
+    if (this.page !== event.page) {
+      this.page = event.page;
+      this.bindSubmittalsGrid();
+    }
+  }
+  errorHandler(event:any) {
+    console.debug(event);
+    event.target.src = "../../../../../assets/images/merge-icons/edit.png";
+ }
 }

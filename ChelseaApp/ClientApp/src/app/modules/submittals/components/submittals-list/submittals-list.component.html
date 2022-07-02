@@ -8,7 +8,8 @@
                 <div class="_t_right">
                     <div class="_t_sarch">
                         <input type="text" class="search_input" placeholder="Search" [(ngModel)]="searchText">
-                        <img (click)="this.searchList()" class="search-icon" src="../../../assets/images/search_icon.png" alt="search icon"/>
+                        <img (click)="this.searchList()" class="search-icon"
+                            src="../../../assets/images/search_icon.png" alt="search icon" />
                     </div>
                     <button type="button" class="__a_btn __b">Submittals</button>
                     <button [routerLink]="['/submittals/form/add/0/step/1']" type="button" class="__a_btn __w">New
@@ -30,23 +31,23 @@
                         <tr *ngFor="let item of list">
                             <td>
                                 <div class="flex">
-                                    <img src="../../../assets/images/{{item.thumbnail}}" alt="">
+                                    <img class="__t_img" src="../../../assets/images/{{item.thumbnail}}" onError="this.src='../../../../../assets/images/placeholder.png'"  alt="">
                                     <div class="__info">
                                         <p class="item_name">{{item.fileName}}</p>
-                                        <p class="__size">{{item.fileSize}}</p>
+                                        <p class="__size" *ngIf="item.fileSize>0">{{item.fileSize}}</p>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                              <p>
-                                {{item.submittalCount}}
-                              </p>
+                                <p>
+                                    {{item.submittalCount}}
+                                </p>
                             </td>
                             <td>
-                              <p class="__name">{{item.firstName}} {{item.lastName}}</p>
+                                <p class="__name">{{item.firstName}} {{item.lastName}}</p>
                             </td>
                             <td>
-                              <p class="__date">{{item.createdDate | date:'MM/d/yyyy' }}</p>
+                                <p class="__date">{{item.createdDate | date:'MM/d/yyyy' }}</p>
                             </td>
                             <td class="action-cell">
                                 <span class="__a_cta">
@@ -71,6 +72,8 @@
                         </tr>
                     </tbody>
                 </table>
+                <p-paginator [rows]="limit" [totalRecords]="20" (onPageChange)="paginate($event)">
+                </p-paginator>
             </div>
         </div>
     </div>

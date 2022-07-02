@@ -27,6 +27,8 @@ import { OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
 import {CalendarModule} from 'primeng/calendar';
 import {FileUploadModule} from 'primeng/fileupload';
 import {PaginatorModule} from 'primeng/paginator';
+import { ImgFallbackModule } from 'ngx-img-fallback';
+
 @NgModule({
   declarations: [
     DigitOnlyDirective,
@@ -59,7 +61,8 @@ import {PaginatorModule} from 'primeng/paginator';
     SharedModule,
     CalendarModule,
     FileUploadModule,
-    PaginatorModule
+    PaginatorModule,
+    ImgFallbackModule
   ],
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'in' }

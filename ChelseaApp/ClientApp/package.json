@@ -23,6 +23,7 @@
     "moment": "^2.29.3",
     "ng-pick-datetime": "^7.0.0",
     "ng-pick-datetime-moment": "^1.0.8",
+    "ngx-img-fallback": "^2.0.0",
     "primeicons": "^5.0.0",
     "primeng": "^13.4.1",
     "rxjs": "~6.6.0",
