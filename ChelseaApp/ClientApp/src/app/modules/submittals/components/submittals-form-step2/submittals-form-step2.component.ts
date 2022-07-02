@@ -7,7 +7,8 @@ const submittalItem: any = {
   mfg: '',
   part: '',
   description: '',
-  files: []
+  files: [],
+  isOpen:true  
 }
 @Component({
   selector: 'app-submittals-form-step2',
@@ -28,7 +29,7 @@ export class SubmittalsFormStep2Component implements OnInit {
       description: '',
       files: [
       //   {
-      //   "fileName": "sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+      //   "fileName": "one.pdf",
       //   "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
       //   "fileSize": "3028",
       //   "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
@@ -38,7 +39,29 @@ export class SubmittalsFormStep2Component implements OnInit {
       //   "createdAt": "2022-07-02T15:32:15.209Z",
       //   "itmindex": "0"
       // },{
-      //   "fileName": "sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+      //   "fileName": "two.pdf",
+      //   "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+      //   "fileSize": "3028",
+      //   "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
+      //   "orgFileName": "sample.pdf",
+      //   "noSamples": 0,
+      //   "owner": "John Smith",
+      //   "createdAt": "2022-07-02T15:32:15.209Z",
+      //   "itmindex": "0"
+      // },
+      // {
+      //   "fileName": "threee.pdf",
+      //   "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+      //   "fileSize": "3028",
+      //   "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
+      //   "orgFileName": "sample.pdf",
+      //   "noSamples": 0,
+      //   "owner": "John Smith",
+      //   "createdAt": "2022-07-02T15:32:15.209Z",
+      //   "itmindex": "0"
+      // },
+      // {
+      //   "fileName": "four.pdf",
       //   "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
       //   "fileSize": "3028",
       //   "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
@@ -109,14 +132,12 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.submittalsTpl[res.itmindex]['isOpen']=res.isOpen
   }
   removeSubmittals=(res:any)=>{
-    res.selectedIndex.map((item:any, index:number)=>{
-      this.submittalsTpl[res.itmindex]['files'].splice(res.itemIndex, 1)
-    })
-    this.submittalsTpl[res.itmindex]['files']
+    const ids = res.selectedIndex;
+    this.submittalsTpl[res.itmindex]['files'] = this.submittalsTpl[res.itmindex]['files'].filter((object:any, index:number) => !ids.includes(index));
   }
   selectedActionCallbackAction=(res:any)=>{
-    // if(res.action=='delete'){
-    //   this.removeSubmittals(res)
-    // }
+    if(res.action=='delete'){
+      this.removeSubmittals(res)
+    }
   }
 }
