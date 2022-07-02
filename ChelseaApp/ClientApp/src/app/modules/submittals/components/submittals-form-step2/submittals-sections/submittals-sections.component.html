@@ -58,15 +58,18 @@
         </li>
         <li class="form-group">
             <label for="">MFG</label>
-            <input type="text" class="form-control" placeholder="Enter here" style="width:170px">
+            <input type="text" class="form-control" placeholder="Enter here" style="width:170px" name='mfg'
+                [(ngModel)]="submittal['mfg']" #mfg="ngModel" required>
         </li>
         <li class="form-group">
             <label for="">Part</label>
-            <input type="text" class="form-control" placeholder="Enter here" style="width:350px">
+            <input type="text" class="form-control" placeholder="Enter here" style="width:350px" name='part'
+                [(ngModel)]="submittal['part']" #part="ngModel" required>
         </li>
         <li class="form-group">
             <label for="">Description</label>
-            <input type="text" class="form-control" placeholder="Enter here" style="width:350px">
+            <input type="text" class="form-control" placeholder="Enter here" style="width:350px" name='description'
+                [(ngModel)]="submittal['description']" #description="ngModel">
         </li>
     </ul>
     <div class="__template_wrapper">

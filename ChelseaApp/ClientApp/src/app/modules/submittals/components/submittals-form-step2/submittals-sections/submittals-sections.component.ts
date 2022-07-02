@@ -58,8 +58,6 @@ export class SubmittalsSectionsComponent implements OnInit {
     console.log("chaild delete called");
     this.removeFn.emit(this.itmindex);
   }
-
-
   onUpload = (event: any) => {
     for (let file of event.files) {
       this.uploadedFiles.push(file);
@@ -68,7 +66,7 @@ export class SubmittalsSectionsComponent implements OnInit {
     let data: any = {
       name: this.submittal.name,
       fileName: 'abc.png',
-      itmindex:this.itmindex
+      itmindex: this.itmindex
     }
     this.uploadSubmittalsCallback.emit(data)
     // event.files.forEach((element: any, index: any) => {
