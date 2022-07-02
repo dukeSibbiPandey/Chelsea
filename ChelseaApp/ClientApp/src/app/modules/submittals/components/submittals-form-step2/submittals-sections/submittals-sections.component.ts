@@ -10,6 +10,7 @@ import { HttpService } from 'src/app/components/http.service';
 export class SubmittalsSectionsComponent implements OnInit {
   @Input() submittal: any;
   @Input() itmindex = '0';
+  @Input() totalSubmittals = '0';
   @Output() removeFn = new EventEmitter();
   @Output() uploadSubmittalsCallback: EventEmitter<any> = new EventEmitter();
   @Output() toggleCallback: EventEmitter<any> = new EventEmitter();
@@ -20,6 +21,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   items: MenuItem[] = [];
   uploadedFiles: any[] = [];
   fileData: any = null;
+  
   constructor(private httpService: HttpService) { }
 
   ngOnInit(): void {
@@ -85,12 +87,43 @@ export class SubmittalsSectionsComponent implements OnInit {
     })
     this.selectedIndex = temp;
   }
-  handleRemoveSelected=()=>{
+  handleRemoveSelected = () => {
     this.selectedActionCallback.emit({
       selectedIndex: this.selectedIndex,
       itmindex: this.itmindex,
-      action:'delete'
+      action: 'delete'
     })
   }
+  handleRemoveSelectedSubmittal = () => {
+    this.selectedActionCallback.emit({
+      idx: this.itmindex,
+      action: 'delete'
+    })
+  }
+  handleDuplicate = (item: any) => {
+    this.selectedActionCallback.emit({
+      submittal: item,
+      itmindex: this.itmindex,
+      action: 'duplicate'
+    })
+  }
+
+  handleMove = (action: any) => {
+    let fIdx: any = this.itmindex;
+    let toIdx: any;
+    if (action == 'down') {
+      toIdx = fIdx + 1
+    } else if (action == 'up') {
+      toIdx = fIdx - 1
+    }
+    this.selectedActionCallback.emit({
+      idx: this.itmindex,
+      fIdx: fIdx,
+      toIdx: toIdx,
+      action: 'move'
+    })
+  }
+
+  
 
 }
