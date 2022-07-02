@@ -2,7 +2,8 @@
   {{submittalsTpl|json}}
   <div class="form-group" *ngFor="let item of submittalsTpl;let i = index">
     <app-submittals-sections [submittal]=item itmindex={{i}} (removeFn)="removePdfOption($event)"
-      (uploadSubmittalsCallback)="uploadSubmittalsCallbackHandler($event)" (toggleCallback)="toggleCallbackHandler($event)">
+      totalSubmittals={{submittalsTpl.length-1}} (uploadSubmittalsCallback)="uploadSubmittalsCallbackHandler($event)"
+      (toggleCallback)="toggleCallbackHandler($event)" (selectedActionCallback)="selectedActionCallbackAction($event)">
     </app-submittals-sections>
   </div>
   <div class="__more">

@@ -10,14 +10,18 @@ import { HttpService } from 'src/app/components/http.service';
 export class SubmittalsSectionsComponent implements OnInit {
   @Input() submittal: any;
   @Input() itmindex = '0';
+  @Input() totalSubmittals = '0';
   @Output() removeFn = new EventEmitter();
   @Output() uploadSubmittalsCallback: EventEmitter<any> = new EventEmitter();
   @Output() toggleCallback: EventEmitter<any> = new EventEmitter();
+  @Output() selectedActionCallback: EventEmitter<any> = new EventEmitter();
+  selectedIndex: any = [];
   multiple = true;
   isEdit = false;
   items: MenuItem[] = [];
   uploadedFiles: any[] = [];
   fileData: any = null;
+
   constructor(private httpService: HttpService) { }
 
   ngOnInit(): void {
@@ -67,12 +71,78 @@ export class SubmittalsSectionsComponent implements OnInit {
 
   removeImage = (target: any, str: string) => {
   }
-  handleToggle=()=>{
-    this.submittal.isOpen=!this.submittal.isOpen;
+  handleToggle = () => {
+    this.submittal.isOpen = !this.submittal.isOpen;
     this.toggleCallback.emit({
-      isOpen:this.submittal.isOpen,
-      itmindex: this.itmindex
+      isOpen: this.submittal.isOpen,
+      idx: this.itmindex
     })
   }
-  
+  handleSelectTiles = () => {
+    let temp: any = [];
+    this.submittal.files.map((item: any, index: number) => {
+      if (item.isSelected && item.isSelected.length > 0) {
+        temp.push(index)
+      }
+    })
+    this.selectedIndex = temp;
+  }
+  handleRemoveSelected = () => {
+    this.selectedActionCallback.emit({
+      selectedIndex: this.selectedIndex,
+      itmindex: this.itmindex,
+      action: 'delete'
+    })
+  }
+  handleRemoveSelectedSubmittal = () => {
+    this.selectedActionCallback.emit({
+      idx: this.itmindex,
+      action: 'delete'
+    })
+  }
+  handleDuplicate = (item: any) => {
+    this.selectedActionCallback.emit({
+      submittal: item,
+      itmindex: this.itmindex,
+      action: 'duplicate'
+    })
+  }
+  handleCopySubmittalItem = (item: any) => {
+    this.selectedActionCallback.emit({
+      file: item,
+      idx: this.itmindex,
+      action: 'copyItem'
+    })
+  }
+
+  handleMoveItem = (idx:number, action: any) => {
+    let fIdx: any = idx;
+    let toIdx: any;
+    if (action == 'left') {
+      toIdx = fIdx - 1
+    } else if (action == 'right') {
+      toIdx = fIdx + 1
+    }
+    this.selectedActionCallback.emit({
+      subIdx: this.itmindex,
+      fIdx: fIdx,
+      toIdx: toIdx,
+      action: 'move_item'
+    })
+  }
+  handleMove = (action: any) => {
+    let fIdx: any = this.itmindex;
+    let toIdx: any;
+    if (action == 'down') {
+      toIdx = fIdx + 1
+    } else if (action == 'up') {
+      toIdx = fIdx - 1
+    }
+    this.selectedActionCallback.emit({
+      idx: this.itmindex,
+      fIdx: fIdx,
+      toIdx: toIdx,
+      action: 'move'
+    })
+  }
 }

@@ -7,7 +7,8 @@ const submittalItem: any = {
   mfg: '',
   part: '',
   description: '',
-  files: []
+  files: [],
+  isOpen: true
 }
 @Component({
   selector: 'app-submittals-form-step2',
@@ -26,8 +27,41 @@ export class SubmittalsFormStep2Component implements OnInit {
       mfg: '',
       part: '',
       description: '',
-      files: [],
-      isOpen:true
+      files: [
+        {
+          "fileName": "one.pdf",
+          "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+          "fileSize": "3028",
+          "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
+          "orgFileName": "sample.pdf",
+          "noSamples": 0,
+          "owner": "John Smith",
+          "createdAt": "2022-07-02T15:32:15.209Z",
+          "itmindex": "0"
+        }, {
+          "fileName": "two.pdf",
+          "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+          "fileSize": "3028",
+          "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
+          "orgFileName": "sample.pdf",
+          "noSamples": 0,
+          "owner": "John Smith",
+          "createdAt": "2022-07-02T15:32:15.209Z",
+          "itmindex": "0"
+        },
+        {
+          "fileName": "threee.pdf",
+          "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+          "fileSize": "3028",
+          "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
+          "orgFileName": "sample.pdf",
+          "noSamples": 0,
+          "owner": "John Smith",
+          "createdAt": "2022-07-02T15:32:15.209Z",
+          "itmindex": "0"
+        }
+      ],
+      isOpen: true
     }
   ]
   constructor(private route: ActivatedRoute, private httpService: HttpService) { }
@@ -83,7 +117,49 @@ export class SubmittalsFormStep2Component implements OnInit {
 
     });
   }
-  toggleCallbackHandler=(res:any)=>{
-    this.submittalsTpl[res.itmindex]['isOpen']=res.isOpen
+  toggleCallbackHandler = (res: any) => {
+    this.submittalsTpl[res.idx]['isOpen'] = res.isOpen
+  }
+  removeSubmittals = (res: any) => {
+    // const ids = res.selectedIndex;
+    // this.submittalsTpl[res.itmindex]['files'] = this.submittalsTpl[res.itmindex]['files'].filter((object: any, index: number) => !ids.includes(index));
+    this.submittalsTpl.splice(res.idx, 1);
+  }
+  duplicateSubmittals = (res: any) => {
+    let item = JSON.parse(JSON.stringify(res.submittal));
+    item.name = "F" + (this.submittalsTpl.length + 1);
+    this.submittalsTpl.push(item)
+  }
+  duplicateSubmittalItem = (res: any) => {
+    let item = JSON.parse(JSON.stringify(res['file']));
+    this.submittalsTpl[res.idx].files.push(item)
+  }
+  arraymove = (res: any) => {
+    let arr = this.submittalsTpl;
+    const fIdx = res.fIdx;
+    const toIdx = res.toIdx;
+    var element = arr[fIdx];
+    arr.splice(fIdx, 1);
+    arr.splice(toIdx, 0, element);
+  }
+  move_sub_itms = (res: any) => {
+    debugger
+    let arr = this.submittalsTpl[res.subIdx].files;
+    const fIdx = res.fIdx;
+    const toIdx = res.toIdx;
+    var element = arr[fIdx];
+    arr.splice(fIdx, 1);
+    arr.splice(toIdx, 0, element);
+  }
+  selectedActionCallbackAction = (res: any) => {
+    if (res.action == 'delete') {
+      this.removeSubmittals(res)
+    } else if (res.action == 'duplicate') {
+      this.duplicateSubmittals(res)
+    } else if (res.action == 'move_item') {
+      this.move_sub_itms(res)
+    } else if (res.action == 'copyItem') {
+      this.duplicateSubmittalItem(res)
+    }
   }
 }
