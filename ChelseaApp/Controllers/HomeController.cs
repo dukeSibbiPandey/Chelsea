@@ -2,6 +2,7 @@
 using Chelsea.Repository;
 using ChelseaApp.DocHelper;
 using ChelseaApp.Model;
+using EO.Pdf;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -90,10 +92,11 @@ namespace ChelseaApp.Controllers
             var stateObj = await _context.StateMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.State)).FirstOrDefaultAsync();
             coverPage.Contractor.StateName = stateObj.Name;
             coverPage.Contractor.CityName = cityObj.Name;
-            DocUtility utility = new DocUtility(this._environment);
-            var stream = utility.SaveCoverPage(coverPage, modelList);
-            string fileName = "cover_" + Guid.NewGuid().ToString() + ".doc";
-            await _azureBlobServices.UploadFile(stream, "/Content/"+ fileName, _appSetting.AzureBlobDocContainer, false);
+            DocUtility utility = new DocUtility(this._environment, _azureBlobServices);
+            var fileInfo = utility.SaveCoverPage(coverPage, modelList);
+            string fileName = Path.GetFileName(fileInfo.Path);
+            
+            //var fileInfo = await _azureBlobServices.UploadFile(stream, "/Content/"+ fileName, _appSetting.AzureBlobDocContainer, false);
 
             Submittal entity = new Submittal();
             entity.Id = Convert.ToInt64(coverPage.Id);
@@ -139,6 +142,10 @@ namespace ChelseaApp.Controllers
         {
             var message = string.Empty;
             var newFileName = string.Empty;
+            string thumbnail = string.Empty;
+            string pdfPath =  string.Empty;
+            string fileSize = string.Empty;
+            string orgFileName = string.Empty;
             try
             {
 
@@ -158,13 +165,22 @@ namespace ChelseaApp.Controllers
                     //}
 
                     Stream stream = new MemoryStream(fileBytes);
-
+                  
                     var fileExtension = Path.GetExtension(file.FileName).ToLower();
                     var fileName = Path.GetFileNameWithoutExtension(file.FileName);
-                    newFileName = string.Format("{0}{1}", fileName + "_" + Guid.NewGuid().ToString(), fileExtension);
+                    string fileId = fileName + "_" + Guid.NewGuid().ToString();
+
+                    newFileName = string.Format("{0}{1}", fileId, fileExtension);
                     var fileUrl = string.Format("{0}/{1}", "Content", newFileName);
                     // System.IO.File.WriteAllBytes(fileUrl, fileBytes);
-                    await _azureBlobServices.UploadFile(stream, fileUrl, _appSetting.AzureBlobTempContainer, false);
+                    var fileInfo = await _azureBlobServices.UploadFile(stream, fileUrl, _appSetting.AzureBlobTempContainer, false);
+
+                    fileSize = file.Length.ToString();
+                    pdfPath = fileInfo.Path;
+                    DocUtility utility = new DocUtility(this._environment, this._azureBlobServices);
+                    string thName = fileId + ".png";
+                    thumbnail = utility.ConvertPDFtoJPG(stream, thName);
+                    orgFileName = file.FileName;
                 }
                 else
                 {
@@ -176,7 +192,7 @@ namespace ChelseaApp.Controllers
                 message = ex.Message;
 
             }
-            return this.Ok(newFileName);
+            return this.Ok(new { fileName = newFileName, filePath = pdfPath, fileSize = fileSize, thumbnail = thumbnail, orgFileName = orgFileName });
         }
 
         [HttpGet("files/merge")]
@@ -209,7 +225,7 @@ namespace ChelseaApp.Controllers
                 files.Add(fileStream);
             }
 
-            DocUtility utility = new DocUtility(this._environment);
+            DocUtility utility = new DocUtility(this._environment, this._azureBlobServices);
             Stream mergedFileName = utility.CombineMultiplePDFs(files);
             string pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
             var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);

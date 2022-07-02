@@ -3,9 +3,11 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Hosting;
 using OpenXmlPowerTools;
+using PDFLibNet64;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -18,17 +20,19 @@ namespace ChelseaApp.DocHelper
     {
         [System.Obsolete]
         public readonly IHostingEnvironment _environment;
+        private readonly IAzureBlobServices _azureBlobServices;
 
         [System.Obsolete]
-        public DocUtility(IHostingEnvironment environment)
+        public DocUtility(IHostingEnvironment environment, IAzureBlobServices azureBlobServices)
         {
             this._environment = environment;
+            _azureBlobServices = azureBlobServices;
         }
 
         [System.Obsolete]
-        public Stream SaveCoverPage(CoverPageModel coverPage, AddressModel addressModel)
+        public FileUploadInfo SaveCoverPage(CoverPageModel coverPage, AddressModel addressModel)
         {
-            string sourceDoc = this._environment.ContentRootPath + "/Content/Template/CoverPage.docx";
+            string sourceDoc = this._environment.ContentRootPath + "/Content/Template/CoverPage_Pdf.docx";
             Stream document = new MemoryStream();
 
             using (var source = WordprocessingDocument.Open(sourceDoc, false))
@@ -42,86 +46,92 @@ namespace ChelseaApp.DocHelper
             using (WordprocessingDocument doc = WordprocessingDocument.Open(document, true))
             {
                 var doct = doc.MainDocumentPart.Document;
-                foreach (var run in doct.Descendants<TextBoxContent>())
+                foreach (var table in doct.Body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Table>())
                 {
-                    var paras = run.Elements<Paragraph>();
-                    foreach (var para in paras)
+                    var rows = table.Descendants<DocumentFormat.OpenXml.Wordprocessing.TableRow>().ToList();
+                    foreach (var row in rows)
                     {
-                        foreach (var runNew in para.Elements<Run>())
+                        foreach (var cell in row.Elements<DocumentFormat.OpenXml.Wordprocessing.TableCell>())
                         {
-                            foreach (var text in runNew.Elements<Text>())
+                            foreach (var para in cell.Elements<Paragraph>())
                             {
-                                if (para.InnerText.Contains("#ADTYPE#"))
+                                foreach (var runNew in para.Elements<Run>())
                                 {
-                                    text.Text = text.Text.Replace("#ADTYPE#", addressModel.Name);
-                                }
+                                    foreach (var text in runNew.Elements<Text>())
+                                    {
+                                        if (para.InnerText.Contains("#ADTYPE#"))
+                                        {
+                                            text.Text = text.Text.Replace("#ADTYPE#", addressModel.Name);
+                                        }
 
-                                if (para.InnerText.Contains("#ADDRESS#"))
-                                {
-                                    text.Text = text.Text.Replace("#ADDRESS#", addressModel.Address);
-                                }
+                                        if (para.InnerText.Contains("#ADDRESS#"))
+                                        {
+                                            text.Text = text.Text.Replace("#ADDRESS#", addressModel.Address);
+                                        }
 
-                                if (para.InnerText.Contains("#STATE#"))
-                                {
-                                    text.Text = text.Text.Replace("#STATE#", addressModel.State);
-                                }
+                                        if (para.InnerText.Contains("#STATE#"))
+                                        {
+                                            text.Text = text.Text.Replace("#STATE#", addressModel.State);
+                                        }
 
-                                if (para.InnerText.Contains("#CITY#"))
-                                {
-                                    text.Text = text.Text.Replace("#CITY#", addressModel.City);
-                                }
+                                        if (para.InnerText.Contains("#CITY#"))
+                                        {
+                                            text.Text = text.Text.Replace("#CITY#", addressModel.City);
+                                        }
 
-                                if (para.InnerText.Contains("#ZIP#"))
-                                {
-                                    text.Text = text.Text.Replace("#ZIP#", addressModel.ZipCode);
-                                }
-                                if (para.InnerText.Contains("#PHONE#"))
-                                {
-                                    text.Text = text.Text.Replace("#PHONE#", addressModel.Phone);
-                                }
-                                if (para.InnerText.Contains("#FAX#"))
-                                {
-                                    text.Text = text.Text.Replace("#FAX#", addressModel.Fax);
-                                }
-                                if (para.InnerText.Contains("#SDATE#"))
-                                {
-                                    text.Text = text.Text.Replace("#SDATE#", coverPage.SubmittalDate);
-                                }
-                                if (para.InnerText.Contains("#JOB#"))
-                                {
-                                    text.Text = text.Text.Replace("#JOB#", coverPage.JobName);
-                                }
-                                if (para.InnerText.Contains("#SBCNT#"))
-                                {
-                                    text.Text = text.Text.Replace("#SBCNT#", coverPage.Submittals);
-                                }
-                                if (para.InnerText.Contains("#PNAME#"))
-                                {
-                                    text.Text = text.Text.Replace("#PNAME#", coverPage.ProjectManager?.Name);
-                                }
-                                if (para.InnerText.Contains("#PPHONE#"))
-                                {
-                                    text.Text = text.Text.Replace("#PPHONE#", coverPage.ProjectManager?.Phone);
-                                }
-                                if (para.InnerText.Contains("#EEMAIL#"))
-                                {
-                                    text.Text = text.Text.Replace("#EEMAIL#", coverPage.ProjectManager?.Email);
-                                }
-                                if (para.InnerText.Contains("#CNAME#"))
-                                {
-                                    text.Text = text.Text.Replace("#CNAME#", coverPage.Contractor?.Name);
-                                }
-                                if (para.InnerText.Contains("#CNAME#"))
-                                {
-                                    text.Text = text.Text.Replace("#CNAME#", coverPage.Contractor?.Name);
-                                }
-                                if (para.InnerText.Contains("#CADDRESS#"))
-                                {
-                                    text.Text = text.Text.Replace("#CADDRESS#", coverPage.Contractor?.AddressLine1 + " " + coverPage.Contractor?.AddressLine2);
-                                }
-                                if (para.InnerText.Contains("#CSTATE#"))
-                                {
-                                    text.Text = text.Text.Replace("#CSTATE#", coverPage.Contractor?.StateName + " " + coverPage.Contractor?.CityName + " " + coverPage.Contractor?.PostalCode);
+                                        if (para.InnerText.Contains("#ZIP#"))
+                                        {
+                                            text.Text = text.Text.Replace("#ZIP#", addressModel.ZipCode);
+                                        }
+                                        if (para.InnerText.Contains("#PHONE#"))
+                                        {
+                                            text.Text = text.Text.Replace("#PHONE#", addressModel.Phone);
+                                        }
+                                        if (para.InnerText.Contains("#FAX#"))
+                                        {
+                                            text.Text = text.Text.Replace("#FAX#", addressModel.Fax);
+                                        }
+                                        if (para.InnerText.Contains("#SDATE#"))
+                                        {
+                                            text.Text = text.Text.Replace("#SDATE#", coverPage.SubmittalDate);
+                                        }
+                                        if (para.InnerText.Contains("#JOB#"))
+                                        {
+                                            text.Text = text.Text.Replace("#JOB#", coverPage.JobName);
+                                        }
+                                        if (para.InnerText.Contains("#SBCNT#"))
+                                        {
+                                            text.Text = text.Text.Replace("#SBCNT#", coverPage.Submittals);
+                                        }
+                                        if (para.InnerText.Contains("#PNAME#"))
+                                        {
+                                            text.Text = text.Text.Replace("#PNAME#", coverPage.ProjectManager?.Name);
+                                        }
+                                        if (para.InnerText.Contains("#PPHONE#"))
+                                        {
+                                            text.Text = text.Text.Replace("#PPHONE#", coverPage.ProjectManager?.Phone);
+                                        }
+                                        if (para.InnerText.Contains("#EEMAIL#"))
+                                        {
+                                            text.Text = text.Text.Replace("#EEMAIL#", coverPage.ProjectManager?.Email);
+                                        }
+                                        if (para.InnerText.Contains("#CNAME#"))
+                                        {
+                                            text.Text = text.Text.Replace("#CNAME#", coverPage.Contractor?.Name);
+                                        }
+                                        if (para.InnerText.Contains("#CNAME#"))
+                                        {
+                                            text.Text = text.Text.Replace("#CNAME#", coverPage.Contractor?.Name);
+                                        }
+                                        if (para.InnerText.Contains("#CADDRESS#"))
+                                        {
+                                            text.Text = text.Text.Replace("#CADDRESS#", coverPage.Contractor?.AddressLine1 + " " + coverPage.Contractor?.AddressLine2);
+                                        }
+                                        if (para.InnerText.Contains("#CSTATE#"))
+                                        {
+                                            text.Text = text.Text.Replace("#CSTATE#", coverPage.Contractor?.StateName + " " + coverPage.Contractor?.CityName + " " + coverPage.Contractor?.PostalCode);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -129,18 +139,18 @@ namespace ChelseaApp.DocHelper
                 }
             }
 
-            /*byte[] tempms = StreamHelper.ReadToEnd(document);
+            byte[] tempms = StreamHelper.ReadToEnd(document);
 
-            var docFile = this._environment.ContentRootPath + "/Content/cover_" + Guid.NewGuid().ToString() + ".doc";
-            var pdfFile = this._environment.ContentRootPath + "/Content/cover.pdf";
-            var outputDir = this._environment.ContentRootPath + "/Content/temppdf";
-            if(!Directory.Exists(outputDir))
-            {
-                Directory.CreateDirectory(outputDir);
-            }
-            File.WriteAllBytes(docFile, tempms);*/
-            //ConvertPdf(docFile, pdfFile, outputDir, outputDir + "/images", "letter");
-            return document;
+            //var docFile = this._environment.ContentRootPath + "/Content/cover_" + Guid.NewGuid().ToString() + ".doc";
+            var pdfFile = this._environment.ContentRootPath + "/Content/cover_" + Guid.NewGuid().ToString() + ".pdf";
+            //var outputDir = this._environment.ContentRootPath + "/Content/temppdf";
+            //if(!Directory.Exists(outputDir))
+            //{
+            //    Directory.CreateDirectory(outputDir);
+            //}
+            //File.WriteAllBytes(docFile, tempms);
+            var pdfInfo = ConvertToHtml(tempms, pdfFile, "letter");
+            return pdfInfo;
         }
 
         [System.Obsolete]
@@ -194,17 +204,18 @@ namespace ChelseaApp.DocHelper
             }
         }
 
-        public static void ConvertToHtml(string file, string pdfFile, string outputDirectory, string imagePath, string type)
+        public FileUploadInfo ConvertToHtml(byte[] byteArray, string pdfFile, string type)
         {
-            var fi = new FileInfo(file);
-           
-            byte[] byteArray = File.ReadAllBytes(fi.FullName);
+            //var fi = new FileInfo(file);
+
+            //byte[] byteArray = File.ReadAllBytes(fi.FullName);
+            FileUploadInfo fileUploadInfo = new FileUploadInfo();
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 memoryStream.Write(byteArray, 0, byteArray.Length);
                 using (WordprocessingDocument wDoc = WordprocessingDocument.Open(memoryStream, true))
                 {
-                    var destFileName = new FileInfo(fi.Name.Replace(".doc", ".html"));
+                    /*var destFileName = new FileInfo("tempfile_" + Guid.NewGuid().ToString() + ".html");
                     if (outputDirectory != null && outputDirectory != string.Empty)
                     {
                         DirectoryInfo di = new DirectoryInfo(outputDirectory);
@@ -214,14 +225,15 @@ namespace ChelseaApp.DocHelper
                         }
                         destFileName = new FileInfo(Path.Combine(di.FullName, destFileName.Name));
                     }
-                    var imageDirectoryName = destFileName.FullName.Substring(0, destFileName.FullName.Length - 5) + "_files";
+                    var imageDirectoryName = destFileName.FullName.Substring(0, destFileName.FullName.Length - 5) + "_files";*/
+
                     int imageCounter = 0;
 
-                    var pageTitle = fi.FullName;
+                    var pageTitle = "Pdf File Converter";
                     var part = wDoc.CoreFilePropertiesPart;
                     if (part != null)
                     {
-                        pageTitle = (string)part.GetXDocument().Descendants(DC.title).FirstOrDefault() ?? fi.FullName;
+                        pageTitle = (string)part.GetXDocument().Descendants(DC.title).FirstOrDefault() ?? "Pdf File Converter";
                     }
 
                     // TODO: Determine max-width from size of content area.
@@ -235,9 +247,10 @@ namespace ChelseaApp.DocHelper
                         RestrictToSupportedNumberingFormats = false,
                         ImageHandler = imageInfo =>
                         {
-                            DirectoryInfo localDirInfo = new DirectoryInfo(imageDirectoryName);
-                            if (!localDirInfo.Exists)
-                                localDirInfo.Create();
+                            //DirectoryInfo localDirInfo = new DirectoryInfo(imageDirectoryName);
+                            //if (!localDirInfo.Exists)
+                            //    localDirInfo.Create();
+
                             ++imageCounter;
                             string extension = imageInfo.ContentType.Split('/')[1].ToLower();
                             ImageFormat imageFormat = null;
@@ -266,18 +279,17 @@ namespace ChelseaApp.DocHelper
                             if (imageFormat == null)
                                 return null;
 
-                            string imageFileName = imageDirectoryName + "/image" +
-                                imageCounter.ToString() + "." + extension;
-                            try
-                            {
-                                imageInfo.Bitmap.Save(imageFileName, imageFormat);
-                            }
-                            catch (System.Runtime.InteropServices.ExternalException)
-                            {
-                                return null;
-                            }
-                            string imageSource = "http://localhost:4450/" + imagePath + "/" + localDirInfo.Name + "/image" +
-                                imageCounter.ToString() + "." + extension;
+                            //string imageFileName = imageDirectoryName + "/image" +
+                            //    imageCounter.ToString() + "." + extension;
+                            //try
+                            //{
+                            //    imageInfo.Bitmap.Save(imageFileName, imageFormat);
+                            //}
+                            //catch (System.Runtime.InteropServices.ExternalException)
+                            //{
+                            //    return null;
+                            //}
+                            string imageSource = "https://chelsea.skdedu.in/Chelsea-logo.png";
 
                             XElement img = new XElement(Xhtml.img,
                                 new XAttribute(NoNamespace.src, imageSource),
@@ -304,7 +316,7 @@ namespace ChelseaApp.DocHelper
                     // must do it correctly, or entities will not be serialized properly.
 
                     var htmlString = html.ToString(SaveOptions.DisableFormatting);
-                    File.WriteAllText(destFileName.FullName, htmlString, Encoding.UTF8);
+                    //File.WriteAllText(destFileName.FullName, htmlString, Encoding.UTF8);
 
                     //var files = Directory.GetFiles(imageDirectoryName);
                     //foreach (var item in files)
@@ -312,32 +324,54 @@ namespace ChelseaApp.DocHelper
                     //    byte[] imageArray = System.IO.File.ReadAllBytes(DefaultImagePath);
                     //    string base64ImageRepresentation = Convert.ToBase64String(imageArray);
                     //}
-
-                    iText.Html2pdf.ConverterProperties converterProperties = new iText.Html2pdf.ConverterProperties();
-
-                    iText.Kernel.Pdf.PdfDocument pdfDocument = new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(pdfFile));
-                    if (type == "landscape")
+                    
+                    /*iText.Html2pdf.ConverterProperties converterProperties = new iText.Html2pdf.ConverterProperties();
+                    using (MemoryStream pdfStream = new MemoryStream(pdfFile))
                     {
-                        pdfDocument.SetDefaultPageSize(iText.Kernel.Geom.PageSize.LETTER.Rotate());
-                    }
-                    else
-                    {
-                        pdfDocument.SetDefaultPageSize(iText.Kernel.Geom.PageSize.LETTER);
-                    }
+                        //pdfStream.Write(byteArray, 0, byteArray.Length);
+                        fileUploadInfo = _azureBlobServices.UploadFile(pdfStream, "/Content/" + fileName, "chelseadoc", false).GetAwaiter().GetResult();
 
-                    iText.Html2pdf.HtmlConverter.ConvertToPdf(htmlString, pdfDocument, converterProperties);
-                    pdfDocument.Close();
+                        iText.Kernel.Pdf.PdfDocument pdfDocument = new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(pdfFile));
+                        if (type == "landscape")
+                        {
+                            pdfDocument.SetDefaultPageSize(iText.Kernel.Geom.PageSize.LETTER.Rotate());
+                        }
+                        else
+                        {
+                            pdfDocument.SetDefaultPageSize(iText.Kernel.Geom.PageSize.LETTER);
+                        }
 
-                    /*Byte[] pdfByte;
+                        iText.Html2pdf.HtmlConverter.ConvertToPdf(htmlString, pdfDocument, converterProperties);
+                        pdfDocument.Close();
+                    }*/
+
+                    string fileName = "cover_" + Guid.NewGuid().ToString() + ".pdf";
+
+                    //FileInfo fileInfo = new FileInfo(pdfFile);
+                    //byte[] pdfArray = File.ReadAllBytes(fileInfo.FullName);
+                    
+
+                    //File.Delete(pdfFile);
+                    
+
+                    Byte[] pdfByte;
                     using (var ms = new MemoryStream())
                     {
                         iText.Html2pdf.HtmlConverter.ConvertToPdf(htmlString, ms);
                         pdfByte = ms.ToArray();
                     }
+                    using (MemoryStream pdfStream = new MemoryStream())
+                    {
+                        pdfStream.Write(pdfByte, 0, pdfByte.Length);
+                        fileUploadInfo = _azureBlobServices.UploadFile(pdfStream, "/Content/" + fileName, "chelseadoc", false).GetAwaiter().GetResult();
+                    }
+
                     //string pdfName = @"D:\Data_Imp\Projects\StartingPoint\WordToPDF\WordToPDF\Quaterlyreport.pdf";
-                    File.WriteAllBytes(pdfFile, pdfByte);*/
+                    //File.WriteAllBytes(pdfFile, pdfByte);
                 }
             }
+            
+            return fileUploadInfo;
         }
 
         [Obsolete]
@@ -395,6 +429,57 @@ namespace ChelseaApp.DocHelper
             var fileByte = StreamHelper.ReadToEnd(stream);
             System.IO.File.WriteAllBytes(pdfFileUrl, fileByte);*/
             return stream;
+        }
+
+        public string ConvertPDFtoJPG(Stream fileStream, string fileName)
+        {
+            PDFWrapper _pdfDoc = new PDFWrapper();
+            _pdfDoc.LoadPDF(fileStream);
+
+            Image img = RenderPage(_pdfDoc, 0);
+
+            Stream stream = new MemoryStream();
+
+            img.Save(stream, ImageFormat.Png);
+
+            var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/"+ fileName, "chelseapublicurl", false).GetAwaiter().GetResult();
+
+            //for (int i = 0; i < _pdfDoc.PageCount; i++)
+            //{
+
+            //    Image img = RenderPage(_pdfDoc, i);
+
+            //    img.Save(Path.Combine(dirOut, string.Format("{0}{1}.jpg", i, DateTime.Now.ToString("mmss"))));
+
+            //}
+            _pdfDoc.Dispose();
+            return fileUploadInfo.Path;
+        }
+        public Image RenderPage(PDFWrapper doc, int page)
+        {
+            doc.CurrentPage = page + 1;
+            doc.CurrentX = 0;
+            doc.CurrentY = 0;
+
+            doc.RenderPage(IntPtr.Zero);
+
+            // create an image to draw the page into
+            var buffer = new Bitmap(doc.PageWidth, doc.PageHeight);
+            doc.ClientBounds = new Rectangle(0, 0, doc.PageWidth, doc.PageHeight);
+            using (var g = Graphics.FromImage(buffer))
+            {
+                var hdc = g.GetHdc();
+                try
+                {
+                    doc.DrawPageHDC(hdc);
+                }
+                finally
+                {
+                    g.ReleaseHdc();
+                }
+            }
+            return buffer;
+
         }
     }
 }
