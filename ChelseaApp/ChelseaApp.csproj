@@ -17,6 +17,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.12.0" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.16.0" />
+    <PackageReference Include="EO.Pdf" Version="22.1.42" />
     <PackageReference Include="itext7.pdfhtml" Version="4.0.2" />
     <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.17" />

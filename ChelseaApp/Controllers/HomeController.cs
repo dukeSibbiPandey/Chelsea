@@ -2,6 +2,7 @@
 using Chelsea.Repository;
 using ChelseaApp.DocHelper;
 using ChelseaApp.Model;
+using EO.Pdf;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -90,10 +92,11 @@ namespace ChelseaApp.Controllers
             var stateObj = await _context.StateMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.State)).FirstOrDefaultAsync();
             coverPage.Contractor.StateName = stateObj.Name;
             coverPage.Contractor.CityName = cityObj.Name;
-            DocUtility utility = new DocUtility(this._environment);
-            var stream = utility.SaveCoverPage(coverPage, modelList);
-            string fileName = "cover_" + Guid.NewGuid().ToString() + ".doc";
-            await _azureBlobServices.UploadFile(stream, "/Content/"+ fileName, _appSetting.AzureBlobDocContainer, false);
+            DocUtility utility = new DocUtility(this._environment, _azureBlobServices);
+            var fileInfo = utility.SaveCoverPage(coverPage, modelList);
+            string fileName = Path.GetFileName(fileInfo.Path);
+            
+            //var fileInfo = await _azureBlobServices.UploadFile(stream, "/Content/"+ fileName, _appSetting.AzureBlobDocContainer, false);
 
             Submittal entity = new Submittal();
             entity.Id = Convert.ToInt64(coverPage.Id);
@@ -209,7 +212,7 @@ namespace ChelseaApp.Controllers
                 files.Add(fileStream);
             }
 
-            DocUtility utility = new DocUtility(this._environment);
+            DocUtility utility = new DocUtility(this._environment, this._azureBlobServices);
             Stream mergedFileName = utility.CombineMultiplePDFs(files);
             string pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
             var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);
