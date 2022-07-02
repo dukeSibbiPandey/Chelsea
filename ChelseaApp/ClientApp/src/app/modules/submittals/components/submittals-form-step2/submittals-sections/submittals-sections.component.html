@@ -2,12 +2,13 @@
     <div class="__t_b">
         <div class="__left">
             <span (click)="handleEdit(true)" *ngIf="!isEdit">
-                {{title}}
+                {{submittal?.name}}
             </span>
             <span class="editable" *ngIf="isEdit">
                 <input type="text" class="form-control" (blur)="handleEdit(false)">
             </span>
         </div>
+        <!-- {{submittal|json}} -->
         <div class="__right">
             <ul class="flex">
                 <li>
@@ -20,7 +21,8 @@
                         </svg>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item" href="javascript:void(0)">Duplicate</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)" (click)="handleDelete()">Delete</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)" (click)="handleDelete()">Delete</a>
+                            </li>
                             <li><a class="dropdown-item" href="javascript:void(0)">Move Up</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0)">Move Down</a></li>
                         </ul>
@@ -130,8 +132,9 @@
                 </div>
             </li>
             <li class="col-same-height col-sm-3">
-                <label class="content">
-                    <input type="file" class="input_file">
+                    <p-fileUpload name="myfile[]" [auto]="true" [customUpload]="true"  (uploadHandler)="onUpload($event)" accept="application/pdf"></p-fileUpload>
+                    <label class="content">
+                    <input type="file" class="input_file" (change)="onFileSelected($event)" #fileUpload>
                     <div class="_img_wrap new_tile">
                         <div>
                             <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
