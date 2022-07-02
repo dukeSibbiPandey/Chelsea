@@ -11,6 +11,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   @Input() submittal: any;
   @Input() itmindex = '0';
   @Output() removeFn = new EventEmitter();
+  @Output() uploadSubmittalsCallback: EventEmitter<any> = new EventEmitter();
   templateList: any = [];
   multiple = true;
   isEdit = false;
@@ -64,50 +65,27 @@ export class SubmittalsSectionsComponent implements OnInit {
       this.uploadedFiles.push(file);
     }
     let url = 'home/upload';
-    event.files.forEach((element: any, index: any) => {
-      this.fileData = <File>event.files[index];
-      const formData = new FormData();
-      formData.append('file', this.fileData);
-      this.httpService.fileupload(url, formData, null, null).subscribe(res => {
-        debugger
-      })
+    let data: any = {
+      name: this.submittal.name,
+      fileName: 'abc.png',
+      itmindex:this.itmindex
+    }
+    this.uploadSubmittalsCallback.emit(data)
+    // event.files.forEach((element: any, index: any) => {
+    //   this.fileData = <File>event.files[index];
+    //   const formData = new FormData();
+    //   formData.append('file', this.fileData);
+    //   this.httpService.fileupload(url, formData, null, null).subscribe(res => {
+    //     debugger
+    //   })
 
-    })
+    // })
   }
   onFileSelected = (event: any) => {
     debugger
   }
   myUploader = (event: any, control: any) => {
-    debugger
-    for (let file of event.files) {
-      this.uploadedFiles.push(file);
-    }
-    // event.files.forEach((element: any, index: any) => {
-    //   this.fileData = <File>event.files[index];
-    //   let url = '/';
-    //   const formData = new FormData();
-    //   formData.append('file', this.fileData);
-    //   debugger
-    //   formData.append('entityKey', this.entityKey);
-    //   formData.append('entityType', this.entityType);
-    //   this.fileUploadNumber = 0;
-    //   this.isUploadBar = true;
-    //   var headers = { entityKey: this.entityKey, entityType: this.entityType, reportProgress: true, observe: 'events' }
-    //   this._AgentService.httpCall(url, 'FileUpload', formData, null, headers).subscribe(res => {
-    //     if (res && res['responseCode'] == 200) {
-    //       this.fileUploadNumber = this.fileUploadNumber + 1;
-    //       const newArray = [res.result].concat(this.documentList)
-    //       this.documentList = newArray;
-    //       if (this.fileUploadNumber == event.files.length) {
-    //         this.isUploadBar = false;
-    //         this.toastMsg('success', 'Success', 'Files uploaded successfully')
-    //       }
-    //     }
-    //   }, (errors) => {
-    //     var res = errors.error;
-    //     this.toastMsg('error', 'Error', `${res.messege || 'Faliure'}`)
-    //   })
-    // });
+
   }
   removeImage = (target: any, str: string) => {
   }

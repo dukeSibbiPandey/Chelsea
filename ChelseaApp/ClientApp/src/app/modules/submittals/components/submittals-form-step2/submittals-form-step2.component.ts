@@ -30,7 +30,6 @@ export class SubmittalsFormStep2Component implements OnInit {
     }
   ]
   constructor(private route: ActivatedRoute, private httpService: HttpService) { }
-
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.getSubmittalData(this.id);
@@ -42,6 +41,10 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
   selectAddress = (index: any) => {
     this.activeAddressInde = index;
+  }
+  uploadSubmittalsCallbackHandler = (res: any) => {
+    debugger
+    this.submittalsTpl[res.itmindex].files.push(res.fileName)
   }
 
   addMoreOption = () => {

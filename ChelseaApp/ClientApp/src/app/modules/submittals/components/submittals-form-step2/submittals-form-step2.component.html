@@ -1,6 +1,8 @@
 <div class="form_wrapper">
+  {{submittalsTpl|json}}
   <div class="form-group" *ngFor="let item of submittalsTpl;let i = index">
-    <app-submittals-sections [submittal]=item itmindex={{i}} (removeFn)="removePdfOption($event)">
+    <app-submittals-sections [submittal]=item itmindex={{i}} (removeFn)="removePdfOption($event)"
+      (uploadSubmittalsCallback)="uploadSubmittalsCallbackHandler($event)">
     </app-submittals-sections>
   </div>
   <div class="__more">
@@ -10,7 +12,6 @@
       </button>
     </span>
   </div>
-
   <div class="action_wrapper form-group">
     <button class="btn __btn __theme" [routerLink]="['/submittals/merge/123']">Merge</button>
     <button class="btn __btn __default" [routerLink]="['/submittals/preview/123']">Preview</button>
