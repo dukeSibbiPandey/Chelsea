@@ -354,8 +354,7 @@ a {
         position: relative;
         height: 209px;
         background: white;
-        border: 1px #d1d1d1 dashed!important;
-        
+        border: 1px #d1d1d1 dashed !important;
     }
     .p-fileupload .p-fileupload-buttonbar .p-button {
         position: absolute;
@@ -366,13 +365,17 @@ a {
         z-index: 99;
         opacity: 0;
     }
-    .p-fileupload .p-fileupload-content{
+    .p-fileupload .p-fileupload-content {
         background: white;
         border: 0px;
         display: none;
     }
-    .p-fileupload-buttonbar{
-        background: white!important;
+    .p-fileupload-buttonbar {
+        background: white !important;
         border: 0px !important;
     }
+}
+
+.hidden {
+    display: none;
 }

@@ -7,8 +7,7 @@ const submittalItem: any = {
   mfg: '',
   part: '',
   description: '',
-  files: [],
-  listItems: []
+  files: []
 }
 @Component({
   selector: 'app-submittals-form-step2',
@@ -28,7 +27,7 @@ export class SubmittalsFormStep2Component implements OnInit {
       part: '',
       description: '',
       files: [],
-      listItems: []
+      isOpen:true
     }
   ]
   constructor(private route: ActivatedRoute, private httpService: HttpService) { }
@@ -44,12 +43,11 @@ export class SubmittalsFormStep2Component implements OnInit {
   selectAddress = (index: any) => {
     this.activeAddressInde = index;
   }
-  uploadSubmittalsCallbackHandler = (res: any) => {
-    const index = res.itmindex;
-    const fileName = res.info && res.info.fileName || '';
-    this.submittalsTpl[index].files.push(fileName)
-    this.submittalsTpl[index].listItems.push(res)
 
+
+  uploadSubmittalsCallbackHandler = (res: any) => {
+    const index = res.info.itmindex;
+    this.submittalsTpl[index].files.push(res.formData);
   }
 
   addMoreOption = () => {
@@ -58,7 +56,7 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.submittalsTpl.push(item)
   }
   removePdfOption = (res: any) => {
-    this.submittalsTpl[res.submittalIndex]['listItems'].splice(res.itemIndex, 1)
+    this.submittalsTpl[res.submittalIndex]['files'].splice(res.itemIndex, 1)
     // this.submittalsTpl.splice(idx, 1);
     // for (let i = 0; i < this.submittalsTpl.length; i++) {
     //   this.submittalsTpl[i].name = "F" + (i + 1);
@@ -84,5 +82,8 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.httpService.post("home/files/merge", postDto).toPromise().then(value => {
 
     });
+  }
+  toggleCallbackHandler=(res:any)=>{
+    this.submittalsTpl[res.itmindex]['isOpen']=res.isOpen
   }
 }

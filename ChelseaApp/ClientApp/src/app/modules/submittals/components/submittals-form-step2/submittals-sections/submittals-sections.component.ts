@@ -12,10 +12,10 @@ export class SubmittalsSectionsComponent implements OnInit {
   @Input() itmindex = '0';
   @Output() removeFn = new EventEmitter();
   @Output() uploadSubmittalsCallback: EventEmitter<any> = new EventEmitter();
+  @Output() toggleCallback: EventEmitter<any> = new EventEmitter();
   multiple = true;
   isEdit = false;
   items: MenuItem[] = [];
-  transmittedFor: string = '';
   uploadedFiles: any[] = [];
   fileData: any = null;
   constructor(private httpService: HttpService) { }
@@ -31,11 +31,11 @@ export class SubmittalsSectionsComponent implements OnInit {
   handleEdit = (value: boolean) => {
     this.isEdit = value
   }
-  handleDelete(index:number) {
+  handleDelete(index: number) {
     console.log("chaild delete called");
-    let res={
-      submittalIndex:this.itmindex,
-      itemIndex:index
+    let res = {
+      submittalIndex: this.itmindex,
+      itemIndex: index
     }
     this.removeFn.emit(res);
   }
@@ -50,20 +50,29 @@ export class SubmittalsSectionsComponent implements OnInit {
       formData.append('file', this.fileData);
       this.httpService.fileupload(url, formData, null, null).subscribe(res => {
         let data: any = {
-          info: {
-            image: res.filePath,
-            fileName: res.fileName,
-            fileSize: res.fileSize
+          formData: {
+            ...res,
           },
-          noSamples: 0,
-          owner: 'John Smith',
-          createdAt: new Date(),
-          itmindex: this.itmindex
+          info: {
+            noSamples: 0,
+            owner: 'John Smith',
+            createdAt: new Date(),
+            itmindex: this.itmindex
+          }
         }
         this.uploadSubmittalsCallback.emit(data)
       })
     })
   }
+
   removeImage = (target: any, str: string) => {
   }
+  handleToggle=()=>{
+    this.submittal.isOpen=!this.submittal.isOpen;
+    this.toggleCallback.emit({
+      isOpen:this.submittal.isOpen,
+      itmindex: this.itmindex
+    })
+  }
+  
 }
