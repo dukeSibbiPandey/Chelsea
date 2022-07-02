@@ -25,5 +25,8 @@ namespace Chelsea.Repository
         public string Name { get; set; }
         public int PdfFileId { get; set; }
         public string FileName { get; set; }
+        public string FileSize { get; set; }
+        public string Thumbnail { get; set; }
+        public string OrgFileName { get; set; }
     }
 }

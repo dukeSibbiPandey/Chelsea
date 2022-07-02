@@ -2,8 +2,8 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 using OpenXmlPowerTools;
-using PDFLibNet64;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,17 +16,19 @@ using System.Xml.Linq;
 
 namespace ChelseaApp.DocHelper
 {
-    public class DocUtility
+    public class DocUtility : IDocUtility
     {
         [System.Obsolete]
         public readonly IHostingEnvironment _environment;
         private readonly IAzureBlobServices _azureBlobServices;
+        public readonly AppConfig _appSetting;
 
         [System.Obsolete]
-        public DocUtility(IHostingEnvironment environment, IAzureBlobServices azureBlobServices)
+        public DocUtility(IHostingEnvironment environment, IAzureBlobServices azureBlobServices, IOptions<AppConfig> appSettings)
         {
             this._environment = environment;
             _azureBlobServices = azureBlobServices;
+            _appSetting = appSettings.Value;
         }
 
         [System.Obsolete]
@@ -93,7 +95,7 @@ namespace ChelseaApp.DocHelper
                                         }
                                         if (para.InnerText.Contains("#SDATE#"))
                                         {
-                                            text.Text = text.Text.Replace("#SDATE#", coverPage.SubmittalDate);
+                                            text.Text = text.Text.Replace("#SDATE#", Convert.ToDateTime(coverPage.SubmittalDate).ToString("MMM dd, yyyy"));
                                         }
                                         if (para.InnerText.Contains("#JOB#"))
                                         {
@@ -158,7 +160,7 @@ namespace ChelseaApp.DocHelper
         {
             EndProcess();
             string exePath = this._environment.ContentRootPath + "/Content/WordToPdfConverter/WordToPDF.exe";
-           
+
             var commandArgs = new List<string>();
             commandArgs.Add(inputFile);
             commandArgs.Add(outputFile);
@@ -324,7 +326,7 @@ namespace ChelseaApp.DocHelper
                     //    byte[] imageArray = System.IO.File.ReadAllBytes(DefaultImagePath);
                     //    string base64ImageRepresentation = Convert.ToBase64String(imageArray);
                     //}
-                    
+
                     /*iText.Html2pdf.ConverterProperties converterProperties = new iText.Html2pdf.ConverterProperties();
                     using (MemoryStream pdfStream = new MemoryStream(pdfFile))
                     {
@@ -349,10 +351,10 @@ namespace ChelseaApp.DocHelper
 
                     //FileInfo fileInfo = new FileInfo(pdfFile);
                     //byte[] pdfArray = File.ReadAllBytes(fileInfo.FullName);
-                    
+
 
                     //File.Delete(pdfFile);
-                    
+
 
                     Byte[] pdfByte;
                     using (var ms = new MemoryStream())
@@ -363,14 +365,14 @@ namespace ChelseaApp.DocHelper
                     using (MemoryStream pdfStream = new MemoryStream())
                     {
                         pdfStream.Write(pdfByte, 0, pdfByte.Length);
-                        fileUploadInfo = _azureBlobServices.UploadFile(pdfStream, "/Content/" + fileName, "chelseadoc", false).GetAwaiter().GetResult();
+                        fileUploadInfo = _azureBlobServices.UploadFile(pdfStream, "/Content/" + fileName, _appSetting.AzureBlobDocContainer, false).GetAwaiter().GetResult();
                     }
 
                     //string pdfName = @"D:\Data_Imp\Projects\StartingPoint\WordToPDF\WordToPDF\Quaterlyreport.pdf";
                     //File.WriteAllBytes(pdfFile, pdfByte);
                 }
             }
-            
+
             return fileUploadInfo;
         }
 
@@ -430,19 +432,30 @@ namespace ChelseaApp.DocHelper
             System.IO.File.WriteAllBytes(pdfFileUrl, fileByte);*/
             return stream;
         }
-
-        public string ConvertPDFtoJPG(Stream fileStream, string fileName)
+        public string ConvertPDFtoJPG(Stream fileStream, string fileName, int pageNumber)
         {
-            PDFWrapper _pdfDoc = new PDFWrapper();
+            if(Environment.Is64BitOperatingSystem)
+            {
+                return ConvertPDFtoJPG32Bit(fileStream, fileName, pageNumber);
+            }
+            else
+            {
+                return ConvertPDFtoJPG32Bit(fileStream, fileName, pageNumber);
+            }
+        }
+
+        public string ConvertPDFtoJPG32Bit(Stream fileStream, string fileName, int pageNumber)
+        {
+            PDFLibNet32.PDFWrapper _pdfDoc = new PDFLibNet32.PDFWrapper();
             _pdfDoc.LoadPDF(fileStream);
 
-            Image img = RenderPage(_pdfDoc, 0);
+            Image img = RenderPage32Bit(_pdfDoc, pageNumber);
 
             Stream stream = new MemoryStream();
 
             img.Save(stream, ImageFormat.Png);
 
-            var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/"+ fileName, "chelseapublicurl", false).GetAwaiter().GetResult();
+            var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
 
             //for (int i = 0; i < _pdfDoc.PageCount; i++)
             //{
@@ -455,7 +468,59 @@ namespace ChelseaApp.DocHelper
             _pdfDoc.Dispose();
             return fileUploadInfo.Path;
         }
-        public Image RenderPage(PDFWrapper doc, int page)
+
+        public string ConvertPDFtoJPG64Bit(Stream fileStream, string fileName, int pageNumber)
+        {
+            PDFLibNet64.PDFWrapper _pdfDoc = new PDFLibNet64.PDFWrapper();
+            _pdfDoc.LoadPDF(fileStream);
+
+            Image img = RenderPage64Bit(_pdfDoc, pageNumber);
+
+            Stream stream = new MemoryStream();
+
+            img.Save(stream, ImageFormat.Png);
+
+            var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
+
+            //for (int i = 0; i < _pdfDoc.PageCount; i++)
+            //{
+
+            //    Image img = RenderPage(_pdfDoc, i);
+
+            //    img.Save(Path.Combine(dirOut, string.Format("{0}{1}.jpg", i, DateTime.Now.ToString("mmss"))));
+
+            //}
+            _pdfDoc.Dispose();
+            return fileUploadInfo.Path;
+        }
+        public Image RenderPage64Bit(PDFLibNet64.PDFWrapper doc, int page)
+        {
+            doc.CurrentPage = page + 1;
+            doc.CurrentX = 0;
+            doc.CurrentY = 0;
+
+            doc.RenderPage(IntPtr.Zero);
+
+            // create an image to draw the page into
+            var buffer = new Bitmap(doc.PageWidth, doc.PageHeight);
+            doc.ClientBounds = new Rectangle(0, 0, doc.PageWidth, doc.PageHeight);
+            using (var g = Graphics.FromImage(buffer))
+            {
+                var hdc = g.GetHdc();
+                try
+                {
+                    doc.DrawPageHDC(hdc);
+                }
+                finally
+                {
+                    g.ReleaseHdc();
+                }
+            }
+            return buffer;
+
+        }
+
+        public Image RenderPage32Bit(PDFLibNet32.PDFWrapper doc, int page)
         {
             doc.CurrentPage = page + 1;
             doc.CurrentX = 0;

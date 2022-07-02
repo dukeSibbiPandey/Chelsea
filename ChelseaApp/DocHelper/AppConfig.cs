@@ -7,6 +7,7 @@
         public string AzureBlobConnection { get; set; }
         public string AzureBlobContainer { get; set; }
         public string AzureBlobTempContainer { get; set; }
+        public string AzureBlobMainImageContainer { get; set; }
         public string DatabaseConnection { get; set; }
     }
 }

@@ -28,15 +28,17 @@ namespace ChelseaApp.Controllers
         private readonly IHostingEnvironment _environment;
         public readonly AppConfig _appSetting;
         private readonly IAzureBlobServices _azureBlobServices;
+        private readonly IDocUtility _docUtility;
 
-       [System.Obsolete]
-        public HomeController(ChelseaContext context, IMapper mapper, IHostingEnvironment environment, IOptions<AppConfig> appSettings, IAzureBlobServices azureBlobServices)
+        [System.Obsolete]
+        public HomeController(ChelseaContext context, IMapper mapper, IHostingEnvironment environment, IOptions<AppConfig> appSettings, IAzureBlobServices azureBlobServices, IDocUtility docUtility)
         {
             _context = context;
             _mapper = mapper;
             this._environment = environment;
             _appSetting = appSettings.Value;
             _azureBlobServices = azureBlobServices;
+            _docUtility = docUtility;
         }
 
         [HttpGet("submittal/list")]
@@ -92,8 +94,7 @@ namespace ChelseaApp.Controllers
             var stateObj = await _context.StateMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.State)).FirstOrDefaultAsync();
             coverPage.Contractor.StateName = stateObj.Name;
             coverPage.Contractor.CityName = cityObj.Name;
-            DocUtility utility = new DocUtility(this._environment, _azureBlobServices);
-            var fileInfo = utility.SaveCoverPage(coverPage, modelList);
+            var fileInfo = _docUtility.SaveCoverPage(coverPage, modelList);
             string fileName = Path.GetFileName(fileInfo.Path);
             
             //var fileInfo = await _azureBlobServices.UploadFile(stream, "/Content/"+ fileName, _appSetting.AzureBlobDocContainer, false);
@@ -177,9 +178,8 @@ namespace ChelseaApp.Controllers
 
                     fileSize = file.Length.ToString();
                     pdfPath = fileInfo.Path;
-                    DocUtility utility = new DocUtility(this._environment, this._azureBlobServices);
-                    string thName = fileId + ".png";
-                    thumbnail = utility.ConvertPDFtoJPG(stream, thName);
+                    string thName = fileId + ".png";                    
+                    thumbnail = _docUtility.ConvertPDFtoJPG(stream, thName, 0);
                     orgFileName = file.FileName;
                 }
                 else
@@ -190,9 +190,10 @@ namespace ChelseaApp.Controllers
             catch (Exception ex)
             {
                 message = ex.Message;
+                return this.BadRequest(message);
 
             }
-            return this.Ok(new { fileName = newFileName, filePath = pdfPath, fileSize = fileSize, thumbnail = thumbnail, orgFileName = orgFileName });
+            return this.Ok(new FileModel { FileName = newFileName, FilePath = pdfPath, FileSize = fileSize, Thumbnail = thumbnail, OrgFileName = orgFileName });
         }
 
         [HttpGet("files/merge")]
@@ -213,23 +214,30 @@ namespace ChelseaApp.Controllers
 
             // var outputFile = string.Format("{0}/{1}", "Content", "mergedbyitext.pdf");
             List<Stream> files = new List<Stream>();
-            
 
-            
+
+            var coverfileUrl = string.Format("{0}/{1}", "Content", modelList.CoverPageName);
+            var coverfileStream = await _azureBlobServices.DownloadFile(coverfileUrl, _appSetting.AzureBlobDocContainer);
+            files.Add(coverfileStream);
 
             var allfiles = pdfFileMaster.PdfFiles.SelectMany(t => t.Files).ToList();
             foreach (var file in allfiles)
             {
-                var fileUrl = string.Format("{0}/{1}", "Content", file);
+                var fileUrl = string.Format("{0}/{1}", "Content", file.FileName);
                 var fileStream = await _azureBlobServices.DownloadFile(fileUrl, _appSetting.AzureBlobTempContainer);
                 files.Add(fileStream);
             }
-
-            DocUtility utility = new DocUtility(this._environment, this._azureBlobServices);
-            Stream mergedFileName = utility.CombineMultiplePDFs(files);
+            
+            Stream mergedFileName = _docUtility.CombineMultiplePDFs(files);
             string pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
             var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);
             await _azureBlobServices.UploadFile(mergedFileName, pdffileUrl, _appSetting.AzureBlobDocContainer, false);
+            var thumbnail = _docUtility.ConvertPDFtoJPG(mergedFileName, Path.GetFileNameWithoutExtension(pdfFileName) + ".png", 2);
+
+            var submittalModel = this._mapper.Map<Submittal>(dataList);
+            submittalModel.Thumbnail = thumbnail;
+            _context.Submittal.Update(submittalModel);
+            await _context.SaveChangesAsync();
 
             foreach (var model in pdfFileMaster.PdfFiles)
             {
@@ -242,10 +250,14 @@ namespace ChelseaApp.Controllers
                 foreach(var file in model.Files)
                 {
                     PdfFileDetails pdfFile = new PdfFileDetails();
-                    pdfFile.FileName = file;
+                    pdfFile.FileName = file.FileName;
                     pdfFile.SubmittalId = pdfFileMaster.SubmittalId;
                     pdfFile.PdfFileId = modeObj.Id;
                     pdfFile.Name = modeObj.Name;
+                    pdfFile.FileName = file.FileName;
+                    pdfFile.FileSize = file.FileSize;
+                    pdfFile.Thumbnail = Path.GetFileName(file.Thumbnail);
+                    pdfFile.OrgFileName = file.OrgFileName;
                     _context.PdfFileDetails.Add(pdfFile);
                     await _context.SaveChangesAsync();
                 }

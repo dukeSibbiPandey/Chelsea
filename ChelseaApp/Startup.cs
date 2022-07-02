@@ -30,6 +30,7 @@ namespace ChelseaApp
             var appSettings = appSettingsSection.Get<AppConfig>();
 
             services.AddScoped<IAzureBlobServices, AzureBlobServices>();
+            services.AddScoped<IDocUtility, DocUtility>();
             services.AddSingleton<IOptions<AppConfig>>(x => Options.Create<AppConfig>(appSettings));
             services.AddDbContext<ChelseaContext>(options =>
                               options.UseSqlServer(appSettings.DatabaseConnection));
