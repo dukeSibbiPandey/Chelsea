@@ -32,6 +32,14 @@
         justify-content: space-between;
         padding: 16px 0;
     }
+    .placehonder {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        color: #707070;
+    }
     .__template_wrapper {
         .col-same-height {
             margin: 10px 0;
@@ -69,51 +77,6 @@
                             transform: translate(-50%, -50%);
                         }
                     }
-                    &.new_tile {
-                        background: white;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: space-between;
-                        padding: 20px 5px;
-                        cursor: pointer;
-                        border: 1px #d1d1d1 dashed;
-                    }
-                    .placehonder {
-                        font-style: normal;
-                        font-weight: 400;
-                        font-size: 14px;
-                        line-height: 16px;
-                        text-align: center;
-                        color: #707070;
-                    }
-                    .seprator {
-                        position: relative;
-                        width: 100%;
-                        text-align: center;
-                        &::after {
-                            position: absolute;
-                            left: 50%;
-                            top: 50%;
-                            transform: translate(-50%, -50%);
-                            content: "";
-                            width: 100%;
-                            height: 1px;
-                            background: #d9d9d9;
-                        }
-                        span {
-                            font-style: normal;
-                            font-weight: 500;
-                            font-size: 14px;
-                            text-align: center;
-                            color: #707070;
-                            position: relative;
-                            z-index: 1;
-                            background: white;
-                            display: inline-block;
-                            padding: 10px;
-                        }
-                    }
                     img {
                         border-radius: 4px;
                     }
@@ -148,4 +111,50 @@
     max-width: 100%;
     height: 200px;
     object-fit: cover;
+}
+
+.new_tile {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 5px;
+    cursor: pointer;
+    height: 173px;
+    .placehonder {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        color: #707070;
+    }
+    .seprator {
+        position: relative;
+        width: 100%;
+        text-align: center;
+        &::after {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            content: "";
+            width: 100%;
+            height: 1px;
+            background: #d9d9d9;
+        }
+        span {
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            text-align: center;
+            color: #707070;
+            position: relative;
+            z-index: 1;
+            background: white;
+            display: inline-block;
+            padding: 10px;
+        }
+    }
 }
