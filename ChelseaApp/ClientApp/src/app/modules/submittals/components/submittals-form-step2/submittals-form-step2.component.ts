@@ -142,13 +142,22 @@ export class SubmittalsFormStep2Component implements OnInit {
     arr.splice(fIdx, 1);
     arr.splice(toIdx, 0, element);
   }
+  move_sub_itms = (res: any) => {
+    debugger
+    let arr = this.submittalsTpl[res.subIdx].files;
+    const fIdx = res.fIdx;
+    const toIdx = res.toIdx;
+    var element = arr[fIdx];
+    arr.splice(fIdx, 1);
+    arr.splice(toIdx, 0, element);
+  }
   selectedActionCallbackAction = (res: any) => {
     if (res.action == 'delete') {
       this.removeSubmittals(res)
     } else if (res.action == 'duplicate') {
       this.duplicateSubmittals(res)
-    } else if (res.action == 'move') {
-      this.arraymove(res)
+    } else if (res.action == 'move_item') {
+      this.move_sub_itms(res)
     } else if (res.action == 'copyItem') {
       this.duplicateSubmittalItem(res)
     }

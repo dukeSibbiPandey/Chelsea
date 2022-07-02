@@ -115,6 +115,21 @@ export class SubmittalsSectionsComponent implements OnInit {
     })
   }
 
+  handleMoveItem = (idx:number, action: any) => {
+    let fIdx: any = idx;
+    let toIdx: any;
+    if (action == 'left') {
+      toIdx = fIdx - 1
+    } else if (action == 'right') {
+      toIdx = fIdx + 1
+    }
+    this.selectedActionCallback.emit({
+      subIdx: this.itmindex,
+      fIdx: fIdx,
+      toIdx: toIdx,
+      action: 'move_item'
+    })
+  }
   handleMove = (action: any) => {
     let fIdx: any = this.itmindex;
     let toIdx: any;
