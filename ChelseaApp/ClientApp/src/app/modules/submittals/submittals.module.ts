@@ -26,6 +26,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
 import {CalendarModule} from 'primeng/calendar';
 import {FileUploadModule} from 'primeng/fileupload';
+import {PaginatorModule} from 'primeng/paginator';
 @NgModule({
   declarations: [
     DigitOnlyDirective,
@@ -57,7 +58,8 @@ import {FileUploadModule} from 'primeng/fileupload';
     OwlNativeDateTimeModule,
     SharedModule,
     CalendarModule,
-    FileUploadModule
+    FileUploadModule,
+    PaginatorModule
   ],
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'in' }
