@@ -21,7 +21,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   items: MenuItem[] = [];
   uploadedFiles: any[] = [];
   fileData: any = null;
-  
+
   constructor(private httpService: HttpService) { }
 
   ngOnInit(): void {
@@ -75,7 +75,7 @@ export class SubmittalsSectionsComponent implements OnInit {
     this.submittal.isOpen = !this.submittal.isOpen;
     this.toggleCallback.emit({
       isOpen: this.submittal.isOpen,
-      itmindex: this.itmindex
+      idx: this.itmindex
     })
   }
   handleSelectTiles = () => {
@@ -107,6 +107,13 @@ export class SubmittalsSectionsComponent implements OnInit {
       action: 'duplicate'
     })
   }
+  handleCopySubmittalItem = (item: any) => {
+    this.selectedActionCallback.emit({
+      file: item,
+      idx: this.itmindex,
+      action: 'copyItem'
+    })
+  }
 
   handleMove = (action: any) => {
     let fIdx: any = this.itmindex;
@@ -123,7 +130,4 @@ export class SubmittalsSectionsComponent implements OnInit {
       action: 'move'
     })
   }
-
-  
-
 }

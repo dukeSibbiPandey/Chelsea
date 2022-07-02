@@ -118,7 +118,7 @@ export class SubmittalsFormStep2Component implements OnInit {
     });
   }
   toggleCallbackHandler = (res: any) => {
-    this.submittalsTpl[res.itmindex]['isOpen'] = res.isOpen
+    this.submittalsTpl[res.idx]['isOpen'] = res.isOpen
   }
   removeSubmittals = (res: any) => {
     // const ids = res.selectedIndex;
@@ -127,9 +127,12 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
   duplicateSubmittals = (res: any) => {
     let item = JSON.parse(JSON.stringify(res.submittal));
-    //item.name = `${item.name}_${res.action}`;
     item.name = "F" + (this.submittalsTpl.length + 1);
     this.submittalsTpl.push(item)
+  }
+  duplicateSubmittalItem = (res: any) => {
+    let item = JSON.parse(JSON.stringify(res['file']));
+    this.submittalsTpl[res.idx].files.push(item)
   }
   arraymove = (res: any) => {
     let arr = this.submittalsTpl;
@@ -146,6 +149,8 @@ export class SubmittalsFormStep2Component implements OnInit {
       this.duplicateSubmittals(res)
     } else if (res.action == 'move') {
       this.arraymove(res)
+    } else if (res.action == 'copyItem') {
+      this.duplicateSubmittalItem(res)
     }
   }
 }
