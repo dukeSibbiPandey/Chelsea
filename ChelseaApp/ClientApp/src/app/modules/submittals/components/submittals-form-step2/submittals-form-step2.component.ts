@@ -66,7 +66,11 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.activeAddressInde = index;
   }
   uploadSubmittalsCallbackHandler = (res: any) => {
-    this.submittalsTpl[res.itmindex].files.push(res.fileName)
+    const index = res.itmindex;
+    const fileName=res.info && res.info.fileName ||'';
+    this.submittalsTpl[index].files.push(fileName)
+    this.submittalsTpl[index].listItems.push(res)
+
   }
 
   addMoreOption = () => {

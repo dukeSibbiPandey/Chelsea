@@ -1,4 +1,5 @@
 <div class="form_wrapper">
+  <!-- {{submittalsTpl|json}} -->
   <div class="form-group" *ngFor="let item of submittalsTpl;let i = index">
     <app-submittals-sections [submittal]=item itmindex={{i}} (removeFn)="removePdfOption($event)"
       (uploadSubmittalsCallback)="uploadSubmittalsCallbackHandler($event)">
