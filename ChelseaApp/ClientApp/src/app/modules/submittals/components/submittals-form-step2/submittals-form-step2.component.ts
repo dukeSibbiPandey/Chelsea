@@ -7,7 +7,8 @@ const submittalItem: any = {
   mfg: '',
   part: '',
   description: '',
-  files: []
+  files: [],
+  listItems: []
 }
 @Component({
   selector: 'app-submittals-form-step2',
@@ -26,7 +27,29 @@ export class SubmittalsFormStep2Component implements OnInit {
       mfg: '',
       part: '',
       description: '',
-      files: []
+      files: [],
+      listItems: [
+        {
+          info: {
+            image: 'thumb_1.jpg',
+            fileName: '010622 Sample file.pdf',
+            fileSize: '2.5 mb'
+          },
+          noSamples: 5,
+          owner: 'John Smith',
+          createdAt: '06/06/2022'
+        },
+        {
+          info: {
+            image: 'thumb_2.jpg',
+            fileName: '020622 Sample file.pdf',
+            fileSize: '3.0 mb'
+          },
+          noSamples: 4,
+          owner: 'Jane Doe',
+          createdAt: '06/05/2022'
+        }
+      ]
     }
   ]
   constructor(private route: ActivatedRoute, private httpService: HttpService) { }

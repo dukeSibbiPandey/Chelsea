@@ -12,7 +12,6 @@ export class SubmittalsSectionsComponent implements OnInit {
   @Input() itmindex = '0';
   @Output() removeFn = new EventEmitter();
   @Output() uploadSubmittalsCallback: EventEmitter<any> = new EventEmitter();
-  templateList: any = [];
   multiple = true;
   isEdit = false;
   items: MenuItem[] = [];
@@ -28,28 +27,6 @@ export class SubmittalsSectionsComponent implements OnInit {
       { label: 'Angular.io', icon: 'pi pi-info' },
       { label: 'Setup', icon: 'pi pi-cog' }
     ];
-    this.templateList = [
-      {
-        info: {
-          image: 'thumb_1.jpg',
-          fileName: '010622 Sample file.pdf',
-          fileSize: '2.5 mb'
-        },
-        noSamples: 5,
-        owner: 'John Smith',
-        createdAt: '06/06/2022'
-      },
-      {
-        info: {
-          image: 'thumb_2.jpg',
-          fileName: '020622 Sample file.pdf',
-          fileSize: '3.0 mb'
-        },
-        noSamples: 4,
-        owner: 'Jane Doe',
-        createdAt: '06/05/2022'
-      }
-    ]
   }
   handleEdit = (value: boolean) => {
     this.isEdit = value
