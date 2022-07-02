@@ -47,14 +47,15 @@
             <label for="">These are Transmitted for</label>
             <div class="flex v_center">
                 <div class="field-radiobutton flex v_center">
-                    <p-radioButton name="transmittedFor" value="Chicago" [(ngModel)]="transmittedFor" inputId="city1">
+                    <p-radioButton value="Approval" inputId="Approval" name='status' [(ngModel)]="submittal['status']"
+                        #status="ngModel">
                     </p-radioButton>
-                    <label class="_ml_10 mb_0" for="city1">Approval</label>
+                    <label class="_ml_10 mb_0" for="Approval">Approval</label>
                 </div>
                 <div class="field-radiobutton flex v_center _ml_10">
-                    <p-radioButton name="transmittedFor" value="Los Angeles" [(ngModel)]="transmittedFor"
-                        inputId="city2"></p-radioButton>
-                    <label class="_ml_10 mb_0" for="city2">Record</label>
+                    <p-radioButton value="Record" name='status' [(ngModel)]="submittal['status']" #status="ngModel"
+                        inputId="Record"></p-radioButton>
+                    <label class="_ml_10 mb_0" for="Record">Record</label>
                 </div>
             </div>
         </li>

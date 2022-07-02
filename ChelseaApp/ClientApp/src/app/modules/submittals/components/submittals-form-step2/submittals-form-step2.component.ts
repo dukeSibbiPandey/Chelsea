@@ -7,8 +7,7 @@ const submittalItem: any = {
   mfg: '',
   part: '',
   description: '',
-  files: [],
-  listItems: []
+  files: []
 }
 @Component({
   selector: 'app-submittals-form-step2',
@@ -54,7 +53,7 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.submittalsTpl.push(item)
   }
   removePdfOption = (res: any) => {
-    this.submittalsTpl[res.submittalIndex]['listItems'].splice(res.itemIndex, 1)
+    this.submittalsTpl[res.submittalIndex]['files'].splice(res.itemIndex, 1)
     // this.submittalsTpl.splice(idx, 1);
     // for (let i = 0; i < this.submittalsTpl.length; i++) {
     //   this.submittalsTpl[i].name = "F" + (i + 1);
