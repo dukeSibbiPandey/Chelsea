@@ -36,7 +36,6 @@ export class HttpService {
   }
 
   fileupload(apiUrl: any, data: any, headers:{}, params:{}) {
-    debugger
     const url = this.baseUrl + apiUrl;
     const newHttpClient = new HttpClient(this.httpBackend);
     return newHttpClient.post<any>(url, data, { 'headers': { ...headers }, 'params': params });
