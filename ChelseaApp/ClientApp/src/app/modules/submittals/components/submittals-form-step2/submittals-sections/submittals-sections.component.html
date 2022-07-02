@@ -27,7 +27,7 @@
                         </ul>
                     </div>
                 </li>
-                <li>
+                <li (click)="handleToggle()">
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="16" cy="16" r="16" transform="rotate(90 16 16)" fill="#EEEEEE" />
                         <path
@@ -38,7 +38,7 @@
             </ul>
         </div>
     </div>
-    <div>
+    <div class="{{submittal?.isOpen?' ':' hidden'}}">
         <ul class="__filter">
             <li class="form-group">
                 <label for="">These are Transmitted for</label>

@@ -12,6 +12,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   @Input() itmindex = '0';
   @Output() removeFn = new EventEmitter();
   @Output() uploadSubmittalsCallback: EventEmitter<any> = new EventEmitter();
+  @Output() toggleCallback: EventEmitter<any> = new EventEmitter();
   multiple = true;
   isEdit = false;
   items: MenuItem[] = [];
@@ -63,6 +64,15 @@ export class SubmittalsSectionsComponent implements OnInit {
       })
     })
   }
+
   removeImage = (target: any, str: string) => {
   }
+  handleToggle=()=>{
+    this.submittal.isOpen=!this.submittal.isOpen;
+    this.toggleCallback.emit({
+      isOpen:this.submittal.isOpen,
+      itmindex: this.itmindex
+    })
+  }
+  
 }

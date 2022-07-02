@@ -26,7 +26,8 @@ export class SubmittalsFormStep2Component implements OnInit {
       mfg: '',
       part: '',
       description: '',
-      files: []
+      files: [],
+      isOpen:true
     }
   ]
   constructor(private route: ActivatedRoute, private httpService: HttpService) { }
@@ -81,5 +82,8 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.httpService.post("home/files/merge", postDto).toPromise().then(value => {
 
     });
+  }
+  toggleCallbackHandler=(res:any)=>{
+    this.submittalsTpl[res.itmindex]['isOpen']=res.isOpen
   }
 }
