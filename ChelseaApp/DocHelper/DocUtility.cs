@@ -1,6 +1,9 @@
 ﻿using ChelseaApp.Model;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.events;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using OpenXmlPowerTools;
@@ -13,6 +16,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using Font = iTextSharp.text.Font;
+using Image = System.Drawing.Image;
+using Paragraph = DocumentFormat.OpenXml.Wordprocessing.Paragraph;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace ChelseaApp.DocHelper
 {
@@ -377,7 +384,7 @@ namespace ChelseaApp.DocHelper
         }
 
         [Obsolete]
-        public byte[] CombineMultiplePDFs(List<Stream> fileNames)
+        public string CombineMultiplePDFs(List<Stream> fileNames)
         {
             //if (File.Exists(outFile))
             //{
@@ -439,10 +446,123 @@ namespace ChelseaApp.DocHelper
             string pdfFileUrl = string.Format("{0}/{1}", rooPath, pdfFileName);
             var fileByte = StreamHelper.ReadToEnd(stream);
             System.IO.File.WriteAllBytes(pdfFileUrl, fileByte);*/
+
+            //CreateIndexPage(outputFilePath);
             pdfBytes = System.IO.File.ReadAllBytes(outputFilePath);
-            File.Delete(outputFilePath);
+
+            //pdfBytes = AddPageNumber(pdfBytes);
+            //File.Delete(outputFilePath);
+            return outputFilePath;
+        }
+
+        [Obsolete]
+        public byte[] CombineMultiplePDFFiles(List<string> fileNames)
+        {
+            //if (File.Exists(outFile))
+            //{
+            //    File.Delete(outFile);
+            //}
+
+            byte[] pdfBytes = null;
+
+            var outputFilePath = this._environment.WebRootPath + "/TempPdf/FinalMergedFile_" + Guid.NewGuid().ToString() + ".pdf";
+
+            var pdfStream = File.Create(outputFilePath);
+
+            iTextSharp.text.Document document = new iTextSharp.text.Document();
+            iTextSharp.text.pdf.PdfCopy pdf = new iTextSharp.text.pdf.PdfCopy(document, pdfStream);
+            iTextSharp.text.pdf.PdfReader reader = null;
+            try
+            {
+                document.Open();
+
+                foreach (string file in fileNames)
+                {
+                    reader = new iTextSharp.text.pdf.PdfReader(file);
+                    pdf.AddDocument(reader);
+                    reader.Close();
+                }
+                //string pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
+                //var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);
+                //_azureBlobServices.UploadFile(pdfStream, pdffileUrl, _appSetting.AzureBlobDocContainer, false).GetAwaiter().GetResult();
+                //pdfBytes = StreamHelper.ReadToEnd(pdfStream);
+            }
+            catch (Exception ex)
+            {
+
+                if (reader != null)
+                {
+                    reader.Close();
+                }
+            }
+            finally
+            {
+                if (document != null)
+                {
+                    document.Close();
+                }
+            }
+
+            /*string reportPath = "Content/MergePdf";
+            string contentRootPath = _environment.ContentRootPath;
+            if (!Directory.Exists(contentRootPath + reportPath))
+            {
+                Directory.CreateDirectory(contentRootPath + reportPath);
+            }
+
+            string rooPath = contentRootPath + reportPath;
+
+
+            string pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
+
+            string pdfFileUrl = string.Format("{0}/{1}", rooPath, pdfFileName);
+            var fileByte = StreamHelper.ReadToEnd(stream);
+            System.IO.File.WriteAllBytes(pdfFileUrl, fileByte);*/
+
+            //CreateIndexPage(outputFilePath);
+            pdfBytes = System.IO.File.ReadAllBytes(outputFilePath);
+
+            //pdfBytes = AddPageNumber(pdfBytes);
+            //File.Delete(outputFilePath);
             return pdfBytes;
         }
+
+        public List<string> CreateIndexPage(List<PdfFileModel> streams)
+        {
+            List<string> fileNames = new List<string>();
+            var desFilePath = this._environment.WebRootPath + "/TempPdf/Merge_TocFile_" + Guid.NewGuid().ToString() + ".pdf";
+            var tocFilePath = this._environment.WebRootPath + "/TempPdf/toc_" + Guid.NewGuid().ToString() + ".pdf";
+            FileInfo file = new FileInfo(desFilePath);
+            file.Directory.Create();
+
+            fileNames.Add(tocFilePath);
+            fileNames.Add(desFilePath);
+
+            PdfHelper.GeneratePdf(desFilePath, streams, tocFilePath);
+            return fileNames;
+        }
+
+        public byte[] AddPageNumber(byte[] bytes)
+        {
+            //byte[] bytes = System.IO.File.ReadAllBytes(@"D:\Sample1.pdf");
+            Font blackFont = FontFactory.GetFont("Arial", 12, Font.NORMAL, BaseColor.BLACK);
+            Font boldfont = FontFactory.GetFont("Arial", 14, Font.BOLD, BaseColor.BLACK);
+            using (MemoryStream stream = new MemoryStream())
+            {
+                PdfReader reader = new PdfReader(bytes);
+                using (PdfStamper stamper = new PdfStamper(reader, stream))
+                {
+                    int pages = reader.NumberOfPages;
+                    for (int j = 2; j <= pages; j++)
+                    {
+                        ColumnText.ShowTextAligned(stamper.GetUnderContent(j), Element.ALIGN_RIGHT, new Phrase((j - 1).ToString(), blackFont), 568f, 15f, 0);
+                    }
+                }
+                bytes = stream.ToArray();
+            }
+            return bytes;
+        }
+
         public string ConvertPDFtoJPG(Stream fileStream, string fileName, int pageNumber)
         {
             if(Environment.Is64BitProcess)
