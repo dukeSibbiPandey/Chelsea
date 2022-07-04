@@ -127,9 +127,22 @@
             throw new NotImplementedException();
         }
 
-        public Task<string> GetPath(string fileName, string subdirectory = "")
+        public async Task<string> GetPath(string fileName, string subdirectory = "")
         {
-            throw new NotImplementedException();
+            try
+            {
+                var containerClient = await GetContainer(subdirectory);
+                // Get a reference to a blob
+                fileName = GetRecognizeFileName(fileName);
+                BlobClient blobClient = containerClient.GetBlobClient(fileName);
+                // Download the blob's contents and save it to a file
+                var url = blobClient.Uri.AbsoluteUri;
+                return url;
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
         }
     }
 }

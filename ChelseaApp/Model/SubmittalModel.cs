@@ -29,5 +29,7 @@ namespace ChelseaApp.Model
         public string LastName { get; set; }
         public string CoverPageName { get; set; }
         public bool? IsTempRecord { get; set; }
+        public string FileUrl { get; set; }
+        public string ThumbnailUrl { get; set; }
     }
 }

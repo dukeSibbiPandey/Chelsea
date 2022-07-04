@@ -14,6 +14,7 @@ namespace ChelseaApp.Model
         public string MFG { get; set; }
         public string Part { get; set; }
         public string Description { get; set; }
+        public string FileTmpPath { get; set; }
         public List<FileModel> Files { get; set; }
     }
 

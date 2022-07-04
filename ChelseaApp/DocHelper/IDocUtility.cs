@@ -1,13 +1,16 @@
 ﻿using ChelseaApp.Model;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace ChelseaApp.DocHelper
 {
     public interface IDocUtility
     {
         FileUploadInfo SaveCoverPage(CoverPageModel coverPage, AddressModel addressModel);
-        byte[] CombineMultiplePDFs(List<Stream> fileNames);
+        string CombineMultiplePDFs(List<Stream> fileNames);
         string ConvertPDFtoJPG(Stream fileStream, string fileName, int pageNumber);
+        List<string> CreateIndexPage(List<PdfFileModel> streams);
+        byte[] CombineMultiplePDFFiles(List<string> fileNames);
     }
 }
