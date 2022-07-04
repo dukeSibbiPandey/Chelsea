@@ -157,7 +157,8 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <button type="button" class="btn __btn __default _view">
+                                <!-- https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf -->
+                                <button type="button" class="btn __btn __default _view"  (click)="handleViewPDF('right',  item.filePath)">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -208,3 +209,31 @@
         </div>
     </div>
 </div>
+
+
+
+
+<p-dialog header="Preview" [(visible)]="isPreviewDialog" [position]="position" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false" [style]="{ width: '95vw', height: '100vh', maxHeight: 'none', marginRight:'-5px'}">
+    
+    <div id="outerContainer">
+        <div class="pdf-container">
+          <pdf-viewer
+            [src]="previewUrl"
+            [rotation]="0"
+            [original-size]="false"
+            [show-all]="true"
+            [fit-to-page]="false"
+            [zoom]="1"
+            [zoom-scale]="'page-width'"
+            [stick-to-page]="false"
+            [render-text]="true"
+            [external-link-target]="'blank'"
+            [autoresize]="true"
+            [show-borders]="false"
+            style="width: 100%; height: 600px;"
+          ></pdf-viewer>
+        </div>
+      </div>
+      
+</p-dialog>

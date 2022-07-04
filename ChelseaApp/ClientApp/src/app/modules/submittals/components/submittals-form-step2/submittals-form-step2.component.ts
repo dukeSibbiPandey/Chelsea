@@ -28,38 +28,38 @@ export class SubmittalsFormStep2Component implements OnInit {
       part: '',
       description: '',
       files: [
-        // {
-        //   "fileName": "one.pdf",
-        //   "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
-        //   "fileSize": "3028",
-        //   "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
-        //   "orgFileName": "sample.pdf",
-        //   "noSamples": 0,
-        //   "owner": "John Smith",
-        //   "createdAt": "2022-07-02T15:32:15.209Z",
-        //   "itmindex": "0"
-        // }, {
-        //   "fileName": "two.pdf",
-        //   "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
-        //   "fileSize": "3028",
-        //   "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
-        //   "orgFileName": "sample.pdf",
-        //   "noSamples": 0,
-        //   "owner": "John Smith",
-        //   "createdAt": "2022-07-02T15:32:15.209Z",
-        //   "itmindex": "0"
-        // },
-        // {
-        //   "fileName": "threee.pdf",
-        //   "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
-        //   "fileSize": "3028",
-        //   "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
-        //   "orgFileName": "sample.pdf",
-        //   "noSamples": 0,
-        //   "owner": "John Smith",
-        //   "createdAt": "2022-07-02T15:32:15.209Z",
-        //   "itmindex": "0"
-        // }
+        {
+          "fileName": "one.pdf",
+          "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+          "fileSize": "3028",
+          "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
+          "orgFileName": "sample.pdf",
+          "noSamples": 0,
+          "owner": "John Smith",
+          "createdAt": "2022-07-02T15:32:15.209Z",
+          "itmindex": "0"
+        }, {
+          "fileName": "two.pdf",
+          "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+          "fileSize": "3028",
+          "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
+          "orgFileName": "sample.pdf",
+          "noSamples": 0,
+          "owner": "John Smith",
+          "createdAt": "2022-07-02T15:32:15.209Z",
+          "itmindex": "0"
+        },
+        {
+          "fileName": "threee.pdf",
+          "filePath": "https://submittalappstorage.blob.core.windows.net/chelseatemp/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.pdf",
+          "fileSize": "3028",
+          "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
+          "orgFileName": "sample.pdf",
+          "noSamples": 0,
+          "owner": "John Smith",
+          "createdAt": "2022-07-02T15:32:15.209Z",
+          "itmindex": "0"
+        }
       ],
       isOpen: true
     }

@@ -29,6 +29,7 @@ import {FileUploadModule} from 'primeng/fileupload';
 import {PaginatorModule} from 'primeng/paginator';
 import { ImgFallbackModule } from 'ngx-img-fallback';
 import {ProgressBarModule} from 'primeng/progressbar';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import {ProgressBarModule} from 'primeng/progressbar';
     FileUploadModule,
     PaginatorModule,
     ImgFallbackModule,
-    ProgressBarModule
+    ProgressBarModule,
+    PdfViewerModule
   ],
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'in' }

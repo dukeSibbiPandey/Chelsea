@@ -16,12 +16,15 @@ export class SubmittalsSectionsComponent implements OnInit {
   @Output() toggleCallback: EventEmitter<any> = new EventEmitter();
   @Output() selectedActionCallback: EventEmitter<any> = new EventEmitter();
   selectedIndex: any = [];
+  position:string="right";
   isProgressBarIndex:any=-1
   multiple = true;
   isEdit = false;
   items: MenuItem[] = [];
   uploadedFiles: any[] = [];
   fileData: any = null;
+  isPreviewDialog=false;
+  previewUrl:any=''
 
   constructor(private httpService: HttpService) { }
 
@@ -148,5 +151,13 @@ export class SubmittalsSectionsComponent implements OnInit {
       toIdx: toIdx,
       action: 'move'
     })
+  }
+
+  
+  
+  handleViewPDF=(position:string, previewUrl:any)=>{
+    this.position=position;
+    this.isPreviewDialog=true;
+    this.previewUrl=previewUrl
   }
 }
