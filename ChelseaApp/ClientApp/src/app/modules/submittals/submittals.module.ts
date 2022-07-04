@@ -28,6 +28,7 @@ import {CalendarModule} from 'primeng/calendar';
 import {FileUploadModule} from 'primeng/fileupload';
 import {PaginatorModule} from 'primeng/paginator';
 import { ImgFallbackModule } from 'ngx-img-fallback';
+import {ProgressBarModule} from 'primeng/progressbar';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { ImgFallbackModule } from 'ngx-img-fallback';
     CalendarModule,
     FileUploadModule,
     PaginatorModule,
-    ImgFallbackModule
+    ImgFallbackModule,
+    ProgressBarModule
   ],
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'in' }

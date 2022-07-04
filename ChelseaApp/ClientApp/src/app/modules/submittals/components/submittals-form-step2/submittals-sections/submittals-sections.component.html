@@ -100,6 +100,7 @@
                     [(ngModel)]="submittal['description']" #description="ngModel">
             </li>
         </ul>
+        
         <div class="__template_wrapper">
             <ul class="row-same-height row">
                 <li class="col-same-height col-sm-3" *ngFor="let item of submittal.files; ;let i = index">
@@ -196,10 +197,12 @@
                                     <button type="button" class="btn __btn __theme">Upload PDF</button>
                                 </div>
                             </div>
+                            <p-progressBar mode="indeterminate" [style]="{'height': '6px'}" *ngIf="isProgressBarIndex == itmindex"></p-progressBar>
                         </ng-template>
                         <ng-template let-file pTemplate="file"></ng-template>
                         <ng-template pTemplate="content" let-files></ng-template>
                     </p-fileUpload>
+                    
                 </li>
             </ul>
         </div>

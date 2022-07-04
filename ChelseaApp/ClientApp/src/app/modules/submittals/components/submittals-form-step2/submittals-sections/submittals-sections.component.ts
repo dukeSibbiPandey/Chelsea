@@ -16,6 +16,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   @Output() toggleCallback: EventEmitter<any> = new EventEmitter();
   @Output() selectedActionCallback: EventEmitter<any> = new EventEmitter();
   selectedIndex: any = [];
+  isProgressBarIndex:any=-1
   multiple = true;
   isEdit = false;
   items: MenuItem[] = [];
@@ -44,6 +45,7 @@ export class SubmittalsSectionsComponent implements OnInit {
     this.removeFn.emit(res);
   }
   onUpload = (event: any) => {
+    this.isProgressBarIndex= this.itmindex
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
@@ -64,6 +66,7 @@ export class SubmittalsSectionsComponent implements OnInit {
             itmindex: this.itmindex
           }
         }
+        this.isProgressBarIndex=-1;
         this.uploadSubmittalsCallback.emit(data)
       })
     })
