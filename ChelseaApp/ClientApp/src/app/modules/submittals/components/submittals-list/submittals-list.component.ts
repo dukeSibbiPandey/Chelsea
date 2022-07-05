@@ -8,6 +8,7 @@ import { HttpService } from '../../../../components/http.service';
 })
 export class SubmittalsComponent implements OnInit {
   list: any = [];
+  isListFetch = false;
   placeholder = 'http://placehold.it/200x200';
   searchText: string = "";
   limit = 10;
@@ -20,12 +21,14 @@ export class SubmittalsComponent implements OnInit {
 
   bindSubmittalsGrid() {
     this.httpService.get("Home/submittal/list").toPromise().then(value => {
-      this.list = value;
+      this.list = value || [];
+      this.isListFetch = true;
     });
   }
   searchList() {
     this.httpService.get("Home/submittal/list/" + this.searchText).toPromise().then(value => {
-      this.list = value;
+      this.list = value || [];
+      this.isListFetch = true;
     });
   }
 
@@ -39,8 +42,8 @@ export class SubmittalsComponent implements OnInit {
       this.bindSubmittalsGrid();
     }
   }
-  errorHandler(event:any) {
+  errorHandler(event: any) {
     console.debug(event);
     event.target.src = "../../../../../assets/images/merge-icons/edit.png";
- }
+  }
 }
