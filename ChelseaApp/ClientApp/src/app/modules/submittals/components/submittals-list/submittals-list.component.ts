@@ -11,7 +11,7 @@ export class SubmittalsComponent implements OnInit {
   isListFetch = false;
   placeholder = 'http://placehold.it/200x200';
   searchText: string = "";
-  limit = 10;
+  limit = 2;
   page = 0;
   httpService: HttpService;
   constructor(httpService: HttpService) {

@@ -3,7 +3,7 @@
         <div class="tabie_wrapper">
             <div class="__t_top">
                 <div class="__t_itms">
-                    <!-- Showing 10 of 20 Submittals -->
+                    Showing {{limit}} of {{list.length}} Submittals
                 </div>
                 <div class="_t_right">
                     <div class="_t_sarch">
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="__t_content">
-                <p-table [value]="list" [paginator]="true" [rows]="2" [showCurrentPageReport]="true"
+                <p-table [value]="list" [paginator]="true" [rows]="2" [showCurrentPageReport]="false"
                     responsiveLayout="scroll"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                     [rowsPerPageOptions]="[2,25,50]" class="__chelsea_tbl __submittals_table">
