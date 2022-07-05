@@ -187,7 +187,7 @@
                             <img src="{{item.thumbnail}}" alt="" class="img-responsive template_img">
                         </div>
                         <p>{{item.fileName}}</p>
-                        <p class="__size">{{item.fileSize}}</p>
+                        <p class="__size" *ngIf="item.fileSize">{{niceBytes(item.fileSize)}}</p>
                     </div>
                 </li>
                 <li class="col-same-height col-sm-3 custom-file-upload">
