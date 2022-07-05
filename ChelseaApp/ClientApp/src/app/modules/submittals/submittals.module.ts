@@ -30,6 +30,7 @@ import {PaginatorModule} from 'primeng/paginator';
 import { ImgFallbackModule } from 'ngx-img-fallback';
 import {ProgressBarModule} from 'primeng/progressbar';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import {TableModule} from 'primeng/table';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     PaginatorModule,
     ImgFallbackModule,
     ProgressBarModule,
-    PdfViewerModule
+    PdfViewerModule,
+    TableModule
   ],
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'in' }
