@@ -4,8 +4,10 @@
             <span (click)="handleEdit(true)" *ngIf="!isEdit">
                 {{submittal?.name}}
             </span>
+            <!-- (blur)="handleEdit(false)"  -->
             <span class="editable" *ngIf="isEdit">
-                <input type="text" class="form-control" (blur)="handleEdit(false)">
+                <input type="text" class="form-control" name='name'
+                    [(ngModel)]="submittal['name']" #name="ngModel" (change)='handleChangeSubmittalName($event)'>
             </span>
         </div>
         <div class="__right">
@@ -100,7 +102,7 @@
                     [(ngModel)]="submittal['description']" #description="ngModel">
             </li>
         </ul>
-        
+
         <div class="__template_wrapper">
             <ul class="row-same-height row">
                 <li class="col-same-height col-sm-3" *ngFor="let item of submittal.files; ;let i = index">
@@ -158,7 +160,8 @@
                                     </ul>
                                 </div>
                                 <!-- https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf -->
-                                <button type="button" class="btn __btn __default _view"  (click)="handleViewPDF('right',  item.filePath)">
+                                <button type="button" class="btn __btn __default _view"
+                                    (click)="handleViewPDF('right',  item.filePath)">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -198,42 +201,29 @@
                                     <button type="button" class="btn __btn __theme">Upload PDF</button>
                                 </div>
                             </div>
-                            <p-progressBar mode="indeterminate" [style]="{'height': '6px'}" *ngIf="isProgressBarIndex == itmindex"></p-progressBar>
+                            <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"
+                                *ngIf="isProgressBarIndex == itmindex"></p-progressBar>
                         </ng-template>
                         <ng-template let-file pTemplate="file"></ng-template>
                         <ng-template pTemplate="content" let-files></ng-template>
                     </p-fileUpload>
-                    
+
                 </li>
             </ul>
         </div>
     </div>
 </div>
-
-
-
-
 <p-dialog header="Preview" [(visible)]="isPreviewDialog" [position]="position" [modal]="true" [style]="{width: '50vw'}"
-    [draggable]="false" [resizable]="false" [style]="{ width: '95vw', height: '100vh', overflow:'hidden', maxHeight: 'none', marginRight:'-5px'}">
-    
+    [draggable]="false" [resizable]="false"
+    [style]="{ width: '95vw', height: '100vh', overflow:'hidden', maxHeight: 'none', marginRight:'-5px'}">
+
     <div id="outerContainer">
         <div class="pdf-container">
-          <pdf-viewer
-            [src]="previewUrl"
-            [rotation]="0"
-            [original-size]="false"
-            [show-all]="true"
-            [fit-to-page]="false"
-            [zoom]="1"
-            [zoom-scale]="'page-width'"
-            [stick-to-page]="false"
-            [render-text]="true"
-            [external-link-target]="'blank'"
-            [autoresize]="true"
-            [show-borders]="false"
-            style="width: 100%; height: 600px;"
-          ></pdf-viewer>
+            <pdf-viewer [src]="previewUrl" [rotation]="0" [original-size]="false" [show-all]="true"
+                [fit-to-page]="false" [zoom]="1" [zoom-scale]="'page-width'" [stick-to-page]="false"
+                [render-text]="true" [external-link-target]="'blank'" [autoresize]="true" [show-borders]="false"
+                style="width: 100%; height: 600px;"></pdf-viewer>
         </div>
-      </div>
-      
+    </div>
+
 </p-dialog>
