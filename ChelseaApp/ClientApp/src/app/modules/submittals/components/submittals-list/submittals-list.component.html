@@ -38,7 +38,7 @@
                                         onError="this.src='../../../../../assets/images/placeholder.png'" alt="">
                                     <div class="__info">
                                         <p class="item_name">{{item.fileName}}</p>
-                                        <p class="__size" *ngIf="item.fileSize>0">{{item.fileSize}} MB</p>
+                                        <p class="__size" *ngIf="item.fileSize>0">{{niceBytes(item.fileSize)}}</p>
                                     </div>
                                 </div>
                             </td>
