@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../../../../components/http.service';
 const submittalItem: any = {
   name: 'F1',
@@ -19,7 +19,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   activeAddressInde = 1;
   id: any = 0;
   submittalData: any;
-  tempSubmittalsTpl:any=[];
+  tempSubmittalsTpl: any = [];
   submittalsTpl: any = [
     {
       name: 'F1',
@@ -64,14 +64,14 @@ export class SubmittalsFormStep2Component implements OnInit {
       isOpen: true
     }
   ]
-  constructor(private route: ActivatedRoute, private httpService: HttpService) { }
+  constructor(private route: ActivatedRoute, private httpService: HttpService, private router: Router) { }
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.updateOldState();
     this.getSubmittalData(this.id);
   }
-  updateOldState=()=>{
-    this.tempSubmittalsTpl= JSON.parse(JSON.stringify(this.submittalsTpl))
+  updateOldState = () => {
+    this.tempSubmittalsTpl = JSON.parse(JSON.stringify(this.submittalsTpl))
   }
   getSubmittalData(id: any) {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then(value => {
@@ -103,28 +103,7 @@ export class SubmittalsFormStep2Component implements OnInit {
     //   this.submittalsTpl[i].name = "F" + (i + 1);
     // }
   }
-  handleMergePdp = () => {
-    let temp: any = [];
-    this.submittalsTpl.map((ele: any, index: number) => {
-      let item: any = {
-        name: ele.name,
-        status: ele.status,
-        mfg: ele.mfg,
-        part: ele.part,
-        description: ele.description,
-        files: ele.files
-      }
-      temp.push(item)
-    })
-    this.updateOldState();
-    let postDto = {
-      submittalId: this.id,
-      pdfFiles: temp
-    }
-    this.httpService.post("home/files/merge", postDto).toPromise().then(value => {
 
-    });
-  }
   toggleCallbackHandler = (res: any) => {
     this.submittalsTpl[res.idx]['isOpen'] = res.isOpen;
     this.updateOldState();
@@ -178,7 +157,7 @@ export class SubmittalsFormStep2Component implements OnInit {
       this.submittalsTpl[res.subIdx]['name'] = this.tempSubmittalsTpl[res.subIdx]['name'];
     }
     this.updateOldState();
-    
+
   }
   selectedActionCallbackAction = (res: any) => {
     if (res.action == 'delete') {
@@ -194,5 +173,33 @@ export class SubmittalsFormStep2Component implements OnInit {
     } else if (res.action == 'change_name') {
       this.change_submittal_name(res)
     }
+  }
+  handleMergePdp = () => {
+    let temp: any = [];
+    this.submittalsTpl.map((ele: any, index: number) => {
+      let item: any = {
+        name: ele.name,
+        status: ele.status,
+        mfg: ele.mfg,
+        part: ele.part,
+        description: ele.description,
+        files: ele.files
+      }
+      temp.push(item)
+    })
+    this.updateOldState();
+    let postDto = {
+      submittalId: this.id,
+      pdfFiles: temp
+    }
+    this.httpService.post("home/files/merge", postDto).toPromise().then(value => {
+      debugger
+      this.postAjax()
+    });
+  }
+
+  postAjax = () => {
+    let url = `/submittals/merge/${this.id}`;
+    this.router.navigate([url]);
   }
 }
