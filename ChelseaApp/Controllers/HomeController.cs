@@ -237,7 +237,7 @@ namespace ChelseaApp.Controllers
                     files.Add(fileStream);
                 }
 
-                string mergByte = _docUtility.CombineMultiplePDFs(files);
+                string mergByte = _docUtility.CombineMultiplePDFs(filesList, files);
                 filesList.FileTmpPath = mergByte;
                 finalfiles.Add(filesList);
                 pages.Add(mergByte);

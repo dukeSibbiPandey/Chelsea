@@ -384,7 +384,7 @@ namespace ChelseaApp.DocHelper
         }
 
         [Obsolete]
-        public string CombineMultiplePDFs(List<Stream> fileNames)
+        public string CombineMultiplePDFs(PdfFileModel model, List<Stream> fileNames)
         {
             //if (File.Exists(outFile))
             //{
@@ -431,6 +431,10 @@ namespace ChelseaApp.DocHelper
                 }
             }
 
+            var desFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".pdf";          
+
+            PdfHelper.ManipulatePdf(model, outputFilePath, desFilePath);
+
             /*string reportPath = "Content/MergePdf";
             string contentRootPath = _environment.ContentRootPath;
             if (!Directory.Exists(contentRootPath + reportPath))
@@ -448,11 +452,11 @@ namespace ChelseaApp.DocHelper
             System.IO.File.WriteAllBytes(pdfFileUrl, fileByte);*/
 
             //CreateIndexPage(outputFilePath);
-            pdfBytes = System.IO.File.ReadAllBytes(outputFilePath);
+            //pdfBytes = System.IO.File.ReadAllBytes(outputFilePath);
 
             //pdfBytes = AddPageNumber(pdfBytes);
-            //File.Delete(outputFilePath);
-            return outputFilePath;
+            File.Delete(outputFilePath);
+            return desFilePath;
         }
 
         [Obsolete]
