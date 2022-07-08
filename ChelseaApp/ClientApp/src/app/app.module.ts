@@ -9,9 +9,11 @@ import { FooterComponent } from './components/footer/footer.component';
 import { TncComponent } from './components/tnc/tnc.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
 import { LayoutComponent } from './components/layout/layout.component';
-import { HttpClientModule } from '@angular/common/http';
 import { HttpService } from './components/http.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoaderComponent } from './components/loader/loader.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HeaderInterceptor } from './interceptors/header.interceptor';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TncComponent,
     PrivacyComponent,
     LayoutComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,7 +33,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserAnimationsModule,
     AppRoutingModule
   ],
-  providers: [HttpService],
+  providers: [HttpService, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: HeaderInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

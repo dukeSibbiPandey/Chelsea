@@ -68,27 +68,7 @@ a {
 .table > :not(:first-child) {
     border: 0px;
 }
-.__chelsea_tbl {
-    width: 100%;
-    border-collapse: collapse;
-    th {
-        border-top: 1px #9cc3e2 solid;
-        border-bottom: 1px #9cc3e2 solid;
-        font-style: normal;
-        font-weight: 500;
-        font-size: 14px;
-        line-height: 16px;
-        color: #707070;
-        padding: 5px;
-        vertical-align: top;
-    }
-    td {
-        border-top: 1px #9cc3e2 solid !important;
-        border-bottom: 1px #9cc3e2 solid;
-        padding: 10px 5px;
-        vertical-align: top;
-    }
-}
+
 .flex {
     display: flex;
 }

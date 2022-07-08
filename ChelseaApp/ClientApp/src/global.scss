@@ -67,19 +67,19 @@ a {
     width: 100%;
     border-collapse: collapse;
     th {
-        border-top: 1px #9cc3e2 solid;
-        border-bottom: 1px #9cc3e2 solid;
+        border-top: 1px #9cc3e2 solid!important;
+        border-bottom: 1px #9cc3e2 solid!important;
         font-style: normal;
-        font-weight: 500;
-        font-size: 14px;
-        line-height: 16px;
-        color: #707070;
+        font-weight: 500!important;
+        font-size: 14px!important;
+        line-height: 16px!important;
+        color: #707070!important;
         padding: 5px;
         vertical-align: top;
     }
     td {
         border-top: 1px #9cc3e2 solid !important;
-        border-bottom: 1px #9cc3e2 solid;
+        border-bottom: 1px #9cc3e2 solid!important;
         padding: 10px 5px;
         vertical-align: top;
     }

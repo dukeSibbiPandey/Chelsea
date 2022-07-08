@@ -3,7 +3,7 @@
         <div class="tabie_wrapper">
             <div class="__t_top">
                 <div class="__t_itms">
-                    Showing 10 of 20 Submittals
+                    Showing {{limit}} of {{list.length}} Submittals
                 </div>
                 <div class="_t_right">
                     <div class="_t_sarch">
@@ -17,8 +17,11 @@
                 </div>
             </div>
             <div class="__t_content">
-                <table class="__chelsea_tbl __submittals_table">
-                    <thead>
+                <p-table [value]="list" [paginator]="true" [rows]="2" [showCurrentPageReport]="false"
+                    responsiveLayout="scroll"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [rowsPerPageOptions]="[2,25,50]" class="__chelsea_tbl __submittals_table">
+                    <ng-template pTemplate="header">
                         <tr>
                             <th>Output Submittals</th>
                             <th># of Types</th>
@@ -26,15 +29,16 @@
                             <th>Date Created</th>
                             <th class="text-center">Action</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of list">
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item>
+                        <tr>
                             <td>
                                 <div class="flex">
-                                    <img class="__t_img" src="../../../assets/images/{{item.thumbnail}}" onError="this.src='../../../../../assets/images/placeholder.png'"  alt="">
+                                    <img class="__t_img" src="../../../assets/images/{{item.thumbnail}}"
+                                        onError="this.src='../../../../../assets/images/placeholder.png'" alt="">
                                     <div class="__info">
                                         <p class="item_name">{{item.fileName}}</p>
-                                        <p class="__size" *ngIf="item.fileSize>0">{{item.fileSize}}</p>
+                                        <p class="__size" *ngIf="item.fileSize>0">{{niceBytes(item.fileSize)}}</p>
                                     </div>
                                 </div>
                             </td>
@@ -70,10 +74,8 @@
                                 </span>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
-                <p-paginator [rows]="limit" [totalRecords]="20" (onPageChange)="paginate($event)">
-                </p-paginator>
+                    </ng-template>
+                </p-table>
             </div>
         </div>
     </div>

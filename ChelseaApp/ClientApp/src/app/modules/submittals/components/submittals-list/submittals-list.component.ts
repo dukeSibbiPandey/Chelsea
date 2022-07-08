@@ -8,9 +8,10 @@ import { HttpService } from '../../../../components/http.service';
 })
 export class SubmittalsComponent implements OnInit {
   list: any = [];
+  isListFetch = false;
   placeholder = 'http://placehold.it/200x200';
   searchText: string = "";
-  limit = 10;
+  limit = 2;
   page = 0;
   httpService: HttpService;
   constructor(httpService: HttpService) {
@@ -20,12 +21,14 @@ export class SubmittalsComponent implements OnInit {
 
   bindSubmittalsGrid() {
     this.httpService.get("Home/submittal/list").toPromise().then(value => {
-      this.list = value;
+      this.list = value || [];
+      this.isListFetch = true;
     });
   }
   searchList() {
     this.httpService.get("Home/submittal/list/" + this.searchText).toPromise().then(value => {
-      this.list = value;
+      this.list = value || [];
+      this.isListFetch = true;
     });
   }
 
@@ -39,8 +42,16 @@ export class SubmittalsComponent implements OnInit {
       this.bindSubmittalsGrid();
     }
   }
-  errorHandler(event:any) {
+  errorHandler(event: any) {
     console.debug(event);
     event.target.src = "../../../../../assets/images/merge-icons/edit.png";
- }
+  }
+  niceBytes(x:any){
+    const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+     let l = 0, n = parseInt(x, 10) || 0;
+     while(n >= 1024 && ++l){
+         n = n/1024;
+     }
+     return(n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
+   }
 }

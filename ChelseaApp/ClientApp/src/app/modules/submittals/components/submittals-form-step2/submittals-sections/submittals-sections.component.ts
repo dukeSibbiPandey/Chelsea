@@ -16,11 +16,15 @@ export class SubmittalsSectionsComponent implements OnInit {
   @Output() toggleCallback: EventEmitter<any> = new EventEmitter();
   @Output() selectedActionCallback: EventEmitter<any> = new EventEmitter();
   selectedIndex: any = [];
+  position: string = "right";
+  isProgressBarIndex: any = -1
   multiple = true;
   isEdit = false;
   items: MenuItem[] = [];
   uploadedFiles: any[] = [];
   fileData: any = null;
+  isPreviewDialog = false;
+  previewUrl: any = ''
 
   constructor(private httpService: HttpService) { }
 
@@ -44,6 +48,7 @@ export class SubmittalsSectionsComponent implements OnInit {
     this.removeFn.emit(res);
   }
   onUpload = (event: any) => {
+    this.isProgressBarIndex = this.itmindex
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
@@ -64,6 +69,7 @@ export class SubmittalsSectionsComponent implements OnInit {
             itmindex: this.itmindex
           }
         }
+        this.isProgressBarIndex = -1;
         this.uploadSubmittalsCallback.emit(data)
       })
     })
@@ -115,7 +121,7 @@ export class SubmittalsSectionsComponent implements OnInit {
     })
   }
 
-  handleMoveItem = (idx:number, action: any) => {
+  handleMoveItem = (idx: number, action: any) => {
     let fIdx: any = idx;
     let toIdx: any;
     if (action == 'left') {
@@ -146,4 +152,30 @@ export class SubmittalsSectionsComponent implements OnInit {
       action: 'move'
     })
   }
+
+
+
+  handleViewPDF = (position: string, previewUrl: any) => {
+    this.position = position;
+    this.isPreviewDialog = true;
+    this.previewUrl = previewUrl
+  }
+
+  handleChangeSubmittalName = (event: any) => {
+    this.selectedActionCallback.emit({
+      subIdx: this.itmindex,
+      value: this.submittal['name'],
+      action: 'change_name'
+    })
+    this.handleEdit(false)
+  }
+
+  niceBytes(x:any){
+    const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+     let l = 0, n = parseInt(x, 10) || 0;
+     while(n >= 1024 && ++l){
+         n = n/1024;
+     }
+     return(n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
+   }
 }
