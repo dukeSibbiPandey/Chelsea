@@ -15,6 +15,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Xml.Linq;
 using Font = iTextSharp.text.Font;
 using Image = System.Drawing.Image;
@@ -601,39 +602,68 @@ namespace ChelseaApp.DocHelper
         {
             PDFLibNet32.PDFWrapper _pdfDoc = new PDFLibNet32.PDFWrapper();
             _pdfDoc.LoadPDF(fileStream);
+            _pdfDoc.CurrentPage = pageNumber + 1;
+            var outputFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".jpg";
+            _pdfDoc.ExportJpg(outputFilePath, 1);
+            while (_pdfDoc.IsJpgBusy)
+            {
+                Thread.Sleep(50);
+            }
+            using (Stream st = new MemoryStream())
+            {
+                var byts = File.ReadAllBytes(outputFilePath);
+                st.Write(byts, 0, byts.Length);
+                var fileUploadInfo = _azureBlobServices.UploadFile(st, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
+                _pdfDoc.Dispose();
+                return fileUploadInfo.Path;
+            }
+            //Image img = RenderPage32Bit(_pdfDoc, pageNumber);
 
-            Image img = RenderPage32Bit(_pdfDoc, pageNumber);
+            //Stream stream = new MemoryStream();
 
-            Stream stream = new MemoryStream();
+            //img.Save(stream, ImageFormat.Png);
 
-            img.Save(stream, ImageFormat.Png);
+            //var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
 
-            var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
+            ////for (int i = 0; i < _pdfDoc.PageCount; i++)
+            ////{
 
-            //for (int i = 0; i < _pdfDoc.PageCount; i++)
-            //{
+            ////    Image img = RenderPage(_pdfDoc, i);
 
-            //    Image img = RenderPage(_pdfDoc, i);
+            ////    img.Save(Path.Combine(dirOut, string.Format("{0}{1}.jpg", i, DateTime.Now.ToString("mmss"))));
 
-            //    img.Save(Path.Combine(dirOut, string.Format("{0}{1}.jpg", i, DateTime.Now.ToString("mmss"))));
-
-            //}
-            _pdfDoc.Dispose();
-            return fileUploadInfo.Path;
+            ////}
+            //_pdfDoc.Dispose();
+            //return fileUploadInfo.Path;
         }
 
         public string ConvertPDFtoJPG64Bit(Stream fileStream, string fileName, int pageNumber)
         {
             PDFLibNet64.PDFWrapper _pdfDoc = new PDFLibNet64.PDFWrapper();
             _pdfDoc.LoadPDF(fileStream);
+            _pdfDoc.CurrentPage = pageNumber + 1;
+            var outputFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".jpg";
+            _pdfDoc.ExportJpg(outputFilePath, 1);
+            while (_pdfDoc.IsJpgBusy)
+            {
+                Thread.Sleep(50);
+            }
+            using (Stream st = new MemoryStream())
+            {
+                var byts = File.ReadAllBytes(outputFilePath);
+                st.Write(byts, 0, byts.Length);
+                var fileUploadInfo = _azureBlobServices.UploadFile(st, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
+                _pdfDoc.Dispose();
+                File.Delete(outputFilePath);
+                return fileUploadInfo.Path;
+            }
+            //Image img = RenderPage64Bit(_pdfDoc, pageNumber);
 
-            Image img = RenderPage64Bit(_pdfDoc, pageNumber);
+            //Stream stream = new MemoryStream();
 
-            Stream stream = new MemoryStream();
+            //img.Save(stream, ImageFormat.Png);
 
-            img.Save(stream, ImageFormat.Png);
-
-            var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
+            //var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
 
             //for (int i = 0; i < _pdfDoc.PageCount; i++)
             //{
@@ -643,8 +673,8 @@ namespace ChelseaApp.DocHelper
             //    img.Save(Path.Combine(dirOut, string.Format("{0}{1}.jpg", i, DateTime.Now.ToString("mmss"))));
 
             //}
-            _pdfDoc.Dispose();
-            return fileUploadInfo.Path;
+            //_pdfDoc.Dispose();
+            //return fileUploadInfo.Path;
         }
         public Image RenderPage64Bit(PDFLibNet64.PDFWrapper doc, int page)
         {
