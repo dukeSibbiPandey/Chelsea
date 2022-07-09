@@ -124,9 +124,16 @@ namespace ChelseaApp.DocHelper
                                         {
                                             text.Text = text.Text.Replace("#EEMAIL#", coverPage.ProjectManager?.Email);
                                         }
-                                        if (para.InnerText.Contains("#CNAME#"))
+                                        if (para.InnerText.Contains("#PTITLE#"))
                                         {
-                                            text.Text = text.Text.Replace("#CNAME#", coverPage.Contractor?.Name);
+                                            if (string.IsNullOrEmpty(coverPage.ProjectManager.Name) && string.IsNullOrEmpty(coverPage.ProjectManager.Phone) && string.IsNullOrEmpty(coverPage.ProjectManager.Email))
+                                            {
+                                                text.Text = text.Text.Replace("#PTITLE#", string.Empty);
+                                            }
+                                            else
+                                            {
+                                                text.Text = text.Text.Replace("#PTITLE#", "Project Manager");
+                                            }
                                         }
                                         if (para.InnerText.Contains("#CNAME#"))
                                         {
@@ -139,6 +146,17 @@ namespace ChelseaApp.DocHelper
                                         if (para.InnerText.Contains("#CSTATE#"))
                                         {
                                             text.Text = text.Text.Replace("#CSTATE#", coverPage.Contractor?.StateName + " " + coverPage.Contractor?.CityName + " " + coverPage.Contractor?.PostalCode);
+                                        }
+                                        if (para.InnerText.Contains("#CTITLE#"))
+                                        {
+                                            if (string.IsNullOrEmpty(coverPage.Contractor?.Name) && string.IsNullOrEmpty(coverPage.Contractor?.AddressLine1 + "" + coverPage.Contractor?.AddressLine2) && string.IsNullOrEmpty(coverPage.Contractor?.StateName + "" + coverPage.Contractor?.CityName + "" + coverPage.Contractor?.PostalCode))
+                                            {
+                                                text.Text = text.Text.Replace("#CTITLE#", string.Empty);
+                                            }
+                                            else
+                                            {
+                                                text.Text = text.Text.Replace("#CTITLE#", "Contractor");
+                                            }
                                         }
                                     }
                                 }

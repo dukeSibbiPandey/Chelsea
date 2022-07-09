@@ -23,7 +23,7 @@ namespace Chelsea.Repository
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
         public int? StateId { get; set; }
-        public int? CityId { get; set; }
+        public string City { get; set; }
         public int? Zip { get; set; }
         public int? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
