@@ -29,8 +29,7 @@ namespace ChelseaApp.Controllers
         public readonly AppConfig _appSetting;
         private readonly IAzureBlobServices _azureBlobServices;
         private readonly IDocUtility _docUtility;
-
-        [System.Obsolete]
+       
         public HomeController(ChelseaContext context, IMapper mapper, IHostingEnvironment environment, IOptions<AppConfig> appSettings, IAzureBlobServices azureBlobServices, IDocUtility docUtility)
         {
             _context = context;
@@ -85,7 +84,6 @@ namespace ChelseaApp.Controllers
         }
 
         [HttpPost("coverpage/save")]
-        [System.Obsolete]
         public async Task<ActionResult> SaveCoverPage(CoverPageModel coverPage)
         {
             var dataList = await _context.vwAddress.AsQueryable().Where(t => t.Id == coverPage.AddressId).FirstOrDefaultAsync();
@@ -153,7 +151,6 @@ namespace ChelseaApp.Controllers
         }
 
         [HttpPost("upload")]
-        [Obsolete]
         public async Task<ActionResult> Upload(IFormFile file)
         {
             var message = string.Empty;
@@ -202,7 +199,6 @@ namespace ChelseaApp.Controllers
         }
 
         [HttpPost("files/merge")]
-        [Obsolete]
         public async Task<ActionResult> FileMerge(PdfFileMasterModel pdfFileMaster)
         {
             var dataList = await _context.vwSubmittals.AsQueryable().Where(t => t.Id == pdfFileMaster.SubmittalId).FirstOrDefaultAsync();
@@ -311,7 +307,6 @@ namespace ChelseaApp.Controllers
         }
 
         [HttpPost("auto/save")]
-        [Obsolete]
         public async Task<ActionResult> AutoSaveFile(IFormFile file, PdfFileAutoSaveModel saveModel)
         {
             var message = string.Empty;
