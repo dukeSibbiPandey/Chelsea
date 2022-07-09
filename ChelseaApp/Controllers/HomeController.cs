@@ -2,7 +2,6 @@
 using Chelsea.Repository;
 using ChelseaApp.DocHelper;
 using ChelseaApp.Model;
-using EO.Pdf;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -272,6 +271,7 @@ namespace ChelseaApp.Controllers
             var submittalModel = this._mapper.Map<Submittal>(dataList);
             submittalModel.Thumbnail = Path.GetFileName(thumbnail);
             submittalModel.FileName = pdfFileName;
+            submittalModel.IsTempRecord = false;
             _context.Submittal.Update(submittalModel);
             await _context.SaveChangesAsync();
 
