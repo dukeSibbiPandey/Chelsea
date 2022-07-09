@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ChelseaApp.Model
 {
@@ -31,5 +32,6 @@ namespace ChelseaApp.Model
         public bool? IsTempRecord { get; set; }
         public string FileUrl { get; set; }
         public string ThumbnailUrl { get; set; }
+        public List<PdfFileModel> PdfFiles { get; set; }
     }
 }

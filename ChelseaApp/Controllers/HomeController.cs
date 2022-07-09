@@ -112,7 +112,7 @@ namespace ChelseaApp.Controllers
             entity.AddressLine1 = coverPage.Contractor.AddressLine1;
             entity.AddressLine2 = coverPage.Contractor.AddressLine2;
             entity.StateId = Convert.ToInt32(coverPage.Contractor.State);
-            entity.CityId = Convert.ToInt32(coverPage.Contractor.City);
+            entity.City = coverPage.Contractor.City;
             entity.CreatedDate = DateTime.Now;
             entity.IsTempRecord = true;
             entity.CoverPageName = fileName;
@@ -136,6 +136,19 @@ namespace ChelseaApp.Controllers
             var modelList = this._mapper.Map<SubmittalModel>(dataList);
             modelList.FileUrl = await _azureBlobServices.GetPath(modelList.FileName, _appSetting.AzureBlobDocContainer);
             modelList.ThumbnailUrl = await _azureBlobServices.GetPath(modelList.Thumbnail, _appSetting.AzureBlobMainImageContainer);
+
+            var pdfFiles = await _context.PdfFiles.AsQueryable().Where(t => t.SubmittalId == Convert.ToInt32(id)).ToListAsync();
+            var pdfFilesList = this._mapper.Map<List<PdfFileModel>>(dataList);
+            var pdfFilesDetails = await _context.PdfFileDetails.AsQueryable().Where(t => t.SubmittalId == Convert.ToInt32(id)).ToListAsync();
+
+            foreach (var pdfFile in pdfFilesList)
+            {
+                var detailList = pdfFilesDetails.Where(t => t.PdfFileId == pdfFile.Id).ToList();
+                pdfFile.Files = this._mapper.Map<List<FileModel>>(detailList); ;
+
+            }
+
+            modelList.PdfFiles = pdfFilesList;
             return Ok(modelList);
         }
 

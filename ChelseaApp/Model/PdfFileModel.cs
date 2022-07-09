@@ -9,6 +9,7 @@ namespace ChelseaApp.Model
     }
     public class PdfFileModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
         public string MFG { get; set; }
@@ -24,6 +25,9 @@ namespace ChelseaApp.Model
 
     public class FileModel
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int PdfFileId { get; set; }
         public string FileName { get; set; }
         public string FilePath { get; set; }
         public string FileSize { get; set; }
