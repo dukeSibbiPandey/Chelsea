@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using ChelseaApp.Model;
 using iText.Forms;
+using iText.IO.Font.Constants;
+using iText.Kernel.Colors;
+using iText.Kernel.Events;
+using iText.Kernel.Font;
+using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Action;
 using iText.Kernel.Pdf.Canvas.Draw;
@@ -109,6 +114,35 @@ namespace ChelseaApp.DocHelper
 
             }
             return filesToMerge;
+        }
+
+        public static void ManipulatePdf(PdfFileModel model, string source, String dest)
+        {
+            PdfDocument pdfDoc = new PdfDocument(new PdfReader(source), new PdfWriter(dest));
+            Document doc = new Document(pdfDoc);
+
+            Paragraph nheader = new Paragraph()
+                    .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
+                    .SetFontSize(14)
+                    .SetFontColor(ColorConstants.BLACK)
+                    .SetMarginTop(10)
+                    .Add(model.Name)
+                    .Add(model.Status)
+                    .Add(new Tab())
+                    .Add(model.MFG)
+                    .Add(model.Part)
+                    .Add(new Tab())
+                    .Add(model.Description);
+
+            for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
+            {
+                Rectangle pageSize = pdfDoc.GetPage(i).GetPageSize();
+                float x = pageSize.GetWidth() / 2;
+                float y = pageSize.GetTop() - 20;
+                doc.ShowTextAligned(nheader, x, y, i, TextAlignment.LEFT, VerticalAlignment.BOTTOM, 0);
+            }
+
+            doc.Close();
         }
     }
 }

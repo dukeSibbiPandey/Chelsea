@@ -2,7 +2,6 @@
 using Chelsea.Repository;
 using ChelseaApp.DocHelper;
 using ChelseaApp.Model;
-using EO.Pdf;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,8 +28,7 @@ namespace ChelseaApp.Controllers
         public readonly AppConfig _appSetting;
         private readonly IAzureBlobServices _azureBlobServices;
         private readonly IDocUtility _docUtility;
-
-        [System.Obsolete]
+       
         public HomeController(ChelseaContext context, IMapper mapper, IHostingEnvironment environment, IOptions<AppConfig> appSettings, IAzureBlobServices azureBlobServices, IDocUtility docUtility)
         {
             _context = context;
@@ -85,7 +83,6 @@ namespace ChelseaApp.Controllers
         }
 
         [HttpPost("coverpage/save")]
-        [System.Obsolete]
         public async Task<ActionResult> SaveCoverPage(CoverPageModel coverPage)
         {
             var dataList = await _context.vwAddress.AsQueryable().Where(t => t.Id == coverPage.AddressId).FirstOrDefaultAsync();
@@ -112,7 +109,7 @@ namespace ChelseaApp.Controllers
             entity.AddressLine1 = coverPage.Contractor.AddressLine1;
             entity.AddressLine2 = coverPage.Contractor.AddressLine2;
             entity.StateId = Convert.ToInt32(coverPage.Contractor.State);
-            entity.CityId = Convert.ToInt32(coverPage.Contractor.City);
+            entity.City = coverPage.Contractor.City;
             entity.CreatedDate = DateTime.Now;
             entity.IsTempRecord = true;
             entity.CoverPageName = fileName;
@@ -136,12 +133,24 @@ namespace ChelseaApp.Controllers
             var modelList = this._mapper.Map<SubmittalModel>(dataList);
             modelList.FileUrl = await _azureBlobServices.GetPath(modelList.FileName, _appSetting.AzureBlobDocContainer);
             modelList.ThumbnailUrl = await _azureBlobServices.GetPath(modelList.Thumbnail, _appSetting.AzureBlobMainImageContainer);
+
+            var pdfFiles = await _context.PdfFiles.AsQueryable().Where(t => t.SubmittalId == Convert.ToInt32(id)).ToListAsync();
+            var pdfFilesList = this._mapper.Map<List<PdfFileModel>>(dataList);
+            var pdfFilesDetails = await _context.PdfFileDetails.AsQueryable().Where(t => t.SubmittalId == Convert.ToInt32(id)).ToListAsync();
+
+            foreach (var pdfFile in pdfFilesList)
+            {
+                var detailList = pdfFilesDetails.Where(t => t.PdfFileId == pdfFile.Id).ToList();
+                pdfFile.Files = this._mapper.Map<List<FileModel>>(detailList); ;
+
+            }
+
+            modelList.PdfFiles = pdfFilesList;
             return Ok(modelList);
         }
 
         [HttpPost("upload")]
-        [Obsolete]
-        public async Task<ActionResult> Upload([FromForm] IFormFile file)
+        public async Task<ActionResult> Upload(IFormFile file)
         {
             var message = string.Empty;
             var newFileName = string.Empty;
@@ -151,21 +160,11 @@ namespace ChelseaApp.Controllers
             string orgFileName = string.Empty;
             try
             {
-
-                file = this.Request.Form.Files[0];
-
                 string[] acceptFileTypes = new[] { ".pdf" };
                 if (file != null && acceptFileTypes.Count(t => t == Path.GetExtension(file.FileName).ToLower()) > 0)
                 {
                     byte[] fileBytes = new byte[file.Length];
                     file.OpenReadStream().Read(fileBytes, 0, int.Parse(file.Length.ToString()));
-
-
-                    //string folderPath = this._environment.ContentRootPath + "/Content/TempPdf";
-                    //if (!Directory.Exists(folderPath))
-                    //{
-                    //    Directory.CreateDirectory(folderPath);
-                    //}
 
                     Stream stream = new MemoryStream(fileBytes);
                   
@@ -199,7 +198,6 @@ namespace ChelseaApp.Controllers
         }
 
         [HttpPost("files/merge")]
-        [Obsolete]
         public async Task<ActionResult> FileMerge(PdfFileMasterModel pdfFileMaster)
         {
             var dataList = await _context.vwSubmittals.AsQueryable().Where(t => t.Id == pdfFileMaster.SubmittalId).FirstOrDefaultAsync();
@@ -237,7 +235,7 @@ namespace ChelseaApp.Controllers
                     files.Add(fileStream);
                 }
 
-                string mergByte = _docUtility.CombineMultiplePDFs(files);
+                string mergByte = _docUtility.CombineMultiplePDFs(filesList, files);
                 filesList.FileTmpPath = mergByte;
                 finalfiles.Add(filesList);
                 pages.Add(mergByte);
@@ -273,6 +271,7 @@ namespace ChelseaApp.Controllers
             var submittalModel = this._mapper.Map<Submittal>(dataList);
             submittalModel.Thumbnail = Path.GetFileName(thumbnail);
             submittalModel.FileName = pdfFileName;
+            submittalModel.IsTempRecord = false;
             _context.Submittal.Update(submittalModel);
             await _context.SaveChangesAsync();
 
@@ -305,6 +304,89 @@ namespace ChelseaApp.Controllers
             modelList.Thumbnail = Path.GetFileName(thumbnail);
             modelList.ThumbnailUrl = thumbnail;
             return Ok(modelList);
+        }
+
+        [HttpPost("auto/save")]
+        public async Task<ActionResult> AutoSaveFile(IFormFile file, PdfFileAutoSaveModel saveModel)
+        {
+            var message = string.Empty;
+            var newFileName = string.Empty;
+            string thumbnail = string.Empty;
+            string pdfPath = string.Empty;
+            string fileSize = string.Empty;
+            string orgFileName = string.Empty;
+            try
+            {
+                string[] acceptFileTypes = new[] { ".pdf" };
+                if (file != null && acceptFileTypes.Count(t => t == Path.GetExtension(file.FileName).ToLower()) > 0)
+                {
+                    byte[] fileBytes = new byte[file.Length];
+                    file.OpenReadStream().Read(fileBytes, 0, int.Parse(file.Length.ToString()));
+
+                    Stream stream = new MemoryStream(fileBytes);
+
+                    var fileExtension = Path.GetExtension(file.FileName).ToLower();
+                    var fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                    string fileId = fileName + "_" + Guid.NewGuid().ToString();
+
+                    newFileName = string.Format("{0}{1}", fileId, fileExtension);
+                    var fileUrl = string.Format("{0}/{1}", "Content", newFileName);
+                    // System.IO.File.WriteAllBytes(fileUrl, fileBytes);
+                    var fileInfo = await _azureBlobServices.UploadFile(stream, fileUrl, _appSetting.AzureBlobTempContainer, false);
+
+                    fileSize = file.Length.ToString();
+                    pdfPath = fileInfo.Path;
+                    string thName = fileId + ".png";
+                    thumbnail = _docUtility.ConvertPDFtoJPG(stream, thName, 0);
+                    orgFileName = file.FileName;
+                }
+                else
+                {
+                    message = "Invalid file type " + Path.GetExtension(file.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+                return this.BadRequest(message);
+
+            }
+
+            var modeObj = this._mapper.Map<PdfFiles>(saveModel.PdfFiles);
+            if (modeObj.Id > 0)
+            {
+                _context.PdfFiles.Update(modeObj);               
+            }
+            else
+            {
+                _context.PdfFiles.Add(modeObj);
+            }
+            await _context.SaveChangesAsync();
+            saveModel.PdfFiles.Id = modeObj.Id;
+
+            foreach (var pdffile in saveModel.PdfFiles.Files)
+            {
+                PdfFileDetails pdfFile = new PdfFileDetails();
+                pdfFile.FileName = file.FileName;
+                pdfFile.SubmittalId = saveModel.SubmittalId;
+                pdfFile.PdfFileId = modeObj.Id;
+                pdfFile.Name = modeObj.Name;
+                pdfFile.FileName = file.FileName;
+                pdfFile.FileSize = fileSize;
+                pdfFile.Thumbnail = thumbnail;
+                pdfFile.OrgFileName = orgFileName;
+                if (modeObj.Id > 0)
+                {
+                    _context.PdfFileDetails.Update(pdfFile);
+                }
+                else
+                {
+                    _context.PdfFileDetails.Add(pdfFile);
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            return this.Ok(saveModel);
         }
     }
 }

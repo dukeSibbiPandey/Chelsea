@@ -15,6 +15,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Xml.Linq;
 using Font = iTextSharp.text.Font;
 using Image = System.Drawing.Image;
@@ -124,9 +125,16 @@ namespace ChelseaApp.DocHelper
                                         {
                                             text.Text = text.Text.Replace("#EEMAIL#", coverPage.ProjectManager?.Email);
                                         }
-                                        if (para.InnerText.Contains("#CNAME#"))
+                                        if (para.InnerText.Contains("#PTITLE#"))
                                         {
-                                            text.Text = text.Text.Replace("#CNAME#", coverPage.Contractor?.Name);
+                                            if (string.IsNullOrEmpty(coverPage.ProjectManager.Name) && string.IsNullOrEmpty(coverPage.ProjectManager.Phone) && string.IsNullOrEmpty(coverPage.ProjectManager.Email))
+                                            {
+                                                text.Text = text.Text.Replace("#PTITLE#", string.Empty);
+                                            }
+                                            else
+                                            {
+                                                text.Text = text.Text.Replace("#PTITLE#", "Project Manager");
+                                            }
                                         }
                                         if (para.InnerText.Contains("#CNAME#"))
                                         {
@@ -139,6 +147,17 @@ namespace ChelseaApp.DocHelper
                                         if (para.InnerText.Contains("#CSTATE#"))
                                         {
                                             text.Text = text.Text.Replace("#CSTATE#", coverPage.Contractor?.StateName + " " + coverPage.Contractor?.CityName + " " + coverPage.Contractor?.PostalCode);
+                                        }
+                                        if (para.InnerText.Contains("#CTITLE#"))
+                                        {
+                                            if (string.IsNullOrEmpty(coverPage.Contractor?.Name) && string.IsNullOrEmpty(coverPage.Contractor?.AddressLine1 + "" + coverPage.Contractor?.AddressLine2) && string.IsNullOrEmpty(coverPage.Contractor?.StateName + "" + coverPage.Contractor?.CityName + "" + coverPage.Contractor?.PostalCode))
+                                            {
+                                                text.Text = text.Text.Replace("#CTITLE#", string.Empty);
+                                            }
+                                            else
+                                            {
+                                                text.Text = text.Text.Replace("#CTITLE#", "Contractor");
+                                            }
                                         }
                                     }
                                 }
@@ -384,7 +403,7 @@ namespace ChelseaApp.DocHelper
         }
 
         [Obsolete]
-        public string CombineMultiplePDFs(List<Stream> fileNames)
+        public string CombineMultiplePDFs(PdfFileModel model, List<Stream> fileNames)
         {
             //if (File.Exists(outFile))
             //{
@@ -431,6 +450,10 @@ namespace ChelseaApp.DocHelper
                 }
             }
 
+            var desFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".pdf";          
+
+            PdfHelper.ManipulatePdf(model, outputFilePath, desFilePath);
+
             /*string reportPath = "Content/MergePdf";
             string contentRootPath = _environment.ContentRootPath;
             if (!Directory.Exists(contentRootPath + reportPath))
@@ -448,11 +471,11 @@ namespace ChelseaApp.DocHelper
             System.IO.File.WriteAllBytes(pdfFileUrl, fileByte);*/
 
             //CreateIndexPage(outputFilePath);
-            pdfBytes = System.IO.File.ReadAllBytes(outputFilePath);
+            //pdfBytes = System.IO.File.ReadAllBytes(outputFilePath);
 
             //pdfBytes = AddPageNumber(pdfBytes);
-            //File.Delete(outputFilePath);
-            return outputFilePath;
+            File.Delete(outputFilePath);
+            return desFilePath;
         }
 
         [Obsolete]
@@ -579,39 +602,68 @@ namespace ChelseaApp.DocHelper
         {
             PDFLibNet32.PDFWrapper _pdfDoc = new PDFLibNet32.PDFWrapper();
             _pdfDoc.LoadPDF(fileStream);
+            _pdfDoc.CurrentPage = pageNumber + 1;
+            var outputFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".jpg";
+            _pdfDoc.ExportJpg(outputFilePath, 1);
+            while (_pdfDoc.IsJpgBusy)
+            {
+                Thread.Sleep(50);
+            }
+            using (Stream st = new MemoryStream())
+            {
+                var byts = File.ReadAllBytes(outputFilePath);
+                st.Write(byts, 0, byts.Length);
+                var fileUploadInfo = _azureBlobServices.UploadFile(st, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
+                _pdfDoc.Dispose();
+                return fileUploadInfo.Path;
+            }
+            //Image img = RenderPage32Bit(_pdfDoc, pageNumber);
 
-            Image img = RenderPage32Bit(_pdfDoc, pageNumber);
+            //Stream stream = new MemoryStream();
 
-            Stream stream = new MemoryStream();
+            //img.Save(stream, ImageFormat.Png);
 
-            img.Save(stream, ImageFormat.Png);
+            //var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
 
-            var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
+            ////for (int i = 0; i < _pdfDoc.PageCount; i++)
+            ////{
 
-            //for (int i = 0; i < _pdfDoc.PageCount; i++)
-            //{
+            ////    Image img = RenderPage(_pdfDoc, i);
 
-            //    Image img = RenderPage(_pdfDoc, i);
+            ////    img.Save(Path.Combine(dirOut, string.Format("{0}{1}.jpg", i, DateTime.Now.ToString("mmss"))));
 
-            //    img.Save(Path.Combine(dirOut, string.Format("{0}{1}.jpg", i, DateTime.Now.ToString("mmss"))));
-
-            //}
-            _pdfDoc.Dispose();
-            return fileUploadInfo.Path;
+            ////}
+            //_pdfDoc.Dispose();
+            //return fileUploadInfo.Path;
         }
 
         public string ConvertPDFtoJPG64Bit(Stream fileStream, string fileName, int pageNumber)
         {
             PDFLibNet64.PDFWrapper _pdfDoc = new PDFLibNet64.PDFWrapper();
             _pdfDoc.LoadPDF(fileStream);
+            _pdfDoc.CurrentPage = pageNumber + 1;
+            var outputFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".jpg";
+            _pdfDoc.ExportJpg(outputFilePath, 1);
+            while (_pdfDoc.IsJpgBusy)
+            {
+                Thread.Sleep(50);
+            }
+            using (Stream st = new MemoryStream())
+            {
+                var byts = File.ReadAllBytes(outputFilePath);
+                st.Write(byts, 0, byts.Length);
+                var fileUploadInfo = _azureBlobServices.UploadFile(st, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
+                _pdfDoc.Dispose();
+                File.Delete(outputFilePath);
+                return fileUploadInfo.Path;
+            }
+            //Image img = RenderPage64Bit(_pdfDoc, pageNumber);
 
-            Image img = RenderPage64Bit(_pdfDoc, pageNumber);
+            //Stream stream = new MemoryStream();
 
-            Stream stream = new MemoryStream();
+            //img.Save(stream, ImageFormat.Png);
 
-            img.Save(stream, ImageFormat.Png);
-
-            var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
+            //var fileUploadInfo = _azureBlobServices.UploadFile(stream, "/Content/" + fileName, _appSetting.AzureBlobMainImageContainer, false).GetAwaiter().GetResult();
 
             //for (int i = 0; i < _pdfDoc.PageCount; i++)
             //{
@@ -621,8 +673,8 @@ namespace ChelseaApp.DocHelper
             //    img.Save(Path.Combine(dirOut, string.Format("{0}{1}.jpg", i, DateTime.Now.ToString("mmss"))));
 
             //}
-            _pdfDoc.Dispose();
-            return fileUploadInfo.Path;
+            //_pdfDoc.Dispose();
+            //return fileUploadInfo.Path;
         }
         public Image RenderPage64Bit(PDFLibNet64.PDFWrapper doc, int page)
         {

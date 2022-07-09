@@ -16,6 +16,10 @@ namespace Chelsea.Repository
         public string Part { get; set; }
         public string Description { get; set; }
         public string FileName { get; set; }
+        public string Volt { get; set; }
+        public string Lamp { get; set; }
+        public string Dim { get; set; }
+        public string Runs { get; set; }
     }
 
     public class PdfFileDetails
