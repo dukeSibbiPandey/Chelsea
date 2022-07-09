@@ -154,7 +154,7 @@ namespace ChelseaApp.Controllers
 
         [HttpPost("upload")]
         [Obsolete]
-        public async Task<ActionResult> Upload([FromForm] IFormFile file)
+        public async Task<ActionResult> Upload(IFormFile file)
         {
             var message = string.Empty;
             var newFileName = string.Empty;
@@ -164,21 +164,11 @@ namespace ChelseaApp.Controllers
             string orgFileName = string.Empty;
             try
             {
-
-                file = this.Request.Form.Files[0];
-
                 string[] acceptFileTypes = new[] { ".pdf" };
                 if (file != null && acceptFileTypes.Count(t => t == Path.GetExtension(file.FileName).ToLower()) > 0)
                 {
                     byte[] fileBytes = new byte[file.Length];
                     file.OpenReadStream().Read(fileBytes, 0, int.Parse(file.Length.ToString()));
-
-
-                    //string folderPath = this._environment.ContentRootPath + "/Content/TempPdf";
-                    //if (!Directory.Exists(folderPath))
-                    //{
-                    //    Directory.CreateDirectory(folderPath);
-                    //}
 
                     Stream stream = new MemoryStream(fileBytes);
                   
@@ -318,6 +308,90 @@ namespace ChelseaApp.Controllers
             modelList.Thumbnail = Path.GetFileName(thumbnail);
             modelList.ThumbnailUrl = thumbnail;
             return Ok(modelList);
+        }
+
+        [HttpPost("auto/save")]
+        [Obsolete]
+        public async Task<ActionResult> AutoSaveFile(IFormFile file, PdfFileAutoSaveModel saveModel)
+        {
+            var message = string.Empty;
+            var newFileName = string.Empty;
+            string thumbnail = string.Empty;
+            string pdfPath = string.Empty;
+            string fileSize = string.Empty;
+            string orgFileName = string.Empty;
+            try
+            {
+                string[] acceptFileTypes = new[] { ".pdf" };
+                if (file != null && acceptFileTypes.Count(t => t == Path.GetExtension(file.FileName).ToLower()) > 0)
+                {
+                    byte[] fileBytes = new byte[file.Length];
+                    file.OpenReadStream().Read(fileBytes, 0, int.Parse(file.Length.ToString()));
+
+                    Stream stream = new MemoryStream(fileBytes);
+
+                    var fileExtension = Path.GetExtension(file.FileName).ToLower();
+                    var fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                    string fileId = fileName + "_" + Guid.NewGuid().ToString();
+
+                    newFileName = string.Format("{0}{1}", fileId, fileExtension);
+                    var fileUrl = string.Format("{0}/{1}", "Content", newFileName);
+                    // System.IO.File.WriteAllBytes(fileUrl, fileBytes);
+                    var fileInfo = await _azureBlobServices.UploadFile(stream, fileUrl, _appSetting.AzureBlobTempContainer, false);
+
+                    fileSize = file.Length.ToString();
+                    pdfPath = fileInfo.Path;
+                    string thName = fileId + ".png";
+                    thumbnail = _docUtility.ConvertPDFtoJPG(stream, thName, 0);
+                    orgFileName = file.FileName;
+                }
+                else
+                {
+                    message = "Invalid file type " + Path.GetExtension(file.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+                return this.BadRequest(message);
+
+            }
+
+            var modeObj = this._mapper.Map<PdfFiles>(saveModel.PdfFiles);
+            if (modeObj.Id > 0)
+            {
+                _context.PdfFiles.Update(modeObj);               
+            }
+            else
+            {
+                _context.PdfFiles.Add(modeObj);
+            }
+            await _context.SaveChangesAsync();
+            saveModel.PdfFiles.Id = modeObj.Id;
+
+            foreach (var pdffile in saveModel.PdfFiles.Files)
+            {
+                PdfFileDetails pdfFile = new PdfFileDetails();
+                pdfFile.FileName = file.FileName;
+                pdfFile.SubmittalId = saveModel.SubmittalId;
+                pdfFile.PdfFileId = modeObj.Id;
+                pdfFile.Name = modeObj.Name;
+                pdfFile.FileName = file.FileName;
+                pdfFile.FileSize = fileSize;
+                pdfFile.Thumbnail = thumbnail;
+                pdfFile.OrgFileName = orgFileName;
+                if (modeObj.Id > 0)
+                {
+                    _context.PdfFileDetails.Update(pdfFile);
+                }
+                else
+                {
+                    _context.PdfFileDetails.Add(pdfFile);
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            return this.Ok(saveModel);
         }
     }
 }

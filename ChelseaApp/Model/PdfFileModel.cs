@@ -2,6 +2,11 @@
 
 namespace ChelseaApp.Model
 {
+    public class PdfFileAutoSaveModel
+    {
+        public int SubmittalId { get; set; }
+        public PdfFileModel PdfFiles { get; set; }
+    }
     public class PdfFileMasterModel
     {
         public int SubmittalId { get; set; }
