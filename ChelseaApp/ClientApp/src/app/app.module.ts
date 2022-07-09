@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderComponent } from './components/loader/loader.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HeaderInterceptor } from './interceptors/header.interceptor';
+import { PdfEditorComponent } from './pdf-editor/pdf-editor.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { HeaderInterceptor } from './interceptors/header.interceptor';
     PrivacyComponent,
     LayoutComponent,
     LoaderComponent,
+    PdfEditorComponent,
   ],
   imports: [
     BrowserModule,

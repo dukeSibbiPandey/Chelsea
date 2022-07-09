@@ -42,7 +42,17 @@
               "src/global.scss",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js",
+              "https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js",
+              "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js",
+              "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js",
+              "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js",
+              "https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.3.0/fabric.min.js",
+              "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.2.0/jspdf.umd.min.js",
+              "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js",
+              "https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"
+            ]
           },
           "configurations": {
             "production": {
