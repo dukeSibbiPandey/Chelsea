@@ -3,10 +3,7 @@
     padding: 0px;
     box-sizing: border-box;
     outline: none !important;
-    font-family: "Roboto";
-}
-html {
-    overflow: hidden;
+    font-family: "Roboto"
 }
 body {
     background: #f9f9f9;
@@ -17,10 +14,9 @@ body {
     padding: 0px;
     box-sizing: border-box;
     min-height: 100vh;
-    height: 100vh;
-}
-body {
-    overflow: auto;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 .main_contaner {
     min-height: 100vh;
@@ -67,11 +63,6 @@ a {
 .table > :not(:first-child) {
     border: 0px;
 }
-
-.flex {
-    display: flex;
-}
-
 .__chelsea_tbl {
     width: 100%;
     border-collapse: collapse;
@@ -93,6 +84,10 @@ a {
         vertical-align: top;
     }
 }
+.flex {
+    display: flex;
+}
+
 .row-same-height {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -118,29 +113,11 @@ a {
     width: 100%;
 }
 
-.form-control {
-    box-shadow: none !important;
-    outline: none !important;
-    border: 1px solid #dbdcdf;
-    &:focus {
-        box-shadow: none !important;
-        outline: none !important;
-        border: 1px solid #dbdcdf;
-    }
-}
 .form-control._placeholder {
     padding: 15px;
 }
 .form-group {
-    margin-bottom: 25px;
-    position: relative;
-    .msgError {
-        position: absolute;
-        left: 0;
-        top: 100%;
-        width: 100%;
-        white-space: normal;
-    }
+    margin-bottom: 20px;
     label {
         font-style: normal;
         font-weight: 400;
@@ -148,9 +125,6 @@ a {
         line-height: 16px;
         color: #707070;
         margin-bottom: 5px;
-        &.mb_0 {
-            margin-bottom: 0px;
-        }
         &.__dark {
             font-weight: 600;
             color: #333333;
@@ -179,8 +153,6 @@ a {
         background: url("./assets/images/select_arrow.svg") white center center no-repeat;
     }
 }
-
-
 .action_wrapper {
     margin-top: 20px;
     padding-top: 20px;
