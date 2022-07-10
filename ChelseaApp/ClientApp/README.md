@@ -1,28 +1,47 @@
-# Chelsea
+# PDF.js Express - Angular sample
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.5.
+[PDF.js Express](https://pdfjs.express/) is a powerful JavaScript-based PDF Library that leverages PDF.js and adds additional features such as annotations, form support, and digitial signatures. It provides a slick out-of-the-box responsive UI that interacts with the core library to view, annotate and manipulate PDFs that can be embedded into any web project.
 
-## Development server
+This repo is specifically designed for any users interested in integrating WebViewer into Angular project. This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.3. See [Angular - Getting Started](https://angular.io/guide/quickstart) for more information.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Initial setup
 
-## Code scaffolding
+Before you begin, make sure your development environment includes [Node.js](https://nodejs.org/en/).
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Install
+
+```
+git clone https://github.com/pdfjs-express/pdfjs-express-angular-sample.git
+cd pdfjs-express-angular-sample
+npm install
+```
+
+## Run
+
+```
+npm start
+```
+
+Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `npm run build` to build the development build of the project.
+Run `npm run build-prod` to build the production build of the project.
+The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+To run the build, navigate to the `dist/` directory, and run `http-server`. Navigate to the url: host:port/index.html to see the app
+(https://github.com/http-party/http-server/issues/525).
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+## WebViewer APIs
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+See [API documentation](https://pdfjs.express/documentation).
 
-## Further help
+## Contributing
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-# Chelsea
+See [contributing](./CONTRIBUTING.md).
+
+## License
+
+See [license](./LICENSE).
