@@ -1,0 +1,51 @@
+<form [formGroup]="registerForm" autocomplete="off" novalidate>
+    <div class="form-group">
+        <label class="block" for="">These are Transmitted for <span class="blue-star">*</span></label>
+        <div class="flex v_center">
+            <div class="field-radiobutton flex v_center">
+                <p-radioButton name="types" value="Chicago" formControlName="types" inputId="city1">
+                </p-radioButton>
+                <label class="_ml_10 mb_0" for="city1">Approval</label>
+            </div>
+            <div class="field-radiobutton flex v_center _ml_10">
+                <p-radioButton name="types" value="Los Angeles" formControlName="types" inputId="city2">
+                </p-radioButton>
+                <label class="_ml_10 mb_0" for="city2">Record</label>
+            </div>
+        </div>
+        <div class="msgError text-danger" *ngIf="formControl.types.invalid && (formControl.types.dirty || submitted)">
+            <small class="text-danger" *ngIf="formControl.types.hasError('required')">
+                Required Field.
+            </small>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="">MFG</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="mfg">
+        <div class="msgError text-danger" *ngIf="formControl.mfg.invalid && (formControl.mfg.dirty || submitted)">
+            <small class="text-danger" *ngIf="formControl.mfg.hasError('required')">
+                Required Field.
+            </small>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="">Part</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="part">
+        <div class="msgError text-danger" *ngIf="formControl.part.invalid && (formControl.part.dirty || submitted)">
+            <small class="text-danger" *ngIf="formControl.part.hasError('required')">
+                Required Field.
+            </small>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="">Description</label>
+        <input type="text" class="form-control" placeholder="Enter here" formControlName="description">
+        <div class="msgError text-danger"
+            *ngIf="formControl.description.invalid && (formControl.description.dirty || submitted)">
+            <small class="text-danger" *ngIf="formControl.description.hasError('required')">
+                Required Field.
+            </small>
+        </div>
+    </div>
+</form>
+<p-toast position="top-center" key="headerFormToast"></p-toast>

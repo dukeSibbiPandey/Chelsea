@@ -1,0 +1,12 @@
+<app-loader></app-loader>
+<div class="main_contaner">
+    <div class="__header_wrapper" *ngIf="!login">
+        <app-header></app-header>
+    </div>
+    <div class="__page_content">
+        <router-outlet></router-outlet>
+    </div>
+    <div class="__footer_wrapper" *ngIf="!login">
+        <app-footer></app-footer>
+    </div>
+</div>
