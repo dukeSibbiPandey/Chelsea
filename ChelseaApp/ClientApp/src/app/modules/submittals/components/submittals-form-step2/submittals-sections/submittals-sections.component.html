@@ -81,38 +81,74 @@
         </div>
     </div>
     <div class="{{submittal?.isOpen?' ':' hidden'}}">
-        <ul class="__filter">
-            <li class="form-group">
-                <label for="">These are Transmitted for</label>
-                <div class="flex v_center">
-                    <div class="field-radiobutton flex v_center">
-                        <p-radioButton value="Approval" inputId="Approval" name='status'
-                            [(ngModel)]="submittal['status']" #status="ngModel">
-                        </p-radioButton>
-                        <label class="_ml_10 mb_0" for="Approval">Approval</label>
-                    </div>
-                    <div class="field-radiobutton flex v_center _ml_10">
-                        <p-radioButton value="Record" name='status' [(ngModel)]="submittal['status']" #status="ngModel"
-                            inputId="Record"></p-radioButton>
-                        <label class="_ml_10 mb_0" for="Record">Record</label>
+        <ul class="row">
+            <li class="col-sm-2">
+                <div class="form-group">
+                    <label for="">These are Transmitted for</label>
+                    <div class="flex v_center">
+                        <div class="field-radiobutton flex v_center">
+                            <p-radioButton value="Approval" inputId="Approval" name='status'
+                                [(ngModel)]="submittal['status']" #status="ngModel">
+                            </p-radioButton>
+                            <label class="_ml_10 mb_0" for="Approval">Approval</label>
+                        </div>
+                        <div class="field-radiobutton flex v_center _ml_10">
+                            <p-radioButton value="Record" name='status' [(ngModel)]="submittal['status']"
+                                #status="ngModel" inputId="Record"></p-radioButton>
+                            <label class="_ml_10 mb_0" for="Record">Record</label>
+                        </div>
                     </div>
                 </div>
             </li>
-            <li class="form-group">
-                <label for="">MFG</label>
-                <input type="text" class="form-control" placeholder="Enter here" style="width:170px" name='mfg'
-                    [(ngModel)]="submittal['mfg']" #mfg="ngModel" required>
+            <li class="col-sm-2">
+                <div class="form-group">
+                    <label for="">MFG</label>
+                    <input type="text" class="form-control" placeholder="Enter here" name='mfg'
+                        [(ngModel)]="submittal['mfg']" #mfg="ngModel" required>
+                </div>
             </li>
-            <li class="form-group">
-                <label for="">Part</label>
-                <input type="text" class="form-control" placeholder="Enter here" style="width:350px" name='part'
-                    [(ngModel)]="submittal['part']" #part="ngModel" required>
+            <li class="col-sm-4">
+                <div class="form-group">
+                    <label for="">Part</label>
+                    <input type="text" class="form-control" placeholder="Enter here" name='part'
+                        [(ngModel)]="submittal['part']" #part="ngModel" required>
+                </div>
             </li>
-            <li class="form-group">
-                <label for="">Description</label>
-                <input type="text" class="form-control" placeholder="Enter here" style="width:350px" name='description'
-                    [(ngModel)]="submittal['description']" #description="ngModel">
-            </li>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="">Description</label>
+                    <input type="text" class="form-control" placeholder="Enter here" name='description'
+                        [(ngModel)]="submittal['description']" #description="ngModel">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="">VOLT</label>
+                    <input type="text" class="form-control" placeholder="Enter here" name='volt'
+                        [(ngModel)]="submittal['volt']" #volt="ngModel">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="">LAMP</label>
+                    <input type="text" class="form-control" placeholder="Enter here" name='lamp'
+                        [(ngModel)]="submittal['lamp']" #lamp="ngModel">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="">DIM</label>
+                    <input type="text" class="form-control" placeholder="Enter here" name='dim'
+                        [(ngModel)]="submittal['dim']" #dim="ngModel">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="">RUNS</label>
+                    <input type="text" class="form-control" placeholder="Enter here" name='runs'
+                        [(ngModel)]="submittal['runs']" #runs="ngModel">
+                </div>
+            </div>
         </ul>
 
         <div class="__template_wrapper">
@@ -228,5 +264,5 @@
 <p-dialog header="Preview" [(visible)]="isPreviewDialog" [position]="position" [modal]="true" [style]="{width: '50vw'}"
     [draggable]="false" [resizable]="false"
     [style]="{ width: '95vw', height: '100vh', overflow:'hidden', maxHeight: 'none', marginRight:'-5px'}">
-    <app-pdf-action [previewUrl]=previewUrl ></app-pdf-action>
+    <app-pdf-action [previewUrl]=previewUrl></app-pdf-action>
 </p-dialog>

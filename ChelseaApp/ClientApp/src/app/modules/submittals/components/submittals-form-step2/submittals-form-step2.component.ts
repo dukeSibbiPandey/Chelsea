@@ -7,6 +7,10 @@ const submittalItem: any = {
   mfg: '',
   part: '',
   description: '',
+  volt: '',
+  lamp: '',
+  dim: '',
+  runs: '',
   files: [],
   isOpen: true
 }
@@ -27,6 +31,10 @@ export class SubmittalsFormStep2Component implements OnInit {
       mfg: '',
       part: '',
       description: '',
+      volt: '',
+      lamp: '',
+      dim: '',
+      runs: '',
       files: [
         {
           "fileName": "one.pdf",
@@ -183,6 +191,10 @@ export class SubmittalsFormStep2Component implements OnInit {
         mfg: ele.mfg,
         part: ele.part,
         description: ele.description,
+        volt: ele.volt,
+        lamp: ele.lamp,
+        dim: ele.dim,
+        runs: ele.cruns,
         files: ele.files
       }
       temp.push(item)
@@ -193,7 +205,6 @@ export class SubmittalsFormStep2Component implements OnInit {
       pdfFiles: temp
     }
     this.httpService.post("home/files/merge", postDto).toPromise().then(value => {
-      debugger
       this.postAjax()
     });
   }
