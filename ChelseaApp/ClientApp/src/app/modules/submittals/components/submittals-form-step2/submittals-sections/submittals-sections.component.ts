@@ -26,8 +26,8 @@ export class SubmittalsSectionsComponent implements OnInit {
   uploadedFiles: any[] = [];
   fileData: any = null;
   isPreviewDialog = false;
-  previewUrl: any = ''
-
+  previewUrl: any = '';
+  pdfActionTitle = '';
   constructor(private httpService: HttpService) { }
 
   ngOnInit(): void {
@@ -156,13 +156,23 @@ export class SubmittalsSectionsComponent implements OnInit {
 
 
 
-  handleViewPDF = (position: string, previewUrl: any) => {
+  handleViewAction = (position: string, previewUrl: any, type: number) => {
     this.position = position;
     this.previewUrl = previewUrl
+    this.pdfActionTitle = 'Preview';
+    this.isPreviewDialog = true;
+  }
+
+  handleActionEdit = (position: string) => {
+    this.position = position;
+    this.previewUrl = this.submittal['files'][this.itmindex]['filePath'];
+    this.pdfActionTitle = 'Edit PDF';
+    this.isPreviewDialog = true;
     setTimeout(() => {
       this._PdfActionComponent.initialDocker();
-    }, 400)
+    }, 200)
     this.isPreviewDialog = true;
+
   }
 
   handleChangeSubmittalName = (event: any) => {
