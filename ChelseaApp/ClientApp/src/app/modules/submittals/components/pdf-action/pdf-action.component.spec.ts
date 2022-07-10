@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SubmittalsSectionsComponent } from './submittals-sections.component';
+import { PdfActionComponent } from './pdf-action.component';
 
-describe('SubmittalsSectionsComponent', () => {
-  let component: SubmittalsSectionsComponent;
-  let fixture: ComponentFixture<SubmittalsSectionsComponent>;
+describe('PdfActionComponent', () => {
+  let component: PdfActionComponent;
+  let fixture: ComponentFixture<PdfActionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SubmittalsSectionsComponent ]
+      declarations: [ PdfActionComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SubmittalsSectionsComponent);
+    fixture = TestBed.createComponent(PdfActionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

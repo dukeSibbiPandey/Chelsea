@@ -31,6 +31,7 @@ import { ImgFallbackModule } from 'ngx-img-fallback';
 import {ProgressBarModule} from 'primeng/progressbar';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import {TableModule} from 'primeng/table';
+import { PdfActionComponent } from './components/pdf-action/pdf-action.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import {TableModule} from 'primeng/table';
     MergeSubmittalsComponent,
     EditHeaderComponent,
     SubmittalsDetailFormComponent,
+    PdfActionComponent
   ],
   imports: [
     CommonModule,

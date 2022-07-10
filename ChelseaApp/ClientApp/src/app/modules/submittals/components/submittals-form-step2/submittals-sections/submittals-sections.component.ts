@@ -1,6 +1,7 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { HttpService } from 'src/app/components/http.service';
+import { PdfActionComponent } from '../../pdf-action/pdf-action.component';
 
 @Component({
   selector: 'app-submittals-sections',
@@ -8,6 +9,7 @@ import { HttpService } from 'src/app/components/http.service';
   styleUrls: ['./submittals-sections.component.scss']
 })
 export class SubmittalsSectionsComponent implements OnInit {
+  @ViewChild(PdfActionComponent, { static: false }) _PdfActionComponent: PdfActionComponent;
   @Input() submittal: any;
   @Input() itmindex = '0';
   @Input() totalSubmittals = '0';
@@ -137,7 +139,6 @@ export class SubmittalsSectionsComponent implements OnInit {
     })
   }
   handleMove = (action: any) => {
-    debugger
     let fIdx: any = this.itmindex;
     let toIdx: any;
     if (action == 'down') {
@@ -157,8 +158,11 @@ export class SubmittalsSectionsComponent implements OnInit {
 
   handleViewPDF = (position: string, previewUrl: any) => {
     this.position = position;
-    this.isPreviewDialog = true;
     this.previewUrl = previewUrl
+    setTimeout(() => {
+      this._PdfActionComponent.initialDocker();
+    }, 400)
+    this.isPreviewDialog = true;
   }
 
   handleChangeSubmittalName = (event: any) => {
@@ -170,12 +174,12 @@ export class SubmittalsSectionsComponent implements OnInit {
     this.handleEdit(false)
   }
 
-  niceBytes(x:any){
+  niceBytes(x: any) {
     const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-     let l = 0, n = parseInt(x, 10) || 0;
-     while(n >= 1024 && ++l){
-         n = n/1024;
-     }
-     return(n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
-   }
+    let l = 0, n = parseInt(x, 10) || 0;
+    while (n >= 1024 && ++l) {
+      n = n / 1024;
+    }
+    return (n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
+  }
 }

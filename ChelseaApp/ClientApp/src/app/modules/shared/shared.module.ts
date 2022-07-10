@@ -5,7 +5,7 @@ import { InputComponent } from './components/input/input.component';
 @NgModule({
   declarations: [
     ButtonComponent,
-    InputComponent
+    InputComponent,
   ],
   imports: [
     CommonModule

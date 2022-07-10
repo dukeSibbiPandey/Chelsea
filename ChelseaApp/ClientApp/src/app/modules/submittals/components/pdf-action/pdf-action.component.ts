@@ -1,20 +1,47 @@
-import { Component, ViewChild, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, OnInit, ElementRef, AfterViewInit, Input } from '@angular/core';
 import WebViewer from '@pdftron/pdfjs-express';
 
 @Component({
-  selector: 'app-pdf-editor',
-  templateUrl: './pdf-editor.component.html',
-  styleUrls: ['./pdf-editor.component.scss']
+  selector: 'app-pdf-action',
+  templateUrl: './pdf-action.component.html',
+  styleUrls: ['./pdf-action.component.scss']
 })
-export class PdfEditorComponent implements OnInit, AfterViewInit {
+export class PdfActionComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer', { static: false }) viewer: ElementRef;
+  @Input() previewUrl: any = "";
   wvInstance: any;
-
+  ngOnInit() {
+    this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
+  }
   ngAfterViewInit(): void {
+    // WebViewer({
+    //   path: '../lib',
+    //   initialDoc: this.previewUrl
+    // }, this.viewer.nativeElement).then(instance => {
+    //   this.wvInstance = instance;
 
+    //   // now you can access APIs through this.webviewer.getInstance()
+    //   instance.openElements(['notesPanel']);
+    //   // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
+
+    //   // or listen to events from the viewer element
+    //   this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
+    //     const [pageNumber] = e.detail;
+    //     console.log(`Current page is ${pageNumber}`);
+    //   });
+
+    //   // or from the docViewer instance
+    //   instance.docViewer.on('annotationsLoaded', () => {
+    //     console.log('annotations loaded');
+    //   });
+
+    //   instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
+    // })
+  }
+  initialDocker = () => {
     WebViewer({
       path: '../lib',
-      initialDoc: 'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf'
+      initialDoc: this.previewUrl
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
 
@@ -24,7 +51,7 @@ export class PdfEditorComponent implements OnInit, AfterViewInit {
 
       // or listen to events from the viewer element
       this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
-        const [ pageNumber ] = e.detail;
+        const [pageNumber] = e.detail;
         console.log(`Current page is ${pageNumber}`);
       });
 
@@ -36,11 +63,6 @@ export class PdfEditorComponent implements OnInit, AfterViewInit {
       instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
     })
   }
-
-  ngOnInit() {
-    this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
-  }
-
   wvDocumentLoadedHandler(): void {
     // you can access docViewer object for low-level APIs
     const docViewer = this.wvInstance;
@@ -55,9 +77,10 @@ export class PdfEditorComponent implements OnInit, AfterViewInit {
     rectangle.Height = 250;
     rectangle.StrokeThickness = 5;
     rectangle.Author = annotManager.getCurrentUser();
-    annotManager.addAnnotation(rectangle);
     annotManager.drawAnnotations(rectangle.PageNumber);
+    //annotManager.addAnnotation(rectangle);
     // see https://www.pdftron.com/api/web/WebViewer.html for the full list of low-level APIs
   }
 }
+
 
