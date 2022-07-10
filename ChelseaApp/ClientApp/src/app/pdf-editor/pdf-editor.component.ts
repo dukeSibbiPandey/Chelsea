@@ -4,7 +4,7 @@ import WebViewer from '@pdftron/pdfjs-express';
 @Component({
   selector: 'app-pdf-editor',
   templateUrl: './pdf-editor.component.html',
-  styleUrls: ['./pdf-editor.component.css']
+  styleUrls: ['./pdf-editor.component.scss']
 })
 export class PdfEditorComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer', { static: false }) viewer: ElementRef;
