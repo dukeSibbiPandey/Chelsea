@@ -31,7 +31,8 @@
             "assets": [
               "src/favicon.ico",
               "src/files",
-              "src/lib"
+              "src/lib",
+              "src/assets"
             ],
             "styles": [
               "src/assets/vendors/font-awesome/css/font-awesome.css",
@@ -104,8 +105,10 @@
               "src/styles.scss"
             ],
             "scripts": [],
-            "assets": [ 
+            "assets": [
               "src/favicon.ico",
+              "src/files",
+              "src/lib",
               "src/assets"
             ]
           }
