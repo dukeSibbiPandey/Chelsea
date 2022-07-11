@@ -265,7 +265,7 @@
                                     View
                                 </button>
                             </div>
-                            <img src="{{item.thumbnail}}" alt="" class="img-responsive template_img">
+                            <img src="{{item.thumbnail}}" onError="this.src='../../../../../../assets/images/placeholder.png'" alt="" class="img-responsive template_img">
                         </div>
                         <p>{{item.fileName}}</p>
                         <p class="__size" *ngIf="item.fileSize">{{niceBytes(item.fileSize)}}</p>
