@@ -267,13 +267,17 @@ namespace ChelseaApp.Controllers
                 blobpdffileUrl = fileInfo.Path;
             }
 
-           
+            var pdfEntities = _context.PdfFiles.Where(t => t.SubmittalId == dataList.Id).ToList();
+            var pdfDetailEntities = _context.PdfFileDetails.Where(t => t.SubmittalId == dataList.Id).ToList();
+            _context.PdfFiles.RemoveRange(pdfEntities);
+            _context.PdfFileDetails.RemoveRange(pdfDetailEntities);
 
             var submittalModel = this._mapper.Map<Submittal>(dataList);
             submittalModel.Thumbnail = Path.GetFileName(thumbnail);
             submittalModel.FileName = pdfFileName;
             _context.Submittal.Update(submittalModel);
             await _context.SaveChangesAsync();
+            
 
             foreach (var model in pdfFileMaster.PdfFiles)
             {
