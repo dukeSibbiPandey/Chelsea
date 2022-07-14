@@ -88,10 +88,10 @@ namespace ChelseaApp.Controllers
         {
             var dataList = await _context.vwAddress.AsQueryable().Where(t => t.Id == coverPage.AddressId).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<AddressModel>(dataList);
-            var cityObj = await _context.CityMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.City)).FirstOrDefaultAsync();
+            //var cityObj = await _context.CityMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.City)).FirstOrDefaultAsync();
             var stateObj = await _context.StateMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.State)).FirstOrDefaultAsync();
             coverPage.Contractor.StateName = stateObj.Name;
-            coverPage.Contractor.CityName = cityObj.Name;
+            //coverPage.Contractor.CityName = cityObj.Name;
             var fileInfo = _docUtility.SaveCoverPage(coverPage, modelList);
             string fileName = Path.GetFileName(fileInfo.Path);
             
@@ -102,7 +102,7 @@ namespace ChelseaApp.Controllers
             entity.AddressId = coverPage.AddressId;
             entity.SubmittedDate = Convert.ToDateTime(coverPage.SubmittalDate);
             entity.JobName = coverPage.JobName;
-            entity.SubmittalCount = Convert.ToInt32(coverPage.Submittals);
+            entity.Submittals = coverPage.Submittals;
             entity.ProjectManagerName = coverPage.ProjectManager.Name;
             entity.Phone = coverPage.ProjectManager.Phone;
             entity.Email = coverPage.ProjectManager.Email;

@@ -12,7 +12,7 @@ namespace ChelseaApp.Model
         public int AddressId { get; set; }
         public DateTime? SubmittedDate { get; set; }
         public string JobName { get; set; }
-        public int SubmittalCount { get; set; }
+        public string Submittals { get; set; }
         public string ProjectManagerName { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
