@@ -67,9 +67,9 @@ export class SubmittalsFormStep1Component implements OnInit {
           fax: [''],
         }),
         projectManager: this._FormBuilder.group({
-          name: ['', [Validators.required]],
-          phone: ['', [Validators.required]],
-          email: ['', [Validators.required, Validators.pattern(mobilePattern)]],
+          name: [''],
+          phone: [''],
+          email: ['', [Validators.pattern(emailPattern)]],
         }),
         contractor: this._FormBuilder.group({
           name: [''],
