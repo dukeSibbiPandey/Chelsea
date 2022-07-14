@@ -31,6 +31,7 @@ import { ImgFallbackModule } from 'ngx-img-fallback';
 import {ProgressBarModule} from 'primeng/progressbar';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import {TableModule} from 'primeng/table';
+import {InputMaskModule} from 'primeng/inputmask';
 import { PdfActionComponent } from './components/pdf-action/pdf-action.component';
 
 @NgModule({
@@ -70,7 +71,8 @@ import { PdfActionComponent } from './components/pdf-action/pdf-action.component
     ImgFallbackModule,
     ProgressBarModule,
     PdfViewerModule,
-    TableModule
+    TableModule,
+    InputMaskModule
   ],
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'in' }

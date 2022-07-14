@@ -362,3 +362,17 @@ a {
 .hidden {
     display: none;
 }
+
+.p-inputtext{
+    height: 30px!important;
+    outline: none!important;
+    box-shadow: none!important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #333;
+    display: block;
+    width: 100%;
+    border: 1px solid #dbdcdf!important;
+}

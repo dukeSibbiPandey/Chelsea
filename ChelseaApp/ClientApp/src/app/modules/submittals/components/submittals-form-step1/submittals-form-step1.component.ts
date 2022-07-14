@@ -5,6 +5,8 @@ import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { HttpService } from '../../../../components/http.service';
 const emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
+const mobilePattern = "^(\([0-9]{3}\)|[0-9]{3}-)[0-9]{3}-[0-9]{4}$";
+
 @Component({
   selector: 'app-submittals-form-step1',
   templateUrl: './submittals-form-step1.component.html',
@@ -66,8 +68,8 @@ export class SubmittalsFormStep1Component implements OnInit {
         }),
         projectManager: this._FormBuilder.group({
           name: ['', [Validators.required]],
-          phone: ['', [Validators.required, Validators.minLength(10)]],
-          email: ['', [Validators.required, Validators.pattern(emailPattern)]],
+          phone: ['', [Validators.required]],
+          email: ['', [Validators.required, Validators.pattern(mobilePattern)]],
         }),
         contractor: this._FormBuilder.group({
           name: [''],
