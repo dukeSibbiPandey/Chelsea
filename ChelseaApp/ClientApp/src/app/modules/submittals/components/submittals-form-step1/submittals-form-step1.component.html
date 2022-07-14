@@ -10,15 +10,16 @@
                                 <span class="__r_btn {{item.isPrimary?' checked':''}}"></span>
                                 <div class="__a_c">
                                     <p class="__title">
-                                      <strong>{{item.name}}</strong>
+                                        <strong>{{item.name}}</strong>
                                     </p>
-                                    <p class="__address">{{item.address}}, {{item.state}}, {{item.city}} {{item.zipCode}}</p>
+                                    <p class="__address">{{item.address}}, {{item.state}}, {{item.city}}
+                                        {{item.zipCode}}</p>
                                     <p class="__contact"><strong>Phone:</strong> {{item.phone}}</p>
                                     <p class="__contact"><strong>Fax:</strong> {{item.fax}}</p>
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                     <input type="hidden" placeholder="Enter here" formControlName="addressId">
                     <div class="msgError text-danger"
@@ -31,8 +32,9 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="">Submittal Date</label>
-                            <p-calendar formControlName="submittalDate" placeholder="dd/mm/yy" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
+                            <label for="">Submittal Date <span class="required text-danger">*</span></label>
+                            <p-calendar formControlName="submittalDate" placeholder="dd/mm/yy" dateFormat="dd/mm/yy"
+                                [showIcon]="true"></p-calendar>
                             <div class="msgError text-danger"
                                 *ngIf="formControl.submittalDate.invalid && (formControl.submittalDate.dirty || submitted)">
                                 <small class="text-danger" *ngIf="formControl.submittalDate.hasError('required')">
@@ -43,7 +45,7 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="">Job Name</label>
+                            <label for="">Job Name <span class="required text-danger">*</span></label>
                             <input type="text" class="form-control" placeholder="Enter here" formControlName="jobName">
                             <div class="msgError text-danger"
                                 *ngIf="formControl.jobName.invalid && (formControl.jobName.dirty || submitted)">
@@ -55,9 +57,9 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="">Submittal #</label>
+                            <label for="">Submittal # <span class="required text-danger">*</span></label>
                             <input type="text" class="form-control" placeholder="Enter here"
-                                formControlName="submittals" digitOnly>
+                                formControlName="submittals">
                             <div class="msgError text-danger"
                                 *ngIf="formControl.submittals.invalid && (formControl.submittals.dirty || submitted)">
                                 <small class="text-danger" *ngIf="formControl.submittals.hasError('required')">
@@ -73,7 +75,8 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for="">Project Manager Name</label>
+                                    <label for="">Project Manager Name <span
+                                            class="required text-danger">*</span></label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
                                         formControlName="name">
                                     <div class="msgError text-danger"
@@ -87,7 +90,7 @@
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for="">Phone</label>
+                                    <label for="">Phone <span class="required text-danger">*</span></label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
                                         formControlName="phone" maxlength="10" digitOnly>
                                     <div class="msgError text-danger"
@@ -101,7 +104,7 @@
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for="">Email</label>
+                                    <label for="">Email <span class="required text-danger">*</span></label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
                                         formControlName="email">
                                     <div class="msgError text-danger"
@@ -129,13 +132,6 @@
                                     <label for="">Contractor Name</label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
                                         formControlName="name">
-                                    <div class="msgError text-danger"
-                                        *ngIf="submittalDetailForm.get('contractor.name').invalid && (submittalDetailForm.get('contractor.name').dirty || submitted)">
-                                        <small class="text-danger"
-                                            *ngIf="submittalDetailForm.get('contractor.name').hasError('required')">
-                                            Required Field.
-                                        </small>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -143,13 +139,6 @@
                                     <label for="">Address Line 1</label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
                                         formControlName="addressLine1">
-                                    <div class="msgError text-danger"
-                                        *ngIf="submittalDetailForm.get('contractor.addressLine1').invalid && (submittalDetailForm.get('contractor.addressLine1').dirty || submitted)">
-                                        <small class="text-danger"
-                                            *ngIf="submittalDetailForm.get('contractor.addressLine1').hasError('required')">
-                                            Required Field.
-                                        </small>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -163,36 +152,27 @@
                                 <div class="form-group">
                                     <label for="">State</label>
                                     <div class="__custom_select">
-                                        <select class="form-control" (change)="selectState()" name="contractor" formControlName="state">
+                                        <select class="form-control" (change)="selectState()" name="contractor"
+                                            formControlName="state">
                                             <option value="">Select</option>
-                                            <option value="{{item.id}}" *ngFor="let item of stateMaster">{{item.name}}</option>
+                                            <option value="{{item.id}}" *ngFor="let item of stateMaster">{{item.name}}
+                                            </option>
                                         </select>
-                                    </div>
-                                    <div class="msgError text-danger"
-                                        *ngIf="submittalDetailForm.get('contractor.state').invalid && (submittalDetailForm.get('contractor.state').dirty || submitted)">
-                                        <small class="text-danger"
-                                            *ngIf="submittalDetailForm.get('contractor.state').hasError('required')">
-                                            Required Field.
-                                        </small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">City</label>
-                                    <div class="__custom_select">
+                                    <input type="text" class="form-control" placeholder="Enter Here"
+                                        formControlName="city">
+                                    <!-- <div class="__custom_select">
                                         <select class="form-control" formControlName="city" (change)="selectCity()">
                                             <option value="">Select</option>
-                                            <option value="{{item.id}}" *ngFor="let item of cityMaster">{{item.name}}</option>
+                                            <option value="{{item.id}}" *ngFor="let item of cityMaster">{{item.name}}
+                                            </option>
                                         </select>
-                                    </div>
-                                    <div class="msgError text-danger"
-                                        *ngIf="submittalDetailForm.get('contractor.city').invalid && (submittalDetailForm.get('contractor.city').dirty || submitted)">
-                                        <small class="text-danger"
-                                            *ngIf="submittalDetailForm.get('contractor.city').hasError('required')">
-                                            Required Field.
-                                        </small>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -200,13 +180,6 @@
                                     <label for="">Zip</label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
                                         formControlName="postalCode" digitOnly>
-                                    <div class="msgError text-danger"
-                                        *ngIf="submittalDetailForm.get('contractor.postalCode').invalid && (submittalDetailForm.get('contractor.postalCode').dirty || submitted)">
-                                        <small class="text-danger"
-                                            *ngIf="submittalDetailForm.get('contractor.postalCode').hasError('required')">
-                                            Required Field.
-                                        </small>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -219,7 +192,8 @@
                 <div class="__c_p form-group">
                     <label for="" class="__dark">Cover Page Preview</label>
                     <div class="preview_wrapper" id="contentToConvert">
-                        <app-submittals-preview-content [formValueOne]=submittalDetailForm.value></app-submittals-preview-content>
+                        <app-submittals-preview-content [formValueOne]=submittalDetailForm.value>
+                        </app-submittals-preview-content>
                     </div>
                 </div>
             </div>

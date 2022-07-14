@@ -70,12 +70,12 @@ export class SubmittalsFormStep1Component implements OnInit {
           email: ['', [Validators.required, Validators.pattern(emailPattern)]],
         }),
         contractor: this._FormBuilder.group({
-          name: ['', [Validators.required]],
-          addressLine1: ['', [Validators.required]],
+          name: [''],
+          addressLine1: [''],
           addressLine2: [''],
-          state: ['', [Validators.required]],
-          city: ['', [Validators.required]],
-          postalCode: ['', [Validators.required]]         
+          state: [''],
+          city: [''],
+          postalCode: ['']         
         }),
         stateName: [''],
         cityName: [''],
