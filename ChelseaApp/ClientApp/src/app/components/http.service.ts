@@ -12,7 +12,7 @@ export class HttpService {
     if(window.location.origin.indexOf('localhost:4200')>-1){
       this.baseUrl = 'https://chelsea.skdedu.in/api/';  
     }else{
-      this.baseUrl = 'https://localhost:44339/api/';
+      this.baseUrl = '/api/';
     }
   }
 
