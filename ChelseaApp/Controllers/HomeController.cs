@@ -89,8 +89,25 @@ namespace ChelseaApp.Controllers
             var dataList = await _context.vwAddress.AsQueryable().Where(t => t.Id == coverPage.AddressId).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<AddressModel>(dataList);
             //var cityObj = await _context.CityMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.City)).FirstOrDefaultAsync();
-            var stateObj = await _context.StateMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.State)).FirstOrDefaultAsync();
-            coverPage.Contractor.StateName = stateObj.Name;
+            int stateId = 0;
+            int postalCode = 0;
+            
+            if(int.TryParse(coverPage.Contractor.State, out stateId))
+            {
+                var stateObj = await _context.StateMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.State)).FirstOrDefaultAsync();
+                coverPage.Contractor.StateName = stateObj.Name;
+            }
+            if (int.TryParse(coverPage.Contractor.PostalCode, out postalCode))
+            {
+            }
+
+            DateTime submittalDate=DateTime.Now;
+            if (DateTime.TryParse(coverPage.SubmittalDate, out submittalDate))
+            {
+
+            }
+
+            
             //coverPage.Contractor.CityName = cityObj.Name;
             var fileInfo = _docUtility.SaveCoverPage(coverPage, modelList);
             string fileName = Path.GetFileName(fileInfo.Path);
@@ -100,7 +117,7 @@ namespace ChelseaApp.Controllers
             Submittal entity = new Submittal();
             entity.Id = Convert.ToInt64(coverPage.Id);
             entity.AddressId = coverPage.AddressId;
-            entity.SubmittedDate = Convert.ToDateTime(coverPage.SubmittalDate);
+            entity.SubmittedDate = submittalDate;
             entity.JobName = coverPage.JobName;
             entity.Submittals = coverPage.Submittals;
             entity.ProjectManagerName = coverPage.ProjectManager.Name;
@@ -109,12 +126,12 @@ namespace ChelseaApp.Controllers
             entity.ContractorName = coverPage.Contractor.Name;
             entity.AddressLine1 = coverPage.Contractor.AddressLine1;
             entity.AddressLine2 = coverPage.Contractor.AddressLine2;
-            entity.StateId = Convert.ToInt32(coverPage.Contractor.State);
+            entity.StateId = stateId;
             entity.City = coverPage.Contractor.City;
             entity.CreatedDate = DateTime.Now;
             entity.IsTempRecord = true;
             entity.CoverPageName = fileName;
-            entity.Zip = Convert.ToInt32(coverPage.Contractor.PostalCode);
+            entity.Zip = postalCode;
             if (entity.Id > 0)
             {
                 _context.Submittal.Update(entity);
