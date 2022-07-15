@@ -1,6 +1,6 @@
 <form [formGroup]="submittalDetailForm" autocomplete="off" novalidate>
     <div class="form_wrapper row-same-height row">
-        <div class="col-same-height col-sm-8">
+        <div class="col-same-height col-sm-7">
             <div class="content __cell __left">
                 <div class="__b_p form-control _placeholder form-group">
                     <label for="" class="__dark">Chelsea Address</label>
@@ -33,7 +33,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="">Submittal Date <span class="required text-danger">*</span></label>
-                            <p-calendar formControlName="submittalDate" placeholder="dd/mm/yy" dateFormat="dd/mm/yy"
+                            <p-calendar formControlName="submittalDate" placeholder="mm/dd/yy" dateFormat="mm/dd/yy"
                                 [showIcon]="true"></p-calendar>
                             <div class="msgError text-danger"
                                 *ngIf="formControl.submittalDate.invalid && (formControl.submittalDate.dirty || submitted)">
@@ -190,7 +190,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-same-height col-sm-4">
+        <div class="col-same-height col-sm-5">
             <div class="content __cell __right">
                 <div class="__c_p form-group">
                     <label for="" class="__dark">Cover Page Preview</label>
