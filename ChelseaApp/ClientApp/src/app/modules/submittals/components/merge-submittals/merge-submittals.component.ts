@@ -19,11 +19,12 @@ export class MergeSubmittalsComponent implements OnInit {
   isDetailEditDialog = false;
   constructor(private primengConfig: PrimeNGConfig) { }
   entityRes:any
-  pageUrl="https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
+  pageUrl="";
   previewUrl=''
   ngOnInit(): void {
     this.entityRes=JSON.parse(localStorage.getItem('pdfRes'));
-    this.previewUrl=this.entityRes.fileUrl
+    this.pageUrl="https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
+    //this.pageUrl=this.entityRes.fileUrl
   }
   handleEditDialog(value: boolean) {
     this.isEditDialog = value;
