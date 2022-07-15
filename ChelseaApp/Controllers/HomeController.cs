@@ -136,7 +136,7 @@ namespace ChelseaApp.Controllers
             modelList.ThumbnailUrl = await _azureBlobServices.GetPath(modelList.Thumbnail, _appSetting.AzureBlobMainImageContainer);
 
             var pdfFiles = await _context.PdfFiles.AsQueryable().Where(t => t.SubmittalId == Convert.ToInt32(id)).ToListAsync();
-            var pdfFilesList = this._mapper.Map<List<PdfFileModel>>(dataList);
+            var pdfFilesList = this._mapper.Map<List<PdfFileModel>>(pdfFiles);
             var pdfFilesDetails = await _context.PdfFileDetails.AsQueryable().Where(t => t.SubmittalId == Convert.ToInt32(id)).ToListAsync();
 
             foreach (var pdfFile in pdfFilesList)
