@@ -215,7 +215,7 @@ namespace ChelseaApp.Controllers
             return this.Ok(new FileModel { FileName = newFileName, FilePath = pdfPath, FileSize = fileSize, Thumbnail = thumbnail, OrgFileName = orgFileName });
         }
 
-        [HttpGet("download/{bloburl}")]
+        [HttpGet("download")]
         public async Task<ActionResult> Download(string bloburl)
         {
             var fileName = Path.GetFileName(bloburl);
