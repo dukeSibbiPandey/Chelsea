@@ -4,3 +4,4 @@ Chelsea.Repository/obj/
 ChelseaApp/obj/
 /node_modules
 .vs/
+ChelseaApp/wwwroot/TempPdf/
