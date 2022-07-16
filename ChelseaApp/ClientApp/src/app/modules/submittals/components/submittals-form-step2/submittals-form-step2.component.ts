@@ -56,8 +56,6 @@ export class SubmittalsFormStep2Component implements OnInit {
   selectAddress = (index: any) => {
     this.activeAddressInde = index;
   }
-
-
   uploadSubmittalsCallbackHandler = (res: any) => {
     const index = res.info.itmindex;
     this.submittalsTpl[index].files.push(res.formData);
@@ -73,10 +71,6 @@ export class SubmittalsFormStep2Component implements OnInit {
   removePdfOption = (res: any) => {
     this.submittalsTpl[res.submittalIndex]['files'].splice(res.itemIndex, 1)
     this.updateOldState();
-    // this.submittalsTpl.splice(idx, 1);
-    // for (let i = 0; i < this.submittalsTpl.length; i++) {
-    //   this.submittalsTpl[i].name = "F" + (i + 1);
-    // }
   }
 
   toggleCallbackHandler = (res: any) => {
@@ -84,8 +78,6 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.updateOldState();
   }
   removeSubmittals = (res: any) => {
-    // const ids = res.selectedIndex;
-    // this.submittalsTpl[res.itmindex]['files'] = this.submittalsTpl[res.itmindex]['files'].filter((object: any, index: number) => !ids.includes(index));
     this.submittalsTpl.splice(res.idx, 1);
   }
   duplicateSubmittals = (res: any) => {
