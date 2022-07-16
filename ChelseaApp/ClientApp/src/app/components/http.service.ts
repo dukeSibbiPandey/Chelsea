@@ -17,7 +17,6 @@ export class HttpService {
   }
 
   httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-
   post(apiUrl: any, data: any) {
     const url = this.baseUrl + apiUrl;
     return this._http.post(url, data, this.httpOptions)

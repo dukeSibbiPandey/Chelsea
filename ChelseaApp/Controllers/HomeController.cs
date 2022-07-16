@@ -215,6 +215,16 @@ namespace ChelseaApp.Controllers
             return this.Ok(new FileModel { FileName = newFileName, FilePath = pdfPath, FileSize = fileSize, Thumbnail = thumbnail, OrgFileName = orgFileName });
         }
 
+        [HttpGet("download/{bloburl}")]
+        public async Task<ActionResult> Download(string bloburl)
+        {
+            var fileName = Path.GetFileName(bloburl);
+            var fileUrl = string.Format("{0}/{1}", "Content", fileName);
+            var fileStream = await _azureBlobServices.DownloadFile(fileUrl, _appSetting.AzureBlobTempContainer);
+
+            return this.File(fileStream, "application/octet-stream", fileName);
+        }
+
         [HttpPost("files/merge")]
         public async Task<ActionResult> FileMerge(PdfFileMasterModel pdfFileMaster)
         {
@@ -277,7 +287,7 @@ namespace ChelseaApp.Controllers
             using (MemoryStream pdfStream = new MemoryStream())
             {
                 pdfStream.Write(mergedByte, 0, mergedByte.Length);
-                
+
                 var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);
                 var fileInfo = await _azureBlobServices.UploadFile(pdfStream, pdffileUrl, _appSetting.AzureBlobDocContainer, false);
                 thumbnail = _docUtility.ConvertPDFtoJPG(pdfStream, Path.GetFileNameWithoutExtension(pdfFileName) + ".png", 2);
@@ -294,7 +304,7 @@ namespace ChelseaApp.Controllers
             submittalModel.FileName = pdfFileName;
             _context.Submittal.Update(submittalModel);
             await _context.SaveChangesAsync();
-            
+
 
             foreach (var model in pdfFileMaster.PdfFiles)
             {
@@ -304,7 +314,7 @@ namespace ChelseaApp.Controllers
                 _context.PdfFiles.Add(modeObj);
                 await _context.SaveChangesAsync();
 
-                foreach(var file in model.Files)
+                foreach (var file in model.Files)
                 {
                     PdfFileDetails pdfFile = new PdfFileDetails();
                     pdfFile.FileName = file.FileName;
