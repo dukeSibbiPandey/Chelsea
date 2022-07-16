@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, ElementRef, Input } from '@angular/core';
 import WebViewer from '@pdftron/pdfjs-express';
-
+import { HttpService } from 'src/app/components/http.service';
 @Component({
   selector: 'app-pdf-action',
   templateUrl: './pdf-action.component.html',
@@ -10,6 +10,7 @@ export class PdfActionComponent implements OnInit{
   @ViewChild('viewer', { static: false }) viewer: ElementRef;
   @Input() previewUrl: any = "";
   wvInstance: any;
+  constructor(private httpService: HttpService) { }
   ngOnInit() {
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
   }
@@ -35,7 +36,7 @@ export class PdfActionComponent implements OnInit{
         console.log('annotations loaded');
       });
 
-      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
+      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)      
     })
   }
   wvDocumentLoadedHandler(): void {
@@ -55,6 +56,26 @@ export class PdfActionComponent implements OnInit{
     annotManager.drawAnnotations(rectangle.PageNumber);
     //annotManager.addAnnotation(rectangle);
     // see https://www.pdftron.com/api/web/WebViewer.html for the full list of low-level APIs
+  }
+
+  handleSaveAction=async ()=>{
+    const { docViewer, annotManager, annotations } = this.wvInstance;
+
+    debugger;
+    
+    const documentStream = await docViewer.getDocument().getFileData({});
+    const documentBlob = new Blob([documentStream], { type: 'application/pdf' });
+    window.open(URL.createObjectURL(documentBlob))
+    //const fileArray = await documentBlob.arrayBuffer();
+    const file  =  new File(documentStream, "test.pdf");
+    // Get the resulting blob from the merge operation
+    let url = 'home/auto/save';  
+    const formData = new FormData();
+    formData.append('file',  file);
+    // trigger a download for the user!
+    this.httpService.fileupload(url, formData, null, null).subscribe(res => {
+      
+    })
   }
 }
 
