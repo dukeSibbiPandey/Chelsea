@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, ElementRef, AfterViewInit, Input } from '@angular/core';
+import { Component, ViewChild, OnInit, ElementRef, Input } from '@angular/core';
 import WebViewer from '@pdftron/pdfjs-express';
 
 @Component({
@@ -6,37 +6,12 @@ import WebViewer from '@pdftron/pdfjs-express';
   templateUrl: './pdf-action.component.html',
   styleUrls: ['./pdf-action.component.scss']
 })
-export class PdfActionComponent implements OnInit, AfterViewInit {
+export class PdfActionComponent implements OnInit{
   @ViewChild('viewer', { static: false }) viewer: ElementRef;
   @Input() previewUrl: any = "";
   wvInstance: any;
   ngOnInit() {
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
-  }
-  ngAfterViewInit(): void {
-    // WebViewer({
-    //   path: '../lib',
-    //   initialDoc: this.previewUrl
-    // }, this.viewer.nativeElement).then(instance => {
-    //   this.wvInstance = instance;
-
-    //   // now you can access APIs through this.webviewer.getInstance()
-    //   instance.openElements(['notesPanel']);
-    //   // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
-
-    //   // or listen to events from the viewer element
-    //   this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
-    //     const [pageNumber] = e.detail;
-    //     console.log(`Current page is ${pageNumber}`);
-    //   });
-
-    //   // or from the docViewer instance
-    //   instance.docViewer.on('annotationsLoaded', () => {
-    //     console.log('annotations loaded');
-    //   });
-
-    //   instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
-    // })
   }
   initialDocker = () => {
     WebViewer({
@@ -44,7 +19,7 @@ export class PdfActionComponent implements OnInit, AfterViewInit {
       initialDoc: this.previewUrl
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
-
+      
       // now you can access APIs through this.webviewer.getInstance()
       instance.openElements(['notesPanel']);
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
