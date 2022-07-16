@@ -21,7 +21,7 @@ export class PdfActionComponent implements OnInit{
       this.wvInstance = instance; 
       
       // now you can access APIs through this.webviewer.getInstance()
-      instance.openElements(['notesPanel']);
+      //instance.openElements(['notesPanel']);
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
 
       // or listen to events from the viewer element
