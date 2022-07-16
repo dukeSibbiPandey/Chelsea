@@ -19,12 +19,9 @@ export class PdfActionComponent implements OnInit{
       initialDoc: this.previewUrl
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance; 
-      debugger
       
       // now you can access APIs through this.webviewer.getInstance()
-      //instance.openElements(['notesPanel']);
-      instance.UI.disableElements(['searchButton']);
-      instance.UI.disableFeatures([instance.UI.Feature.Print])
+      instance.openElements(['notesPanel']);
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
 
       // or listen to events from the viewer element
