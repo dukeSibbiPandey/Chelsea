@@ -215,11 +215,12 @@ namespace ChelseaApp.Controllers
             return this.Ok(new FileModel { FileName = newFileName, FilePath = pdfPath, FileSize = fileSize, Thumbnail = thumbnail, OrgFileName = orgFileName });
         }
 
-        [HttpPost("download/{bloburl}")]
+        [HttpGet("download/{bloburl}")]
         public async Task<ActionResult> Download(string bloburl)
         {
             var fileName = Path.GetFileName(bloburl);
-            var fileStream = await _azureBlobServices.DownloadFile(fileName, _appSetting.AzureBlobTempContainer);
+            var fileUrl = string.Format("{0}/{1}", "Content", fileName);
+            var fileStream = await _azureBlobServices.DownloadFile(fileUrl, _appSetting.AzureBlobTempContainer);
 
             return this.File(fileStream, "application/octet-stream", fileName);
         }

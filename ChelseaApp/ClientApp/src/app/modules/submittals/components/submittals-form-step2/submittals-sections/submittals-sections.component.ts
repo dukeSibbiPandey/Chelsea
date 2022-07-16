@@ -156,16 +156,16 @@ export class SubmittalsSectionsComponent implements OnInit {
 
 
 
-  handleViewAction = (position: string, previewUrl: any, type: number) => {
+  handleViewAction = (position: string, previewUrl: any, type: number, fileName: string) => {
+    debugger;
     this.position = position;
-    this.previewUrl = previewUrl
+    this.previewUrl = "https://chelsea.skdedu.in/api/Home/download/" + fileName + ""
     this.pdfActionTitle = 'Preview';
     this.isPreviewDialog = true;
   }
-
   handleActionEdit = (position: string) => {
     this.position = position;
-    this.previewUrl = this.submittal['files'][this.itmindex]['filePath'];
+    this.previewUrl = "https://chelsea.skdedu.in/api/Home/download/" + this.submittal['files'][this.itmindex]['fileName'] + "";
     this.pdfActionTitle = 'Edit PDF';
     this.isPreviewDialog = true;
     setTimeout(() => {
