@@ -35,7 +35,30 @@ export class SubmittalsFormStep2Component implements OnInit {
       lamp: '',
       dim: '',
       runs: '',
-      files: [],
+      files: [
+        {
+          "fileName": "two.pdf",
+          "filePath": "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf",
+          "fileSize": "3028",
+          "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
+          "orgFileName": "sample.pdf",
+          "noSamples": 0,
+          "owner": "John Smith",
+          "createdAt": "2022-07-02T15:32:15.209Z",
+          "itmindex": "0"
+        },
+        {
+          "fileName": "threee.pdf",
+          "filePath": "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf",
+          "fileSize": "3028",
+          "thumbnail": "https://submittalappstorage.blob.core.windows.net/chelseapublicurl/Content/sample_fed134ff-99aa-454c-af49-5169c5262939.png",
+          "orgFileName": "sample.pdf",
+          "noSamples": 0,
+          "owner": "John Smith",
+          "createdAt": "2022-07-02T15:32:15.209Z",
+          "itmindex": "0"
+        }
+      ],
       isOpen: true
     }
   ]
