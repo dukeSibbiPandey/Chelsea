@@ -18,7 +18,7 @@ export class PdfActionComponent implements OnInit{
       path: '../lib',
       initialDoc: this.previewUrl
     }, this.viewer.nativeElement).then(instance => {
-      this.wvInstance = instance;
+      this.wvInstance = instance; 
       
       // now you can access APIs through this.webviewer.getInstance()
       instance.openElements(['notesPanel']);
