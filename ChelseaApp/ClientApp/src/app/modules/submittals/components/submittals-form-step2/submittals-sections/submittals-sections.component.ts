@@ -157,7 +157,6 @@ export class SubmittalsSectionsComponent implements OnInit {
 
 
   handleViewAction = (position: string, previewUrl: any, type: number, fileName: string) => {
-    debugger;
     this.position = position;
     this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + fileName + ""
     this.pdfActionTitle = 'Preview';
@@ -166,6 +165,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   handleActionEdit = (position: string) => {
     this.position = position;
     this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + this.submittal['files'][this.itmindex]['fileName'] + "";
+    this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=solace_265e7b6b-0a72-49a5-9997-44b0c029faab.pdf";
     this.pdfActionTitle = 'Edit PDF';
     this.isPreviewDialog = true;
     setTimeout(() => {
