@@ -14,13 +14,14 @@ export class PdfActionComponent implements OnInit{
   ngOnInit() {
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
   }
+  
   initialDocker = () => {
     WebViewer({
       path: '../lib',
       initialDoc: this.previewUrl
     }, this.viewer.nativeElement).then(instance => {
-      this.wvInstance = instance; 
-      
+      this.wvInstance = instance;
+
       // now you can access APIs through this.webviewer.getInstance()
       instance.openElements(['notesPanel']);
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
