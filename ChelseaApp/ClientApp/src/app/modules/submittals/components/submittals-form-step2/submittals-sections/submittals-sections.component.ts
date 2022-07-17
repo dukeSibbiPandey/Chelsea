@@ -157,7 +157,6 @@ export class SubmittalsSectionsComponent implements OnInit {
 
 
   handleViewAction = (position: string, previewUrl: any, type: number, fileName: string) => {
-    debugger;
     this.position = position;
     this.previewUrl = "https://localhost:44339/api/Home/download?bloburl=" + fileName + ""
     this.pdfActionTitle = 'Preview';
