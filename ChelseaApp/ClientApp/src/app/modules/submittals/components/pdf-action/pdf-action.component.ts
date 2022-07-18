@@ -21,6 +21,7 @@ export class PdfActionComponent implements OnInit {
   }
 
   initialDocker = () => {
+    debugger
     WebViewer({
       path: '../lib',
       initialDoc: this.previewUrl
