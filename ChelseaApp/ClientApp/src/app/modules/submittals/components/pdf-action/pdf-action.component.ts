@@ -1,6 +1,7 @@
 import { Component, ViewChild, OnInit, ElementRef, Input } from '@angular/core';
 import WebViewer from '@pdftron/pdfjs-express';
-
+import { HttpService } from 'src/app/components/http.service';
+import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib'
 @Component({
   selector: 'app-pdf-action',
   templateUrl: './pdf-action.component.html',
@@ -10,6 +11,7 @@ export class PdfActionComponent implements OnInit {
   @ViewChild('viewer', { static: false }) viewer: ElementRef;
   @Input() previewUrl: any = "";
   wvInstance: any;
+  constructor(private httpService: HttpService) { }
   ngOnInit() {
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
   }
@@ -40,7 +42,7 @@ export class PdfActionComponent implements OnInit {
         console.log('annotations loaded');
       });
 
-      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
+      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)      
     })
   }
   customReduIcon = (docViewer) => {
@@ -136,7 +138,63 @@ export class PdfActionComponent implements OnInit {
 
     });
   }
+
+  handleSaveAction=async ()=>{
+    const { docViewer, annotManager, annotations } = this.wvInstance;
+
+    debugger;
+
+    const annotationList = annotManager.getAnnotationsList();
+
+    const existingPdfBytes = await fetch(this.previewUrl).then(res => res.arrayBuffer())
+
+    const pdfDoc = await PDFDocument.load(existingPdfBytes)
+    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
   
+    const pages = pdfDoc.getPages()
+    const firstPage = pages[0]
+    const { width, height } = firstPage.getSize()
+    annotationList.forEach(function(obj){
+      if(obj.ToolName=="AnnotationCreateFreeTextswqwd")
+      {
+        firstPage.drawText(obj.HY, {
+          x: obj.Xt,
+          y: height-obj.Yt,
+          size: parseInt(obj.OE.replace('pt', '')),
+          font: helveticaFont,
+          color: rgb(1, 0, 0),//rgb(obj.jk.R, obj.jk.G, obj.jk.B),
+          rotate: degrees(-45),
+        })
+     }else if(obj.ToolName=="AnnotationCreateRectangle")
+     {
+      firstPage.drawRectangle({
+        x: obj.Xt,
+        y: height-obj.Yt,
+        width: obj.qq,
+        height: obj.pq,
+        borderColor: rgb(1, 0, 0),
+        borderWidth: 1.5,
+      })
+     }
+    })
+    
+  
+    const pdfBytes = await pdfDoc.save()
+    
+    // const documentStream = await docViewer.getDocument().getFileData({});
+    // const documentBlob = new Blob([documentStream], { type: 'application/pdf' });
+    // window.open(URL.createObjectURL(documentBlob))
+    // //const fileArray = await documentBlob.arrayBuffer();
+    const file  =  new File([pdfBytes], "test.pdf");
+    // // Get the resulting blob from the merge operation
+     let url = 'home/auto/save';  
+     const formData = new FormData();
+    formData.append('file',  file);
+    // trigger a download for the user!
+    this.httpService.fileupload(url, formData, null, null).subscribe(res => {
+      
+    })
+  }
 }
 
 
