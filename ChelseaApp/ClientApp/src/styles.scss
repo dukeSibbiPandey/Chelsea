@@ -376,3 +376,7 @@ a {
     width: 100%;
     border: 1px solid #dbdcdf!important;
 }
+
+.Button.active:not(.disable){
+    background: none!important;
+}
