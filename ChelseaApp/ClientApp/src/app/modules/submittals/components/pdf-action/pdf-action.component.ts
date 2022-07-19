@@ -11,17 +11,16 @@ export class PdfActionComponent implements OnInit {
   @ViewChild('viewer', { static: false }) viewer: ElementRef;
   @Input() previewUrl: any = "";
   wvInstance: any;
+  currentIndex = 0;
   constructor(private httpService: HttpService) { }
   ngOnInit() {
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
   }
-  handleClick=()=>{
-    debugger
+  handleClick = () => {
     console.log(this.wvInstance)
   }
 
   initialDocker = () => {
-    debugger
     WebViewer({
       path: '../lib',
       initialDoc: this.previewUrl
@@ -29,7 +28,7 @@ export class PdfActionComponent implements OnInit {
       this.wvInstance = instance;
       instance.setFitMode('FitWidth')
       instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
-      instance.disableElements(['menuButton', 'searchButton', 'miscToolGroupButton', 'signatureToolButton', 'eraserToolButton', 'selectToolButton', 'panToolButton', 'viewControlsButton', 'outlinesPanelButton', 'notesPanelButton']);
+      instance.disableElements(['menuButton', 'searchButton', 'miscToolGroupButton', 'signatureToolButton', 'eraserToolButton', 'selectToolButton', 'panToolButton', 'viewControlsButton', 'outlinesPanelButton', 'notesPanelButton', 'zoomOutButton', 'zoomInButton', 'zoomOverlayButton', 'freeHandToolGroupButton', 'textToolGroupButton', 'stickyToolButton']);
       instance.openElements(['notesPanel']);
       // now you can access APIs through this.webviewer.getInstance()
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
@@ -37,14 +36,27 @@ export class PdfActionComponent implements OnInit {
       // or listen to events from the viewer element
       this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
         const [pageNumber] = e.detail;
+        debugger
         console.log(`Current page is ${pageNumber}`);
       });
       instance.docViewer.on('annotationsLoaded', () => {
         console.log('annotations loaded');
       });
 
-      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)      
+      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
     })
+  }
+  updatePager = (docViewer: any) => {
+    debugger
+    setTimeout(() => {
+      let currentPage = docViewer.getCurrentPage();
+      let TotalPageNumber = docViewer.getPageCount();
+      let pager = document.getElementById('pager');
+      if (pager) {
+        pager.innerHTML = `Page ${currentPage}/${TotalPageNumber}`;
+      }
+    }, 10000);
+
   }
   customReduIcon = (docViewer) => {
     const icon = {
@@ -77,23 +89,116 @@ export class PdfActionComponent implements OnInit {
     }
     return icon
   }
+
+  customPagerFirst = (docViewer) => {
+    const icon = {
+      type: 'actionButton',
+      id: 'undo-button',
+      img: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+          d="M5.825 18.675C5.54166 18.675 5.30416 18.5792 5.1125 18.3875C4.92083 18.1958 4.825 17.9583 4.825 17.675V6.32501C4.825 6.04168 4.92083 5.80418 5.1125 5.61251C5.30416 5.42085 5.54166 5.32501 5.825 5.32501C6.10833 5.32501 6.34583 5.42085 6.5375 5.61251C6.72916 5.80418 6.825 6.04168 6.825 6.32501V17.675C6.825 17.9583 6.72916 18.1958 6.5375 18.3875C6.34583 18.5792 6.10833 18.675 5.825 18.675ZM17.6 17.575L10.725 12.825C10.4083 12.625 10.25 12.35 10.25 12C10.25 11.65 10.4083 11.375 10.725 11.175L17.6 6.42501C17.9333 6.17501 18.2792 6.14585 18.6375 6.33751C18.9958 6.52918 19.175 6.82501 19.175 7.22501V16.775C19.175 17.175 18.9958 17.4667 18.6375 17.65C18.2792 17.8333 17.9333 17.8083 17.6 17.575Z"
+          fill="#333333" />
+      </svg>`,
+      onClick: () => {
+        docViewer.setCurrentPage(1);
+        this.updatePager(docViewer)
+      },
+      dataElement: 'first',
+    }
+    return icon
+  }
+  customPagerPrev = (docViewer) => {
+    const icon = {
+      type: 'actionButton',
+      id: 'undo-button',
+      img: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="16" fill="white" />
+      <path
+          d="M19.325 21.625C19.5083 21.4084 19.6042 21.1667 19.6125 20.9C19.6208 20.6334 19.525 20.4 19.325 20.2L15.1 15.975L19.35 11.725C19.5333 11.5417 19.6208 11.3042 19.6125 11.0125C19.6042 10.7209 19.5083 10.4834 19.325 10.3C19.1083 10.0834 18.8708 9.97919 18.6125 9.98752C18.3542 9.99586 18.125 10.1 17.925 10.3L12.95 15.275C12.85 15.375 12.775 15.4834 12.725 15.6C12.675 15.7167 12.65 15.8417 12.65 15.975C12.65 16.1084 12.675 16.2334 12.725 16.35C12.775 16.4667 12.85 16.575 12.95 16.675L17.9 21.625C18.1 21.825 18.3333 21.9209 18.6 21.9125C18.8667 21.9042 19.1083 21.8084 19.325 21.625Z"
+          fill="#333333" />
+  </svg>`,
+      onClick: () => {
+        let currentPage = docViewer.getCurrentPage();
+        if (currentPage > 1) {
+          docViewer.setCurrentPage(currentPage - 1);
+          this.updatePager(docViewer)
+        }
+      },
+      dataElement: 'undo',
+    }
+    return icon
+  }
+
+  customPagerNext = (docViewer) => {
+    const icon = {
+      type: 'actionButton',
+      id: 'undo-button',
+      img: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="16" fill="white" />
+      <path
+          d="M12.675 21.625C12.4917 21.4084 12.3958 21.1667 12.3875 20.9C12.3792 20.6334 12.475 20.4 12.675 20.2L16.9 15.975L12.65 11.725C12.4667 11.5417 12.3792 11.3042 12.3875 11.0125C12.3958 10.7209 12.4917 10.4834 12.675 10.3C12.8917 10.0834 13.1292 9.97919 13.3875 9.98752C13.6458 9.99586 13.875 10.1 14.075 10.3L19.05 15.275C19.15 15.375 19.225 15.4834 19.275 15.6C19.325 15.7167 19.35 15.8417 19.35 15.975C19.35 16.1084 19.325 16.2334 19.275 16.35C19.225 16.4667 19.15 16.575 19.05 16.675L14.1 21.625C13.9 21.825 13.6667 21.9209 13.4 21.9125C13.1333 21.9042 12.8917 21.8084 12.675 21.625Z"
+          fill="#333333" />
+  </svg>`,
+      onClick: () => {
+        let currentPage = docViewer.getCurrentPage();
+        let TotalPageNumber = docViewer.getPageCount();
+        if (currentPage != TotalPageNumber) {
+          docViewer.setCurrentPage(currentPage + 1);
+          this.updatePager(docViewer)
+        }
+      },
+      dataElement: 'undo',
+    }
+    return icon
+  }
+  customPagerlast = (docViewer) => {
+    const icon = {
+      type: 'actionButton',
+      id: 'undo-button',
+      img: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="16" fill="white" />
+      <path
+          d="M22.175 22.675C21.8917 22.675 21.6542 22.5792 21.4625 22.3875C21.2708 22.1958 21.175 21.9583 21.175 21.675V10.325C21.175 10.0417 21.2708 9.80418 21.4625 9.61251C21.6542 9.42085 21.8917 9.32501 22.175 9.32501C22.4583 9.32501 22.6958 9.42085 22.8875 9.61251C23.0792 9.80418 23.175 10.0417 23.175 10.325V21.675C23.175 21.9583 23.0792 22.1958 22.8875 22.3875C22.6958 22.5792 22.4583 22.675 22.175 22.675ZM10.4 21.575C10.0667 21.8083 9.72083 21.8333 9.3625 21.65C9.00416 21.4667 8.825 21.175 8.825 20.775V11.225C8.825 10.825 9.00416 10.5292 9.3625 10.3375C9.72083 10.1458 10.0667 10.175 10.4 10.425L17.275 15.175C17.5917 15.375 17.75 15.65 17.75 16C17.75 16.35 17.5917 16.625 17.275 16.825L10.4 21.575Z"
+          fill="#333333" />
+  </svg>`,
+      onClick: () => {
+        debugger
+        let TotalPageNumber = docViewer.getPageCount();
+        docViewer.setCurrentPage(TotalPageNumber);
+        this.updatePager(docViewer)
+      },
+      dataElement: 'undo',
+    }
+    return icon
+  }
   wvDocumentLoadedHandler(): void {
     // you can access docViewer object for low-level APIs
     const { docViewer } = this.wvInstance;
     const reduIcon = this.customReduIcon(docViewer);
     const unduIcon = this.customUnduIcon(docViewer);
+    const customPagerFirst = this.customPagerFirst(docViewer);
+    const customPagerPrev = this.customPagerPrev(docViewer);
+    const customPagerNext = this.customPagerNext(docViewer);
+    const customPagerlast = this.customPagerlast(docViewer);
     this.wvInstance.setHeaderItems((header) => {
       header.push(reduIcon);
       header.push(unduIcon);
+      header.push(customPagerFirst);
+      header.push(customPagerPrev);
+      header.push(customPagerNext);
+      header.push(customPagerlast);
     })
     let currentPage = docViewer.getCurrentPage();
     let TotalPageNumber = docViewer.getPageCount();
-    this.wvInstance.setHeaderItems(function (header) {
+    this.wvInstance.setHeaderItems((header) => {
       var items = header.getItems();
       items.push({
         type: 'customElement',
         title: 'Page',
-        render: function () {
+        render: () => {
+          let pager: any = document.createElement('span');
+          pager.id = 'pager';
+          pager.innerHTML = `Page ${this.currentIndex}/${TotalPageNumber}`;
           let slider: any = document.createElement('input');
           slider.type = 'text';
           slider.value = currentPage;
@@ -103,7 +208,6 @@ export class PdfActionComponent implements OnInit {
             console.log('---oninput---');
           };
           slider.addEventListener("focusout", function (event) {
-            console.log('---onfocusout---');
             if (slider.value == '' || (slider.value > TotalPageNumber) || (slider.value != docViewer.getCurrentPage())) {
               slider.value = docViewer.getCurrentPage();
             }
@@ -123,13 +227,14 @@ export class PdfActionComponent implements OnInit {
           pageNum.type = 'text';
           pageNum.value = " /  " + TotalPageNumber;
           pageNum.tabindex = "-1";
-          pageNum.class='go_to_index  '
+          pageNum.class = 'go_to_index  '
           pageNum.style = "width: 30px; border:none; font-size: medium; margin-top: -1px;background-color: white;";
           pageNum.disabled = true;
           var form: any = document.createElement('div');
           form.style = "display: flex; border-radius: 10px;padding: 10px;cursor: pointer;";
-          form.appendChild(slider);
-          form.appendChild(pageNum);
+          form.appendChild(pager);
+          // form.appendChild(slider);
+          // form.appendChild(pageNum);
           return form;
         }
 
@@ -140,62 +245,50 @@ export class PdfActionComponent implements OnInit {
     });
   }
 
-  handleSaveAction=async ()=>{
+  handleSaveAction = async () => {
     const { docViewer, annotManager, annotations } = this.wvInstance;
-
-    debugger;
-
     const annotationList = annotManager.getAnnotationsList();
-
     const existingPdfBytes = await fetch(this.previewUrl).then(res => res.arrayBuffer())
-
     const pdfDoc = await PDFDocument.load(existingPdfBytes)
     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
-  
     const pages = pdfDoc.getPages()
     const firstPage = pages[0]
     const { width, height } = firstPage.getSize()
-    annotationList.forEach(function(obj){
-      if(obj.ToolName=="AnnotationCreateFreeTextswqwd")
-      {
+    annotationList.forEach(function (obj) {
+      if (obj.ToolName == "AnnotationCreateFreeTextswqwd") {
         firstPage.drawText(obj.HY, {
           x: obj.Xt,
-          y: height-obj.Yt,
+          y: height - obj.Yt,
           size: parseInt(obj.OE.replace('pt', '')),
           font: helveticaFont,
           color: rgb(1, 0, 0),//rgb(obj.jk.R, obj.jk.G, obj.jk.B),
           rotate: degrees(-45),
         })
-     }else if(obj.ToolName=="AnnotationCreateRectangle")
-     {
-      firstPage.drawRectangle({
-        x: obj.Xt,
-        y: height-obj.Yt,
-        width: obj.qq,
-        height: obj.pq,
-        borderColor: rgb(1, 0, 0),
-        borderWidth: 1.5,
-      })
-     }
+      } else if (obj.ToolName == "AnnotationCreateRectangle") {
+        firstPage.drawRectangle({
+          x: obj.Xt,
+          y: height - obj.Yt,
+          width: obj.qq,
+          height: obj.pq,
+          borderColor: rgb(1, 0, 0),
+          borderWidth: 1.5,
+        })
+      }
     })
-    
-  
+
+
     const pdfBytes = await pdfDoc.save()
-    
     // const documentStream = await docViewer.getDocument().getFileData({});
     // const documentBlob = new Blob([documentStream], { type: 'application/pdf' });
     // window.open(URL.createObjectURL(documentBlob))
     // //const fileArray = await documentBlob.arrayBuffer();
-    const file  =  new File([pdfBytes], "test.pdf");
+    const file = new File([pdfBytes], "test.pdf");
     // // Get the resulting blob from the merge operation
-     let url = 'home/auto/save';  
-     const formData = new FormData();
-    formData.append('file',  file);
+    let url = 'home/auto/save';
+    const formData = new FormData();
+    formData.append('file', file);
     // trigger a download for the user!
     this.httpService.fileupload(url, formData, null, null).subscribe(res => {
-      
     })
   }
 }
-
-
