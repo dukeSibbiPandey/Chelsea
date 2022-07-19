@@ -36,7 +36,7 @@ export class SubmittalsFormStep2Component implements OnInit {
       dim: '',
       runs: '',
       files: [
-        
+
       ],
       isOpen: true
     }
@@ -44,16 +44,20 @@ export class SubmittalsFormStep2Component implements OnInit {
   constructor(private route: ActivatedRoute, private httpService: HttpService, private router: Router) { }
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
-    this.updateOldState();
     this.getSubmittalData(this.id);
   }
   updateOldState = () => {
     this.tempSubmittalsTpl = JSON.parse(JSON.stringify(this.submittalsTpl))
   }
   getSubmittalData(id: any) {
-    this.httpService.get("Home/submittal/get/" + id + "").toPromise().then(value => {
+    this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
+      if (value.pdfFiles) {
+        value.pdfFiles[0].isOpen = true
+      }
+      this.submittalsTpl = value.pdfFiles;
+      this.updateOldState();
       this.submittalData = value;
-    });
+    })
   }
   selectAddress = (index: any) => {
     this.activeAddressInde = index;
@@ -75,10 +79,6 @@ export class SubmittalsFormStep2Component implements OnInit {
   removePdfOption = (res: any) => {
     this.submittalsTpl[res.submittalIndex]['files'].splice(res.itemIndex, 1)
     this.updateOldState();
-    // this.submittalsTpl.splice(idx, 1);
-    // for (let i = 0; i < this.submittalsTpl.length; i++) {
-    //   this.submittalsTpl[i].name = "F" + (i + 1);
-    // }
   }
 
   toggleCallbackHandler = (res: any) => {
@@ -86,8 +86,6 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.updateOldState();
   }
   removeSubmittals = (res: any) => {
-    // const ids = res.selectedIndex;
-    // this.submittalsTpl[res.itmindex]['files'] = this.submittalsTpl[res.itmindex]['files'].filter((object: any, index: number) => !ids.includes(index));
     this.submittalsTpl.splice(res.idx, 1);
   }
   duplicateSubmittals = (res: any) => {

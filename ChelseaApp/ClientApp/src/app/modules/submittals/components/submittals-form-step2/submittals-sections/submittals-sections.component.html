@@ -11,51 +11,6 @@
         </div>
         <div class="__right">
             <ul class="flex">
-                <!-- <li>
-                    <div class="dropdown __custom_dropdown">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="16" cy="16" r="16" transform="rotate(90 16 16)" fill="#EEEEEE" />
-                            <path
-                                d="M8.87502 17.35C8.50836 17.35 8.19169 17.2167 7.92502 16.95C7.65836 16.6834 7.52502 16.3667 7.52502 16C7.52502 15.6167 7.65836 15.2959 7.92502 15.0375C8.19169 14.7792 8.50836 14.65 8.87502 14.65C9.24169 14.65 9.56252 14.7792 9.83752 15.0375C10.1125 15.2959 10.25 15.6167 10.25 16C10.25 16.3667 10.1125 16.6834 9.83752 16.95C9.56252 17.2167 9.24169 17.35 8.87502 17.35ZM16 17.35C15.6334 17.35 15.3167 17.2167 15.05 16.95C14.7834 16.6834 14.65 16.3667 14.65 16C14.65 15.6167 14.7834 15.2959 15.05 15.0375C15.3167 14.7792 15.6334 14.65 16 14.65C16.3834 14.65 16.7042 14.7792 16.9625 15.0375C17.2209 15.2959 17.35 15.6167 17.35 16C17.35 16.3667 17.2209 16.6834 16.9625 16.95C16.7042 17.2167 16.3834 17.35 16 17.35ZM23.125 17.35C22.7417 17.35 22.4167 17.2167 22.15 16.95C21.8834 16.6834 21.75 16.3667 21.75 16C21.75 15.6167 21.8834 15.2959 22.15 15.0375C22.4167 14.7792 22.7417 14.65 23.125 14.65C23.5084 14.65 23.8334 14.7792 24.1 15.0375C24.3667 15.2959 24.5 15.6167 24.5 16C24.5 16.3667 24.3667 16.6834 24.1 16.95C23.8334 17.2167 23.5084 17.35 23.125 17.35Z"
-                                fill="#333333" />
-                        </svg>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li class="list_icon">
-                                <a class="dropdown-item" href="javascript:void(0)" (click)="handleDuplicate(submittal)">
-                                    <div class="icon_block">
-                                        <i class="fa fa-clone" aria-hidden="true"></i>
-                                    </div>
-                                    Duplicate
-                                </a>
-                            </li>
-                            <li class="list_icon">
-                                <a class="dropdown-item" href="javascript:void(0)"
-                                    (click)="handleRemoveSelectedSubmittal()">
-                                    <div class="icon_block">
-                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                    </div>
-                                    Delete
-                                </a>
-                            </li>
-                            <li class="list_icon" *ngIf="itmindex !== '0'">
-                                <a class="dropdown-item" href="javascript:void(0)" (click)="handleMove('up')">
-                                    <div class="icon_block">
-                                        <i class="fa fa-angle-up" aria-hidden="true"></i>
-                                    </div>
-                                    Move Up
-                                </a>
-                            </li>
-                            <li class="list_icon" *ngIf="itmindex !== totalSubmittals">
-                                <a class="dropdown-item" href="javascript:void(0)" (click)="handleMove('down')">
-                                    <div class="icon_block">
-                                        <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                    </div>
-                                    Move Down
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li> -->
                 <li>
                     <button class="btn __btn __default flex v_center">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -193,8 +148,7 @@
                             <div class="__overlay">
                                 <div class="_top_b flex v_center space_between">
                                     <div class="field-checkbox">
-                                        <!-- <p-checkbox name="group1" value="yes" [(ngModel)]="item.isSelected" (onChange)="handleSelectTiles()">
-                                        </p-checkbox> -->
+
                                     </div>
                                     <ul class="flex">
                                         <li (click)="handleDelete(i)">
@@ -208,23 +162,14 @@
                                             </svg>
                                         </li>
                                         <li class="_ml_10" (click)="handleActionEdit('right')">
-                                            <svg style="background: white; border-radius:100%; width:32px; height:32px; padding:4px" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <svg style="background: white; border-radius:100%; width:32px; height:32px; padding:4px"
+                                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
                                                 <path
                                                     d="M19.9 7.47513L16.625 4.20013L17.625 3.20013C17.9417 2.88346 18.3292 2.72929 18.7875 2.73763C19.2459 2.74596 19.6417 2.90846 19.975 3.22513L20.925 4.15013C21.2584 4.48346 21.4125 4.87512 21.3876 5.32512C21.3626 5.77513 21.1917 6.15846 20.875 6.47513L19.9 7.47513ZM3.92505 21.1751C3.64172 21.1751 3.40422 21.0793 3.21255 20.8876C3.02088 20.696 2.92505 20.4585 2.92505 20.1751V18.3001C2.92505 18.1835 2.95005 18.0668 3.00005 17.9501C3.05005 17.8335 3.12505 17.7251 3.22505 17.6251L15.575 5.25013L18.85 8.50013L6.50005 20.8751C6.38338 20.9751 6.26672 21.0501 6.15005 21.1001C6.03338 21.1501 5.90838 21.1751 5.77505 21.1751H3.92505Z"
                                                     fill="#333333" />
                                             </svg>
                                         </li>
-                                        <!-- <li class="_ml_10" (click)="handleCopySubmittalItem(item)">
-                                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="16" cy="16" r="16" transform="rotate(90 16 16)"
-                                                    fill="#EEEEEE" />
-                                                <path
-                                                    d="M11.8749 23.1C11.3249 23.1 10.8541 22.9042 10.4624 22.5125C10.0707 22.1208 9.8749 21.65 9.8749 21.1V7.35C9.8749 6.81667 10.0707 6.35417 10.4624 5.9625C10.8541 5.57083 11.3249 5.375 11.8749 5.375H22.6249C23.1582 5.375 23.6207 5.57083 24.0124 5.9625C24.4041 6.35417 24.5999 6.81667 24.5999 7.35V21.1C24.5999 21.65 24.4041 22.1208 24.0124 22.5125C23.6207 22.9042 23.1582 23.1 22.6249 23.1H11.8749ZM11.8749 21.1H22.6249V7.35H11.8749V21.1ZM8.3749 26.575C7.84157 26.575 7.37907 26.3792 6.9874 25.9875C6.59574 25.5958 6.3999 25.1333 6.3999 24.6V10.625C6.3999 10.3583 6.49574 10.1292 6.6874 9.9375C6.87907 9.74583 7.11657 9.65 7.3999 9.65C7.68324 9.65 7.91657 9.74583 8.0999 9.9375C8.28324 10.1292 8.3749 10.3583 8.3749 10.625V24.6H19.1249C19.3916 24.6 19.6207 24.6958 19.8124 24.8875C20.0041 25.0792 20.0999 25.3167 20.0999 25.6C20.0999 25.8833 20.0041 26.1167 19.8124 26.3C19.6207 26.4833 19.3916 26.575 19.1249 26.575H8.3749ZM11.8749 7.35V21.1V7.35Z"
-                                                    fill="#333333" />
-                                            </svg>
-
-                                        </li> -->
                                         <li class="_ml_10">
                                             <svg (click)="handleMoveItem(i, 'left')" class="rotate_180" width="32"
                                                 height="32" viewBox="0 0 32 32" fill="none"
@@ -260,7 +205,9 @@
                                     View
                                 </button>
                             </div>
-                            <img src="{{item.thumbnail}}" onError="this.src='../../../../../../assets/images/placeholder.png'" alt="" class="img-responsive template_img">
+                            <img src="{{item.thumbnail}}"
+                                onError="this.src='../../../../../../assets/images/placeholder.png'" alt=""
+                                class="img-responsive template_img">
                         </div>
                         <p>{{item.orgFileName}}</p>
                         <p class="__size" *ngIf="item.fileSize">{{niceBytes(item.fileSize)}}</p>
