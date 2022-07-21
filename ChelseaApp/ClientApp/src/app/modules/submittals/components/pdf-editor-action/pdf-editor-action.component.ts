@@ -19,6 +19,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.params['id'];
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
+    this.updatePagnation = this.updatePagnation.bind(this);
   }
   ngAfterViewInit(): void {
     this.previewUrl = this.activatedRoute.snapshot.paramMap.get('url');
@@ -61,7 +62,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       instance.openElements(['notesPanel']);
       const ToolNames = this.wvInstance.Tools.ToolNames;
       this.wvInstance.setColorPalette({
-        toolNames: [ToolNames['TEXT'], ToolNames['FREETEXT'], ToolNames['LINE'], ToolNames['RECTANGLE'], ToolNames['FREEHAND']],
+        toolNames: [ToolNames['TEXT'], ToolNames['FREETEXT'], ToolNames['LINE'], ToolNames['RECTANGLE'], ToolNames['FREEHAND'], ToolNames['HIGHLIGHT']],
         colors: [
           '#FF0000',
           '#0000FF',
@@ -76,6 +77,8 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       this.viewer1.nativeElement.addEventListener('pageChanged', (e) => {
         const [pageNumber] = e.detail;
         console.log(`Current page is ${pageNumber}`);
+        this.updatePagnation(instance)
+        
       });
       instance.docViewer.on('annotationsLoaded', () => {
         console.log('annotations loaded');
@@ -83,6 +86,12 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
       instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
     })
+  }
+  updatePagnation=(instance)=>{
+    instance.docViewer.on('documentLoaded', () => {
+      console.log('annotations loadeddfdfdfd');
+    });
+    
   }
   updatePager = (docViewer: any) => {
     setTimeout(() => {
