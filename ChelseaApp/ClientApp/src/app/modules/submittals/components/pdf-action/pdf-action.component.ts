@@ -125,14 +125,7 @@ export class PdfActionComponent implements OnInit {
     let TotalPageNumber = docViewer.getPageCount();
     return `Page ${currentPage}/${TotalPageNumber}`
   }
-
-
-
-
-
-  setPaginator = () => {
-
-  }
+  
   wvDocumentLoadedHandler(): void {
     // you can access docViewer object for low-level APIs
     const { docViewer } = this.wvInstance;
