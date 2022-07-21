@@ -24,7 +24,8 @@ export class PdfActionComponent implements OnInit {
   initialDocker = () => {
     WebViewer({
       path: '../lib',
-      initialDoc: this.previewUrl
+      initialDoc: this.previewUrl,
+      licenseKey: 'irld89CMAcwPvMz4SJzz',
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
       instance.setFitMode('FitWidth')
@@ -66,6 +67,9 @@ export class PdfActionComponent implements OnInit {
       });
       this.wvInstance.updateTool(ToolNames['FREEHAND'], {
         buttonImage: this._SubmittalService.FREEHAND_ICON()
+      });
+      this.wvInstance.updateTool(ToolNames['FREETEXT'], {
+        buttonImage: this._SubmittalService.FREETEXT_ICON()
       });
       this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
         const [pageNumber] = e.detail;
