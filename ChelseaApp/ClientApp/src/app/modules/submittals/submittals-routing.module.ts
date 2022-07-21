@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MergeSubmittalsComponent } from './components/merge-submittals/merge-submittals.component';
+import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-editor-action.component';
 import { SubmittalsFormComponent } from './components/submittals-form/submittals-form.component';
 import { SubmittalsComponent } from './components/submittals-list/submittals-list.component';
 import { SubmittalsPreviewComponent } from './components/submittals-preview/submittals-preview.component';
@@ -18,6 +19,9 @@ const routes: Routes = [
       },
       {
         path: 'form/:action/:id/step/:step', component: SubmittalsFormComponent
+      },
+      {
+        path: 'pdf-edit/:id', component: PdfEditorActionComponent, data: { previewUrl: "" }
       },
       {
         path: 'preview/:id', component: SubmittalsPreviewComponent

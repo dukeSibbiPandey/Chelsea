@@ -1,4 +1,5 @@
 import { Component, Input, Output, OnInit, EventEmitter, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { HttpService } from 'src/app/components/http.service';
 import { PdfActionComponent } from '../../pdf-action/pdf-action.component';
@@ -12,6 +13,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   @ViewChild(PdfActionComponent, { static: false }) _PdfActionComponent: PdfActionComponent;
   @Input() submittal: any;
   @Input() itmindex = '0';
+  @Input() id = '0';
   @Input() totalSubmittals = '0';
   @Output() removeFn = new EventEmitter();
   @Output() uploadSubmittalsCallback: EventEmitter<any> = new EventEmitter();
@@ -28,7 +30,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   isPreviewDialog = false;
   previewUrl: any = '';
   pdfActionTitle = '';
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService, private router: Router) { }
 
   ngOnInit(): void {
     this.items = [
@@ -42,7 +44,6 @@ export class SubmittalsSectionsComponent implements OnInit {
     this.isEdit = value
   }
   handleDelete(index: number) {
-    console.log("chaild delete called");
     let res = {
       submittalIndex: this.itmindex,
       itemIndex: index
@@ -163,14 +164,15 @@ export class SubmittalsSectionsComponent implements OnInit {
     this.isPreviewDialog = true;
   }
   handleActionEdit = (position: string) => {
-    this.position = position;
     this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + this.submittal['files'][this.itmindex]['fileName'] + "";
-    this.pdfActionTitle = 'Edit PDF';
-    this.isPreviewDialog = true;
-    setTimeout(() => {
-      this._PdfActionComponent.initialDocker();
-    }, 200)
-    this.isPreviewDialog = true;
+    this.router.navigate([`/submittals/pdf-edit/${this.id}`, { url: this.previewUrl }]);
+    // this.position = position;
+    // this.pdfActionTitle = 'Edit PDF';
+    // this.isPreviewDialog = true;  
+    // setTimeout(() => {
+    //   this._PdfActionComponent.initialDocker();
+    // }, 200)
+    // this.isPreviewDialog = true;
 
   }
 

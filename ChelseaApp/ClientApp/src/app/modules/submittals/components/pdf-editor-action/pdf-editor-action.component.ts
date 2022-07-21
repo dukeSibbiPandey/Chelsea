@@ -1,32 +1,32 @@
-import { Component, ViewChild, OnInit, ElementRef, Input } from '@angular/core';
+import { Component, ViewChild, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import WebViewer from '@pdftron/pdfjs-express';
 import { HttpService } from 'src/app/components/http.service';
-import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib'
 import { SubmittalService } from '../../submittal.service';
+import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib'
+
 @Component({
-  selector: 'app-pdf-action',
-  templateUrl: './pdf-action.component.html',
-  styleUrls: ['./pdf-action.component.scss']
+  selector: 'app-pdf-editor-action',
+  templateUrl: './pdf-editor-action.component.html',
+  styleUrls: ['./pdf-editor-action.component.scss']
 })
-export class PdfActionComponent implements OnInit {
-  @ViewChild('viewer', { static: true }) viewer: ElementRef;
-  @Input() previewUrl: any = "";
+export class PdfEditorActionComponent implements OnInit, AfterViewInit {
+  @ViewChild('viewer1', { static: false }) viewer1: ElementRef;
+  previewUrl: any;
   wvInstance: any;
-  currentIndex = 0;
-  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService) { }
+  id: any
+  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router) { }
   ngOnInit() {
+    this.id = this.activatedRoute.snapshot.params['id'];
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
   }
-  handleClick = () => {
-    console.log(this.wvInstance)
-  }
-
-  initialDocker = () => {
+  ngAfterViewInit(): void {
+    this.previewUrl = this.activatedRoute.snapshot.paramMap.get('url');
     WebViewer({
       path: '../lib',
       initialDoc: this.previewUrl,
       licenseKey: 'irld89CMAcwPvMz4SJzz',
-    }, this.viewer.nativeElement).then(instance => {
+    }, this.viewer1.nativeElement).then(instance => {
       this.wvInstance = instance;
       instance.setFitMode('FitWidth')
       instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
@@ -73,7 +73,7 @@ export class PdfActionComponent implements OnInit {
       // this.wvInstance.updateTool(ToolNames['FREETEXT'], {
       //   buttonImage: this._SubmittalService.FREETEXT_ICON()
       // });
-      this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
+      this.viewer1.nativeElement.addEventListener('pageChanged', (e) => {
         const [pageNumber] = e.detail;
         console.log(`Current page is ${pageNumber}`);
       });
@@ -125,7 +125,6 @@ export class PdfActionComponent implements OnInit {
     let TotalPageNumber = docViewer.getPageCount();
     return `Page ${currentPage}/${TotalPageNumber}`
   }
-
   wvDocumentLoadedHandler(): void {
     // you can access docViewer object for low-level APIs
     const { docViewer } = this.wvInstance;
@@ -214,6 +213,7 @@ export class PdfActionComponent implements OnInit {
     });
   }
 
+
   handleSaveAction = async () => {
     const { docViewer, annotManager, annotations } = this.wvInstance;
     const annotationList = annotManager.getAnnotationsList();
@@ -259,5 +259,8 @@ export class PdfActionComponent implements OnInit {
     // trigger a download for the user!
     this.httpService.fileupload(url, formData, null, null).subscribe(res => {
     })
+  }
+  handleBack = () => {
+    this.router.navigate([`/submittals/form/add/${this.id}/step/2`]);
   }
 }
