@@ -1,11 +1,15 @@
 <div class="container">
+    <button type="button" class="btn __btn __default" (click)="handleBack()">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+    </button>
+    <br> <br>
     <div class="preview_page_wrapper">
         <div class="__preview_content">
             <div>
                 <pdf-viewer [src]="pageUrl" [rotation]="0" [original-size]="false" [show-all]="true"
                     [fit-to-page]="false" [zoom]="1" [zoom-scale]="'page-width'" [stick-to-page]="false"
                     [render-text]="true" [external-link-target]="'blank'" [autoresize]="true" [show-borders]="false"
-                    style="width: 100%; height: 600px; overflow-x: hidden;">
+                    style="width: 100%; height: 82vh; overflow-x: hidden;">
                 </pdf-viewer>
             </div>
         </div>

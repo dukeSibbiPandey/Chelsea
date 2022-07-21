@@ -172,7 +172,6 @@ export class SubmittalsFormStep2Component implements OnInit {
       pdfFiles: temp
     }
     this.httpService.post("home/files/merge", postDto).toPromise().then(value => {
-      localStorage.setItem('pdfRes', JSON.stringify(value))
       this.postAjax()
     });
   }
