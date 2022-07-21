@@ -30,12 +30,7 @@ export class PdfActionComponent implements OnInit {
       instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
       instance.disableElements(['menuButton', 'searchButton', 'miscToolGroupButton', 'signatureToolButton', 'eraserToolButton', 'selectToolButton', 'panToolButton', 'viewControlsButton', 'outlinesPanelButton', 'notesPanelButton', 'zoomOutButton', 'zoomInButton', 'zoomOverlayButton', 'freeHandToolGroupButton', 'textToolGroupButton', 'stickyToolButton', 'ellipseToolButton', 'arrowToolButton', 'polylineToolButton', 'polygonToolButton', 'cloudToolButton']);
       instance.openElements(['notesPanel']);
-      // now you can access APIs through this.webviewer.getInstance()
-      // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
-
-      // or listen to events from the viewer element
       const ToolNames = this.wvInstance.Tools.ToolNames;
-      debugger
       this.wvInstance.setColorPalette({
         toolNames: [ToolNames['FREETEXT'], ToolNames['LINE'], ToolNames['RECTANGLE']],
         colors: [
@@ -51,14 +46,14 @@ export class PdfActionComponent implements OnInit {
             fill="black" />
     </svg>`
       });
-        this.wvInstance.updateTool(ToolNames['LINE'], {
-          buttonImage: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      this.wvInstance.updateTool(ToolNames['LINE'], {
+        buttonImage: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="16" cy="16" r="16" fill="#EEEEEE" />
           <path
               d="M18.25 25.3C18.0167 25.3 17.8167 25.2167 17.65 25.05C17.4833 24.8833 17.4 24.6833 17.4 24.45C17.4 24.2167 17.4833 24.0208 17.65 23.8625C17.8167 23.7042 18.0167 23.625 18.25 23.625C19.2 23.625 20.0042 23.4333 20.6625 23.05C21.3208 22.6667 21.65 22.2167 21.65 21.7C21.65 21.35 21.4125 20.9958 20.9375 20.6375C20.4625 20.2792 19.8083 20 18.975 19.8L20.25 18.5C21.3167 18.8333 22.0958 19.2792 22.5875 19.8375C23.0792 20.3958 23.325 21.0167 23.325 21.7C23.325 22.85 22.8083 23.7375 21.775 24.3625C20.7417 24.9875 19.5667 25.3 18.25 25.3ZM9.70001 17.5C8.56667 17.25 7.76667 16.8708 7.30001 16.3625C6.83334 15.8542 6.60001 15.3167 6.60001 14.75C6.60001 14.15 6.81251 13.6042 7.23751 13.1125C7.66251 12.6208 8.68334 12.1 10.3 11.55C11.3667 11.2 12.0583 10.9 12.375 10.65C12.6917 10.4 12.85 10.1083 12.85 9.77499C12.85 9.39165 12.6708 9.05832 12.3125 8.77499C11.9542 8.49165 11.4083 8.34999 10.675 8.34999C10.2417 8.34999 9.87084 8.40415 9.56251 8.51249C9.25417 8.62082 8.97501 8.79165 8.72501 9.02499C8.57501 9.19165 8.38751 9.28332 8.16251 9.29999C7.93751 9.31665 7.73334 9.25832 7.55001 9.12499C7.35001 8.97499 7.24584 8.78749 7.23751 8.56249C7.22917 8.33749 7.29167 8.14165 7.42501 7.97499C7.72501 7.60832 8.16251 7.29999 8.73751 7.04999C9.31251 6.79999 9.95834 6.67499 10.675 6.67499C11.825 6.67499 12.75 6.95415 13.45 7.51249C14.15 8.07082 14.5 8.82499 14.5 9.77499C14.5 10.525 14.2583 11.1417 13.775 11.625C13.2917 12.1083 12.35 12.5917 10.95 13.075C9.83334 13.475 9.10417 13.7958 8.76251 14.0375C8.42084 14.2792 8.25001 14.5167 8.25001 14.75C8.25001 15.0167 8.47501 15.2667 8.92501 15.5C9.37501 15.7333 10.075 15.9583 11.025 16.175L9.70001 17.5ZM22.75 13.675L19.325 10.25L20.45 9.12499C20.7667 8.80832 21.1292 8.64582 21.5375 8.63749C21.9458 8.62915 22.325 8.79165 22.675 9.12499L23.875 10.325C24.2083 10.675 24.3708 11.0542 24.3625 11.4625C24.3542 11.8708 24.1917 12.2333 23.875 12.55L22.75 13.675ZM8.35001 25.15C8.21667 25.15 8.10001 25.1 8.00001 25C7.90001 24.9 7.85001 24.7833 7.85001 24.65V21.925C7.85001 21.875 7.89167 21.7583 7.97501 21.575L18.125 11.45L21.55 14.875L11.425 25.025C11.4083 25.0417 11.2917 25.0833 11.075 25.15H8.35001Z"
               fill="#333333" />
       </svg>`
-        });
+      });
       this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
         const [pageNumber] = e.detail;
         console.log(`Current page is ${pageNumber}`);
@@ -285,7 +280,7 @@ export class PdfActionComponent implements OnInit {
           y: height - obj.Yt,
           size: parseInt(obj.OE.replace('pt', '')),
           font: helveticaFont,
-          color: rgb(1, 0, 0),//rgb(obj.jk.R, obj.jk.G, obj.jk.B),
+          color: rgb(1, 0, 0),
           rotate: degrees(-45),
         })
       } else if (obj.ToolName == "AnnotationCreateRectangle") {
