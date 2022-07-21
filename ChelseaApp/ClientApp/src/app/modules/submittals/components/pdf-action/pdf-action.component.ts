@@ -54,7 +54,9 @@ export class PdfActionComponent implements OnInit {
         'highlightToolButton4',
         'underlineToolButton',
         'squigglyToolButton',
-        'strikeoutToolButton'
+        'strikeoutToolButton',
+        'outlinesPanelButton',
+        'notesPanelButton'
       ]);
       instance.openElements(['notesPanel']);
       const ToolNames = this.wvInstance.Tools.ToolNames;
