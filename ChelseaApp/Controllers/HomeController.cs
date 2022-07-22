@@ -212,7 +212,7 @@ namespace ChelseaApp.Controllers
                 return this.BadRequest(message);
 
             }
-            return this.Ok(new FileModel { FileName = newFileName, FilePath = pdfPath, FileSize = fileSize, Thumbnail = thumbnail, OrgFileName = orgFileName });
+            return this.CreatedAtAction(HttpStatusCode.InternalServerError.ToString(), new FileModel { FileName = newFileName, FilePath = pdfPath, FileSize = fileSize, Thumbnail = thumbnail, OrgFileName = orgFileName });
         }
 
         [HttpGet("download")]

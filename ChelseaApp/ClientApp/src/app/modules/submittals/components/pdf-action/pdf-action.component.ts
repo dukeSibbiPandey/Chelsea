@@ -270,7 +270,40 @@ export class PdfActionComponent implements OnInit {
   }
 
   handleSaveAction = async () => {
-    const { docViewer, annotManager, annotations } = this.wvInstance;
+    debugger;
+    const { docViewer, annotManager } = this.wvInstance;
+    const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
+    const fileData = await docViewer.getDocument().getFileData({});
+    const blob = new Blob([fileData], {type: 'application/pdf'});
+
+    const data = new FormData();
+    data.append('xfdf', xfdf);
+    data.append('file', blob);
+    data.append('license', "irld89CMAcwPvMz4SJzz");
+
+    // Process the file
+    const response = await fetch('https://api.pdfjs.express/xfdf/merge', {
+      method: 'post',
+      body: data
+    }).then(resp => resp.json());
+
+    const { url, key, id } = response;
+
+    // Download the file
+    const mergedFileBlob = await fetch(url, {
+      headers: {
+        Authorization: key
+      }
+    }).then(resp => resp.blob())
+
+    const formData = new FormData();
+    const submittalObj  = JSON.stringify({submittalId: 1});
+    formData.append('file', mergedFileBlob);
+    formData.append('saveModel', submittalObj);
+    this.httpService.fileupload(url, formData, null, null).subscribe(res => {
+    })
+
+    /*const { docViewer, annotManager, annotations } = this.wvInstance;
     const annotationList = annotManager.getAnnotationsList();
     const existingPdfBytes = await fetch(this.previewUrl).then(res => res.arrayBuffer())
     const pdfDoc = await PDFDocument.load(existingPdfBytes)
@@ -313,6 +346,6 @@ export class PdfActionComponent implements OnInit {
     formData.append('file', file);
     // trigger a download for the user!
     this.httpService.fileupload(url, formData, null, null).subscribe(res => {
-    })
+    })*/
   }
 }
