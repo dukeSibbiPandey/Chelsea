@@ -101,6 +101,12 @@ namespace ChelseaApp.Controllers
         [HttpPost("coverpage/save")]
         public async Task<ActionResult> SaveCoverPage(CoverPageModel coverPage)
         {
+            var isSubmittalExists = await _context.vwSubmittals.AnyAsync(t => t.Submittals == coverPage.Submittals && t.Id != coverPage.Id);
+            if(isSubmittalExists)
+            {
+                return this.Ok("duplicate submittals");
+            }
+
             var dataList = await _context.vwAddress.AsQueryable().Where(t => t.Id == coverPage.AddressId).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<AddressModel>(dataList);
             //var cityObj = await _context.CityMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.City)).FirstOrDefaultAsync();
