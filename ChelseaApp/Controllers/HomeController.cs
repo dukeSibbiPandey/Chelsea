@@ -53,16 +53,21 @@ namespace ChelseaApp.Controllers
 
             int skip = (Convert.ToInt32(pageNumber) - 1)*Convert.ToInt32(pageSize);
             var dataList =  new List<SubmittalList>();
+            int totalCount = 0;
             if (string.IsNullOrEmpty(searchText))
             {
-                dataList = await _context.vwSubmittals.AsQueryable().Where(t => (t.IsTempRecord == null || t.IsTempRecord == false)).OrderBy(t=>t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
+                var dataQuery =  _context.vwSubmittals.AsQueryable().Where(t => (t.IsTempRecord == null || t.IsTempRecord == false));
+                totalCount = dataQuery.Count();
+                dataList = await dataQuery.OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
             }
             else
             {
-                dataList = await _context.vwSubmittals.AsQueryable().Where(t => (t.FileName.ToLower().Contains(searchText.ToLower()) || t.LastName.Contains(searchText)) && (t.IsTempRecord == null || t.IsTempRecord == false)).OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
+                var dataQuery  =  _context.vwSubmittals.AsQueryable().Where(t => (t.FileName.ToLower().Contains(searchText.ToLower()) || t.LastName.Contains(searchText)) && (t.IsTempRecord == null || t.IsTempRecord == false));
+                totalCount = dataQuery.Count();
+                dataList = await dataQuery.OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
             }
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
-            return Ok(modelList);
+            return Ok(new { data = modelList, totalCount = totalCount });
         }
 
         [HttpGet("master/data/{type}")]
