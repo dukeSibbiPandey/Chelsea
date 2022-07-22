@@ -47,10 +47,20 @@ namespace ChelseaApp.Controllers
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
             return Ok(modelList);
         }
-        [HttpGet("submittal/list/{searchText}")]
-        public async Task<ActionResult> Get(string searchText)
+        [HttpGet("submittal/list/{searchText}/{pageNumber}/{pageSize}")]
+        public async Task<ActionResult> Get(string searchText, string pageNumber, string pageSize)
         {
-            var dataList = await _context.vwSubmittals.AsQueryable().Where(t => (t.FileName.Contains(searchText) || t.LastName.Contains(searchText)) && (t.IsTempRecord == null || t.IsTempRecord == false)).ToListAsync();
+
+            int skip = (Convert.ToInt32(pageNumber) - 1)*Convert.ToInt32(pageSize);
+            var dataList =  new List<SubmittalList>();
+            if (string.IsNullOrEmpty(searchText))
+            {
+                dataList = await _context.vwSubmittals.AsQueryable().Where(t => (t.IsTempRecord == null || t.IsTempRecord == false)).OrderBy(t=>t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
+            }
+            else
+            {
+                dataList = await _context.vwSubmittals.AsQueryable().Where(t => (t.FileName.ToLower().Contains(searchText.ToLower()) || t.LastName.Contains(searchText)) && (t.IsTempRecord == null || t.IsTempRecord == false)).OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
+            }
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
             return Ok(modelList);
         }
