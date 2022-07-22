@@ -33,6 +33,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import {TableModule} from 'primeng/table';
 import {InputMaskModule} from 'primeng/inputmask';
 import { PdfActionComponent } from './components/pdf-action/pdf-action.component';
+import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-editor-action.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { PdfActionComponent } from './components/pdf-action/pdf-action.component
     MergeSubmittalsComponent,
     EditHeaderComponent,
     SubmittalsDetailFormComponent,
-    PdfActionComponent
+    PdfActionComponent,
+    PdfEditorActionComponent
   ],
   imports: [
     CommonModule,

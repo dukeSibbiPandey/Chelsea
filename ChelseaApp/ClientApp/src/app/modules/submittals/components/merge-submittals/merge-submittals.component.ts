@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
+import { HttpService } from 'src/app/components/http.service';
 import { EditHeaderComponent } from '../edit-header/edit-header.component';
 import { SubmittalsDetailFormComponent } from '../submittals-detail-form/submittals-detail-form.component';
 
@@ -17,13 +19,22 @@ export class MergeSubmittalsComponent implements OnInit {
   headerDialogtitle = 'Edit Header';
   detailDialogtitle = 'Edit Submittal Details';
   isDetailEditDialog = false;
-  constructor(private primengConfig: PrimeNGConfig) { }
-  entityRes:any
-  pageUrl="";
-  previewUrl=''
+  constructor(private _ActivatedRoute: ActivatedRoute, private httpService: HttpService, private router: Router) { }
+  entityRes: any
+  pageUrl = "";
+  id: any
   ngOnInit(): void {
-    this.entityRes=JSON.parse(localStorage.getItem('pdfRes'));
-    this.pageUrl=this.entityRes.fileUrl
+    this.id = this._ActivatedRoute.snapshot.params['id'];
+    this.getSubmittalData(this.id);
+  }
+  getSubmittalData(id: any) {
+    this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
+      this.pageUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + value.fileName + ""
+      this.entityRes = value;
+    })
+  }
+  handleBack = () => {
+    this.router.navigate([`/submittals/form/add/${this.id}/step/2`]);
   }
   handleEditDialog(value: boolean) {
     this.isEditDialog = value;

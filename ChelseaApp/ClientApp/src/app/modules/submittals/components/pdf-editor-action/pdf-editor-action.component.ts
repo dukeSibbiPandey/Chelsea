@@ -1,32 +1,33 @@
-import { Component, ViewChild, OnInit, ElementRef, Input } from '@angular/core';
+import { Component, ViewChild, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import WebViewer from '@pdftron/pdfjs-express';
 import { HttpService } from 'src/app/components/http.service';
-import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib'
 import { SubmittalService } from '../../submittal.service';
-@Component({
-  selector: 'app-pdf-action',
-  templateUrl: './pdf-action.component.html',
-  styleUrls: ['./pdf-action.component.scss']
-})
-export class PdfActionComponent implements OnInit {
-  @ViewChild('viewer', { static: true }) viewer: ElementRef;
-  @Input() previewUrl: any = "";
-  wvInstance: any;
-  currentIndex = 0;
-  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService) { }
-  ngOnInit() {
-    this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
-  }
-  handleClick = () => {
-    console.log(this.wvInstance)
-  }
+import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib'
 
-  initialDocker = () => {
+@Component({
+  selector: 'app-pdf-editor-action',
+  templateUrl: './pdf-editor-action.component.html',
+  styleUrls: ['./pdf-editor-action.component.scss']
+})
+export class PdfEditorActionComponent implements OnInit, AfterViewInit {
+  @ViewChild('viewer1', { static: false }) viewer1: ElementRef;
+  previewUrl: any;
+  wvInstance: any;
+  id: any
+  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router) { }
+  ngOnInit() {
+    this.id = this.activatedRoute.snapshot.params['id'];
+    this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
+    this.updatePagnation = this.updatePagnation.bind(this);
+  }
+  ngAfterViewInit(): void {
+    this.previewUrl = this.activatedRoute.snapshot.paramMap.get('url');
     WebViewer({
       path: '../lib',
       initialDoc: this.previewUrl,
       licenseKey: 'irld89CMAcwPvMz4SJzz',
-    }, this.viewer.nativeElement).then(instance => {
+    }, this.viewer1.nativeElement).then(instance => {
       this.wvInstance = instance;
       instance.setFitMode('FitWidth')
       instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
@@ -61,7 +62,7 @@ export class PdfActionComponent implements OnInit {
       instance.openElements(['notesPanel']);
       const ToolNames = this.wvInstance.Tools.ToolNames;
       this.wvInstance.setColorPalette({
-        toolNames: [ToolNames['TEXT'], ToolNames['FREETEXT'], ToolNames['LINE'], ToolNames['RECTANGLE'], ToolNames['FREEHAND']],
+        toolNames: [ToolNames['TEXT'], ToolNames['FREETEXT'], ToolNames['LINE'], ToolNames['RECTANGLE'], ToolNames['FREEHAND'], ToolNames['HIGHLIGHT']],
         colors: [
           '#FF0000',
           '#0000FF',
@@ -73,9 +74,11 @@ export class PdfActionComponent implements OnInit {
       // this.wvInstance.updateTool(ToolNames['FREETEXT'], {
       //   buttonImage: this._SubmittalService.FREETEXT_ICON()
       // });
-      this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
+      this.viewer1.nativeElement.addEventListener('pageChanged', (e) => {
         const [pageNumber] = e.detail;
         console.log(`Current page is ${pageNumber}`);
+        this.updatePagnation(instance)
+        
       });
       instance.docViewer.on('annotationsLoaded', () => {
         console.log('annotations loaded');
@@ -83,6 +86,12 @@ export class PdfActionComponent implements OnInit {
 
       instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
     })
+  }
+  updatePagnation=(instance)=>{
+    instance.docViewer.on('documentLoaded', () => {
+      console.log('annotations loadeddfdfdfd');
+    });
+    
   }
   updatePager = (docViewer: any) => {
     setTimeout(() => {
@@ -125,7 +134,6 @@ export class PdfActionComponent implements OnInit {
     let TotalPageNumber = docViewer.getPageCount();
     return `Page ${currentPage}/${TotalPageNumber}`
   }
-
   wvDocumentLoadedHandler(): void {
     // you can access docViewer object for low-level APIs
     const { docViewer } = this.wvInstance;
@@ -214,41 +222,9 @@ export class PdfActionComponent implements OnInit {
     });
   }
 
+
   handleSaveAction = async () => {
-    debugger;
-    const { docViewer, annotManager } = this.wvInstance;
-    const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
-    const fileData = await docViewer.getDocument().getFileData({});
-    const blob = new Blob([fileData], {type: 'application/pdf'});
-
-    const data = new FormData();
-    data.append('xfdf', xfdf);
-    data.append('file', blob);
-    data.append('license', "irld89CMAcwPvMz4SJzz");
-
-    // Process the file
-    const response = await fetch('https://api.pdfjs.express/xfdf/merge', {
-      method: 'post',
-      body: data
-    }).then(resp => resp.json());
-
-    const { url, key, id } = response;
-
-    // Download the file
-    const mergedFileBlob = await fetch(url, {
-      headers: {
-        Authorization: key
-      }
-    }).then(resp => resp.blob())
-
-    const formData = new FormData();
-    const submittalObj  = JSON.stringify({submittalId: 1});
-    formData.append('file', mergedFileBlob);
-    formData.append('saveModel', submittalObj);
-    this.httpService.fileupload(url, formData, null, null).subscribe(res => {
-    })
-
-    /*const { docViewer, annotManager, annotations } = this.wvInstance;
+    const { docViewer, annotManager, annotations } = this.wvInstance;
     const annotationList = annotManager.getAnnotationsList();
     const existingPdfBytes = await fetch(this.previewUrl).then(res => res.arrayBuffer())
     const pdfDoc = await PDFDocument.load(existingPdfBytes)
@@ -291,6 +267,9 @@ export class PdfActionComponent implements OnInit {
     formData.append('file', file);
     // trigger a download for the user!
     this.httpService.fileupload(url, formData, null, null).subscribe(res => {
-    })*/
+    })
+  }
+  handleBack = () => {
+    this.router.navigate([`/submittals/form/add/${this.id}/step/2`]);
   }
 }
