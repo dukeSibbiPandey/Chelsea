@@ -11,7 +11,7 @@ export class SubmittalsComponent implements OnInit {
   isListFetch = false;
   placeholder = 'http://placehold.it/200x200';
   searchText: string = "";
-  limit = 2;
+  pageSize = 2;
   page = 0;
   httpService: HttpService;
   constructor(httpService: HttpService) {
@@ -20,16 +20,17 @@ export class SubmittalsComponent implements OnInit {
   }
 
   bindSubmittalsGrid() {
-    this.httpService.get("Home/submittal/list").toPromise().then(value => {
+    let url = `Home/submittal/list/${this.page}/${this.pageSize}`
+    if (this.searchText) {
+      url = url + `/${this.searchText}`
+    }
+    this.httpService.get(url).toPromise().then(value => {
       this.list = value || [];
       this.isListFetch = true;
     });
   }
   searchList() {
-    this.httpService.get("Home/submittal/list/" + this.searchText).toPromise().then(value => {
-      this.list = value || [];
-      this.isListFetch = true;
-    });
+    this.bindSubmittalsGrid()
   }
 
   ngOnInit(): void {
@@ -46,12 +47,12 @@ export class SubmittalsComponent implements OnInit {
     console.debug(event);
     event.target.src = "../../../../../assets/images/merge-icons/edit.png";
   }
-  niceBytes(x:any){
+  niceBytes(x: any) {
     const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-     let l = 0, n = parseInt(x, 10) || 0;
-     while(n >= 1024 && ++l){
-         n = n/1024;
-     }
-     return(n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
-   }
+    let l = 0, n = parseInt(x, 10) || 0;
+    while (n >= 1024 && ++l) {
+      n = n / 1024;
+    }
+    return (n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
+  }
 }

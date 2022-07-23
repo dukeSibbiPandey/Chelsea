@@ -3,7 +3,7 @@
         <div class="tabie_wrapper">
             <div class="__t_top">
                 <div class="__t_itms" *ngIf="list.length>0">
-                    Showing {{limit}} of {{list.length}} Submittals
+                    Showing {{pageSize}} of {{list.length}} Submittals
                 </div>
                 <div class="__t_itms" *ngIf="list.length==0"></div>
                 <div class="_t_right">
@@ -18,8 +18,8 @@
                 </div>
             </div>
             <div class="__t_content">
-                <p-table [value]="list" [paginator]="list.length>0?true:false" [rows]="2" [showCurrentPageReport]="false"
-                    responsiveLayout="scroll"
+                <p-table [value]="list" [paginator]="list.length>0?true:false" [rows]="2"
+                    [showCurrentPageReport]="false" responsiveLayout="scroll"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                     [rowsPerPageOptions]="[2,25,50]" class="__chelsea_tbl __submittals_table">
                     <ng-template pTemplate="header">
