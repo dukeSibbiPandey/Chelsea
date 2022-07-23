@@ -12,7 +12,7 @@ export class SubmittalsComponent implements OnInit {
   placeholder = 'http://placehold.it/200x200';
   searchText: string = "";
   pageSize = 2;
-  page = 0;
+  page = 1;
   httpService: HttpService;
   constructor(httpService: HttpService) {
     this.httpService = httpService;
@@ -20,12 +20,12 @@ export class SubmittalsComponent implements OnInit {
   }
 
   bindSubmittalsGrid() {
-    let url = `Home/submittal/list/${this.page}/${this.pageSize}`
+    let url = `Home/submittal/all?pageNumber=${this.page}&pageSize=${this.pageSize}`
     if (this.searchText) {
-      url = url + `/${this.searchText}`
+      url = url + `&searchText=${this.searchText}`
     }
     this.httpService.get(url).toPromise().then(value => {
-      this.list = value || [];
+      this.list = value["data"] || [];
       this.isListFetch = true;
     });
   }

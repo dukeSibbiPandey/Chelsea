@@ -28,6 +28,9 @@ export class PdfActionComponent implements OnInit {
       licenseKey: 'irld89CMAcwPvMz4SJzz',
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
+      const { annotManager } = instance; 
+      var xfdfData = localStorage.getItem('annotations');
+      annotManager.importAnnotations(xfdfData).then(importedAnnotations => { });
       instance.setFitMode('FitWidth')
       instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
       instance.disableElements([
@@ -218,6 +221,7 @@ export class PdfActionComponent implements OnInit {
     debugger;
     const { docViewer, annotManager } = this.wvInstance;
     const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
+    localStorage.setItem('annotations', xfdf);
     /*const fileData = await docViewer.getDocument().getFileData({});
     const blob = new Blob([fileData], {type: 'application/pdf'});
 

@@ -34,7 +34,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       initialDoc: this.previewUrl,
       licenseKey: 'irld89CMAcwPvMz4SJzz',
     }, this.viewer1.nativeElement).then(instance => {
-      this.wvInstance = instance;
+      this.wvInstance = instance;      
       instance.setFitMode('FitWidth')
       instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
       instance.disableElements([
@@ -226,12 +226,18 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       header.update(items);
 
     });
+
+    const { annotManager } = this.wvInstance; 
+    var xfdfData = localStorage.getItem('annotations');
+    annotManager.importAnnotations(xfdfData).then(importedAnnotations => { });
   }
 
 
   handleSaveAction = async () => {
     const { docViewer, annotManager, annotations } = this.wvInstance;
-    const annotationList = annotManager.getAnnotationsList();
+    const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
+    localStorage.setItem('annotations', xfdf);
+    /*const annotationList = annotManager.getAnnotationsList();
     const existingPdfBytes = await fetch(this.previewUrl).then(res => res.arrayBuffer())
     const pdfDoc = await PDFDocument.load(existingPdfBytes)
     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
@@ -273,7 +279,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     formData.append('file', file);
     // trigger a download for the user!
     this.httpService.fileupload(url, formData, null, null).subscribe(res => {
-    })
+    })*/
   }
   handleBack = () => {
     this.router.navigate([`/submittals/form/add/${this.id}/step/2`]);

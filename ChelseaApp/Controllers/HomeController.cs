@@ -47,7 +47,7 @@ namespace ChelseaApp.Controllers
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
             return Ok(modelList);
         }
-        [HttpGet("submittal/list")]
+        [HttpGet("submittal/all")]
         public async Task<ActionResult> Get(string searchText, string pageNumber, string pageSize)
         {
 
@@ -62,11 +62,17 @@ namespace ChelseaApp.Controllers
             }
             else
             {
-                var dataQuery  =  _context.vwSubmittals.AsQueryable().Where(t => (t.FileName.ToLower().Contains(searchText.ToLower()) || t.LastName.Contains(searchText)));
+                var dataQuery  =  _context.vwSubmittals.AsQueryable().Where(t => (t.FirstName.ToLower().Contains(searchText.ToLower()) || t.LastName.ToLower().Contains(searchText.ToLower()) || t.Submittals.ToLower().Contains(searchText.ToLower())));
                 totalCount = dataQuery.Count();
                 dataList = await dataQuery.OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
             }
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
+            foreach (var model in modelList)
+            {
+                var thuUrl = string.Format("{0}/{1}", "Content", model.Thumbnail);
+                model.ThumbnailUrl = await _azureBlobServices.GetPath(thuUrl, _appSetting.AzureBlobMainImageContainer);
+                model.Thumbnail = model.ThumbnailUrl;
+            }
             return Ok(new { data = modelList, totalCount = totalCount });
         }
 
@@ -170,8 +176,10 @@ namespace ChelseaApp.Controllers
         {
             var dataList = await _context.vwSubmittals.AsQueryable().Where(t => t.Id == Convert.ToInt32(id)).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<SubmittalModel>(dataList);
-            modelList.FileUrl = await _azureBlobServices.GetPath(modelList.FileName, _appSetting.AzureBlobDocContainer);
-            modelList.ThumbnailUrl = await _azureBlobServices.GetPath(modelList.Thumbnail, _appSetting.AzureBlobMainImageContainer);
+            var fileUrl = string.Format("{0}/{1}", "Content", modelList.FileName);
+            var thuUrl = string.Format("{0}/{1}", "Content", modelList.Thumbnail);
+            modelList.FileUrl = await _azureBlobServices.GetPath(fileUrl, _appSetting.AzureBlobDocContainer);
+            modelList.ThumbnailUrl = await _azureBlobServices.GetPath(thuUrl, _appSetting.AzureBlobMainImageContainer);
 
             var pdfFiles = await _context.PdfFiles.AsQueryable().Where(t => t.SubmittalId == Convert.ToInt32(id)).ToListAsync();
             var pdfFilesList = this._mapper.Map<List<PdfFileModel>>(pdfFiles);
@@ -180,7 +188,12 @@ namespace ChelseaApp.Controllers
             foreach (var pdfFile in pdfFilesList)
             {
                 var detailList = pdfFilesDetails.Where(t => t.PdfFileId == pdfFile.Id).ToList();
-                pdfFile.Files = this._mapper.Map<List<FileModel>>(detailList); ;
+                pdfFile.Files = this._mapper.Map<List<FileModel>>(detailList);
+                foreach (var model in pdfFile.Files)
+                {
+                    var thuFileUrl = string.Format("{0}/{1}", "Content", model.Thumbnail);
+                    model.Thumbnail = await _azureBlobServices.GetPath(thuFileUrl, _appSetting.AzureBlobMainImageContainer);
+                }
 
             }
 

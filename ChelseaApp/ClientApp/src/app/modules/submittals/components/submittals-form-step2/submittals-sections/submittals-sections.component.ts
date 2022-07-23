@@ -167,7 +167,7 @@ export class SubmittalsSectionsComponent implements OnInit {
     this.isPreviewDialog = true;
   }
   handleActionEdit = (position: string) => {
-    this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + this.submittal['files'][this.itmindex]['fileName'] + "";
+    this.previewUrl = "https://localhost:44339/api/Home/download?bloburl=" + this.submittal['files'][this.itmindex]['fileName'] + "";
     //this.router.navigate([`/submittals/pdf-edit/${this.id}`, { url: this.previewUrl }]);
     // this.position = position;
     // this.pdfActionTitle = 'Edit PDF';
