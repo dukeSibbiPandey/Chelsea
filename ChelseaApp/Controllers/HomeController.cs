@@ -47,12 +47,27 @@ namespace ChelseaApp.Controllers
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
             return Ok(modelList);
         }
-        [HttpGet("submittal/list/{searchText}")]
-        public async Task<ActionResult> Get(string searchText)
+        [HttpGet("submittal/list/{searchText}/{pageNumber}/{pageSize}")]
+        public async Task<ActionResult> Get(string searchText, string pageNumber, string pageSize)
         {
-            var dataList = await _context.vwSubmittals.AsQueryable().Where(t => (t.FileName.Contains(searchText) || t.LastName.Contains(searchText)) && (t.IsTempRecord == null || t.IsTempRecord == false)).ToListAsync();
+
+            int skip = (Convert.ToInt32(pageNumber) - 1)*Convert.ToInt32(pageSize);
+            var dataList =  new List<SubmittalList>();
+            int totalCount = 0;
+            if (string.IsNullOrEmpty(searchText))
+            {
+                var dataQuery =  _context.vwSubmittals.AsQueryable().Where(t => (t.IsTempRecord == null || t.IsTempRecord == false));
+                totalCount = dataQuery.Count();
+                dataList = await dataQuery.OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
+            }
+            else
+            {
+                var dataQuery  =  _context.vwSubmittals.AsQueryable().Where(t => (t.FileName.ToLower().Contains(searchText.ToLower()) || t.LastName.Contains(searchText)) && (t.IsTempRecord == null || t.IsTempRecord == false));
+                totalCount = dataQuery.Count();
+                dataList = await dataQuery.OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
+            }
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
-            return Ok(modelList);
+            return Ok(new { data = modelList, totalCount = totalCount });
         }
 
         [HttpGet("master/data/{type}")]
@@ -86,6 +101,12 @@ namespace ChelseaApp.Controllers
         [HttpPost("coverpage/save")]
         public async Task<ActionResult> SaveCoverPage(CoverPageModel coverPage)
         {
+            var isSubmittalExists = await _context.vwSubmittals.AnyAsync(t => t.Submittals == coverPage.Submittals && t.Id != coverPage.Id);
+            if(isSubmittalExists)
+            {
+                return this.Ok("duplicate submittals");
+            }
+
             var dataList = await _context.vwAddress.AsQueryable().Where(t => t.Id == coverPage.AddressId).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<AddressModel>(dataList);
             //var cityObj = await _context.CityMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.City)).FirstOrDefaultAsync();
