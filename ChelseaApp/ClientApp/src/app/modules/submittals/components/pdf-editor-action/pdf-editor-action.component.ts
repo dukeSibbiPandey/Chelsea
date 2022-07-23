@@ -4,6 +4,8 @@ import WebViewer from '@pdftron/pdfjs-express';
 import { HttpService } from 'src/app/components/http.service';
 import { SubmittalService } from '../../submittal.service';
 import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib'
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-pdf-editor-action',
@@ -15,14 +17,18 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   previewUrl: any;
   wvInstance: any;
   id: any
-  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router) { }
+  entity;
+  dialogConfig;
+  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, public ref: DynamicDialogRef, public config: DynamicDialogConfig) { }
   ngOnInit() {
+    this.dialogConfig = this.config.data;
+    this.previewUrl = this.dialogConfig.data.previewUrl;
     this.id = this.activatedRoute.snapshot.params['id'];
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
     this.updatePagnation = this.updatePagnation.bind(this);
   }
   ngAfterViewInit(): void {
-    this.previewUrl = this.activatedRoute.snapshot.paramMap.get('url');
+    //this.previewUrl = this.activatedRoute.snapshot.paramMap.get('url');
     WebViewer({
       path: '../lib',
       initialDoc: this.previewUrl,
@@ -78,7 +84,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         const [pageNumber] = e.detail;
         console.log(`Current page is ${pageNumber}`);
         this.updatePagnation(instance)
-        
+
       });
       instance.docViewer.on('annotationsLoaded', () => {
         console.log('annotations loaded');
@@ -87,11 +93,11 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
     })
   }
-  updatePagnation=(instance)=>{
+  updatePagnation = (instance) => {
     instance.docViewer.on('documentLoaded', () => {
       console.log('annotations loadeddfdfdfd');
     });
-    
+
   }
   updatePager = (docViewer: any) => {
     setTimeout(() => {

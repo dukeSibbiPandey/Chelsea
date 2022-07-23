@@ -1,8 +1,11 @@
 import { Component, Input, Output, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { CommonService } from 'src/app/common.service';
 import { HttpService } from 'src/app/components/http.service';
 import { PdfActionComponent } from '../../pdf-action/pdf-action.component';
+import { DialogService } from 'primeng/dynamicdialog';
+import { PdfEditorActionComponent } from '../../pdf-editor-action/pdf-editor-action.component';
 
 @Component({
   selector: 'app-submittals-sections',
@@ -30,7 +33,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   isPreviewDialog = false;
   previewUrl: any = '';
   pdfActionTitle = '';
-  constructor(private httpService: HttpService, private router: Router) { }
+  constructor(private httpService: HttpService, private router: Router, private _CommonService:CommonService, public dialogService: DialogService) { }
 
   ngOnInit(): void {
     this.items = [
@@ -165,7 +168,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   }
   handleActionEdit = (position: string) => {
     this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + this.submittal['files'][this.itmindex]['fileName'] + "";
-    this.router.navigate([`/submittals/pdf-edit/${this.id}`, { url: this.previewUrl }]);
+    //this.router.navigate([`/submittals/pdf-edit/${this.id}`, { url: this.previewUrl }]);
     // this.position = position;
     // this.pdfActionTitle = 'Edit PDF';
     // this.isPreviewDialog = true;  
@@ -173,6 +176,19 @@ export class SubmittalsSectionsComponent implements OnInit {
     //   this._PdfActionComponent.initialDocker();
     // }, 200)
     // this.isPreviewDialog = true;
+    let config={
+      title:'Edit PDF',
+      previewUrl:this.previewUrl,
+      width:'90%'
+
+    }
+    this._CommonService.dialogComponentConfig(config, PdfEditorActionComponent).subscribe(res => {
+      if (res != undefined) {
+
+      } else {
+
+      }
+    })
 
   }
 
