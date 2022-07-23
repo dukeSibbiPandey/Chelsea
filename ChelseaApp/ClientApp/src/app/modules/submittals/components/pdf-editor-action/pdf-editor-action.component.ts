@@ -241,6 +241,14 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     const { docViewer, annotManager, annotations } = this.wvInstance;
     const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
     localStorage.setItem('annotations', xfdf);
+    /*let url = 'home/auto/save';
+    let formData = {
+      submittalId: 1,
+      files: [{annotation: xfdf}]
+    }
+    this.httpService.fileupload(url, formData, null, null).subscribe(res => {
+    })*/
+
     /*const annotationList = annotManager.getAnnotationsList();
     const existingPdfBytes = await fetch(this.previewUrl).then(res => res.arrayBuffer())
     const pdfDoc = await PDFDocument.load(existingPdfBytes)
@@ -317,6 +325,8 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     page.drawText('LAMP: Led300', {x: width, y: height-24, size: size });
     page.drawText('DIM : 0-10V', {x: width, y: height-31, size: size });
     page.drawText('RUNS: NA', {x: width, y: height-38, size: size });
+    page.drawText('Part Number 234545-345345-345345-4545', {x: 250, y: height-10, size: size+3, maxWidth: 30  });
+    page.drawText('Description 234545-345345-345345-4545', {x: 250, y: height-17, size: size+3, maxWidth: 30 });
     }
     catch{}
   });
