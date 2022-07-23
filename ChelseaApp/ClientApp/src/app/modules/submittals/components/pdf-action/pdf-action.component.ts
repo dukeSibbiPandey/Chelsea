@@ -218,7 +218,7 @@ export class PdfActionComponent implements OnInit {
     debugger;
     const { docViewer, annotManager } = this.wvInstance;
     const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
-    const fileData = await docViewer.getDocument().getFileData({});
+    /*const fileData = await docViewer.getDocument().getFileData({});
     const blob = new Blob([fileData], {type: 'application/pdf'});
 
     const data = new FormData();
@@ -239,13 +239,14 @@ export class PdfActionComponent implements OnInit {
       headers: {
         Authorization: key
       }
-    }).then(resp => resp.blob())
+    }).then(resp => resp.blob())*/
 
-    const formData = new FormData();
-    const submittalObj  = JSON.stringify({submittalId: 1});
-    formData.append('file', mergedFileBlob);
-    formData.append('saveModel', submittalObj);
-    this.httpService.fileupload(url, formData, null, null).subscribe(res => {
+    // const formData = new FormData();
+    // const submittalObj  = JSON.stringify({submittalId: 1});
+    // formData.append('file', mergedFileBlob);
+    // formData.append('saveModel', submittalObj);
+    let url = 'home/auto/save';
+    this.httpService.fileupload(url, {}, null, null).subscribe(res => {
     })
 
     /*const { docViewer, annotManager, annotations } = this.wvInstance;

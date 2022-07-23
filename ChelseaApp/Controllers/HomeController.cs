@@ -43,11 +43,11 @@ namespace ChelseaApp.Controllers
         [HttpGet("submittal/list")]
         public async Task<ActionResult> Get()
         {
-            var dataList = await _context.vwSubmittals.Where(t => t.IsTempRecord == null || t.IsTempRecord == false).ToListAsync();
+            var dataList = await _context.vwSubmittals.ToListAsync();
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
             return Ok(modelList);
         }
-        [HttpGet("submittal/list/{searchText}/{pageNumber}/{pageSize}")]
+        [HttpGet("submittal/list")]
         public async Task<ActionResult> Get(string searchText, string pageNumber, string pageSize)
         {
 
@@ -56,13 +56,13 @@ namespace ChelseaApp.Controllers
             int totalCount = 0;
             if (string.IsNullOrEmpty(searchText))
             {
-                var dataQuery =  _context.vwSubmittals.AsQueryable().Where(t => (t.IsTempRecord == null || t.IsTempRecord == false));
+                var dataQuery = await _context.vwSubmittals.AsQueryable().ToListAsync();
                 totalCount = dataQuery.Count();
-                dataList = await dataQuery.OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
+                dataList = dataQuery.OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToList();
             }
             else
             {
-                var dataQuery  =  _context.vwSubmittals.AsQueryable().Where(t => (t.FileName.ToLower().Contains(searchText.ToLower()) || t.LastName.Contains(searchText)) && (t.IsTempRecord == null || t.IsTempRecord == false));
+                var dataQuery  =  _context.vwSubmittals.AsQueryable().Where(t => (t.FileName.ToLower().Contains(searchText.ToLower()) || t.LastName.Contains(searchText)));
                 totalCount = dataQuery.Count();
                 dataList = await dataQuery.OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
             }
@@ -341,7 +341,7 @@ namespace ChelseaApp.Controllers
                     pdfFile.FileName = file.FileName;
                     pdfFile.SubmittalId = pdfFileMaster.SubmittalId;
                     pdfFile.PdfFileId = modeObj.Id;
-                    pdfFile.Name = modeObj.Name;
+                    pdfFile.Annotations = file.Annotations;
                     pdfFile.FileName = file.FileName;
                     pdfFile.FileSize = file.FileSize;
                     pdfFile.Thumbnail = Path.GetFileName(file.Thumbnail);
@@ -359,15 +359,15 @@ namespace ChelseaApp.Controllers
         }
 
         [HttpPost("auto/save")]
-        public async Task<ActionResult> AutoSaveFile(IFormFile file, PdfFileAutoSaveModel saveModel)
+        public async Task<ActionResult> AutoSaveFile(PdfFileAutoSaveModel saveModel)
         {
-            var message = string.Empty;
+            /*var message = string.Empty;
             var newFileName = string.Empty;
             string thumbnail = string.Empty;
             string pdfPath = string.Empty;
             string fileSize = string.Empty;
-            string orgFileName = string.Empty;
-            try
+            string orgFileName = string.Empty;*/
+            /*try
             {
                 string[] acceptFileTypes = new[] { ".pdf" };
                 if (file != null && acceptFileTypes.Count(t => t == Path.GetExtension(file.FileName).ToLower()) > 0)
@@ -402,7 +402,7 @@ namespace ChelseaApp.Controllers
                 message = ex.Message;
                 return this.BadRequest(message);
 
-            }
+            }*/
 
             var modeObj = this._mapper.Map<PdfFiles>(saveModel.PdfFiles);
             if (modeObj.Id > 0)
@@ -416,17 +416,18 @@ namespace ChelseaApp.Controllers
             await _context.SaveChangesAsync();
             saveModel.PdfFiles.Id = modeObj.Id;
 
-            foreach (var pdffile in saveModel.PdfFiles.Files)
+            foreach (var pdfitem in saveModel.PdfFiles.Files)
             {
                 PdfFileDetails pdfFile = new PdfFileDetails();
-                pdfFile.FileName = file.FileName;
+                pdfFile.FileName = pdfitem.FileName;
                 pdfFile.SubmittalId = saveModel.SubmittalId;
                 pdfFile.PdfFileId = modeObj.Id;
-                pdfFile.Name = modeObj.Name;
-                pdfFile.FileName = file.FileName;
-                pdfFile.FileSize = fileSize;
+
+                /*pdfFile.FileSize = fileSize;
                 pdfFile.Thumbnail = thumbnail;
-                pdfFile.OrgFileName = orgFileName;
+                pdfFile.OrgFileName = orgFileName;*/
+
+                pdfFile.Annotations = pdfitem.Annotations;
                 if (modeObj.Id > 0)
                 {
                     _context.PdfFileDetails.Update(pdfFile);
