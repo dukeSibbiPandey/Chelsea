@@ -11,8 +11,10 @@ export class SubmittalsComponent implements OnInit {
   isListFetch = false;
   placeholder = 'http://placehold.it/200x200';
   searchText: string = "";
-  pageSize = 2;
+  pageSize = 10;
   page = 1;
+  totalRecords;
+  rowsPerPageOptions = [10, 20, 30];
   httpService: HttpService;
   constructor(httpService: HttpService) {
     this.httpService = httpService;
@@ -24,8 +26,9 @@ export class SubmittalsComponent implements OnInit {
     if (this.searchText) {
       url = url + `&searchText=${this.searchText}`
     }
-    this.httpService.get(url).toPromise().then(value => {
+    this.httpService.get(url).toPromise().then((value: any) => {
       this.list = value["data"] || [];
+      this.totalRecords = value.totalCount
       this.isListFetch = true;
     });
   }
@@ -33,16 +36,27 @@ export class SubmittalsComponent implements OnInit {
     this.bindSubmittalsGrid()
   }
 
+  paginate = (event) => {
+    if (this.page != (event.first / event.rows)) {
+      this.page = event.first / event.rows;
+      this.bindSubmittalsGrid();
+    }
+
+  }
+
+  nextPage = (event) => {
+    if (this.pageSize != event.rows) {
+      this.page = 0;
+      this.pageSize = event.rows;
+      this.bindSubmittalsGrid();
+    }
+  }
+
   ngOnInit(): void {
     this.bindSubmittalsGrid();
   }
 
-  paginate(event: any) {
-    if (this.page !== event.page) {
-      this.page = event.page;
-      this.bindSubmittalsGrid();
-    }
-  }
+
   errorHandler(event: any) {
     console.debug(event);
     event.target.src = "../../../../../assets/images/merge-icons/edit.png";

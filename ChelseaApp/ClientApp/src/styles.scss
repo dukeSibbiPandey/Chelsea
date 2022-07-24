@@ -380,3 +380,7 @@ a {
 .Button.active:not(.disable){
     background: none!important;
 }
+
+.p-paginator .p-dropdown .p-dropdown-label{
+    border: 0px!important;
+}
