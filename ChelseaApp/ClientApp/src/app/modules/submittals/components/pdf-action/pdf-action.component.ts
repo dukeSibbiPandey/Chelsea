@@ -1,7 +1,7 @@
 import { Component, ViewChild, OnInit, ElementRef, Input } from '@angular/core';
 import WebViewer from '@pdftron/pdfjs-express';
 import { HttpService } from 'src/app/components/http.service';
-import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib'
+//import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib'
 import { SubmittalService } from '../../submittal.service';
 @Component({
   selector: 'app-pdf-action',
@@ -17,10 +17,6 @@ export class PdfActionComponent implements OnInit {
   ngOnInit() {
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
   }
-  handleClick = () => {
-    console.log(this.wvInstance)
-  }
-
   initialDocker = () => {
     WebViewer({
       path: '../lib',
@@ -28,7 +24,7 @@ export class PdfActionComponent implements OnInit {
       licenseKey: 'irld89CMAcwPvMz4SJzz',
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
-      const { annotManager } = instance; 
+      const { annotManager } = instance;
       var xfdfData = localStorage.getItem('annotations');
       annotManager.importAnnotations(xfdfData).then(importedAnnotations => { });
       instance.setFitMode('FitWidth')

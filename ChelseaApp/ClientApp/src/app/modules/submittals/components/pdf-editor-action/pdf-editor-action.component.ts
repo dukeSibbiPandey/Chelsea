@@ -21,6 +21,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   dialogConfig;
   constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, public ref: DynamicDialogRef, public config: DynamicDialogConfig) { }
   ngOnInit() {
+    debugger
     this.dialogConfig = this.config.data;
     this.previewUrl = this.dialogConfig.data.previewUrl;
     this.id = this.activatedRoute.snapshot.params['id'];
@@ -35,7 +36,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       licenseKey: 'irld89CMAcwPvMz4SJzz',
     }, this.viewer1.nativeElement).then(instance => {
       this.wvInstance = instance;
-      this.createHeader();    
+      // this.createHeader();
       instance.setFitMode('FitWidth')
       instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
       instance.disableElements([
@@ -228,11 +229,10 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
     });
 
-    const { annotManager } = this.wvInstance; 
+    const { annotManager } = this.wvInstance;
     var xfdfData = localStorage.getItem('annotations');
-    if(xfdfData)
-    {
-     annotManager.importAnnotations(xfdfData).then(importedAnnotations => { });
+    if (xfdfData) {
+      annotManager.importAnnotations(xfdfData).then(importedAnnotations => { });
     }
   }
 
@@ -297,44 +297,42 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     this.router.navigate([`/submittals/form/add/${this.id}/step/2`]);
   }
 
-  createHeader=async()=>{
+  createHeader = async () => {
     debugger;
-   const formPdfBytes = await fetch(this.previewUrl).then(res => res.arrayBuffer())
+    const formPdfBytes = await fetch(this.previewUrl).then(res => res.arrayBuffer())
 
-   // Fetch the Mario image
-   const marioUrl = 'https://pdf-lib.js.org/assets/small_mario.png'
-   const marioImageBytes = await fetch(marioUrl).then(res => res.arrayBuffer())
+    // Fetch the Mario image
+    const marioUrl = 'https://pdf-lib.js.org/assets/small_mario.png'
+    const marioImageBytes = await fetch(marioUrl).then(res => res.arrayBuffer())
 
-   // Load a PDF with form fields
-   const pdfDoc = await PDFDocument.load(formPdfBytes)
-   const pages =  pdfDoc.getPages();
+    // Load a PDF with form fields
+    const pdfDoc = await PDFDocument.load(formPdfBytes)
+    if (pdfDoc) {
+      const pages = pdfDoc.getPages();
+      // Embed the Mario and emblem images
+      const marioImage = await pdfDoc.embedPng(marioImageBytes)
 
-   // Embed the Mario and emblem images
-   const marioImage = await pdfDoc.embedPng(marioImageBytes)
-
-   pages.forEach(page => {
-    const { height } = page.getSize()
-    let width=100;
-    let size=7;
-    try
-    {
-    page.drawImage(marioImage, {x: 30, y: height-50, height: 50, width: 50 })
-    // Fill in the basic info fields
-    page.drawText('TYPE: F1', {x: width, y: height-10, size: size })
-    page.drawText('VOLT: 120V', {x: width, y: height-17, size: size });
-    page.drawText('LAMP: Led300', {x: width, y: height-24, size: size });
-    page.drawText('DIM : 0-10V', {x: width, y: height-31, size: size });
-    page.drawText('RUNS: NA', {x: width, y: height-38, size: size });
-    page.drawText('Part Number 234545-345345-345345-4545', {x: 250, y: height-10, size: size+3, maxWidth: 30  });
-    page.drawText('Description 234545-345345-345345-4545', {x: 250, y: height-17, size: size+3, maxWidth: 30 });
+      pages.forEach(page => {
+        const { height } = page.getSize()
+        let width = 100;
+        let size = 7;
+        try {
+          page.drawImage(marioImage, { x: 30, y: height - 50, height: 50, width: 50 })
+          // Fill in the basic info fields
+          page.drawText('TYPE: F1', { x: width, y: height - 10, size: size })
+          page.drawText('VOLT: 120V', { x: width, y: height - 17, size: size });
+          page.drawText('LAMP: Led300', { x: width, y: height - 24, size: size });
+          page.drawText('DIM : 0-10V', { x: width, y: height - 31, size: size });
+          page.drawText('RUNS: NA', { x: width, y: height - 38, size: size });
+          page.drawText('Part Number 234545-345345-345345-4545', { x: 250, y: height - 10, size: size + 3, maxWidth: 30 });
+          page.drawText('Description 234545-345345-345345-4545', { x: 250, y: height - 17, size: size + 3, maxWidth: 30 });
+        }
+        catch { }
+      });
+      // Serialize the PDFDocument to bytes (a Uint8Array)
+      const pdfBytes = await pdfDoc.save();
+      let blobDoc = new Blob([pdfBytes], { type: 'application/pdf' });
+      this.wvInstance.loadDocument(blobDoc);
     }
-    catch{}
-  });
-   
-
-   // Serialize the PDFDocument to bytes (a Uint8Array)
-   const pdfBytes = await pdfDoc.save();
-   let blobDoc = new Blob([pdfBytes], { type: 'application/pdf' });
-   this.wvInstance.loadDocument(blobDoc);
   }
 }
