@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { HttpService } from '../../../../components/http.service';
@@ -20,33 +20,18 @@ export class SubmittalsFormStep1Component implements OnInit {
   addressMaster: any = [];
   cityMaster: any = [];
   stateMaster: any = [];
-  
-  constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService) { }
+  id:any;
+  constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService, private _ActivatedRoute: ActivatedRoute) { }
   ngOnInit(): void {
+    this.id = this._ActivatedRoute.snapshot.params['id'];
     this.createForm(() => {
-
+      if(this.id>0){
+        this.getSubmittalData(this.id);
+      }
     })
-
     this.bindAddressOptions();
     this.bindCityOptions();
     this.bindStateOptions();
-  }
-  
-  bindAddressOptions() {
-    this.httpService.get("Home/master/data/address").toPromise().then(value => {
-      this.addressMaster = value;
-      this.selectAddress(0, this.addressMaster[0]);
-    });
-  }
-  bindCityOptions() {
-    this.httpService.get("Home/master/data/city").toPromise().then(value => {
-      this.cityMaster = value;
-    });
-  }
-  bindStateOptions() {
-    this.httpService.get("Home/master/data/state").toPromise().then(value => {
-      this.stateMaster = value;
-    });
   }
   createForm = (callback: any): void => {
     this.submitted = false;
@@ -88,7 +73,41 @@ export class SubmittalsFormStep1Component implements OnInit {
     }
   }
   get formControl() { return this.submittalDetailForm.controls };
+  getSubmittalData(id: any) {
+    this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
+      debugger
+      this.setFormData(value)    
+    })
+  }
+  setFormData=(res)=>{
+    debugger
+    this.submittalDetailForm.controls['id'].setValue(res['id']);
+    this.submittalDetailForm.controls['submittalDate'].setValue(res['submittedDate']);
+    this.submittalDetailForm.controls['jobName'].setValue(res['jobName']);
+    this.submittalDetailForm.controls['submittals'].setValue(res['submittals']);
+    this.submittalDetailForm.controls['addressId'].setValue(res['addressId']);
+    this.submittalDetailForm.controls['stateName'].setValue(res['stateId']);
+    this.submittalDetailForm.controls['cityName'].setValue(res['city']);
 
+    /* project manager */
+    this.submittalDetailForm.controls['projectManager']['controls']['name'].setValue(res['projectManagerName'])
+  }
+  bindAddressOptions() {
+    this.httpService.get("Home/master/data/address").toPromise().then(value => {
+      this.addressMaster = value;
+      this.selectAddress(0, this.addressMaster[0]);
+    });
+  }
+  bindCityOptions() {
+    this.httpService.get("Home/master/data/city").toPromise().then(value => {
+      this.cityMaster = value;
+    });
+  }
+  bindStateOptions() {
+    this.httpService.get("Home/master/data/state").toPromise().then(value => {
+      this.stateMaster = value;
+    });
+  }
   selectAddress = (index: any, item: any) => {
     for (let i = 0; i < this.addressMaster.length; i++) {
       this.addressMaster[i].isPrimary = false;  
