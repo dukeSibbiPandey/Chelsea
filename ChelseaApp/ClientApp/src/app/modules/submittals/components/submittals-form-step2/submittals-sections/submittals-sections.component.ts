@@ -33,7 +33,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   isPreviewDialog = false;
   previewUrl: any = '';
   pdfActionTitle = '';
-  constructor(private httpService: HttpService, private router: Router, private _CommonService:CommonService, public dialogService: DialogService) { }
+  constructor(private httpService: HttpService, private router: Router, private _CommonService: CommonService, public dialogService: DialogService) { }
 
   ngOnInit(): void {
     this.items = [
@@ -166,20 +166,16 @@ export class SubmittalsSectionsComponent implements OnInit {
     this.pdfActionTitle = 'Preview';
     this.isPreviewDialog = true;
   }
-  handleActionEdit = (position: string) => {
-    this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + this.submittal['files'][this.itmindex]['fileName'] + "";
-    //this.router.navigate([`/submittals/pdf-edit/${this.id}`, { url: this.previewUrl }]);
-    // this.position = position;
-    // this.pdfActionTitle = 'Edit PDF';
-    // this.isPreviewDialog = true;  
-    // setTimeout(() => {
-    //   this._PdfActionComponent.initialDocker();
-    // }, 200)
-    // this.isPreviewDialog = true;
-    let config={
-      title:'Edit PDF',
-      previewUrl:this.previewUrl,
-      width:'90%'
+  handleActionEdit = (index) => {
+    let submitalData = JSON.parse(JSON.stringify(this.submittal))
+    submitalData['files'] = submitalData.files[index]
+    // this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + this.submittal['files'][index]['fileName'] + "";
+    this.previewUrl = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
+    let config = {
+      title: 'Edit PDF',
+      previewUrl: this.previewUrl,
+      width: '90%',
+      submitalData: submitalData
 
     }
     this._CommonService.dialogComponentConfig(config, PdfEditorActionComponent).subscribe(res => {

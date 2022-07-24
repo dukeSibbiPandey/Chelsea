@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import WebViewer from '@pdftron/pdfjs-express';
 import { HttpService } from 'src/app/components/http.service';
 import { SubmittalService } from '../../submittal.service';
-import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib'
+import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
@@ -32,11 +32,11 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     //this.previewUrl = this.activatedRoute.snapshot.paramMap.get('url');
     WebViewer({
       path: '../lib',
-      //initialDoc: this.previewUrl,
+      initialDoc: this.previewUrl,
       licenseKey: 'irld89CMAcwPvMz4SJzz',
     }, this.viewer1.nativeElement).then(instance => {
       this.wvInstance = instance;
-      // this.createHeader();
+      this.createHeader();
       instance.setFitMode('FitWidth')
       instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
       instance.disableElements([
@@ -79,9 +79,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       this.wvInstance.updateTool(ToolNames['FREEHAND'], {
         buttonImage: this._SubmittalService.FREEHAND_ICON()
       });
-      // this.wvInstance.updateTool(ToolNames['FREETEXT'], {
-      //   buttonImage: this._SubmittalService.FREETEXT_ICON()
-      // });
       this.viewer1.nativeElement.addEventListener('pageChanged', (e) => {
         const [pageNumber] = e.detail;
         console.log(`Current page is ${pageNumber}`);
@@ -143,7 +140,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     return `Page ${currentPage}/${TotalPageNumber}`
   }
   wvDocumentLoadedHandler(): void {
-    // you can access docViewer object for low-level APIs
     const { docViewer } = this.wvInstance;
     const reduIcon = this.customReduIcon(docViewer);
     const unduIcon = this.customUnduIcon(docViewer);
@@ -240,6 +236,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   handleSaveAction = async () => {
     const { docViewer, annotManager, annotations } = this.wvInstance;
     const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
+    debugger
     localStorage.setItem('annotations', xfdf);
     /*let url = 'home/auto/save';
     let formData = {
@@ -298,9 +295,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   }
 
   createHeader = async () => {
-    debugger;
     const formPdfBytes = await fetch(this.previewUrl).then(res => res.arrayBuffer())
-
     // Fetch the Mario image
     const marioUrl = 'https://pdf-lib.js.org/assets/small_mario.png'
     const marioImageBytes = await fetch(marioUrl).then(res => res.arrayBuffer())
