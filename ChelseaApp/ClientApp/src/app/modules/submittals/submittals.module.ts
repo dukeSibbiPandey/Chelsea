@@ -32,7 +32,6 @@ import {ProgressBarModule} from 'primeng/progressbar';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import {TableModule} from 'primeng/table';
 import {InputMaskModule} from 'primeng/inputmask';
-import { PdfActionComponent } from './components/pdf-action/pdf-action.component';
 import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-editor-action.component';
 
 @NgModule({
@@ -51,7 +50,6 @@ import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-edi
     MergeSubmittalsComponent,
     EditHeaderComponent,
     SubmittalsDetailFormComponent,
-    PdfActionComponent,
     PdfEditorActionComponent
   ],
   imports: [

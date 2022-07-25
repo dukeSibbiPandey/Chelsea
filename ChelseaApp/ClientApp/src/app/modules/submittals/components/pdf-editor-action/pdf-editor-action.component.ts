@@ -302,7 +302,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   createHeader = async () => {
     const formPdfBytes = await fetch(this.previewUrl).then(res => res.arrayBuffer())
     // Fetch the Mario image
-    const marioUrl = 'https://pdf-lib.js.org/assets/small_mario.png'
+    const marioUrl = '../../../../../assets/images/Chelsea-Logo.png';
     const marioImageBytes = await fetch(marioUrl).then(res => res.arrayBuffer())
     // Load a PDF with form fields
     const pdfDoc = await PDFDocument.load(formPdfBytes)
@@ -313,10 +313,10 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
       pages.forEach(page => {
         const { height } = page.getSize()
-        let width = 100;
+        let width = 150;
         let size = 7;
         try {
-          page.drawImage(marioImage, { x: 30, y: height - 50, height: 50, width: 50 })
+          page.drawImage(marioImage, { x: 30, y: height - 30, width: 100 })
           // Fill in the basic info fields
           page.drawText(`TYPE: ${this.entity.submitalData.name}`, { x: width, y: height - 10, size: size })
           page.drawText(`VOLT: ${this.entity.submitalData.volt}`, { x: width, y: height - 17, size: size });

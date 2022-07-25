@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { CommonService } from 'src/app/common.service';
 import { HttpService } from 'src/app/components/http.service';
-import { PdfActionComponent } from '../../pdf-action/pdf-action.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { PdfEditorActionComponent } from '../../pdf-editor-action/pdf-editor-action.component';
 
@@ -13,7 +12,6 @@ import { PdfEditorActionComponent } from '../../pdf-editor-action/pdf-editor-act
   styleUrls: ['./submittals-sections.component.scss']
 })
 export class SubmittalsSectionsComponent implements OnInit {
-  @ViewChild(PdfActionComponent, { static: false }) _PdfActionComponent: PdfActionComponent;
   @Input() submittal: any;
   @Input() itmindex = '0';
   @Input() id = '0';

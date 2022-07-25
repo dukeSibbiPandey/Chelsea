@@ -20,12 +20,12 @@ export class SubmittalsFormStep1Component implements OnInit {
   addressMaster: any = [];
   cityMaster: any = [];
   stateMaster: any = [];
-  id:any;
+  id: any;
   constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService, private _ActivatedRoute: ActivatedRoute) { }
   ngOnInit(): void {
     this.id = this._ActivatedRoute.snapshot.params['id'];
     this.createForm(() => {
-      if(this.id>0){
+      if (this.id > 0) {
         this.getSubmittalData(this.id);
       }
     })
@@ -62,7 +62,7 @@ export class SubmittalsFormStep1Component implements OnInit {
           addressLine2: [''],
           state: [''],
           city: [''],
-          postalCode: ['']         
+          postalCode: ['']
         }),
         stateName: [''],
         cityName: [''],
@@ -76,10 +76,10 @@ export class SubmittalsFormStep1Component implements OnInit {
   getSubmittalData(id: any) {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
       debugger
-      this.setFormData(value)    
+      this.setFormData(value)
     })
   }
-  setFormData=(res)=>{
+  setFormData = (res) => {
     debugger
     this.submittalDetailForm.controls['id'].setValue(res['id']);
     this.submittalDetailForm.controls['submittalDate'].setValue(res['submittedDate']);
@@ -110,11 +110,11 @@ export class SubmittalsFormStep1Component implements OnInit {
   }
   selectAddress = (index: any, item: any) => {
     for (let i = 0; i < this.addressMaster.length; i++) {
-      this.addressMaster[i].isPrimary = false;  
+      this.addressMaster[i].isPrimary = false;
     }
     item.isPrimary = true;
     this.submittalDetailForm.controls['addressId'].setValue(item.id);
-    this.submittalDetailForm.controls['address'].setValue({ addressLine1: item.address, addressLine2: item.name, state: item.state, city: item.city, postalCode: item.zipCode, phone: item.phone, fax: item.fax });    
+    this.submittalDetailForm.controls['address'].setValue({ addressLine1: item.address, addressLine2: item.name, state: item.state, city: item.city, postalCode: item.zipCode, phone: item.phone, fax: item.fax });
     this.activeAddressInde = index;
   }
   selectCity = () => {
@@ -153,6 +153,7 @@ export class SubmittalsFormStep1Component implements OnInit {
         ... this.submittalDetailForm.value
       }
       this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
+        debugger
         this.toastMsg('success', 'Success', 'Form submitted successfully', 2000);
         setTimeout(() => {
           this.postAjax(value);
