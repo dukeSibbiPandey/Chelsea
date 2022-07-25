@@ -30,6 +30,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     //this.previewUrl = this.activatedRoute.snapshot.paramMap.get('url');
+    this.entity = this.config.data.data;
     WebViewer({
       path: '../lib',
       initialDoc: this.previewUrl,
@@ -234,17 +235,21 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
 
   handleSaveAction = async () => {
-    const { docViewer, annotManager, annotations } = this.wvInstance;
+    const { annotManager } = this.wvInstance;
     const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
-    debugger
     localStorage.setItem('annotations', xfdf);
-    /*let url = 'home/auto/save';
+    const submitalData = this.entity.submitalData;
+
+    let url = 'home/auto/save';
     let formData = {
-      submittalId: 1,
-      files: [{annotation: xfdf}]
+      ...submitalData
     }
-    this.httpService.fileupload(url, formData, null, null).subscribe(res => {
-    })*/
+    formData.files.annotations = xfdf
+    formData.files.annotation = xfdf
+    prompt('formData', JSON.stringify(formData))
+    // this.httpService.fileupload(url, formData, null, null).subscribe(res => {
+    //   debugger
+    // })
 
     /*const annotationList = annotManager.getAnnotationsList();
     const existingPdfBytes = await fetch(this.previewUrl).then(res => res.arrayBuffer())
@@ -299,7 +304,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     // Fetch the Mario image
     const marioUrl = 'https://pdf-lib.js.org/assets/small_mario.png'
     const marioImageBytes = await fetch(marioUrl).then(res => res.arrayBuffer())
-
     // Load a PDF with form fields
     const pdfDoc = await PDFDocument.load(formPdfBytes)
     if (pdfDoc) {
@@ -314,13 +318,13 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         try {
           page.drawImage(marioImage, { x: 30, y: height - 50, height: 50, width: 50 })
           // Fill in the basic info fields
-          page.drawText('TYPE: F1', { x: width, y: height - 10, size: size })
-          page.drawText('VOLT: 120V', { x: width, y: height - 17, size: size });
-          page.drawText('LAMP: Led300', { x: width, y: height - 24, size: size });
-          page.drawText('DIM : 0-10V', { x: width, y: height - 31, size: size });
-          page.drawText('RUNS: NA', { x: width, y: height - 38, size: size });
-          page.drawText('Part Number 234545-345345-345345-4545', { x: 250, y: height - 10, size: size + 3, maxWidth: 30 });
-          page.drawText('Description 234545-345345-345345-4545', { x: 250, y: height - 17, size: size + 3, maxWidth: 30 });
+          page.drawText(`TYPE: ${this.entity.submitalData.name}`, { x: width, y: height - 10, size: size })
+          page.drawText(`VOLT: ${this.entity.submitalData.volt}`, { x: width, y: height - 17, size: size });
+          page.drawText(`LAMP: ${this.entity.submitalData.lamp}`, { x: width, y: height - 24, size: size });
+          page.drawText(`DIM : ${this.entity.submitalData.dim}`, { x: width, y: height - 31, size: size });
+          page.drawText(`RUNS: ${this.entity.submitalData.runs}`, { x: width, y: height - 38, size: size });
+          page.drawText(`${this.entity.submitalData.part}`, { x: 250, y: height - 10, size: size + 3, maxWidth: 30 });
+          page.drawText(this.entity.submitalData.description, { x: 250, y: height - 17, size: size + 3, maxWidth: 30 });
         }
         catch { }
       });
