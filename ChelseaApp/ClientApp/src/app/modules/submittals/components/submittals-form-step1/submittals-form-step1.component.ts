@@ -75,12 +75,10 @@ export class SubmittalsFormStep1Component implements OnInit {
   get formControl() { return this.submittalDetailForm.controls };
   getSubmittalData(id: any) {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
-      debugger
       this.setFormData(value)
     })
   }
   setFormData = (res) => {
-    debugger
     this.submittalDetailForm.controls['id'].setValue(res['id']);
     this.submittalDetailForm.controls['submittalDate'].setValue(res['submittedDate']);
     this.submittalDetailForm.controls['jobName'].setValue(res['jobName']);
@@ -153,7 +151,6 @@ export class SubmittalsFormStep1Component implements OnInit {
         ... this.submittalDetailForm.value
       }
       this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
-        debugger
         this.toastMsg('success', 'Success', 'Form submitted successfully', 2000);
         setTimeout(() => {
           this.postAjax(value);

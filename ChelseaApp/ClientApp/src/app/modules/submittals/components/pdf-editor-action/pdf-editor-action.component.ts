@@ -21,7 +21,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   dialogConfig;
   constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, public ref: DynamicDialogRef, public config: DynamicDialogConfig) { }
   ngOnInit() {
-    debugger
     this.dialogConfig = this.config.data;
     this.previewUrl = this.dialogConfig.data.previewUrl;
     this.id = this.activatedRoute.snapshot.params['id'];
