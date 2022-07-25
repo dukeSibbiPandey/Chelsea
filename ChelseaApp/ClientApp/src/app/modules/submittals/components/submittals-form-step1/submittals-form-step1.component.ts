@@ -151,10 +151,18 @@ export class SubmittalsFormStep1Component implements OnInit {
         ... this.submittalDetailForm.value
       }
       this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
-        this.toastMsg('success', 'Success', 'Form submitted successfully', 2000);
-        setTimeout(() => {
-          this.postAjax(value);
-        }, 3000);
+        debugger  
+        try {
+          if (value) {
+            this.toastMsg('success', 'Success', 'Form submitted successfully', 2000);
+            setTimeout(() => {
+              this.postAjax(value);
+            }, 3000);
+          }  
+        } catch (err) {
+          debugger
+        }
+        
       });
     }
   }
