@@ -151,7 +151,6 @@ export class SubmittalsFormStep1Component implements OnInit {
         ... this.submittalDetailForm.value
       }
       this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
-        debugger  
         try {
           if (value) {
             this.toastMsg('success', 'Success', 'Form submitted successfully', 2000);
