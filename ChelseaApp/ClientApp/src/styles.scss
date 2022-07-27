@@ -450,6 +450,23 @@ a {
     }
 }
 
+.disabled-btn {
+    svg {
+        * {
+            fill: #333333;
+            opacity: .5;
+        }
+
+        circle {
+            fill: #EEEEEE;
+            opacity: 1;
+        }
+    }
+    &.bg {
+        background: #EEEEEE !important;
+    }
+}
+
 .hover-outer {
     &:hover {
         * {

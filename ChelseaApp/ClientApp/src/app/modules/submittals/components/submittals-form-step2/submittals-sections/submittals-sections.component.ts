@@ -5,6 +5,9 @@ import { CommonService } from 'src/app/common.service';
 import { HttpService } from 'src/app/components/http.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { PdfEditorActionComponent } from '../../pdf-editor-action/pdf-editor-action.component';
+import { SubmittalService } from '../../../submittal.service';
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+
 
 @Component({
   selector: 'app-submittals-sections',
@@ -31,7 +34,13 @@ export class SubmittalsSectionsComponent implements OnInit {
   isPreviewDialog = false;
   previewUrl: any = '';
   pdfActionTitle = '';
-  constructor(private httpService: HttpService, private router: Router, private _CommonService: CommonService, public dialogService: DialogService) { }
+  
+  icon:any={
+    DEL_ICON:'',
+    MOVE_UP_ICON:'',
+    MOVE_DOWN_ICON:''
+  }
+  constructor(private httpService: HttpService, private router: Router, private _CommonService: CommonService, public dialogService: DialogService, private _SubmittalService: SubmittalService, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.items = [
@@ -40,7 +49,44 @@ export class SubmittalsSectionsComponent implements OnInit {
       { label: 'Angular.io', icon: 'pi pi-info' },
       { label: 'Setup', icon: 'pi pi-cog' }
     ];
+    this.DEL_ICON();
+    this.MOVE_UP_ICON();
+    this.MOVE_DOWN_ICON();
+    this.COLLAPSE_MINUS_ICON();
+    this.COLLAPSE_PLUS_ICON();
   }
+  DEL_ICON = () => {
+    const icon = this._SubmittalService.DEL_ICON();
+    this.icon.DEL_ICON = this.sanitizer.bypassSecurityTrustHtml(
+      icon
+    );
+  }
+
+  MOVE_UP_ICON = () => {
+    const icon = this._SubmittalService.MOVE_UP_ICON();
+    this.icon.MOVE_UP_ICON = this.sanitizer.bypassSecurityTrustHtml(
+      icon
+    );
+  }
+  MOVE_DOWN_ICON = () => {
+    const icon = this._SubmittalService.MOVE_DOWN_ICON();
+    this.icon.MOVE_DOWN_ICON = this.sanitizer.bypassSecurityTrustHtml(
+      icon
+    );
+  }
+  COLLAPSE_MINUS_ICON = () => {
+    const icon = this._SubmittalService.COLLAPSE_MINUS_ICON();
+    this.icon.COLLAPSE_MINUS_ICON = this.sanitizer.bypassSecurityTrustHtml(
+      icon
+    );
+  }
+  COLLAPSE_PLUS_ICON = () => {
+    const icon = this._SubmittalService.COLLAPSE_PLUS_ICON();
+    this.icon.COLLAPSE_PLUS_ICON = this.sanitizer.bypassSecurityTrustHtml(
+      icon
+    );
+  }
+
   handleEdit = (value: boolean) => {
     this.isEdit = value
   }
