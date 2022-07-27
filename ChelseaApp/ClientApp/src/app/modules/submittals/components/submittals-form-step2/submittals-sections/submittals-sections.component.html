@@ -71,7 +71,7 @@
     </div>
     <div class="{{submittal?.isOpen?' ':' hidden'}}">
         <ul class="row">
-            <li class="col-sm-2">
+            <!--    <li class="col-sm-2">
                 <div class="form-group">
                     <label for="">These are Transmitted for</label>
                     <div class="flex v_center">
@@ -88,50 +88,50 @@
                         </div>
                     </div>
                 </div>
-            </li>
-            <li class="col-sm-2">
+            </li> -->
+            <li class="col-sm-3">
                 <div class="form-group">
-                    <label for="">MFG</label>
+                    <label for="">Manufacturer</label>
                     <input type="text" class="form-control" placeholder="Enter here" name='mfg'
                         [(ngModel)]="submittal['mfg']" #mfg="ngModel" required>
                 </div>
             </li>
-            <li class="col-sm-4">
+            <li class="col-sm-3">
                 <div class="form-group">
                     <label for="">Part</label>
                     <input type="text" class="form-control" placeholder="Enter here" name='part'
                         [(ngModel)]="submittal['part']" #part="ngModel" required>
                 </div>
             </li>
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <div class="form-group">
                     <label for="">Description</label>
                     <input type="text" class="form-control" placeholder="Enter here" name='description'
                         [(ngModel)]="submittal['description']" #description="ngModel">
                 </div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <div class="form-group">
-                    <label for="">VOLT</label>
+                    <label for="">Voltage</label>
                     <input type="text" class="form-control" placeholder="Enter here" name='volt'
                         [(ngModel)]="submittal['volt']" #volt="ngModel">
                 </div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <div class="form-group">
                     <label for="">LAMP</label>
                     <input type="text" class="form-control" placeholder="Enter here" name='lamp'
                         [(ngModel)]="submittal['lamp']" #lamp="ngModel">
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="form-group">
                     <label for="">DIM</label>
                     <input type="text" class="form-control" placeholder="Enter here" name='dim'
                         [(ngModel)]="submittal['dim']" #dim="ngModel">
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3        ">
                 <div class="form-group">
                     <label for="">RUNS</label>
                     <input type="text" class="form-control" placeholder="Enter here" name='runs'
