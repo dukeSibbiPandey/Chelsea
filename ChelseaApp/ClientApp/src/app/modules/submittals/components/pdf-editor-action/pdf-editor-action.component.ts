@@ -262,7 +262,9 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     });
 
     const { annotManager } = this.wvInstance;
-    var xfdfData = localStorage.getItem('annotations');
+    //var xfdfData = localStorage.getItem('annotations');
+    let submitalData = this.dialogConfig.submitalData;
+    let xfdfData = submitalData.files.annotations;
     if (xfdfData) {
       annotManager.importAnnotations(xfdfData).then(importedAnnotations => { });
     }
@@ -289,50 +291,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         this.handleBack();
       }, 3000)
     })
-
-    /*const annotationList = annotManager.getAnnotationsList();
-    const existingPdfBytes = await fetch(this.previewUrl).then(res => res.arrayBuffer())
-    const pdfDoc = await PDFDocument.load(existingPdfBytes)
-    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
-    const pages = pdfDoc.getPages()
-    const firstPage = pages[0]
-    const { width, height } = firstPage.getSize()
-    annotationList.forEach(function (obj) {
-      if (obj.ToolName == "AnnotationCreateFreeTextswqwd") {
-        firstPage.drawText(obj.HY, {
-          x: obj.Xt,
-          y: height - obj.Yt,
-          size: parseInt(obj.OE.replace('pt', '')),
-          font: helveticaFont,
-          color: rgb(1, 0, 0),
-          rotate: degrees(-45),
-        })
-      } else if (obj.ToolName == "AnnotationCreateRectangle") {
-        firstPage.drawRectangle({
-          x: obj.Xt,
-          y: height - obj.Yt,
-          width: obj.qq,
-          height: obj.pq,
-          borderColor: rgb(1, 0, 0),
-          borderWidth: 1.5,
-        })
-      }
-    })
-
-
-    const pdfBytes = await pdfDoc.save()
-    // const documentStream = await docViewer.getDocument().getFileData({});
-    // const documentBlob = new Blob([documentStream], { type: 'application/pdf' });
-    // window.open(URL.createObjectURL(documentBlob))
-    // //const fileArray = await documentBlob.arrayBuffer();
-    const file = new File([pdfBytes], "test.pdf");
-    // // Get the resulting blob from the merge operation
-    let url = 'home/auto/save';
-    const formData = new FormData();
-    formData.append('file', file);
-    // trigger a download for the user!
-    this.httpService.fileupload(url, formData, null, null).subscribe(res => {
-    })*/
   }
   handleBack = () => {
     this.router.navigate([`/submittals/form/add/${this.id}/step/2`]);

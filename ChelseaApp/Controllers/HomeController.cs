@@ -29,7 +29,7 @@ namespace ChelseaApp.Controllers
         public readonly AppConfig _appSetting;
         private readonly IAzureBlobServices _azureBlobServices;
         private readonly IDocUtility _docUtility;
-       
+
         public HomeController(ChelseaContext context, IMapper mapper, IHostingEnvironment environment, IOptions<AppConfig> appSettings, IAzureBlobServices azureBlobServices, IDocUtility docUtility)
         {
             _context = context;
@@ -51,8 +51,8 @@ namespace ChelseaApp.Controllers
         public async Task<ActionResult> Get(string searchText, string pageNumber, string pageSize)
         {
 
-            int skip = (Convert.ToInt32(pageNumber) - 1)*Convert.ToInt32(pageSize);
-            var dataList =  new List<SubmittalList>();
+            int skip = (Convert.ToInt32(pageNumber) - 1) * Convert.ToInt32(pageSize);
+            var dataList = new List<SubmittalList>();
             int totalCount = 0;
             if (string.IsNullOrEmpty(searchText))
             {
@@ -62,7 +62,7 @@ namespace ChelseaApp.Controllers
             }
             else
             {
-                var dataQuery  =  _context.vwSubmittals.AsQueryable().Where(t => (t.FirstName.ToLower().Contains(searchText.ToLower()) || t.LastName.ToLower().Contains(searchText.ToLower()) || t.Submittals.ToLower().Contains(searchText.ToLower())));
+                var dataQuery = _context.vwSubmittals.AsQueryable().Where(t => (t.FirstName.ToLower().Contains(searchText.ToLower()) || t.LastName.ToLower().Contains(searchText.ToLower()) || t.Submittals.ToLower().Contains(searchText.ToLower())));
                 totalCount = dataQuery.Count();
                 dataList = await dataQuery.OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
             }
@@ -108,7 +108,7 @@ namespace ChelseaApp.Controllers
         public async Task<ActionResult> SaveCoverPage(CoverPageModel coverPage)
         {
             var isSubmittalExists = await _context.vwSubmittals.AnyAsync(t => t.Submittals == coverPage.Submittals && t.Id != coverPage.Id);
-            if(isSubmittalExists)
+            if (isSubmittalExists)
             {
                 return this.Ok("duplicate submittals");
             }
@@ -118,8 +118,8 @@ namespace ChelseaApp.Controllers
             //var cityObj = await _context.CityMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.City)).FirstOrDefaultAsync();
             int stateId = 0;
             int postalCode = 0;
-            
-            if(int.TryParse(coverPage.Contractor.State, out stateId))
+
+            if (int.TryParse(coverPage.Contractor.State, out stateId))
             {
                 var stateObj = await _context.StateMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.State)).FirstOrDefaultAsync();
                 coverPage.Contractor.StateName = stateObj.Name;
@@ -128,17 +128,17 @@ namespace ChelseaApp.Controllers
             {
             }
 
-            DateTime submittalDate=DateTime.Now;
+            DateTime submittalDate = DateTime.Now;
             if (DateTime.TryParse(coverPage.SubmittalDate, out submittalDate))
             {
 
             }
 
-            
+
             //coverPage.Contractor.CityName = cityObj.Name;
             var fileInfo = _docUtility.SaveCoverPage(coverPage, modelList);
             string fileName = Path.GetFileName(fileInfo.Path);
-            
+
             //var fileInfo = await _azureBlobServices.UploadFile(stream, "/Content/"+ fileName, _appSetting.AzureBlobDocContainer, false);
 
             Submittal entity = new Submittal();
@@ -201,13 +201,33 @@ namespace ChelseaApp.Controllers
             return Ok(modelList);
         }
 
+        [HttpGet("submittal/get/{submittalId}/{sectionId}/{fileId}")]
+        public async Task<ActionResult> GetSubmittalFile(string submittalId, string sectionId, string fileId)
+        {
+           
+            var pdfFiles = await _context.PdfFiles.AsQueryable().Where(t => t.SubmittalId == Convert.ToInt32(submittalId) && t.Id == Convert.ToInt32(sectionId)).FirstOrDefaultAsync();
+            var pdfFileObject = this._mapper.Map<PdfFileAutoSaveModel>(pdfFiles);
+            if (pdfFileObject != null)
+            {
+                var pdfFilesDetail = await _context.PdfFileDetails.AsQueryable().Where(t => t.SubmittalId == Convert.ToInt32(submittalId) && t.PdfFileId == Convert.ToInt32(sectionId) && t.Id == Convert.ToInt32(fileId)).FirstOrDefaultAsync();
+
+                pdfFileObject.Files = this._mapper.Map<FileModel>(pdfFilesDetail);
+                if (pdfFileObject.Files != null)
+                {
+                    var thuFileUrl = string.Format("{0}/{1}", "Content", pdfFileObject.Files.Thumbnail);
+                    pdfFileObject.Files.Thumbnail = await _azureBlobServices.GetPath(thuFileUrl, _appSetting.AzureBlobMainImageContainer);
+                }
+            }
+            return Ok(pdfFileObject);
+        }
+
         [HttpPost("upload")]
         public async Task<ActionResult> Upload(IFormFile file)
         {
             var message = string.Empty;
             var newFileName = string.Empty;
             string thumbnail = string.Empty;
-            string pdfPath =  string.Empty;
+            string pdfPath = string.Empty;
             string fileSize = string.Empty;
             string orgFileName = string.Empty;
             try
@@ -219,7 +239,7 @@ namespace ChelseaApp.Controllers
                     file.OpenReadStream().Read(fileBytes, 0, int.Parse(file.Length.ToString()));
 
                     Stream stream = new MemoryStream(fileBytes);
-                  
+
                     var fileExtension = Path.GetExtension(file.FileName).ToLower();
                     var fileName = Path.GetFileNameWithoutExtension(file.FileName);
                     string fileId = fileName + "_" + Guid.NewGuid().ToString();
@@ -231,7 +251,7 @@ namespace ChelseaApp.Controllers
 
                     fileSize = file.Length.ToString();
                     pdfPath = fileInfo.Path;
-                    string thName = fileId + ".png";                    
+                    string thName = fileId + ".png";
                     thumbnail = _docUtility.ConvertPDFtoJPG(stream, thName, 0);
                     orgFileName = file.FileName;
                 }
@@ -417,40 +437,39 @@ namespace ChelseaApp.Controllers
 
             }*/
 
-            var modeObj = this._mapper.Map<PdfFiles>(saveModel.PdfFiles);
+            var modeObj = this._mapper.Map<PdfFiles>(saveModel);
             if (modeObj.Id > 0)
             {
-                _context.PdfFiles.Update(modeObj);               
+                _context.PdfFiles.Update(modeObj);
             }
             else
             {
                 _context.PdfFiles.Add(modeObj);
             }
             await _context.SaveChangesAsync();
-            saveModel.PdfFiles.Id = modeObj.Id;
-
-            foreach (var pdfitem in saveModel.PdfFiles.Files)
+            saveModel.Id = modeObj.Id;
+            var pdfitem = saveModel.Files;
+            //foreach ()
+            //{
+            PdfFileDetails pdfFile = new PdfFileDetails();
+            pdfFile.FileName = pdfitem.FileName;
+            pdfFile.SubmittalId = saveModel.SubmittalId;
+            pdfFile.PdfFileId = modeObj.Id;
+            pdfFile.Id = pdfitem.Id;
+            pdfFile.FileSize = pdfitem.FileSize;
+            pdfFile.Thumbnail = pdfitem.Thumbnail;
+            pdfFile.OrgFileName = pdfitem.OrgFileName;
+            pdfFile.Annotations = pdfitem.Annotations;
+            if (pdfFile.Id > 0)
             {
-                PdfFileDetails pdfFile = new PdfFileDetails();
-                pdfFile.FileName = pdfitem.FileName;
-                pdfFile.SubmittalId = saveModel.SubmittalId;
-                pdfFile.PdfFileId = modeObj.Id;
-
-                /*pdfFile.FileSize = fileSize;
-                pdfFile.Thumbnail = thumbnail;
-                pdfFile.OrgFileName = orgFileName;*/
-
-                pdfFile.Annotations = pdfitem.Annotations;
-                if (modeObj.Id > 0)
-                {
-                    _context.PdfFileDetails.Update(pdfFile);
-                }
-                else
-                {
-                    _context.PdfFileDetails.Add(pdfFile);
-                }
-                await _context.SaveChangesAsync();
+                _context.PdfFileDetails.Update(pdfFile);
             }
+            else
+            {
+                _context.PdfFileDetails.Add(pdfFile);
+            }
+            await _context.SaveChangesAsync();
+            //}
 
             return this.Ok(saveModel);
         }

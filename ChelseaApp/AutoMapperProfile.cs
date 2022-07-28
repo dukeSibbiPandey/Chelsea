@@ -18,6 +18,8 @@ namespace ChelseaApp
             CreateMap<PdfFiles, PdfFileModel>();
             CreateMap<PdfFileDetails, FileModel>();
             CreateMap<SubmittalList, Submittal>();
+            CreateMap<PdfFileAutoSaveModel, PdfFiles>();
+            CreateMap<PdfFiles, PdfFileAutoSaveModel>();
         }
     }
 }
