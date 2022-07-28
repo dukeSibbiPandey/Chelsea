@@ -247,7 +247,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     }
     formData.files.annotations = xfdf
     formData.files.annotation = xfdf
-    prompt('formData', JSON.stringify(formData))
     this.httpService.fileupload(url, formData, null, null).subscribe(res => {
       debugger
     })
