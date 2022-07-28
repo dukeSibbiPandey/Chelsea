@@ -226,7 +226,9 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     });
 
     const { annotManager } = this.wvInstance;
-    var xfdfData = localStorage.getItem('annotations');
+    //var xfdfData = localStorage.getItem('annotations');
+    let submitalData = this.entity.submitalData;
+    let xfdfData = submitalData.files.annotations;
     if (xfdfData) {
       annotManager.importAnnotations(xfdfData).then(importedAnnotations => { });
     }
