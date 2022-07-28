@@ -3,10 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import WebViewer from '@pdftron/pdfjs-express';
 import { HttpService } from 'src/app/components/http.service';
 import { SubmittalService } from '../../submittal.service';
-import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
-
+import { PDFDocument } from 'pdf-lib';
+import { HostListener } from '@angular/core';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-pdf-editor-action',
   templateUrl: './pdf-editor-action.component.html',
@@ -14,22 +13,26 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 })
 export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer1', { static: false }) viewer1: ElementRef;
+  @HostListener('window:beforeunload')
   previewUrl: any;
   wvInstance: any;
   id: any
-  entity;
   dialogConfig;
-  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, public ref: DynamicDialogRef, public config: DynamicDialogConfig) { }
+
+  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router) { }
   ngOnInit() {
-    this.dialogConfig = this.config.data;
-    this.previewUrl = this.dialogConfig.data.previewUrl;
+    const data = JSON.parse(localStorage.getItem('submittalObject'));
+    this.dialogConfig = data;
+    this.previewUrl = this.dialogConfig.previewUrl;
     this.id = this.activatedRoute.snapshot.params['id'];
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
     this.updatePagnation = this.updatePagnation.bind(this);
   }
+  canDeactivate(): Observable<boolean> | boolean {
+    return false
+  }
   ngAfterViewInit(): void {
-    //this.previewUrl = this.activatedRoute.snapshot.paramMap.get('url');
-    this.entity = this.config.data.data;
+    this.previewUrl = this.dialogConfig.previewUrl;
     WebViewer({
       path: '../lib',
       initialDoc: this.previewUrl,
@@ -237,7 +240,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     const { annotManager } = this.wvInstance;
     const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
     localStorage.setItem('annotations', xfdf);
-    const submitalData = this.entity.submitalData;
+    const submitalData = this.dialogConfig.submitalData;
 
     let url = 'home/auto/save';
     let formData = {
@@ -317,13 +320,13 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         try {
           page.drawImage(marioImage, { x: 30, y: height - 30, width: 100 })
           // Fill in the basic info fields
-          page.drawText(`TYPE: ${this.entity.submitalData.name}`, { x: width, y: height - 10, size: size })
-          page.drawText(`VOLT: ${this.entity.submitalData.volt}`, { x: width, y: height - 17, size: size });
-          page.drawText(`LAMP: ${this.entity.submitalData.lamp}`, { x: width, y: height - 24, size: size });
-          page.drawText(`DIM : ${this.entity.submitalData.dim}`, { x: width, y: height - 31, size: size });
-          page.drawText(`RUNS: ${this.entity.submitalData.runs}`, { x: width, y: height - 38, size: size });
-          page.drawText(`${this.entity.submitalData.part}`, { x: 250, y: height - 10, size: size + 3, maxWidth: 30 });
-          page.drawText(this.entity.submitalData.description, { x: 250, y: height - 17, size: size + 3, maxWidth: 30 });
+          page.drawText(`TYPE: ${this.dialogConfig.submitalData.name}`, { x: width, y: height - 10, size: size })
+          page.drawText(`VOLT: ${this.dialogConfig.submitalData.volt}`, { x: width, y: height - 17, size: size });
+          page.drawText(`LAMP: ${this.dialogConfig.submitalData.lamp}`, { x: width, y: height - 24, size: size });
+          page.drawText(`DIM : ${this.dialogConfig.submitalData.dim}`, { x: width, y: height - 31, size: size });
+          page.drawText(`RUNS: ${this.dialogConfig.submitalData.runs}`, { x: width, y: height - 38, size: size });
+          page.drawText(`${this.dialogConfig.submitalData.part}`, { x: 250, y: height - 10, size: size + 3, maxWidth: 30 });
+          page.drawText(this.dialogConfig.submitalData.description, { x: 250, y: height - 17, size: size + 3, maxWidth: 30 });
         }
         catch { }
       });

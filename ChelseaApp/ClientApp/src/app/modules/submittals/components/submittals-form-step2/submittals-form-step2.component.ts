@@ -54,6 +54,31 @@ export class SubmittalsFormStep2Component implements OnInit {
       if (value.pdfFiles) {
         value.pdfFiles[0].isOpen = true
       }
+      const tempData = JSON.parse(localStorage.getItem('submittalObject'));
+      debugger
+      if (tempData) {
+        const index = tempData.submittalIndex;
+        const itemIndex = tempData.itemIndex;
+        const item = tempData.submitalData;
+
+        value.pdfFiles[index]['description'] = item['description'];
+        value.pdfFiles[index]['dim'] = item['dim'];
+        value.pdfFiles[index]['fileTmpPath'] = item['fileTmpPath'];
+        value.pdfFiles[index]['id'] = item['id'];
+        value.pdfFiles[index]['isOpen'] = item['isOpen'];
+        value.pdfFiles[index]['mfg'] = item['mfg'];
+        value.pdfFiles[index]['name'] = item['name'];
+        value.pdfFiles[index]['part'] = item['part'];
+        value.pdfFiles[index]['runs'] = item['runs'];
+        value.pdfFiles[index]['status'] = item['status'];
+        value.pdfFiles[index]['volt'] = item['volt'];
+        if (value.pdfFiles[index]['files'].length >= itemIndex) {
+          value.pdfFiles[index]['files'][itemIndex] = item['files']
+        } else {
+          value.pdfFiles[index]['files'][itemIndex].push(item['files'])
+        }
+
+      }
       this.submittalsTpl = value.pdfFiles;
       this.updateOldState();
       this.submittalData = value;
@@ -62,7 +87,6 @@ export class SubmittalsFormStep2Component implements OnInit {
   selectAddress = (index: any) => {
     this.activeAddressInde = index;
   }
-
 
   uploadSubmittalsCallbackHandler = (res: any) => {
     const index = res.info.itmindex;

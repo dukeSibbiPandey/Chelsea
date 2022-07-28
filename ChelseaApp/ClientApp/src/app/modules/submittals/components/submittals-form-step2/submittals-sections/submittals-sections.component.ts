@@ -1,14 +1,11 @@
-import { Component, Input, Output, OnInit, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { CommonService } from 'src/app/common.service';
 import { HttpService } from 'src/app/components/http.service';
 import { DialogService } from 'primeng/dynamicdialog';
-import { PdfEditorActionComponent } from '../../pdf-editor-action/pdf-editor-action.component';
 import { SubmittalService } from '../../../submittal.service';
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
-
-
 @Component({
   selector: 'app-submittals-sections',
   templateUrl: './submittals-sections.component.html',
@@ -34,11 +31,11 @@ export class SubmittalsSectionsComponent implements OnInit {
   isPreviewDialog = false;
   previewUrl: any = '';
   pdfActionTitle = '';
-  
-  icon:any={
-    DEL_ICON:'',
-    MOVE_UP_ICON:'',
-    MOVE_DOWN_ICON:''
+
+  icon: any = {
+    DEL_ICON: '',
+    MOVE_UP_ICON: '',
+    MOVE_DOWN_ICON: ''
   }
   constructor(private httpService: HttpService, private router: Router, private _CommonService: CommonService, public dialogService: DialogService, private _SubmittalService: SubmittalService, private sanitizer: DomSanitizer) { }
 
@@ -213,23 +210,19 @@ export class SubmittalsSectionsComponent implements OnInit {
   handleActionEdit = (index) => {
     let submitalData = JSON.parse(JSON.stringify(this.submittal))
     submitalData['files'] = submitalData.files[index]
-    this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + this.submittal['files'][index]['fileName'] + "";
-    //this.previewUrl = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
+    // this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + this.submittal['files'][index]['fileName'] + "";
+    this.previewUrl = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
     let config = {
       title: 'Edit PDF',
       previewUrl: this.previewUrl,
       width: '90%',
-      submitalData: submitalData
-
+      submitalData: submitalData,
+      itemIndex: index,
+      submittalIndex: this.itmindex
     }
-    this._CommonService.dialogComponentConfig(config, PdfEditorActionComponent).subscribe(res => {
-      if (res != undefined) {
-
-      } else {
-
-      }
-    })
-
+    localStorage.removeItem('submittalObject');
+    localStorage.setItem('submittalObject', JSON.stringify(config));
+    this.router.navigate([`/submittals/pdf-edit/${this.id}`]);
   }
 
   handleChangeSubmittalName = (event: any) => {

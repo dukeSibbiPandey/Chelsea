@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PendingChangesGuard } from 'src/app/interceptors/pendingchanges.guard';
 import { MergeSubmittalsComponent } from './components/merge-submittals/merge-submittals.component';
 import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-editor-action.component';
 import { SubmittalsFormComponent } from './components/submittals-form/submittals-form.component';
@@ -21,7 +22,7 @@ const routes: Routes = [
         path: 'form/:action/:id/step/:step', component: SubmittalsFormComponent
       },
       {
-        path: 'pdf-edit/:id', component: PdfEditorActionComponent, data: { previewUrl: "" }
+        path: 'pdf-edit/:id', component: PdfEditorActionComponent, canDeactivate: [PendingChangesGuard]
       },
       {
         path: 'preview/:id', component: SubmittalsPreviewComponent

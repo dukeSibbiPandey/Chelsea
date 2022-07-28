@@ -33,6 +33,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import {TableModule} from 'primeng/table';
 import {InputMaskModule} from 'primeng/inputmask';
 import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-editor-action.component';
+import { PendingChangesGuard } from 'src/app/interceptors/pendingchanges.guard';
 
 @NgModule({
   declarations: [

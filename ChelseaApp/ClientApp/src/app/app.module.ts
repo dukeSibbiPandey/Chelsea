@@ -15,6 +15,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HeaderInterceptor } from './interceptors/header.interceptor';
 import { DialogService } from 'primeng/dynamicdialog';
+import { PendingChangesGuard } from './interceptors/pendingchanges.guard';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { DialogService } from 'primeng/dynamicdialog';
     provide: HTTP_INTERCEPTORS,
     useClass: HeaderInterceptor,
     multi: true
-  }, DialogService],
+  }, DialogService, PendingChangesGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

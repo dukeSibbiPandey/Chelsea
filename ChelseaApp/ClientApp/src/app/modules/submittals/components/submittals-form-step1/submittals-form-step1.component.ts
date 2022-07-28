@@ -159,7 +159,7 @@ export class SubmittalsFormStep1Component implements OnInit {
             }, 3000);
           }  
         } catch (err) {
-          debugger
+          
         }
         
       });
