@@ -201,6 +201,26 @@ namespace ChelseaApp.Controllers
             return Ok(modelList);
         }
 
+        [HttpGet("submittal/get/{submittalId}/{sectionId}/{fileId}")]
+        public async Task<ActionResult> GetSubmittalFile(string submittalId, string sectionId, string fileId)
+        {
+           
+            var pdfFiles = await _context.PdfFiles.AsQueryable().Where(t => t.SubmittalId == Convert.ToInt32(submittalId) && t.Id == Convert.ToInt32(sectionId)).FirstOrDefaultAsync();
+            var pdfFileObject = this._mapper.Map<PdfFileAutoSaveModel>(pdfFiles);
+            if (pdfFileObject != null)
+            {
+                var pdfFilesDetail = await _context.PdfFileDetails.AsQueryable().Where(t => t.SubmittalId == Convert.ToInt32(submittalId) && t.PdfFileId == Convert.ToInt32(sectionId) && t.Id == Convert.ToInt32(fileId)).FirstOrDefaultAsync();
+
+                pdfFileObject.Files = this._mapper.Map<FileModel>(pdfFilesDetail);
+                if (pdfFileObject.Files != null)
+                {
+                    var thuFileUrl = string.Format("{0}/{1}", "Content", pdfFileObject.Files.Thumbnail);
+                    pdfFileObject.Files.Thumbnail = await _azureBlobServices.GetPath(thuFileUrl, _appSetting.AzureBlobMainImageContainer);
+                }
+            }
+            return Ok(pdfFileObject);
+        }
+
         [HttpPost("upload")]
         public async Task<ActionResult> Upload(IFormFile file)
         {
