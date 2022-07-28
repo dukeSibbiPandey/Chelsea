@@ -460,10 +460,22 @@ a {
 
         circle {
             fill: #e8442d;
+            -webkit-transition: fill .1s ease-in;
+            /* Safari */
+            transition: fill .1s ease-in;
+            -webkit-transition-delay: .1s;
+            /* Safari */
+            transition-delay: .1s;
         }
 
         &.bg {
             background: #e8442d !important;
+            -webkit-transition: background-color .1s ease-in;
+            /* Safari */
+            transition: background-color .1s ease-in;
+            -webkit-transition-delay: .1s;
+            /* Safari */
+            transition-delay: .1s;
         }
     }
 }
@@ -490,6 +502,12 @@ a {
     &:hover {
         * {
             fill: #e8442d;
+            -webkit-transition: fill .1s ease-in;
+            /* Safari */
+            transition: fill .1s ease-in;
+            -webkit-transition-delay: .1s;
+            /* Safari */
+            transition-delay: .1s;
         }
     }
 }

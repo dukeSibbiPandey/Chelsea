@@ -27,7 +27,7 @@
                     [innerHTML]="icon['MOVE_UP_ICON']"></li>
                 <li class="{{itmindex==totalSubmittals?'  disabled disabled-btn':'hover-btn'}}"
                     (click)="handleMove('down')" [innerHTML]="icon['MOVE_DOWN_ICON']"></li>
-                <li (click)="handleToggle()" class="pointer">
+                <li (click)="handleToggle()" class="pointer hover-btn">
                     <i *ngIf="openIndex.indexOf(itmindex)>-1" [innerHTML]="icon['COLLAPSE_MINUS_ICON']"></i>
                     <i *ngIf="openIndex.indexOf(itmindex)== -1" [innerHTML]="icon['COLLAPSE_PLUS_ICON']"></i>
                 </li>
