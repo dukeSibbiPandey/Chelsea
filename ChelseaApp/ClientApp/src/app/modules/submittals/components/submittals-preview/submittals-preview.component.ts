@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 const submittalItem: any = {
   name: 'F1',
   status: '',
@@ -19,20 +19,36 @@ const submittalItem: any = {
 })
 export class SubmittalsPreviewComponent implements OnInit {
   @Input() pdfActionConfig: any = {};
+  @Output() previewSubmitCallback: EventEmitter<any> = new EventEmitter();
   saveDialogTitle = 'Save PDF';
   isDetailEditDialog = false;
   submittal: any = submittalItem;
   constructor() { }
 
   ngOnInit(): void {
-    debugger
     this.submittal = {
       ...this.pdfActionConfig.pdfFiles
     }
 
   }
   handleUpdateDetail = () => {
-
+    let pdfFiles = {
+      mfg: this.submittal.mfg,
+      part: this.submittal.part,
+      description: this.submittal.description,
+      volt: this.submittal.volt,
+      lamp: this.submittal.lamp,
+      dim: this.submittal.dim,
+      runs: this.submittal.runs,
+    }
+    let config = {
+      ...this.pdfActionConfig.config
+    }
+    let postDto = {
+      pdfFiles: pdfFiles,
+      config: config
+    }
+    this.previewSubmitCallback.emit(postDto)
   }
   handleDetailEditDialog = (value: boolean) => {
     this.isDetailEditDialog = value

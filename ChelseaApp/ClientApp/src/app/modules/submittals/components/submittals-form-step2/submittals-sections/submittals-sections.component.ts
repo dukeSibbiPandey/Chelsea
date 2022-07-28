@@ -262,4 +262,21 @@ export class SubmittalsSectionsComponent implements OnInit {
     }
     return (n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
   }
+
+  previewSubmitCallbackHandler = (res: any) => {
+    const old = {
+      ...this.submittal
+    };
+    this.submittal = {
+      ...old,
+      mfg: res.pdfFiles.mfg,
+      part: res.pdfFiles.part,
+      description: res.pdfFiles.description,
+      volt: res.pdfFiles.volt,
+      lamp: res.pdfFiles.lamp,
+      dim: res.pdfFiles.dim,
+      runs: res.pdfFiles.runs,
+    }
+    this.isPreviewDialog = false;
+  }
 }
