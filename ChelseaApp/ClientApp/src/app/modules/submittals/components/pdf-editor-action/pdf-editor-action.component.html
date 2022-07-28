@@ -1,11 +1,13 @@
 <div class="container-fluid relative pdfAction">
     <div class="pdf_tool_bar">
-        <div>
-            <span class="pointer" [innerHTML]="icon['BACK_ICON']" (click)="handleBack()"></span>
-            <span class="pdf_name">
-                {{dialogConfig && dialogConfig.submitalData && dialogConfig.submitalData.files &&
-                dialogConfig.submitalData.files.orgFileName}}
-            </span>
+        <div class="flex v_center">
+            <div class="pointer" (click)="handleBack()">
+                <span [innerHTML]="icon['BACK_ICON']"></span>
+                <span class="pdf_name">
+                    {{dialogConfig && dialogConfig.submitalData && dialogConfig.submitalData.files &&
+                    dialogConfig.submitalData.files.orgFileName}}
+                </span>
+            </div>
             <button type="button" class="save_pdf btn __btn __default" (click)="handleSaveAction()">Save</button>
         </div>
         <div>
