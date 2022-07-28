@@ -9,8 +9,7 @@ const submittalItem: any = {
   lamp: '',
   dim: '',
   runs: '',
-  files: [],
-  isOpen: true
+  files: []
 }
 @Component({
   selector: 'app-submittals-preview',
