@@ -92,7 +92,9 @@ app-webviewer {
     justify-content: space-between;
     width: 100%;
     background: #F5F5F5;
-
+    span{
+        display: inline-block;
+    }
     .pdf_name {
         font-family: 'Roboto';
         font-style: normal;
