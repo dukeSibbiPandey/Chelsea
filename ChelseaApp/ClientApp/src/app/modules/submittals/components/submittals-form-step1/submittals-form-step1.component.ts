@@ -20,6 +20,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   cityMaster: any = [];
   stateMaster: any = [];
   id: any;
+  entity: any
   constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService, private _ActivatedRoute: ActivatedRoute) { }
   ngOnInit(): void {
     this.id = this._ActivatedRoute.snapshot.params['id'];
@@ -74,6 +75,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   get formControl() { return this.submittalDetailForm.controls };
   getSubmittalData(id: any) {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
+      this.entity = value
       this.setFormData(value)
     })
   }
@@ -83,28 +85,29 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['jobName'].setValue(res['jobName']);
     this.submittalDetailForm.controls['submittals'].setValue(res['submittals']);
     this.submittalDetailForm.controls['addressId'].setValue(res['addressId']);
-    this.submittalDetailForm.controls['stateName'].setValue(res['stateId']);
-    this.submittalDetailForm.controls['cityName'].setValue(res['city']);
+    // this.submittalDetailForm.controls['stateName'].setValue(res['stateId']);
+    // this.submittalDetailForm.controls['cityName'].setValue(res['city']);
 
 
     /* project manager */
     this.submittalDetailForm.controls['projectManager']['controls']['name'].setValue(res['projectManagerName'])
+    this.submittalDetailForm.controls['projectManager']['controls']['phone'].setValue(res['phone'])
+    this.submittalDetailForm.controls['projectManager']['controls']['email'].setValue(res['email'])
 
 
     /* contractor */
 
     this.submittalDetailForm.controls['contractor']['controls']['name'].setValue(res['contractorName']);
-    // this.submittalDetailForm.controls['contractor']['controls']['addressLine1'].setValue(res['projectManagerName']);
-    // this.submittalDetailForm.controls['contractor']['controls']['addressLine2'].setValue(res['projectManagerName']);
-    // this.submittalDetailForm.controls['contractor']['controls']['state'].setValue(res['state']);
-    // this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(res['city']);
-    this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue(res['zip']);
+    this.submittalDetailForm.controls['contractor']['controls']['addressLine1'].setValue(res['addressLine1']);
+    this.submittalDetailForm.controls['contractor']['controls']['addressLine2'].setValue(res['addressLine2']);
+    //this.submittalDetailForm.controls['contractor']['controls']['state'].setValue(res['stateId']);
+    this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(res['city']);
+    this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue(res['zip'] || '');
   }
 
   bindAddressOptions() {
     this.httpService.get("Home/master/data/address").toPromise().then(value => {
       this.addressMaster = value;
-      this.selectAddress(0, this.addressMaster[0]);
     });
   }
   bindCityOptions() {
@@ -118,13 +121,9 @@ export class SubmittalsFormStep1Component implements OnInit {
     });
   }
   selectAddress = (index: any, item: any) => {
-    for (let i = 0; i < this.addressMaster.length; i++) {
-      this.addressMaster[i].isPrimary = false;
-    }
-    item.isPrimary = true;
+    this.entity['addressId'] = item.id;
     this.submittalDetailForm.controls['addressId'].setValue(item.id);
     this.submittalDetailForm.controls['address'].setValue({ addressLine1: item.address, addressLine2: item.name, state: item.state, city: item.city, postalCode: item.zipCode, phone: item.phone, fax: item.fax });
-    this.activeAddressInde = index;
   }
   selectCity = () => {
     let cityId = this.submittalDetailForm.controls['contractor'].value.city;
@@ -172,7 +171,6 @@ export class SubmittalsFormStep1Component implements OnInit {
         } catch (err) {
 
         }
-
       });
     }
   }
