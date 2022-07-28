@@ -6,7 +6,7 @@ import { SubmittalService } from '../../submittal.service';
 import { PDFDocument } from 'pdf-lib';
 import { HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { DomSanitizer } from "@angular/platform-browser";
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 @Component({

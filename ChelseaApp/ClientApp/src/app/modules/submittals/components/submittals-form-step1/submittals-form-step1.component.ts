@@ -78,7 +78,6 @@ export class SubmittalsFormStep1Component implements OnInit {
     })
   }
   setFormData = (res) => {
-    debugger
     this.submittalDetailForm.controls['id'].setValue(res['id']);
     this.submittalDetailForm.controls['submittalDate'].setValue(res['submittedDate'] && new Date(res['submittedDate']));
     this.submittalDetailForm.controls['jobName'].setValue(res['jobName']);
