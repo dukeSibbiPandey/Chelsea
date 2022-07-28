@@ -1,11 +1,13 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { CommonService } from 'src/app/common.service';
 import { HttpService } from 'src/app/components/http.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { SubmittalService } from '../../../submittal.service';
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { DomSanitizer } from "@angular/platform-browser";
+import { SubmittalsPreviewComponent } from '../../submittals-preview/submittals-preview.component';
+
 @Component({
   selector: 'app-submittals-sections',
   templateUrl: './submittals-sections.component.html',
@@ -17,6 +19,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   @Input() id = '0';
   @Input() totalSubmittals = '0';
   @Output() removeFn = new EventEmitter();
+  @ViewChild(SubmittalsPreviewComponent, { static: false }) _SubmittalsPreviewComponent: SubmittalsPreviewComponent;
   @Output() uploadSubmittalsCallback: EventEmitter<any> = new EventEmitter();
   @Output() toggleCallback: EventEmitter<any> = new EventEmitter();
   @Output() selectedActionCallback: EventEmitter<any> = new EventEmitter();
@@ -30,7 +33,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   fileData: any = null;
   isPreviewDialog = false;
   previewUrl: any = '';
-  pdfActionTitle = '';
+  pdfActionConfig: any = {};
 
   icon: any = {
     DEL_ICON: '',
@@ -201,15 +204,31 @@ export class SubmittalsSectionsComponent implements OnInit {
 
 
 
-  handleViewAction = (position: string, previewUrl: any, type: number, fileName: string) => {
+  handleViewAction = (position: string, item: any, index) => {
+    //this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + item.fileName + ""
+    this.previewUrl = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
     this.position = position;
-    this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + fileName + ""
-    this.pdfActionTitle = 'Preview';
+    let pdfFiles = JSON.parse(JSON.stringify(this.submittal))
+    pdfFiles['files'] = item;
+    let config = {
+      itemIndex: index,
+      submittalIndex: this.itmindex,
+      submittalId: this.id,
+      previewUrl: this.previewUrl,
+      title: 'Preview',
+    }
+    this.pdfActionConfig = {
+      pdfFiles: pdfFiles,
+      config: config
+    }
+    setTimeout(() => {
+      this._SubmittalsPreviewComponent.ngOnInit();
+    }, 300);
     this.isPreviewDialog = true;
   }
-  handleActionEdit = (index) => {
+  handleActionEdit = (item: any, index: number) => {
     let submitalData = JSON.parse(JSON.stringify(this.submittal))
-    submitalData['files'] = submitalData.files[index]
+    submitalData['files'] = item;
     this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + this.submittal['files'][index]['fileName'] + "";
     //this.previewUrl = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
     let config = {

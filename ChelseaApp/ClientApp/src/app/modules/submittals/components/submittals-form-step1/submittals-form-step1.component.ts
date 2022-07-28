@@ -1,11 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { HttpService } from '../../../../components/http.service';
 const emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
-const mobilePattern = "^(\([0-9]{3}\)|[0-9]{3}-)[0-9]{3}-[0-9]{4}$";
 
 @Component({
   selector: 'app-submittals-form-step1',
@@ -87,7 +86,7 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['addressId'].setValue(res['addressId']);
     this.submittalDetailForm.controls['stateName'].setValue(res['stateId']);
     this.submittalDetailForm.controls['cityName'].setValue(res['city']);
-    
+
 
     /* project manager */
     this.submittalDetailForm.controls['projectManager']['controls']['name'].setValue(res['projectManagerName'])
@@ -102,7 +101,7 @@ export class SubmittalsFormStep1Component implements OnInit {
     // this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(res['city']);
     this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue(res['zip']);
   }
-  
+
   bindAddressOptions() {
     this.httpService.get("Home/master/data/address").toPromise().then(value => {
       this.addressMaster = value;

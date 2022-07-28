@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../../../../components/http.service';
+
 const submittalItem: any = {
   name: 'F1',
   status: '',
@@ -55,12 +56,10 @@ export class SubmittalsFormStep2Component implements OnInit {
         value.pdfFiles[0].isOpen = true
       }
       const tempData = JSON.parse(localStorage.getItem('submittalObject'));
-      debugger
       if (tempData) {
         const index = tempData.submittalIndex;
         const itemIndex = tempData.itemIndex;
         const item = tempData.submitalData;
-
         value.pdfFiles[index]['description'] = item['description'];
         value.pdfFiles[index]['dim'] = item['dim'];
         value.pdfFiles[index]['fileTmpPath'] = item['fileTmpPath'];
