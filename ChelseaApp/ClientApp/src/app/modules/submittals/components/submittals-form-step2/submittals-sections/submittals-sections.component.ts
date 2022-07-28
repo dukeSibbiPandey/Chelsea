@@ -219,8 +219,8 @@ export class SubmittalsSectionsComponent implements OnInit {
       title: 'Edit PDF',
       previewUrl: this.previewUrl,
       width: '90%',
+      submittalId:this.id,
       submitalData: submitalData
-
     }
     this._CommonService.dialogComponentConfig(config, PdfEditorActionComponent).subscribe(res => {
       if (res != undefined) {
