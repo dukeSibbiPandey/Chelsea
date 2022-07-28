@@ -210,8 +210,8 @@ export class SubmittalsSectionsComponent implements OnInit {
   handleActionEdit = (index) => {
     let submitalData = JSON.parse(JSON.stringify(this.submittal))
     submitalData['files'] = submitalData.files[index]
-    // this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + this.submittal['files'][index]['fileName'] + "";
-    this.previewUrl = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
+    this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + this.submittal['files'][index]['fileName'] + "";
+    //this.previewUrl = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
     let config = {
       title: 'Edit PDF',
       previewUrl: this.previewUrl,
