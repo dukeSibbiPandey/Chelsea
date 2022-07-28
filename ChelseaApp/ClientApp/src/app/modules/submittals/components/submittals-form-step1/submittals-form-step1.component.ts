@@ -83,15 +83,25 @@ export class SubmittalsFormStep1Component implements OnInit {
       this.setFormData(value)
     })
   }
+  getAddress = () => {
+    if (this.addressMaster && this.addressMaster.length > 0 && this.entity.addressId) {
+      this.addressMaster.map((item) => {
+        if (item.id == this.entity.addressId) {
+          this.selectAddress(item)
+        }
+      })
+    }
+
+  }
   setFormData = (res) => {
     this.submittalDetailForm.controls['id'].setValue(res['id']);
     this.submittalDetailForm.controls['submittalDate'].setValue(res['submittedDate'] && new Date(res['submittedDate']));
     this.submittalDetailForm.controls['jobName'].setValue(res['jobName']);
     this.submittalDetailForm.controls['submittals'].setValue(res['submittals']);
     this.submittalDetailForm.controls['addressId'].setValue(res['addressId']);
-    // this.submittalDetailForm.controls['stateName'].setValue(res['stateId']);
-    // this.submittalDetailForm.controls['cityName'].setValue(res['city']);
-
+    if (res['addressId']) {
+      this.getAddress()
+    }
 
     /* project manager */
     this.submittalDetailForm.controls['projectManager']['controls']['name'].setValue(res['projectManagerName'])
@@ -112,6 +122,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   bindAddressOptions() {
     this.httpService.get("Home/master/data/address").toPromise().then(value => {
       this.addressMaster = value;
+      this.getAddress()
     });
   }
   bindCityOptions() {
@@ -124,7 +135,7 @@ export class SubmittalsFormStep1Component implements OnInit {
       this.stateMaster = value;
     });
   }
-  selectAddress = (index: any, item: any) => {
+  selectAddress = (item: any) => {
     this.entity['addressId'] = item.id;
     this.submittalDetailForm.controls['addressId'].setValue(item.id);
     this.submittalDetailForm.controls['address'].setValue({ addressLine1: item.address, addressLine2: item.name, state: item.state, city: item.city, postalCode: item.zipCode, phone: item.phone, fax: item.fax });

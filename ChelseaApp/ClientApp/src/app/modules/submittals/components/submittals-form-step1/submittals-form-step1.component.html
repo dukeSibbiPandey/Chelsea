@@ -6,7 +6,7 @@
                     <label for="" class="__dark">Chelsea Address</label>
                     <div class="row-same-height __address_grid">
                         <div class="col-same-height" *ngFor="let item of addressMaster">
-                            <div class="content __a_list" (click)="selectAddress(0, item)">
+                            <div class="content __a_list" (click)="selectAddress(item)">
                                 <span class="__r_btn {{item.id==entity.addressId?' checked':''}}"></span>
                                 <div class="__a_c">
                                     <p class="__title">
