@@ -20,13 +20,17 @@ export class SubmittalsFormStep1Component implements OnInit {
   cityMaster: any = [];
   stateMaster: any = [];
   id: any;
-  entity: any
+  entity: any = {
+    addressId: 0
+  }
   constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService, private _ActivatedRoute: ActivatedRoute) { }
   ngOnInit(): void {
     this.id = this._ActivatedRoute.snapshot.params['id'];
     this.createForm(() => {
       if (this.id > 0) {
         this.getSubmittalData(this.id);
+      } else {
+
       }
     })
     this.bindAddressOptions();
