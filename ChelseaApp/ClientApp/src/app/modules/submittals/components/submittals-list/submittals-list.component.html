@@ -22,6 +22,7 @@
                     (onPage)="paginate($event)" class="__chelsea_tbl __submittals_table">
                     <ng-template pTemplate="header">
                         <tr>
+                            <th># Id</th>
                             <th>Output Submittals</th>
                             <th>Submittals</th>
                             <th>Created By</th>
@@ -31,6 +32,9 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-item>
                         <tr>
+                            <td>
+                                {{item.id}}
+                            </td>
                             <td>
                                 <div class="flex">
                                     <img class="__t_img" src="{{item.thumbnailUrl}}"
