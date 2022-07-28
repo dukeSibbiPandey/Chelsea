@@ -237,8 +237,8 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     const { annotManager } = this.wvInstance;
     const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
     localStorage.setItem('annotations', xfdf);
-    const submitalData = this.entity.submitalData;
-
+    let submitalData = this.entity.submitalData;
+    submitalData.submittalId = this.entity.submittalId;
     let url = 'home/auto/save';
     let formData = {
       ...submitalData
