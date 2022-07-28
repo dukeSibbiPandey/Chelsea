@@ -10,7 +10,6 @@ import { SubmittalsStepperComponent } from './components/submittals-stepper/subm
 import { SubmittalsSectionsComponent } from './components/submittals-form-step2/submittals-sections/submittals-sections.component';
 import { SubmittalsPreviewContentComponent } from './components/submittals-preview-content/submittals-preview-content.component';
 import { SubmittalsPreviewComponent } from './components/submittals-preview/submittals-preview.component';
-import { PreviewPageTwoComponent } from './components/submittals-preview-content/preview-page-two/preview-page-two.component';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
@@ -24,17 +23,15 @@ import { SharedModule } from 'primeng/api';
 import { DigitOnlyDirective } from 'src/app/directives/digit-only.directive';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
-import {CalendarModule} from 'primeng/calendar';
-import {FileUploadModule} from 'primeng/fileupload';
-import {PaginatorModule} from 'primeng/paginator';
+import { CalendarModule } from 'primeng/calendar';
+import { FileUploadModule } from 'primeng/fileupload';
+import { PaginatorModule } from 'primeng/paginator';
 import { ImgFallbackModule } from 'ngx-img-fallback';
-import {ProgressBarModule} from 'primeng/progressbar';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import {TableModule} from 'primeng/table';
-import {InputMaskModule} from 'primeng/inputmask';
+import { TableModule } from 'primeng/table';
+import { InputMaskModule } from 'primeng/inputmask';
 import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-editor-action.component';
-import { PendingChangesGuard } from 'src/app/interceptors/pendingchanges.guard';
-
 @NgModule({
   declarations: [
     DigitOnlyDirective,
@@ -47,7 +44,6 @@ import { PendingChangesGuard } from 'src/app/interceptors/pendingchanges.guard';
     SubmittalsSectionsComponent,
     SubmittalsPreviewComponent,
     SubmittalsPreviewContentComponent,
-    PreviewPageTwoComponent,
     MergeSubmittalsComponent,
     EditHeaderComponent,
     SubmittalsDetailFormComponent,
