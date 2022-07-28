@@ -6,6 +6,7 @@ import { SubmittalService } from '../../submittal.service';
 import { PDFDocument } from 'pdf-lib';
 import { HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 @Component({
   selector: 'app-pdf-editor-action',
   templateUrl: './pdf-editor-action.component.html',
@@ -18,8 +19,11 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   wvInstance: any;
   id: any
   dialogConfig;
+  icon:any={
+    BACK_ICON:''
+  }
 
-  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router) { }
+  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer) { }
   ngOnInit() {
     const data = JSON.parse(localStorage.getItem('submittalObject'));
     this.dialogConfig = data;
@@ -27,9 +31,16 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     this.id = this.activatedRoute.snapshot.params['id'];
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
     this.updatePagnation = this.updatePagnation.bind(this);
+    this.BACK_ICON()
   }
   canDeactivate(): Observable<boolean> | boolean {
     return false
+  }
+  BACK_ICON=()=>{
+    const icon = this._SubmittalService.BACK_ICON();
+    this.icon.BACK_ICON = this.sanitizer.bypassSecurityTrustHtml(
+      icon
+    );
   }
   ngAfterViewInit(): void {
     this.previewUrl = this.dialogConfig.previewUrl;

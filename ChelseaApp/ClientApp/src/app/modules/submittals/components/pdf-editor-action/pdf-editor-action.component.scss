@@ -78,9 +78,34 @@ app-webviewer {
     margin-right: 10px;
 }
 
-.save_pdf {
+.pdfAction {
+    padding-top: 35px;
+}
+
+.pdf_tool_bar {
     position: absolute;
-    background: #e8442d;
-    border: 1px #e8442d solid;
-    color: white;
+    top: 0px;
+    left: 0px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+
+    .pdf_name {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+        color: #333333;
+        display: inline-block;
+        margin: 0 10px;
+    }
+
+    .save_pdf {
+        background: #e8442d;
+        border: 1px #e8442d solid;
+        color: white;
+        display: flex;
+        align-items: center;
+    }
 }
