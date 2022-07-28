@@ -22,7 +22,7 @@ const routes: Routes = [
         path: 'form/:action/:id/step/:step', pathMatch:'full', component: SubmittalsFormComponent
       },
       {
-        path: 'preview/:id',pathMatch:'full',  component: SubmittalsPreviewComponent
+        path: 'preview/:id',pathMatch:'full',  component: MergeSubmittalsComponent
       },
       {
         path: 'pdf-edit/:id', pathMatch:'full', component: PdfEditorActionComponent, canDeactivate: [PendingChangesGuard]
