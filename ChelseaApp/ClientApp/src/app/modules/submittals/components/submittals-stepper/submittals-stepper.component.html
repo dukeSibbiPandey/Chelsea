@@ -15,16 +15,17 @@
     <!-- {{activeStep >= 2 ?' active':''}} -->
     <div class="indicator-line "></div>
     <div class="step step2 {{activeStep >= 2 ?' active':''}}">
-        <div class="step-icon" *ngIf="activeStep == 2">
+        <!-- *ngIf="activeStep < 2" -->
+        <div class="step-icon">
             2
         </div>
-        <div class="step-icon" *ngIf="activeStep > 2">
+        <!-- <div class="step-icon" *ngIf="activeStep > 2">
             <svg width="11" height="8" viewBox="0 0 11 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M3.725 7.7C3.825 7.7 3.92083 7.68333 4.0125 7.65C4.10417 7.61667 4.18333 7.55833 4.25 7.475L10.425 1.275C10.575 1.125 10.65 0.95 10.65 0.75C10.65 0.55 10.575 0.366667 10.425 0.2C10.275 0.0666669 10.0958 0 9.8875 0C9.67917 0 9.5 0.0749999 9.35 0.225L3.725 5.85L1.275 3.4C1.125 3.25 0.95 3.175 0.75 3.175C0.55 3.175 0.375 3.25 0.225 3.4C0.0749999 3.55 0 3.73333 0 3.95C0 4.16667 0.0749999 4.34167 0.225 4.475L3.2 7.475C3.28333 7.55833 3.37083 7.61667 3.4625 7.65C3.55417 7.68333 3.64167 7.7 3.725 7.7Z"
                     fill="white" />
             </svg>
-        </div>
+        </div> -->
         <!-- <p>Payment</p> -->
     </div>
     <!-- <div class="indicator-line" *ngIf="activeStep >= 2"></div> -->
