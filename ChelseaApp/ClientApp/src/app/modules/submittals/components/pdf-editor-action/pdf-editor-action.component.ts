@@ -293,7 +293,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     })
   }
   handleBack = () => {
-    this.router.navigate([`/submittals/form/add/${this.id}/step/2`]);
+    this.router.navigate([`/submittals/form/${this.id}/step/2`]);
   }
   handlePreview = () => {
     this.router.navigate([`/submittals/preview/${this.id}`]);

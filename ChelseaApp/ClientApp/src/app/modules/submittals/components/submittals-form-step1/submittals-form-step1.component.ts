@@ -183,7 +183,7 @@ export class SubmittalsFormStep1Component implements OnInit {
     let data: any = {
       isDialogOpen: false
     }
-    let url = '/submittals/form/add/' + id + '/step/2';
+    let url = '/submittals/form/' + id + '/step/2';
     this.router.navigate([url]);
     // this.detailFormSubmitCallbck.emit(data)
   }

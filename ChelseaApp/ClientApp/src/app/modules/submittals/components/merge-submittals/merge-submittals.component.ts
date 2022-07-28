@@ -34,7 +34,7 @@ export class MergeSubmittalsComponent implements OnInit {
     })
   }
   handleBack = () => {
-    this.router.navigate([`/submittals/form/add/${this.id}/step/2`]);
+    this.router.navigate([`/submittals/form/${this.id}/step/2`]);
   }
   handleEditDialog(value: boolean) {
     this.isEditDialog = value;

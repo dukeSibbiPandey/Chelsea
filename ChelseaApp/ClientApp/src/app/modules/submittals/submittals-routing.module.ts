@@ -19,7 +19,7 @@ const routes: Routes = [
         path: 'list', pathMatch:'full', component: SubmittalsComponent
       },
       {
-        path: 'form/:action/:id/step/:step', pathMatch:'full', component: SubmittalsFormComponent
+        path: 'form/:id/step/:step', pathMatch:'full', component: SubmittalsFormComponent
       },
       {
         path: 'preview/:id',pathMatch:'full',  component: MergeSubmittalsComponent
