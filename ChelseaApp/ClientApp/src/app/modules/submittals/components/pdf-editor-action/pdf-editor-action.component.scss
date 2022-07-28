@@ -79,7 +79,7 @@ app-webviewer {
 }
 
 .pdfAction {
-    padding-top: 35px;
+    padding-top: 45px;
 }
 
 .pdf_tool_bar {
@@ -89,6 +89,9 @@ app-webviewer {
     padding: 0 15px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: #F5F5F5;
 
     .pdf_name {
         font-family: 'Roboto';
@@ -105,7 +108,7 @@ app-webviewer {
         background: #e8442d;
         border: 1px #e8442d solid;
         color: white;
-        display: flex;
-        align-items: center;
+        line-height: 12px;
+        height: 27px;
     }
 }

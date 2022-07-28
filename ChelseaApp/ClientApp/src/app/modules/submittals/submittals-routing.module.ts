@@ -16,19 +16,19 @@ const routes: Routes = [
         path: '', redirectTo: 'list', pathMatch: "full"
       },
       {
-        path: 'list', component: SubmittalsComponent
+        path: 'list', pathMatch:'full', component: SubmittalsComponent
       },
       {
-        path: 'form/:action/:id/step/:step', component: SubmittalsFormComponent
+        path: 'form/:action/:id/step/:step', pathMatch:'full', component: SubmittalsFormComponent
       },
       {
-        path: 'pdf-edit/:id', component: PdfEditorActionComponent, canDeactivate: [PendingChangesGuard]
+        path: 'preview/:id',pathMatch:'full',  component: SubmittalsPreviewComponent
       },
       {
-        path: 'preview/:id', component: SubmittalsPreviewComponent
+        path: 'pdf-edit/:id', pathMatch:'full', component: PdfEditorActionComponent, canDeactivate: [PendingChangesGuard]
       },
       {
-        path: 'merge/:id', component: MergeSubmittalsComponent
+        path: 'merge/:id', pathMatch:'full', component: MergeSubmittalsComponent
       },
     ]
   }

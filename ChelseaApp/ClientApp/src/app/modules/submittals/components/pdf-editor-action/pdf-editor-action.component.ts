@@ -19,8 +19,8 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   wvInstance: any;
   id: any
   dialogConfig;
-  icon:any={
-    BACK_ICON:''
+  icon: any = {
+    BACK_ICON: ''
   }
 
   constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer) { }
@@ -36,7 +36,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   canDeactivate(): Observable<boolean> | boolean {
     return false
   }
-  BACK_ICON=()=>{
+  BACK_ICON = () => {
     const icon = this._SubmittalService.BACK_ICON();
     this.icon.BACK_ICON = this.sanitizer.bypassSecurityTrustHtml(
       icon
@@ -97,19 +97,15 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         const [pageNumber] = e.detail;
         console.log(`Current page is ${pageNumber}`);
         this.updatePagnation(instance)
-
       });
       instance.docViewer.on('annotationsLoaded', () => {
         console.log('annotations loaded');
       });
-
       instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
     })
   }
   updatePagnation = (instance) => {
-    instance.docViewer.on('documentLoaded', () => {
-      console.log('annotations loadeddfdfdfd');
-    });
+    
 
   }
   updatePager = (docViewer: any) => {
@@ -157,6 +153,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     const { docViewer } = this.wvInstance;
     const reduIcon = this.customReduIcon(docViewer);
     const unduIcon = this.customUnduIcon(docViewer);
+    debugger
     this.wvInstance.setHeaderItems((header) => {
       header.push(reduIcon);
       header.push(unduIcon);
@@ -224,6 +221,17 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
               pager.innerHTML = `Page ${TotalPageNumber}/${TotalPageNumber}`;
             }
           };
+
+          /* Go to Preview */
+          let button: any = document.createElement('button');
+          button.innerHTML = 'Preview';
+          button.setAttribute("type", "button");
+          button.setAttribute("id", "preview");
+          button.style = "background: #e8442d; color: white;cursor: pointer; border:1px #e8442d solid; border-radius:4px";
+          button.onclick = () => {
+            this.handlePreview()
+          };
+
           var form: any = document.createElement('div');
           form.style = "display: flex; border-radius: 10px;padding: 10px;cursor: pointer;";
           form.appendChild(pager);
@@ -231,6 +239,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
           form.appendChild(customPagerPrev);
           form.appendChild(customPagerNext);
           form.appendChild(customPagerlast);
+          // form.appendChild(button);
           return form;
         }
       });
@@ -310,6 +319,9 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   }
   handleBack = () => {
     this.router.navigate([`/submittals/form/add/${this.id}/step/2`]);
+  }
+  handlePreview = () => {
+    this.router.navigate([`/submittals/preview/${this.id}`]);
   }
 
   createHeader = async () => {
