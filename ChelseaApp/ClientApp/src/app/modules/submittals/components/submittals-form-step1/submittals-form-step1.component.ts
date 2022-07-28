@@ -79,6 +79,7 @@ export class SubmittalsFormStep1Component implements OnInit {
     })
   }
   setFormData = (res) => {
+    debugger
     this.submittalDetailForm.controls['id'].setValue(res['id']);
     this.submittalDetailForm.controls['submittalDate'].setValue(res['submittedDate'] && new Date(res['submittedDate']));
     this.submittalDetailForm.controls['jobName'].setValue(res['jobName']);
@@ -86,10 +87,22 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['addressId'].setValue(res['addressId']);
     this.submittalDetailForm.controls['stateName'].setValue(res['stateId']);
     this.submittalDetailForm.controls['cityName'].setValue(res['city']);
+    
 
     /* project manager */
     this.submittalDetailForm.controls['projectManager']['controls']['name'].setValue(res['projectManagerName'])
+
+
+    /* contractor */
+
+    this.submittalDetailForm.controls['contractor']['controls']['name'].setValue(res['contractorName']);
+    // this.submittalDetailForm.controls['contractor']['controls']['addressLine1'].setValue(res['projectManagerName']);
+    // this.submittalDetailForm.controls['contractor']['controls']['addressLine2'].setValue(res['projectManagerName']);
+    // this.submittalDetailForm.controls['contractor']['controls']['state'].setValue(res['state']);
+    // this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(res['city']);
+    this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue(res['zip']);
   }
+  
   bindAddressOptions() {
     this.httpService.get("Home/master/data/address").toPromise().then(value => {
       this.addressMaster = value;
