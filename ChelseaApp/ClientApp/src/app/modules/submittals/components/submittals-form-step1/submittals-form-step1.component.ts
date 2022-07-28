@@ -80,7 +80,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   }
   setFormData = (res) => {
     this.submittalDetailForm.controls['id'].setValue(res['id']);
-    this.submittalDetailForm.controls['submittalDate'].setValue(res['submittedDate']);
+    this.submittalDetailForm.controls['submittalDate'].setValue(res['submittedDate'] && new Date(res['submittedDate']));
     this.submittalDetailForm.controls['jobName'].setValue(res['jobName']);
     this.submittalDetailForm.controls['submittals'].setValue(res['submittals']);
     this.submittalDetailForm.controls['addressId'].setValue(res['addressId']);
@@ -157,11 +157,11 @@ export class SubmittalsFormStep1Component implements OnInit {
             setTimeout(() => {
               this.postAjax(value);
             }, 3000);
-          }  
+          }
         } catch (err) {
-          
+
         }
-        
+
       });
     }
   }
