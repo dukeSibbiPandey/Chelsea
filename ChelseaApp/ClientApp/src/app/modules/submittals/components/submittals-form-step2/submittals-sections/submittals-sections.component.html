@@ -28,13 +28,13 @@
                 <li class="{{itmindex==totalSubmittals?'  disabled disabled-btn':'hover-btn'}}"
                     (click)="handleMove('down')" [innerHTML]="icon['MOVE_DOWN_ICON']"></li>
                 <li (click)="handleToggle()">
-                    <i *ngIf="submittal.isOpen" [innerHTML]="icon['COLLAPSE_MINUS_ICON']"></i>
-                    <i *ngIf="!submittal.isOpen" [innerHTML]="icon['COLLAPSE_PLUS_ICON']"></i>
+                    <i *ngIf="openIndex.indexOf(itmindex)>-1" [innerHTML]="icon['COLLAPSE_MINUS_ICON']"></i>
+                    <i *ngIf="openIndex.indexOf(itmindex)== -1" [innerHTML]="icon['COLLAPSE_PLUS_ICON']"></i>
                 </li>
             </ul>
         </div>
     </div>
-    <div class="{{submittal?.isOpen?' ':' hidden'}}">
+    <div class="{{openIndex.indexOf(itmindex)>-1?' ':' hidden'}}">
         <ul class="row">
             <!--    <li class="col-sm-2">
                 <div class="form-group">

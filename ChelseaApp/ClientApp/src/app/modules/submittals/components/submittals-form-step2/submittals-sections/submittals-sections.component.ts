@@ -18,6 +18,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   @Input() itmindex = '0';
   @Input() id = '0';
   @Input() totalSubmittals = '0';
+  @Input() openIndex = [];
   @Output() removeFn = new EventEmitter();
   @ViewChild(SubmittalsPreviewComponent, { static: false }) _SubmittalsPreviewComponent: SubmittalsPreviewComponent;
   @Output() uploadSubmittalsCallback: EventEmitter<any> = new EventEmitter();
@@ -34,7 +35,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   isPreviewDialog = false;
   previewUrl: any = '';
   pdfActionConfig: any = {};
-
+  
   icon: any = {
     DEL_ICON: '',
     MOVE_UP_ICON: '',
@@ -128,9 +129,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   removeImage = (target: any, str: string) => {
   }
   handleToggle = () => {
-    this.submittal.isOpen = !this.submittal.isOpen;
     this.toggleCallback.emit({
-      isOpen: this.submittal.isOpen,
       idx: this.itmindex
     })
   }

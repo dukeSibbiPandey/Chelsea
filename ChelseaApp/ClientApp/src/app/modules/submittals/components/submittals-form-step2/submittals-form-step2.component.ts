@@ -12,8 +12,7 @@ const submittalItem: any = {
   lamp: '',
   dim: '',
   runs: '',
-  files: [],
-  isOpen: true
+  files: []
 }
 @Component({
   selector: 'app-submittals-form-step2',
@@ -25,6 +24,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   id: any = 0;
   submittalData: any;
   tempSubmittalsTpl: any = [];
+  openIndex=['0']
   submittalsTpl: any = [
     {
       name: 'F1',
@@ -38,8 +38,7 @@ export class SubmittalsFormStep2Component implements OnInit {
       runs: '',
       files: [
 
-      ],
-      isOpen: true
+      ]
     }
   ]
   constructor(private route: ActivatedRoute, private httpService: HttpService, private router: Router) { }
@@ -52,9 +51,6 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
   getSubmittalData(id: any) {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
-      if (value.pdfFiles) {
-        value.pdfFiles[0].isOpen = true
-      }
       const tempData = JSON.parse(localStorage.getItem('submittalObject'));
       if (tempData) {
         const index = tempData.submittalIndex;
@@ -64,7 +60,6 @@ export class SubmittalsFormStep2Component implements OnInit {
         value.pdfFiles[index]['dim'] = item['dim'];
         value.pdfFiles[index]['fileTmpPath'] = item['fileTmpPath'];
         value.pdfFiles[index]['id'] = item['id'];
-        value.pdfFiles[index]['isOpen'] = item['isOpen'];
         value.pdfFiles[index]['mfg'] = item['mfg'];
         value.pdfFiles[index]['name'] = item['name'];
         value.pdfFiles[index]['part'] = item['part'];
@@ -105,8 +100,12 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
 
   toggleCallbackHandler = (res: any) => {
-    this.submittalsTpl[res.idx]['isOpen'] = res.isOpen;
-    this.updateOldState();
+    const index = this.openIndex.indexOf(res.idx);
+    if (index > -1) { 
+      this.openIndex.splice(index, 1); 
+    }else{
+      this.openIndex.push(res.idx)
+    }
   }
   removeSubmittals = (res: any) => {
     this.submittalsTpl.splice(res.idx, 1);
