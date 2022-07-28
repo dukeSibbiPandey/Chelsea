@@ -217,6 +217,7 @@ export class SubmittalsSectionsComponent implements OnInit {
       previewUrl: this.previewUrl,
       width: '90%',
       submitalData: submitalData,
+      submittalId: this.id,
       itemIndex: index,
       submittalIndex: this.itmindex
     }

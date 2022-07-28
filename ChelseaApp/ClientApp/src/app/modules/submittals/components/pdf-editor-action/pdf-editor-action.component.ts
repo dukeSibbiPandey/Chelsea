@@ -7,40 +7,54 @@ import { PDFDocument } from 'pdf-lib';
 import { HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { MessageService } from 'primeng/api';
+import { PrimeNGConfig } from 'primeng/api';
 @Component({
   selector: 'app-pdf-editor-action',
   templateUrl: './pdf-editor-action.component.html',
-  styleUrls: ['./pdf-editor-action.component.scss']
+  styleUrls: ['./pdf-editor-action.component.scss'],
+  providers: [PrimeNGConfig, MessageService]
 })
 export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer1', { static: false }) viewer1: ElementRef;
   @HostListener('window:beforeunload')
   previewUrl: any;
   wvInstance: any;
+  isFormSubmit = false;
   id: any
-  dialogConfig;
+  dialogConfig: any = null;
   icon: any = {
     BACK_ICON: ''
   }
 
-  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer) { }
+  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer, private messageService: MessageService) { }
   ngOnInit() {
+    this.id = this.activatedRoute.snapshot.params['id'];
     const data = JSON.parse(localStorage.getItem('submittalObject'));
     this.dialogConfig = data;
-    this.previewUrl = this.dialogConfig.previewUrl;
-    this.id = this.activatedRoute.snapshot.params['id'];
-    this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
-    this.updatePagnation = this.updatePagnation.bind(this);
-    this.BACK_ICON()
+    if (!this.dialogConfig) {
+      this.isFormSubmit = true;
+      this.handleBack();
+    } else {
+      this.previewUrl = this.dialogConfig.previewUrl;
+      this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
+      this.updatePagnation = this.updatePagnation.bind(this);
+      this.BACK_ICON()
+    }
+
   }
   canDeactivate(): Observable<boolean> | boolean {
-    return false
+
+    return this.isFormSubmit
   }
   BACK_ICON = () => {
     const icon = this._SubmittalService.BACK_ICON();
     this.icon.BACK_ICON = this.sanitizer.bypassSecurityTrustHtml(
       icon
     );
+  }
+  toastMsg(severity: any, summary: any, detail: any, life: any) {
+    this.messageService.add({ key: 'pdfEditorToast', severity: severity, summary: summary, detail: detail, life: life, closable: true });
   }
   ngAfterViewInit(): void {
     this.previewUrl = this.dialogConfig.previewUrl;
@@ -105,7 +119,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     })
   }
   updatePagnation = (instance) => {
-    
+
 
   }
   updatePager = (docViewer: any) => {
@@ -153,7 +167,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     const { docViewer } = this.wvInstance;
     const reduIcon = this.customReduIcon(docViewer);
     const unduIcon = this.customUnduIcon(docViewer);
-    debugger
     this.wvInstance.setHeaderItems((header) => {
       header.push(reduIcon);
       header.push(unduIcon);
@@ -260,17 +273,21 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     const { annotManager } = this.wvInstance;
     const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
     localStorage.setItem('annotations', xfdf);
-    const submitalData = this.dialogConfig.submitalData;
-
+    let submitalData = this.dialogConfig.submitalData;
+    submitalData.submittalId = this.dialogConfig.submittalId;
     let url = 'home/auto/save';
     let formData = {
       ...submitalData
     }
     formData.files.annotations = xfdf
     formData.files.annotation = xfdf
-    prompt('formData', JSON.stringify(formData))
     this.httpService.fileupload(url, formData, null, null).subscribe(res => {
-      debugger
+      this.toastMsg('success', 'Success', 'PDF Submitted Successfully', 2000);
+      this.isFormSubmit = true
+      setTimeout(() => {
+        localStorage.removeItem('submittalObject');
+        this.handleBack();
+      }, 3000)
     })
 
     /*const annotationList = annotManager.getAnnotationsList();
