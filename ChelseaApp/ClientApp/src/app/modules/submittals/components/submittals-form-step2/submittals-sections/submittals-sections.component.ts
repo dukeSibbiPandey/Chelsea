@@ -204,8 +204,8 @@ export class SubmittalsSectionsComponent implements OnInit {
 
 
   handleViewAction = (position: string, item: any, index) => {
-    //this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + item.fileName + ""
-    this.previewUrl = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
+    this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + item.fileName + ""
+    //this.previewUrl = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
     this.position = position;
     let pdfFiles = JSON.parse(JSON.stringify(this.submittal))
     pdfFiles['files'] = item;
