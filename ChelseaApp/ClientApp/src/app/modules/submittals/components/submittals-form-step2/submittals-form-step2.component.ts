@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../../../../components/http.service';
+import { PDFDocument } from 'pdf-lib';
+import { PdfHelperService } from '../../pdfhelper.service';
 
 const submittalItem: any = {
   name: 'F1',
@@ -171,9 +173,12 @@ export class SubmittalsFormStep2Component implements OnInit {
       this.change_submittal_name(res)
     }
   }
-  handleMergePdp = () => {
+  handleMergePdp = async() => {
     let temp: any = [];
-    this.submittalsTpl.map((ele: any, index: number) => {
+    //this.submittalsTpl.map((ele: any, index: number) => {
+     for(let i=0; i<this.submittalsTpl.length; i++)
+     {
+      let ele = this.submittalsTpl[i];
       let item: any = {
         name: ele.name,
         status: ele.status,
@@ -184,16 +189,38 @@ export class SubmittalsFormStep2Component implements OnInit {
         volt: ele.volt,
         lamp: ele.lamp,
         dim: ele.dim,
-        runs: ele.cruns,
+        runs: ele.runs,
         files: ele.files
       }
+      //item.files.forEach(async element => {
+        for(let j=0; j<item.files.length; j++)
+        {
+         const element = item.files[j];
+         let fileurl = "https://chelsea.skdedu.in/api/Home/download?bloburl="+element.fileName;
+         if(element.annotations)
+         {
+           let expressObj = await this.getMergedPdfWithAnnotations(element.annotations, item, fileurl);
+           debugger;
+           item.files[j].expressKey = expressObj.key;
+           item.files[j].expressUrl = expressObj.url;
+           item.files[j].expressId = expressObj.id;
+         }
+         else
+         {
+            let expressObj = await this.createPdfHeaders(item, fileurl, 2, element.orgFileName);
+            item.files[j].tempFileName = expressObj.fileName;
+         }
+        }
+      //});
       temp.push(item)
-    })
+     }
+    //})
     this.updateOldState();
     let postDto = {
       submittalId: this.id,
       pdfFiles: temp
     }
+    debugger;
     this.httpService.post("home/files/merge", postDto).toPromise().then(value => {
       this.postAjax()
     });
@@ -202,5 +229,52 @@ export class SubmittalsFormStep2Component implements OnInit {
   postAjax = () => {
     let url = `/submittals/merge/${this.id}`;
     this.router.navigate([url]);
+  }
+  getMergedPdfWithAnnotations = async (xfdf: string, item: any, fileUrl: string): Promise<any> => {
+    debugger;    
+    // const fileData = await fetch(fileUrl).then(res => res.arrayBuffer());
+    // const blob = new Blob([fileData], {type: 'application/pdf'});
+    const blob = await this.createPdfHeaders(item, fileUrl, 1, "");
+
+    const data = new FormData();
+    data.append('xfdf', xfdf);
+    data.append('file', blob);
+    //data.append('license', my_license_key);
+
+    // Process the file
+    const response = await fetch('https://api.pdfjs.express/xfdf/merge', {
+      method: 'post',
+      body: data
+    }).then(resp => resp.json());
+
+    const { url, key, id } = response;
+
+    // Download the file
+    /*const mergedFileBlob = await fetch(url, {
+      headers: {
+        Authorization: key
+      }
+    }).then(resp => resp.blob())*/
+
+    // Do something with blob...
+    // save(mergedFileBlob)
+
+    return response;
+  }
+  createPdfHeaders = async (item: any, fileUrl: string, type: any, fileName: string): Promise<any> => {
+    debugger;
+      let blobDoc = await PdfHelperService.CreatePdfHeader(fileUrl, item);
+      if(type==2)
+      {
+        let response = {};
+        const data = new FormData();
+        data.append('fileName', fileName);
+        data.append('file', blobDoc);
+        await this.httpService.fileupload('home/upload/header', data, null, null).toPromise().then(value => {
+           response = value;
+        });
+        return response;
+      }
+      return blobDoc;
   }
 }

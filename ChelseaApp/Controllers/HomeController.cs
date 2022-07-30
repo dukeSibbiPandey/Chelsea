@@ -225,6 +225,27 @@ namespace ChelseaApp.Controllers
             return Ok(pdfFileObject);
         }
 
+        [HttpPost("upload/header")]
+        public async Task<ActionResult> UploadHeader(IFormFile file, [FromForm]string fileName)
+
+        {
+            byte[] fileBytes = new byte[file.Length];
+            file.OpenReadStream().Read(fileBytes, 0, int.Parse(file.Length.ToString()));
+
+            Stream stream = new MemoryStream(fileBytes);
+
+            var fileExtension = Path.GetExtension(fileName).ToLower();
+            var fileNameNew = Path.GetFileNameWithoutExtension(fileName);
+            string fileId = fileNameNew + "_" + Guid.NewGuid().ToString();
+
+            var newFileName = string.Format("{0}{1}", fileId, fileExtension);
+            var fileUrl = string.Format("{0}/{1}", "Content", newFileName);
+
+            await _azureBlobServices.UploadFile(stream, fileUrl, _appSetting.AzureBlobTempContainer, false);
+            return Ok(new FileModel { FileName = newFileName, OrgFileName = fileName });
+
+        }
+
         [HttpPost("upload")]
         public async Task<ActionResult> Upload(IFormFile file)
         {
@@ -316,9 +337,22 @@ namespace ChelseaApp.Controllers
             {
                 foreach (var fdetails in filesList.Files)
                 {
-                    var fileUrl = string.Format("{0}/{1}", "Content", fdetails.FileName);
-                    var fileStream = await _azureBlobServices.DownloadFile(fileUrl, _appSetting.AzureBlobTempContainer);
-                    files.Add(fileStream);
+                    if (!string.IsNullOrEmpty(fdetails.ExpressKey))
+                    {
+                        var fileStream = this.GetMergedPdf(fdetails.ExpressKey, fdetails.ExpressUrl);
+                        files.Add(fileStream);
+                    }
+                    else
+                    {
+                        var fileUrl = string.Format("{0}/{1}", "Content", !string.IsNullOrEmpty(fdetails.TempFileName) ? fdetails.TempFileName : fdetails.FileName);
+                        var fileStream = await _azureBlobServices.DownloadFile(fileUrl, _appSetting.AzureBlobTempContainer);
+                        files.Add(fileStream);
+
+                        if (!string.IsNullOrEmpty(fdetails.TempFileName))
+                        {
+                            await _azureBlobServices.DeleteFile(fileUrl, _appSetting.AzureBlobTempContainer);
+                        }
+                    }
                 }
 
                 string mergByte = _docUtility.CombineMultiplePDFs(filesList, files);
@@ -513,6 +547,17 @@ namespace ChelseaApp.Controllers
             saveModel.Files.Id = pdfFile.Id;
             saveModel.Files.PdfFileId = pdfFile.PdfFileId;
             return this.Ok(saveModel);
+        }
+
+
+        public Stream GetMergedPdf(string key, string url)
+        {
+            WebRequest myWebRequest = WebRequest.Create(url);
+            myWebRequest.Method = "GET";
+            myWebRequest.Headers.Add("Authorization", key);
+            WebResponse myWebResponse = myWebRequest.GetResponse();
+            var stream = myWebResponse.GetResponseStream();
+            return stream;
         }
     }
 }

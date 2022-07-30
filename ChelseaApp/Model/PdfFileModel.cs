@@ -49,5 +49,9 @@ namespace ChelseaApp.Model
         public string Thumbnail { get; set; }
         public string OrgFileName { get; set; }
         public string Annotations { get; set; }
+        public string ExpressKey { get; set; }
+        public string ExpressUrl { get; set; }
+        public string ExpressId { get; set; }
+        public string TempFileName { get; set; }
     }
 }

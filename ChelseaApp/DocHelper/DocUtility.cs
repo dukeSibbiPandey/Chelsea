@@ -452,7 +452,7 @@ namespace ChelseaApp.DocHelper
 
             var desFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".pdf";          
 
-            PdfHelper.ManipulatePdf(model, outputFilePath, desFilePath);
+            //PdfHelper.ManipulatePdf(model, outputFilePath, desFilePath);
 
             /*string reportPath = "Content/MergePdf";
             string contentRootPath = _environment.ContentRootPath;
