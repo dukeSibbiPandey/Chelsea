@@ -19,7 +19,7 @@ export class PdfHelperService {
         let size = 7;
         let valsize = 7;
         try {
-          page.drawImage(marioImage, { x: 30, y: height+40 })
+          page.drawImage(marioImage, { x: 30, y: height+40, width: 70, height: 15 })
           // Fill in the basic info fields
           page.drawText(`Type`, { x: w, y: height + 29, size: size })
           page.drawText(`${fileData.name}`, { x: w +30, y: height + 29, size: valsize  })
