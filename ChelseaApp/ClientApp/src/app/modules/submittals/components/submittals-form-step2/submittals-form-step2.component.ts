@@ -178,6 +178,7 @@ export class SubmittalsFormStep2Component implements OnInit {
         name: ele.name,
         status: ele.status,
         mfg: ele.mfg,
+        id: ele.id,
         part: ele.part,
         description: ele.description,
         volt: ele.volt,

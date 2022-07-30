@@ -193,6 +193,8 @@ namespace ChelseaApp.Controllers
                 {
                     var thuFileUrl = string.Format("{0}/{1}", "Content", model.Thumbnail);
                     model.Thumbnail = await _azureBlobServices.GetPath(thuFileUrl, _appSetting.AzureBlobMainImageContainer);
+                    fileUrl = string.Format("{0}/{1}", "Content", model.FileName);
+                    model.FilePath = await _azureBlobServices.GetPath(fileUrl, _appSetting.AzureBlobDocContainer);
                 }
 
             }
@@ -216,6 +218,8 @@ namespace ChelseaApp.Controllers
                 {
                     var thuFileUrl = string.Format("{0}/{1}", "Content", pdfFileObject.Files.Thumbnail);
                     pdfFileObject.Files.Thumbnail = await _azureBlobServices.GetPath(thuFileUrl, _appSetting.AzureBlobMainImageContainer);
+                    var fileUrl = string.Format("{0}/{1}", "Content", pdfFileObject.Files.FileName);
+                    pdfFileObject.Files.FilePath = await _azureBlobServices.GetPath(fileUrl, _appSetting.AzureBlobDocContainer);
                 }
             }
             return Ok(pdfFileObject);
@@ -348,10 +352,15 @@ namespace ChelseaApp.Controllers
                 blobpdffileUrl = fileInfo.Path;
             }
 
+            var sectionIds = pdfFileMaster.PdfFiles.Select(t => t.Id).ToList();
+            var subSectionIds = pdfFileMaster.PdfFiles.SelectMany(t => t.Files).Select(t => t.Id).ToList();
+
             var pdfEntities = _context.PdfFiles.Where(t => t.SubmittalId == dataList.Id).ToList();
+            var pdfEntitiesNew = pdfEntities.Where(t => !sectionIds.Any(s => s == t.Id)).ToList();
             var pdfDetailEntities = _context.PdfFileDetails.Where(t => t.SubmittalId == dataList.Id).ToList();
-            _context.PdfFiles.RemoveRange(pdfEntities);
-            _context.PdfFileDetails.RemoveRange(pdfDetailEntities);
+            var pdfDetailEntitiesNew = pdfDetailEntities.Where(t => !subSectionIds.Any(s => s == t.Id)).ToList();
+            _context.PdfFiles.RemoveRange(pdfEntitiesNew);
+            _context.PdfFileDetails.RemoveRange(pdfDetailEntitiesNew);
 
             var submittalModel = this._mapper.Map<Submittal>(dataList);
             submittalModel.Thumbnail = Path.GetFileName(thumbnail);
@@ -362,24 +371,55 @@ namespace ChelseaApp.Controllers
 
             foreach (var model in pdfFileMaster.PdfFiles)
             {
+                var upDateObj = pdfEntities.Where(t => t.Id == model.Id).FirstOrDefault();
                 var modeObj = this._mapper.Map<PdfFiles>(model);
                 modeObj.SubmittalId = pdfFileMaster.SubmittalId;
                 modeObj.FileName = pdfFileName;
-                _context.PdfFiles.Add(modeObj);
+                if (upDateObj!=null)
+                {
+                    upDateObj.Status = modeObj.Status;
+                    upDateObj.Name = modeObj.Name;
+                    upDateObj.MFG = modeObj.MFG;
+                    upDateObj.Part = modeObj.Part;
+                    upDateObj.Description = modeObj.Description;
+                    upDateObj.FileName = modeObj.FileName;
+                    upDateObj.Volt = modeObj.Volt;
+                    upDateObj.Lamp = modeObj.Lamp;
+                    upDateObj.Dim = modeObj.Dim;
+                    upDateObj.Runs = modeObj.Runs;
+                    _context.PdfFiles.Update(upDateObj);
+                }
+                else
+                {
+                    _context.PdfFiles.Add(modeObj);
+                }
                 await _context.SaveChangesAsync();
 
                 foreach (var file in model.Files)
                 {
-                    PdfFileDetails pdfFile = new PdfFileDetails();
-                    pdfFile.FileName = file.FileName;
+                    var pdfFile = pdfDetailEntities.Where(t => t.Id == file.Id).FirstOrDefault();
+                    if (pdfFile == null)
+                    {
+                        pdfFile = new PdfFileDetails();
+                    }
+
+                    pdfFile.Id = file.Id;
+                    pdfFile.FileName = Path.GetFileName(file.FileName);
                     pdfFile.SubmittalId = pdfFileMaster.SubmittalId;
                     pdfFile.PdfFileId = modeObj.Id;
                     pdfFile.Annotations = file.Annotations;
-                    pdfFile.FileName = file.FileName;
+                    pdfFile.FileName = Path.GetFileName(file.FileName);
                     pdfFile.FileSize = file.FileSize;
                     pdfFile.Thumbnail = Path.GetFileName(file.Thumbnail);
                     pdfFile.OrgFileName = file.OrgFileName;
-                    _context.PdfFileDetails.Add(pdfFile);
+                    if (pdfFile.Id > 0)
+                    {
+                        _context.PdfFileDetails.Update(pdfFile);
+                    }
+                    else
+                    {
+                        _context.PdfFileDetails.Add(pdfFile);
+                    }
                     await _context.SaveChangesAsync();
                 }
             }
@@ -452,12 +492,12 @@ namespace ChelseaApp.Controllers
             //foreach ()
             //{
             PdfFileDetails pdfFile = new PdfFileDetails();
-            pdfFile.FileName = pdfitem.FileName;
+            pdfFile.FileName = Path.GetFileName(pdfitem.FileName);
             pdfFile.SubmittalId = saveModel.SubmittalId;
             pdfFile.PdfFileId = modeObj.Id;
             pdfFile.Id = pdfitem.Id;
             pdfFile.FileSize = pdfitem.FileSize;
-            pdfFile.Thumbnail = pdfitem.Thumbnail;
+            pdfFile.Thumbnail = Path.GetFileName(pdfitem.Thumbnail);
             pdfFile.OrgFileName = pdfitem.OrgFileName;
             pdfFile.Annotations = pdfitem.Annotations;
             if (pdfFile.Id > 0)
@@ -470,7 +510,8 @@ namespace ChelseaApp.Controllers
             }
             await _context.SaveChangesAsync();
             //}
-
+            saveModel.Files.Id = pdfFile.Id;
+            saveModel.Files.PdfFileId = pdfFile.PdfFileId;
             return this.Ok(saveModel);
         }
     }
