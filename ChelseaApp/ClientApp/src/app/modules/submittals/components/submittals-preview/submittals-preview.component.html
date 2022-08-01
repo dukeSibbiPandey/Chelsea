@@ -11,54 +11,56 @@
                 <button type="button" class="btn __btn __default" (click)="handleSaveAction()">Save</button>
             </div>
             <ul class="row">
-                <li class="col-sm-3">
+                <li class="col-sm-4">
                     <div class="form-group">
                         <label for="">Manufacturer</label>
                         <input type="text" class="form-control" placeholder="Enter here" name='mfg'
                             [(ngModel)]="submittal['mfg']" #mfg="ngModel" (ngModelChange)="modelChanged($event)">
                     </div>
                 </li>
-                <li class="col-sm-3">
+                <li class="col-sm-4">
                     <div class="form-group">
-                        <label for="">Part</label>
+                        <label for="">Part#</label>
                         <input type="text" class="form-control" placeholder="Enter here" name='part'
                             [(ngModel)]="submittal['part']" #part="ngModel" (ngModelChange)="modelChanged($event)">
                     </div>
                 </li>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label for="">Description</label>
-                        <input type="text" class="form-control" placeholder="Enter here" name='description'
-                            [(ngModel)]="submittal['description']" #description="ngModel"
-                            (ngModelChange)="modelChanged($event)">
-                    </div>
-                </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label for="">Voltage</label>
                         <input type="text" class="form-control" placeholder="Enter here" name='volt'
                             [(ngModel)]="submittal['volt']" #volt="ngModel" (ngModelChange)="modelChanged($event)">
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="form-group">
-                        <label for="">LAMP</label>
+                        <label for="">Lamp</label>
                         <input type="text" class="form-control" placeholder="Enter here" name='lamp'
                             [(ngModel)]="submittal['lamp']" #lamp="ngModel" (ngModelChange)="modelChanged($event)">
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="form-group">
-                        <label for="">DIM</label>
+                        <label for="">Dim</label>
                         <input type="text" class="form-control" placeholder="Enter here" name='dim'
                             [(ngModel)]="submittal['dim']" #dim="ngModel" (ngModelChange)="modelChanged($event)">
                     </div>
                 </div>
-                <div class="col-sm-3        ">
+                <div class="col-sm-4        ">
                     <div class="form-group">
-                        <label for="">RUNS</label>
+                        <label for="">Runs</label>
                         <input type="text" class="form-control" placeholder="Enter here" name='runs'
                             [(ngModel)]="submittal['runs']" #runs="ngModel" (ngModelChange)="modelChanged($event)">
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="">Description</label>
+                        <textarea class="form-control text-areae" placeholder="Enter here" name='description'
+                            [(ngModel)]="submittal['description']" #description="ngModel"
+                            (ngModelChange)="modelChanged($event)">
+
+                    </textarea>
                     </div>
                 </div>
             </ul>
