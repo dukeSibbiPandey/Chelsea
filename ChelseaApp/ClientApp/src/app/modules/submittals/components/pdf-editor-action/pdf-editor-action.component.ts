@@ -302,5 +302,8 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   createHeader = async () => {
     let blobDoc = await PdfHelperService.CreatePdfHeader(this.previewUrl, this.dialogConfig.submitalData);
     this.wvInstance.loadDocument(blobDoc);
+    setTimeout(() => {
+      this.wvInstance.setFitMode('FitWidth')
+    }, 100);
   }
 }
