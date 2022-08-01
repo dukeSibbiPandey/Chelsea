@@ -35,3 +35,19 @@
     background: #F9F9F9;
     padding: 15px;
 }
+
+.viewer_dialog{
+    height: 100vh;
+    position: relative;
+    &.mt20{
+        margin-top: 20px;
+    }
+    iframe{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0px;
+    }
+}
+
