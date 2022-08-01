@@ -31,12 +31,12 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer, private messageService: MessageService) { }
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.params['id'];
-    const data = JSON.parse(localStorage.getItem('submittalObject'));
-    this.dialogConfig = data;
-    if (!this.dialogConfig) {
+    const data = localStorage.getItem('submittalObject') && JSON.parse(localStorage.getItem('submittalObject')) || null;
+    if (!data) {
       this.isFormSubmit = true;
       this.handleBack();
     } else {
+      this.dialogConfig = data;
       this.previewUrl = this.dialogConfig.previewUrl;
       this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
       this.updatePagnation = this.updatePagnation.bind(this);

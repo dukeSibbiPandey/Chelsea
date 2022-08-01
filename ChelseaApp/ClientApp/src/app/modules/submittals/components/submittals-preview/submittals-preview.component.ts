@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit, } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
@@ -26,7 +26,6 @@ const submittalItem: any = {
 })
 export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer2', { static: false }) viewer1: ElementRef;
-  @Output() previewSubmitCallback: EventEmitter<any> = new EventEmitter();
   saveDialogTitle = 'Save PDF';
   isDetailEditDialog = false;
   submittal: any = submittalItem;
@@ -38,18 +37,29 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
   icon: any = {
     BACK_ICON: ''
   }
-  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer, private messageService: MessageService) { }
+  constructor(private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
+    this.BACK_ICON()
     this.id = this.activatedRoute.snapshot.params['submittalId'];
-    const data = JSON.parse(localStorage.getItem('submittalObject'));
-    this.submittal = {
-      ...data.pdfFiles
+    const data = localStorage.getItem('submittalObject') && JSON.parse(localStorage.getItem('submittalObject')) || null;
+    if (!data) {
+      this.handleBack();
+    }else{
+      this.dialogConfig = data;
+      this.submittal = {
+        ...data.pdfFiles
+      }
+      this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
     }
-    this.dialogConfig = data;
-    this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
+    
   }
-
+  BACK_ICON = () => {
+    const icon = this._SubmittalService.BACK_ICON();
+    this.icon.BACK_ICON = this.sanitizer.bypassSecurityTrustHtml(
+      icon
+    );
+  }
   ngAfterViewInit(): void {
     this.previewUrl = this.dialogConfig.config.previewUrl;
     WebViewer(
@@ -80,6 +90,9 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
     let blobDoc = await PdfHelperService.CreatePdfHeader(this.previewUrl, this.dialogConfig.pdfFiles);
     this.wvInstance.loadDocument(blobDoc);
   }
+  handleBack = () => {
+    this.router.navigate([`/submittals/form/${this.id}/step/2`]);
+  }
   handleUpdateDetail = () => {
     let pdfFiles = {
       mfg: this.submittal.mfg,
@@ -100,8 +113,7 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
     localStorage.removeItem('submittalObject');
     localStorage.removeItem('updatedHeader');
     localStorage.setItem('updatedHeader', JSON.stringify(postDto));
-    // this.previewSubmitCallback.emit(postDto)
-    this.router.navigate([`/submittals/form/${this.id}/step/2`]);
+    this.handleBack();
   }
   handleDetailEditDialog = (value: boolean) => {
     this.isDetailEditDialog = value
