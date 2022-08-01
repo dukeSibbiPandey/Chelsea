@@ -101,7 +101,11 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
     }, 100);
   }
   handleBack = () => {
-    this.router.navigate([`/submittals/form/${this.id}/step/2`]);
+    localStorage.removeItem('submittalObject');
+    localStorage.removeItem('updatedHeader');
+    setTimeout(() => {
+      this.router.navigate([`/submittals/form/${this.id}/step/2`]);
+    }, 10);
   }
   handleUpdateDetail = () => {
     let pdfFiles = {
@@ -125,8 +129,6 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
     }
     this.isFormSaved = false
     this.createHeader(this.previewUrl, pdfFiles);
-    // localStorage.removeItem('submittalObject');
-    localStorage.removeItem('updatedHeader');
     localStorage.setItem('updatedHeader', JSON.stringify(postDto));
     // this.handleBack();
   }
@@ -136,7 +138,7 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
   toastMsg(severity: any, summary: any, detail: any, life: any) {
     this.messageService.add({ key: 'pdfEditorToast', severity: severity, summary: summary, detail: detail, life: life, closable: true });
   }
-  modelChanged=(event)=>{
+  modelChanged = (event) => {
     this.isFormSaved = false
   }
   handleSaveAction = async () => {
@@ -155,8 +157,6 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
       this.toastMsg('success', 'Success', 'PDF Submitted Successfully', 2000);
       this.isFormSaved = true
       setTimeout(() => {
-        localStorage.removeItem('submittalObject');
-        localStorage.removeItem('updatedHeader');
         this.handleBack();
       }, 3000)
     })
