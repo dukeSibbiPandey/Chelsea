@@ -114,6 +114,8 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       });
       instance.docViewer.on('annotationsLoaded', () => {
         console.log('annotations loaded');
+        const annots = this.wvInstance.annotManager.getAnnotationsList;
+        this.wvInstance.annotManager.deleteAnnotations(annots);
       });
       // instance.addEventListener('annotationChanged', (annotations, action, { imported }) => {
       //   alert('aa')
