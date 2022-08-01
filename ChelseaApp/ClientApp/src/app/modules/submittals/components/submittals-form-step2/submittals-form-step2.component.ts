@@ -26,7 +26,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   id: any = 0;
   submittalData: any;
   tempSubmittalsTpl: any = [];
-  openIndex = ['0']
+  openIndex = []
   submittalsTpl: any = [
     {
       name: 'F1',
@@ -99,6 +99,10 @@ export class SubmittalsFormStep2Component implements OnInit {
           }
         }
       }
+      this.openIndex = [];
+      value.pdfFiles && value.pdfFiles.map((item, index) => {
+        this.openIndex.push(index.toString())
+      })
       this.submittalsTpl = value.pdfFiles;
       this.updateOldState();
       this.submittalData = value;
@@ -117,6 +121,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   addMoreOption = () => {
     let item = JSON.parse(JSON.stringify(submittalItem));
     item.name = "F" + (this.submittalsTpl.length + 1);
+    this.openIndex.push(this.submittalsTpl.length.toString())
     this.submittalsTpl.push(item);
     this.updateOldState();
   }
@@ -134,6 +139,7 @@ export class SubmittalsFormStep2Component implements OnInit {
     }
   }
   removeSubmittals = (res: any) => {
+    this.toggleCallbackHandler(res.idx)
     this.submittalsTpl.splice(res.idx, 1);
   }
   duplicateSubmittals = (res: any) => {
