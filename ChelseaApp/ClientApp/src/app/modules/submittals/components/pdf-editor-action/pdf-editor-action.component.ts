@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import WebViewer from '@pdftron/pdfjs-express';
 import { HttpService } from 'src/app/components/http.service';
 import { SubmittalService } from '../../submittal.service';
-import { PDFDocument } from 'pdf-lib';
 import { HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DomSanitizer } from "@angular/platform-browser";
