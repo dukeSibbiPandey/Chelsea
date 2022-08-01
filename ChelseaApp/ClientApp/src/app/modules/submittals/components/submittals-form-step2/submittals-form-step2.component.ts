@@ -120,8 +120,21 @@ export class SubmittalsFormStep2Component implements OnInit {
 
   addMoreOption = () => {
     let item = JSON.parse(JSON.stringify(submittalItem));
-    item.name = "F" + (this.submittalsTpl.length + 1);
-    this.openIndex.push(this.submittalsTpl.length.toString())
+    let name = "F" + (this.submittalsTpl.length + 1);
+    let arr = this.tempSubmittalsTpl;
+    let temp = 0;
+    arr.map((ele: any, index: number) => {
+      if (ele['name'] == name) {
+        temp = temp + 1
+      }
+    })
+    if (temp == 0) {
+      item.name = name
+    } else {
+      item.name = name + `_` + new Date().getTime()
+    }
+
+    this.openIndex.push(this.submittalsTpl.length.toString());
     this.submittalsTpl.push(item);
     this.updateOldState();
   }
