@@ -24,16 +24,16 @@ export class PdfHelperService {
           page.drawText(`Type`, { x: w, y: height + 29, size: size })
           page.drawText(`${fileData.name}`, { x: w + 30, y: height + 29, size: valsize })
 
-          page.drawText(`Volt`, { x: w, y: height + 17, size: size });
+          page.drawText(`Voltage`, { x: w, y: height + 17, size: size });
           page.drawText(`${fileData.volt}`, { x: w + 30, y: height + 17, size: valsize })
 
           page.drawText(`Lamp`, { x: w, y: height + 5, size: size });
           page.drawText(`${fileData.lamp}`, { x: w + 30, y: height + 5, size: valsize })
 
-          page.drawText(`DIM`, { x: w, y: height - 7, size: size });
+          page.drawText(`Dim`, { x: w, y: height - 7, size: size });
           page.drawText(`${fileData.dim}`, { x: w + 30, y: height - 7, size: valsize })
 
-          page.drawText(`RUNS`, { x: w, y: height - 21, size: size });
+          page.drawText(`Runs`, { x: w, y: height - 21, size: size });
           page.drawText(`${fileData.runs}`, { x: w + 30, y: height - 21, size: valsize })
 
           page.drawText(`${fileData.part}`, { x: 400, y: height + 60, size: size + 3, maxWidth: 30 });
