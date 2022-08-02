@@ -30,6 +30,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer, private messageService: MessageService) { }
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.params['id'];
+     PdfHelperService.RemoveDataLocalStorage();
     const data = localStorage.getItem('submittalObject') && JSON.parse(localStorage.getItem('submittalObject')) || null;
     if (!data) {
       this.isFormSubmit = true;

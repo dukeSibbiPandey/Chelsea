@@ -43,6 +43,7 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
   constructor(private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer, private httpService: HttpService, private messageService: MessageService) { }
 
   ngOnInit(): void {
+    PdfHelperService.RemoveDataLocalStorage();
     this.BACK_ICON()
     this.id = this.activatedRoute.snapshot.params['submittalId'];
     const data = localStorage.getItem('submittalObject') && JSON.parse(localStorage.getItem('submittalObject')) || null;
