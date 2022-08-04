@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import WebViewer from '@pdftron/pdfjs-express';
 import { HttpService } from 'src/app/components/http.service';
 import { SubmittalService } from '../../submittal.service';
-import { PDFDocument } from 'pdf-lib';
 import { HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DomSanitizer } from "@angular/platform-browser";
@@ -31,12 +30,13 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer, private messageService: MessageService) { }
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.params['id'];
-    const data = JSON.parse(localStorage.getItem('submittalObject'));
-    this.dialogConfig = data;
-    if (!this.dialogConfig) {
+     PdfHelperService.RemoveDataLocalStorage();
+    const data = localStorage.getItem('submittalObject') && JSON.parse(localStorage.getItem('submittalObject')) || null;
+    if (!data) {
       this.isFormSubmit = true;
       this.handleBack();
     } else {
+      this.dialogConfig = data;
       this.previewUrl = this.dialogConfig.previewUrl;
       this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
       this.updatePagnation = this.updatePagnation.bind(this);
@@ -115,7 +115,16 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       });
       instance.docViewer.on('annotationsLoaded', () => {
         console.log('annotations loaded');
+        const annots = this.wvInstance.annotManager.getAnnotationsList;
+        this.wvInstance.annotManager.deleteAnnotations(annots);
       });
+      // instance.addEventListener('annotationChanged', (annotations, action, { imported }) => {
+      //   alert('aa')
+      //   if (imported) {
+      //     return;
+      //   }
+      //   // do event handling
+      // });
       instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
     })
   }
@@ -301,8 +310,10 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   }
 
   createHeader = async () => {
-    debugger;
-      let blobDoc = await PdfHelperService.CreatePdfHeader(this.previewUrl, this.dialogConfig.submitalData);
-      this.wvInstance.loadDocument(blobDoc);
+    let blobDoc = await PdfHelperService.CreatePdfHeader(this.previewUrl, this.dialogConfig.submitalData);
+    this.wvInstance.loadDocument(blobDoc);
+    setTimeout(() => {
+      this.wvInstance.setFitMode('FitWidth')
+    }, 100);
   }
 }

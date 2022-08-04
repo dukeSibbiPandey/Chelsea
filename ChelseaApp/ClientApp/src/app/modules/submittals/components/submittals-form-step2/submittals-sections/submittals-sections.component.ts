@@ -35,7 +35,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   isPreviewDialog = false;
   previewUrl: any = '';
   pdfActionConfig: any = {};
-  
+
   icon: any = {
     DEL_ICON: '',
     MOVE_UP_ICON: '',
@@ -204,11 +204,13 @@ export class SubmittalsSectionsComponent implements OnInit {
 
 
   handleViewAction = (position: string, item: any, index) => {
+    debugger
     this.previewUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + item.fileName + ""
     //this.previewUrl = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
-    this.position = position;
+    // this.position = position;
     let pdfFiles = JSON.parse(JSON.stringify(this.submittal))
     pdfFiles['files'] = item;
+    debugger
     let config = {
       itemIndex: index,
       submittalIndex: this.itmindex,
@@ -216,14 +218,17 @@ export class SubmittalsSectionsComponent implements OnInit {
       previewUrl: this.previewUrl,
       title: 'Preview',
     }
-    this.pdfActionConfig = {
+    let pdfActionConfig = {
       pdfFiles: pdfFiles,
       config: config
     }
-    setTimeout(() => {
-      this._SubmittalsPreviewComponent.ngOnInit();
-    }, 300);
-    this.isPreviewDialog = true;
+    localStorage.removeItem('submittalObject');
+    localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
+    this.router.navigate([`/submittals/form/preview/${this.id}/${item.id}`]);
+    // setTimeout(() => {
+    //   this._SubmittalsPreviewComponent.ngOnInit();
+    // }, 300);
+    // this.isPreviewDialog = true;
   }
   handleActionEdit = (item: any, index: number) => {
     let submitalData = JSON.parse(JSON.stringify(this.submittal))
