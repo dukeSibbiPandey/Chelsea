@@ -33,5 +33,7 @@ namespace Chelsea.Repository
         public string LastName { get; set; }
         public string CoverPageName { get; set; }
         public bool? IsTempRecord { get; set; }
+        public string Status { get; set; }
+        public bool? IsDraft { get; set; }
     }
 }
