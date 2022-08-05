@@ -77,28 +77,28 @@ export class SubmittalsFormStep2Component implements OnInit {
           localStorage.removeItem('updatedHeader');
         }
       }
-      if (tempData) {
-        const index = tempData.submittalIndex;
-        const itemIndex = tempData.itemIndex;
-        const item = tempData.submitalData;
-        if (item) {
-          value.pdfFiles[index]['description'] = item['description'];
-          value.pdfFiles[index]['dim'] = item['dim'];
-          value.pdfFiles[index]['fileTmpPath'] = item['fileTmpPath'];
-          value.pdfFiles[index]['id'] = item['id'];
-          value.pdfFiles[index]['mfg'] = item['mfg'];
-          value.pdfFiles[index]['name'] = item['name'];
-          value.pdfFiles[index]['part'] = item['part'];
-          value.pdfFiles[index]['runs'] = item['runs'];
-          value.pdfFiles[index]['status'] = item['status'];
-          value.pdfFiles[index]['volt'] = item['volt'];
-          if (value.pdfFiles[index]['files'].length >= itemIndex) {
-            value.pdfFiles[index]['files'][itemIndex] = item['files']
-          } else {
-            value.pdfFiles[index]['files'][itemIndex].push(item['files'])
-          }
-        }
-      }
+      // if (tempData) {
+      //   const index = tempData.submittalIndex;
+      //   const itemIndex = tempData.itemIndex;
+      //   const item = tempData.submitalData;
+      //   if (item) {
+      //     value.pdfFiles[index]['description'] = item['description'];
+      //     value.pdfFiles[index]['dim'] = item['dim'];
+      //     value.pdfFiles[index]['fileTmpPath'] = item['fileTmpPath'];
+      //     value.pdfFiles[index]['id'] = item['id'];
+      //     value.pdfFiles[index]['mfg'] = item['mfg'];
+      //     value.pdfFiles[index]['name'] = item['name'];
+      //     value.pdfFiles[index]['part'] = item['part'];
+      //     value.pdfFiles[index]['runs'] = item['runs'];
+      //     value.pdfFiles[index]['status'] = item['status'];
+      //     value.pdfFiles[index]['volt'] = item['volt'];
+      //     if (value.pdfFiles[index]['files'].length >= itemIndex) {
+      //       value.pdfFiles[index]['files'][itemIndex] = item['files']
+      //     } else {
+      //       value.pdfFiles[index]['files'][itemIndex].push(item['files'])
+      //     }
+      //   }
+      // }
       this.openIndex = [];
       value.pdfFiles && value.pdfFiles.map((item, index) => {
         this.openIndex.push(index.toString())
