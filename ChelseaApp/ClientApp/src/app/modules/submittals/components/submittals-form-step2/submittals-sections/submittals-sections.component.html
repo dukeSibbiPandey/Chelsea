@@ -54,53 +54,57 @@
                     </div>
                 </div>
             </li> -->
-            <li class="col-sm-4">
-                <div class="form-group">
-                    <label for="">Manufacturer</label>
-                    <input type="text" class="form-control" placeholder="Enter here" name='mfg'
-                        [(ngModel)]="submittal['mfg']" #mfg="ngModel" required>
-                </div>
-            </li>
-            <li class="col-sm-4">
-                <div class="form-group">
-                    <label for="">Part #</label>
-                    <input type="text" class="form-control" placeholder="Enter here" name='part'
-                        [(ngModel)]="submittal['part']" #part="ngModel" required>
-                </div>
-            </li>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label for="">Voltage</label>
-                    <input type="text" class="form-control" placeholder="Enter here" name='volt'
-                        [(ngModel)]="submittal['volt']" #volt="ngModel">
+            <div class="col-sm-8">
+                <div class="row">
+                    <li class="col-sm-4">
+                        <div class="form-group">
+                            <label for="">Manufacturer</label>
+                            <input type="text" class="form-control" placeholder="Enter here" name='mfg'
+                                [(ngModel)]="submittal['mfg']" #mfg="ngModel" required>
+                        </div>
+                    </li>
+                    <li class="col-sm-4">
+                        <div class="form-group">
+                            <label for="">Part #</label>
+                            <input type="text" class="form-control" placeholder="Enter here" name='part'
+                                [(ngModel)]="submittal['part']" #part="ngModel" required>
+                        </div>
+                    </li>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="">Voltage</label>
+                            <input type="text" class="form-control" placeholder="Enter here" name='volt'
+                                [(ngModel)]="submittal['volt']" #volt="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="">Lamp</label>
+                            <input type="text" class="form-control" placeholder="Enter here" name='lamp'
+                                [(ngModel)]="submittal['lamp']" #lamp="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="">Dim</label>
+                            <input type="text" class="form-control" placeholder="Enter here" name='dim'
+                                [(ngModel)]="submittal['dim']" #dim="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="">Runs</label>
+                            <input type="text" class="form-control" placeholder="Enter here" name='runs'
+                                [(ngModel)]="submittal['runs']" #runs="ngModel">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-4">
-                <div class="form-group">
-                    <label for="">Lamp</label>
-                    <input type="text" class="form-control" placeholder="Enter here" name='lamp'
-                        [(ngModel)]="submittal['lamp']" #lamp="ngModel">
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label for="">Dim</label>
-                    <input type="text" class="form-control" placeholder="Enter here" name='dim'
-                        [(ngModel)]="submittal['dim']" #dim="ngModel">
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label for="">Runs</label>
-                    <input type="text" class="form-control" placeholder="Enter here" name='runs'
-                        [(ngModel)]="submittal['runs']" #runs="ngModel">
-                </div>
-            </div>
-            <div class="col-sm-12">
                 <div class="form-group">
                     <label for="">Description</label>
-                    <textarea class="form-control text-areae" placeholder="Enter here" name='description'
-                    [(ngModel)]="submittal['description']" #description="ngModel">
+                    <textarea class="form-control text-area" placeholder="Enter here" name='description'
+                        [(ngModel)]="submittal['description']" #description="ngModel">
 
                     </textarea>
                 </div>
