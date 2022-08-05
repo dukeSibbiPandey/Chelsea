@@ -1,20 +1,113 @@
-<div class="container-fluid relative pdfAction">
-    <div class="pdf_tool_bar">
-        <div class="flex v_center">
-            <div class="pointer" (click)="handleBack()">
-                <span [innerHTML]="icon['BACK_ICON']"></span>
-                <span class="pdf_name">
-                    {{dialogConfig && dialogConfig.submitalData && dialogConfig.submitalData.files &&
-                    dialogConfig.submitalData.files.orgFileName}}
-                </span>
+<div class="container">
+    <div class="preview_page_wrapper">
+        <div class="preview-form">
+            <div class="flex  v_center space_between width_100 pdf--toolbar">
+                <div class="pdf_tool_bar pointer flex v_center toolbar-top" (click)="handleBack()">
+                    <span [innerHTML]="icon['BACK_ICON']"></span>
+                    &nbsp; &nbsp;
+                    <span class="pdf_name">
+                        {{submittal && submittal.name}}
+                    </span>
+                </div>
+                <div>
+                    <button type="button" class="btn __btn __default _ml_10" (click)="toggleEditHeader()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M19.9 7.47513L16.625 4.20013L17.625 3.20013C17.9417 2.88346 18.3292 2.72929 18.7875 2.73763C19.2459 2.74596 19.6417 2.90846 19.975 3.22513L20.925 4.15013C21.2584 4.48346 21.4125 4.87512 21.3876 5.32512C21.3626 5.77513 21.1917 6.15846 20.875 6.47513L19.9 7.47513ZM3.92505 21.1751C3.64172 21.1751 3.40422 21.0793 3.21255 20.8876C3.02088 20.696 2.92505 20.4585 2.92505 20.1751V18.3001C2.92505 18.1835 2.95005 18.0668 3.00005 17.9501C3.05005 17.8335 3.12505 17.7251 3.22505 17.6251L15.575 5.25013L18.85 8.50013L6.50005 20.8751C6.38338 20.9751 6.26672 21.0501 6.15005 21.1001C6.03338 21.1501 5.90838 21.1751 5.77505 21.1751H3.92505Z"
+                                fill="#333333" />
+                        </svg>
+                        Edit Header
+                        <svg width="13" height="8" viewBox="0 0 13 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M0.375221 0.674762C0.591887 0.491429 0.833555 0.395595 1.10022 0.387262C1.36689 0.378928 1.60022 0.474762 1.80022 0.674762L6.02522 4.89976L10.2752 0.649762C10.4586 0.466429 10.6961 0.378929 10.9877 0.387262C11.2794 0.395596 11.5169 0.491429 11.7002 0.674763C11.9169 0.891429 12.0211 1.12893 12.0127 1.38726C12.0044 1.6456 11.9002 1.87476 11.7002 2.07476L6.72522 7.04976C6.62522 7.14976 6.51689 7.22476 6.40022 7.27476C6.28355 7.32476 6.15855 7.34976 6.02522 7.34976C5.89189 7.34976 5.76689 7.32476 5.65022 7.27476C5.53355 7.22476 5.42522 7.14976 5.32522 7.04976L0.375221 2.09976C0.175221 1.89976 0.0793876 1.66643 0.0877208 1.39976C0.096054 1.13309 0.191888 0.891429 0.375221 0.674762Z"
+                                fill="#333333" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn __btn __default _ml_10" (click)="handlePreview()">Preview</button>
+                    <button type="button" class="btn __btn __theme _ml_10" (click)="handleSaveAction()">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.375 15.75C3.075 15.75 2.8125 15.6375 2.5875 15.4125C2.3625 15.1875 2.25 14.925 2.25 14.625V3.375C2.25 3.075 2.3625 2.8125 2.5875 2.5875C2.8125 2.3625 3.075 2.25 3.375 2.25H12.3375C12.4875 2.25 12.6344 2.28125 12.7781 2.34375C12.9219 2.40625 13.0437 2.4875 13.1437 2.5875L15.4125 4.85625C15.5125 4.95625 15.5938 5.07812 15.6562 5.22188C15.7188 5.36563 15.75 5.5125 15.75 5.6625V14.625C15.75 14.925 15.6375 15.1875 15.4125 15.4125C15.1875 15.6375 14.925 15.75 14.625 15.75H3.375ZM14.625 5.7L12.3 3.375H3.375V14.625H14.625V5.7ZM9 13.4062C9.5375 13.4062 9.99687 13.2156 10.3781 12.8344C10.7594 12.4531 10.95 11.9937 10.95 11.4562C10.95 10.9187 10.7594 10.4594 10.3781 10.0781C9.99687 9.69688 9.5375 9.50625 9 9.50625C8.4625 9.50625 8.00313 9.69688 7.62188 10.0781C7.24063 10.4594 7.05 10.9187 7.05 11.4562C7.05 11.9937 7.24063 12.4531 7.62188 12.8344C8.00313 13.2156 8.4625 13.4062 9 13.4062ZM4.93125 7.05H10.5187C10.6812 7.05 10.8156 6.99687 10.9219 6.89062C11.0281 6.78438 11.0812 6.65 11.0812 6.4875V4.93125C11.0812 4.76875 11.0281 4.63437 10.9219 4.52812C10.8156 4.42188 10.6812 4.36875 10.5187 4.36875H4.93125C4.76875 4.36875 4.63437 4.42188 4.52812 4.52812C4.42188 4.63437 4.36875 4.76875 4.36875 4.93125V6.4875C4.36875 6.65 4.42188 6.78438 4.52812 6.89062C4.63437 6.99687 4.76875 7.05 4.93125 7.05ZM3.375 5.7V14.625V3.375V5.7Z" fill="white"/>
+                            </svg>
+
+                        Save
+                    </button>
+                </div>
             </div>
-            <button type="button" class="btn __btn __default" (click)="handleSaveAction()">Save</button>
-        </div>
-        <div>
-            <button type="button" class="save_pdf btn __btn __default" (click)="handlePreview()">Preview</button>
+            <div *ngIf="isEditHeader">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Manufacturer</label>
+                                    <input type="text" class="form-control" placeholder="Enter here" name='mfg'
+                                        [(ngModel)]="submittal['mfg']" #mfg="ngModel"
+                                        (ngModelChange)="modelChanged($event)">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Part#</label>
+                                    <input type="text" class="form-control" placeholder="Enter here" name='part'
+                                        [(ngModel)]="submittal['part']" #part="ngModel"
+                                        (ngModelChange)="modelChanged($event)">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Voltage</label>
+                                    <input type="text" class="form-control" placeholder="Enter here" name='volt'
+                                        [(ngModel)]="submittal['volt']" #volt="ngModel"
+                                        (ngModelChange)="modelChanged($event)">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Lamp</label>
+                                    <input type="text" class="form-control" placeholder="Enter here" name='lamp'
+                                        [(ngModel)]="submittal['lamp']" #lamp="ngModel"
+                                        (ngModelChange)="modelChanged($event)">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Dim</label>
+                                    <input type="text" class="form-control" placeholder="Enter here" name='dim'
+                                        [(ngModel)]="submittal['dim']" #dim="ngModel"
+                                        (ngModelChange)="modelChanged($event)">
+                                </div>
+                            </div>
+                            <div class="col-sm-4        ">
+                                <div class="form-group">
+                                    <label for="">Runs</label>
+                                    <input type="text" class="form-control" placeholder="Enter here" name='runs'
+                                        [(ngModel)]="submittal['runs']" #runs="ngModel"
+                                        (ngModelChange)="modelChanged($event)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="">Description</label>
+                            <textarea class="form-control text-area" placeholder="Enter here" name='description'
+                                [(ngModel)]="submittal['description']" #description="ngModel"
+                                (ngModelChange)="modelChanged($event)">
+
+                        </textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn __btn __default" (click)="handleUpdateDetail()">
+                        Refresh Header
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
-    <div #viewer1 class="viewer_dialog"></div>
 </div>
-
-<p-toast position="top-center" key="pdfEditorToast"></p-toast>
+<div class="container-fluid relative pdfAction">
+    <div #viewer1 class="viewer_dialog mt20"></div>
+</div>

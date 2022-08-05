@@ -78,21 +78,7 @@ app-webviewer {
     margin-right: 10px;
 }
 
-.pdfAction {
-    padding-top: 45px;
-}
-
 .pdf_tool_bar {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    padding: 0 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    background: #F5F5F5;
-
     span {
         display: inline-block;
     }
@@ -101,18 +87,14 @@ app-webviewer {
         font-family: 'Roboto';
         font-style: normal;
         font-weight: 500;
-        font-size: 18px;
+        font-size: 24px;
         line-height: normal;
         color: #333333;
         display: inline-block;
         margin: 0 10px;
     }
+}
 
-    .save_pdf {
-        background: #e8442d;
-        border: 1px #e8442d solid;
-        color: white;
-        line-height: 12px;
-        height: 27px;
-    }
+.pdf--toolbar {
+    padding: 10px 0px 20px 0;
 }

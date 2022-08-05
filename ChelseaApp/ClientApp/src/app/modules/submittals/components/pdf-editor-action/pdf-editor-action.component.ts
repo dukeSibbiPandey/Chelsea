@@ -9,6 +9,18 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { PdfHelperService } from '../../pdfhelper.service';
+const submittalItem: any = {
+  name: 'F1',
+  status: '',
+  mfg: '',
+  part: '',
+  description: '',
+  volt: '',
+  lamp: '',
+  dim: '',
+  runs: '',
+  files: []
+}
 @Component({
   selector: 'app-pdf-editor-action',
   templateUrl: './pdf-editor-action.component.html',
@@ -18,25 +30,28 @@ import { PdfHelperService } from '../../pdfhelper.service';
 export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer1', { static: false }) viewer1: ElementRef;
   @HostListener('window:beforeunload')
+  isEditHeader: any = false;
   previewUrl: any;
   wvInstance: any;
-  isFormSubmit = false;
+  isFormSaved = false;
   id: any
   dialogConfig: any = null;
   icon: any = {
     BACK_ICON: ''
   }
+  submittal: any = submittalItem;
 
   constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer, private messageService: MessageService) { }
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.params['id'];
-     PdfHelperService.RemoveDataLocalStorage();
+    PdfHelperService.RemoveDataLocalStorage();
     const data = localStorage.getItem('submittalObject') && JSON.parse(localStorage.getItem('submittalObject')) || null;
     if (!data) {
-      this.isFormSubmit = true;
+      this.isFormSaved = true;
       this.handleBack();
     } else {
       this.dialogConfig = data;
+      this.submittal = data['submitalData']
       this.previewUrl = this.dialogConfig.previewUrl;
       this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
       this.updatePagnation = this.updatePagnation.bind(this);
@@ -46,7 +61,13 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   }
   canDeactivate(): Observable<boolean> | boolean {
 
-    return this.isFormSubmit
+    return this.isFormSaved
+  }
+  toggleEditHeader = () => {
+    this.isEditHeader = !this.isEditHeader
+  }
+  modelChanged = (event) => {
+    this.isFormSaved = false
   }
   BACK_ICON = () => {
     const icon = this._SubmittalService.BACK_ICON();
@@ -65,8 +86,9 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       licenseKey: 'irld89CMAcwPvMz4SJzz',
     }, this.viewer1.nativeElement).then(instance => {
       this.wvInstance = instance;
-      this.createHeader();
+      this.createHeader(this.previewUrl, this.submittal);
       instance.setFitMode('FitWidth')
+      instance.openElements(['notesPanel']);
       instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
       instance.disableElements([
         'menuButton', /* for menu */
@@ -96,7 +118,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         'outlinesPanelButton',
         'notesPanelButton'
       ]);
-      instance.openElements(['notesPanel']);
       const ToolNames = this.wvInstance.Tools.ToolNames;
       this.wvInstance.setColorPalette({
         toolNames: [ToolNames['TEXT'], ToolNames['FREETEXT'], ToolNames['LINE'], ToolNames['RECTANGLE'], ToolNames['FREEHAND'], ToolNames['HIGHLIGHT']],
@@ -117,18 +138,10 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         console.log('annotations loaded');
         debugger;
         const annots = this.wvInstance.annotManager.getAnnotationsList;
-        if(annots.length>0)
-        {
+        if (annots.length > 0) {
           this.wvInstance.annotManager.deleteAnnotations(annots);
         }
       });
-      // instance.addEventListener('annotationChanged', (annotations, action, { imported }) => {
-      //   alert('aa')
-      //   if (imported) {
-      //     return;
-      //   }
-      //   // do event handling
-      // });
       instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
     })
   }
@@ -277,7 +290,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
     const { annotManager } = this.wvInstance;
     //var xfdfData = localStorage.getItem('annotations');
-    let submitalData = this.dialogConfig.submitalData;
+    let submitalData = this.submittal;
     let xfdfData = submitalData.files.annotations;
     if (xfdfData) {
       annotManager.importAnnotations(xfdfData).then(importedAnnotations => { });
@@ -286,11 +299,10 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
 
   handleSaveAction = async () => {
-    debugger;
     const { annotManager } = this.wvInstance;
     const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
     localStorage.setItem('annotations', xfdf);
-    let submitalData = this.dialogConfig.submitalData;
+    let submitalData = this.submittal;
     submitalData.submittalId = this.dialogConfig.submittalId;
     let url = 'home/auto/save';
     let formData = {
@@ -300,7 +312,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     formData.files.annotation = xfdf
     this.httpService.fileupload(url, formData, null, null).subscribe(res => {
       this.toastMsg('success', 'Success', 'PDF Submitted Successfully', 2000);
-      this.isFormSubmit = true
+      this.isFormSaved = true
       setTimeout(() => {
         localStorage.removeItem('submittalObject');
         this.handleBack();
@@ -314,11 +326,25 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     this.router.navigate([`/submittals/preview/${this.id}`]);
   }
 
-  createHeader = async () => {
-    let blobDoc = await PdfHelperService.CreatePdfHeader(this.previewUrl, this.dialogConfig.submitalData);
+  createHeader = async (previewUrl, pdfFiles) => {
+    let blobDoc = await PdfHelperService.CreatePdfHeader(previewUrl, pdfFiles);
     this.wvInstance.loadDocument(blobDoc);
     setTimeout(() => {
-      this.wvInstance.setFitMode('FitWidth')
+      this.wvInstance.setFitMode('FitWidth');
+      this.wvInstance.openElements(['notesPanel']);
     }, 100);
+  }
+  handleUpdateDetail = () => {
+    let pdfFiles = {
+      mfg: this.submittal.mfg,
+      part: this.submittal.part,
+      description: this.submittal.description,
+      volt: this.submittal.volt,
+      lamp: this.submittal.lamp,
+      dim: this.submittal.dim,
+      runs: this.submittal.runs,
+    }
+    this.isFormSaved = false
+    this.createHeader(this.previewUrl, pdfFiles);
   }
 }

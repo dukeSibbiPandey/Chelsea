@@ -224,7 +224,7 @@ a {
 }
 
 .__btn {
-    height: 32px;
+    min-height: 32px;
     border-radius: 40px;
     font-style: normal;
     font-weight: 600;
@@ -274,7 +274,9 @@ a {
 .v_center {
     align-items: center;
 }
-
+.width_100{
+    width: 100%;
+}
 .space_between {
     justify-content: space-between;
 }
