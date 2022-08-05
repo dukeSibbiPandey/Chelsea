@@ -5,7 +5,7 @@ import { HttpService } from 'src/app/components/http.service';
 import { SubmittalService } from '../../submittal.service';
 import { HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DomSanitizer } from "@angular/platform-browser";
+import { DomSanitizer, Title } from "@angular/platform-browser";
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { PdfHelperService } from '../../pdfhelper.service';
@@ -135,8 +135,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         this.updatePagnation(instance)
       });
       instance.docViewer.on('annotationsLoaded', () => {
-        console.log('annotations loaded');
-        debugger;
         const annots = this.wvInstance.annotManager.getAnnotationsList;
         if (annots.length > 0) {
           this.wvInstance.annotManager.deleteAnnotations(annots);
@@ -163,6 +161,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   customReduIcon = (docViewer) => {
     const icon = {
       type: 'actionButton',
+      title: "Redu",
       img: this._SubmittalService.REDU_ICON(),
       onClick: () => {
         const historyManager = docViewer.getAnnotationHistoryManager();
@@ -175,7 +174,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   customUnduIcon = (docViewer) => {
     const icon = {
       type: 'actionButton',
-      id: 'undo-button',
+      title: "Undu",
       img: this._SubmittalService.UNDU_ICON(),
       onClick: () => {
         const historyManager = docViewer.getAnnotationHistoryManager();
@@ -194,98 +193,112 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     const { docViewer } = this.wvInstance;
     const reduIcon = this.customReduIcon(docViewer);
     const unduIcon = this.customUnduIcon(docViewer);
-    this.wvInstance.setHeaderItems((header) => {
-      header.push(reduIcon);
-      header.push(unduIcon);
-    })
-    let currentPage = docViewer.getCurrentPage();
     let TotalPageNumber = docViewer.getPageCount();
     this.wvInstance.setHeaderItems((header) => {
-      var items = header.getItems();
-      items.push({
-        type: 'customElement',
-        title: 'Page',
-        render: () => {
-          /* Paginator Nav */
-          let pager: any = document.createElement('span');
-          pager.id = 'pager';
-          pager.innerHTML = this.customPaginator(docViewer);
-
-
-          /* Got to First Page */
-          let customPagerFirst: any = document.createElement('span');
-          customPagerFirst.id = 'customPagerFirst';
-          customPagerFirst.innerHTML = this._SubmittalService.CUSTOMPAGER_FIRST();
-          customPagerFirst.onclick = () => {
-            let currentPage = docViewer.getCurrentPage();
-            if (currentPage > 1) {
-              this.wvInstance.goToFirstPage()
-              pager.innerHTML = `Page 1/${TotalPageNumber}`;
-            }
-          };
-
-          /* Go to Prev Page */
-          let customPagerPrev: any = document.createElement('span');
-          customPagerPrev.id = 'customPagerPrev';
-          customPagerPrev.innerHTML = this._SubmittalService.CUSTOMPAGER_PREV();
-          customPagerPrev.onclick = () => {
-            let currentPage = docViewer.getCurrentPage();
-            if (currentPage > 1) {
-              this.wvInstance.goToPrevPage();
-              let currentPage = docViewer.getCurrentPage();
-              pager.innerHTML = `Page ${currentPage}/${TotalPageNumber}`;
-            }
-          };
-
-          /* Go to Next Page */
-          let customPagerNext: any = document.createElement('span');
-          customPagerNext.id = 'customPagerNext';
-          customPagerNext.innerHTML = this._SubmittalService.CUSTOMPAGER_NEXT();
-          customPagerNext.onclick = () => {
-            let currentPage = docViewer.getCurrentPage();
-            if (currentPage < TotalPageNumber) {
-              this.wvInstance.goToNextPage();
-              let currentPage = docViewer.getCurrentPage();
-              pager.innerHTML = `Page ${currentPage}/${TotalPageNumber}`;
-            }
-          };
-
-          /* Go to Last Page */
-          let customPagerlast: any = document.createElement('span');
-          customPagerlast.id = 'customPagerlast';
-          customPagerlast.innerHTML = this._SubmittalService.CUSTOMPAGER_LAST()
-          customPagerlast.onclick = () => {
-            let currentPage = docViewer.getCurrentPage();
-            if (currentPage < TotalPageNumber) {
-              this.wvInstance.goToLastPage();
-              pager.innerHTML = `Page ${TotalPageNumber}/${TotalPageNumber}`;
-            }
-          };
-
-          /* Go to Preview */
-          let button: any = document.createElement('button');
-          button.innerHTML = 'Preview';
-          button.setAttribute("type", "button");
-          button.setAttribute("id", "preview");
-          button.style = "background: #e8442d; color: white;cursor: pointer; border:1px #e8442d solid; border-radius:4px";
-          button.onclick = () => {
-            this.handlePreview()
-          };
-
-          var form: any = document.createElement('div');
-          form.style = "display: flex; border-radius: 10px;padding: 10px;cursor: pointer;";
-          form.appendChild(pager);
-          form.appendChild(customPagerFirst);
-          form.appendChild(customPagerPrev);
-          form.appendChild(customPagerNext);
-          form.appendChild(customPagerlast);
-          // form.appendChild(button);
-          return form;
+      let items = [];
+      items = header.getItems();
+      let undoCount = 0;
+      let redoCount = 0;
+      let paging = 0;
+      console.log('items==', items)
+      items && items.length > 0 && items.map((el, i) => {
+        if ((el.type == "actionButton" && el.title == "Undu")) {
+          undoCount = undoCount + 1
         }
-      });
+        if ((el.type == "actionButton" && el.title == "Redu")) {
+          redoCount = redoCount + 1
+        }
+        if (el.type == "customElement" && el.title == "Paging") {
+          paging = paging + 1
+        }
+      })
+      if (undoCount == 0 && redoCount == 0 && paging == 0) {
+        header.push(reduIcon);
+        header.push(unduIcon);
+        items.push({
+          type: 'customElement',
+          title: 'Paging',
+          render: () => {
+            /* Paginator Nav */
+            let pager: any = document.createElement('span');
+            pager.id = 'pager';
+            pager.innerHTML = this.customPaginator(docViewer);
 
-      header.update(items);
 
+            /* Got to First Page */
+            let customPagerFirst: any = document.createElement('span');
+            customPagerFirst.id = 'customPagerFirst';
+            customPagerFirst.innerHTML = this._SubmittalService.CUSTOMPAGER_FIRST();
+            customPagerFirst.onclick = () => {
+              let currentPage = docViewer.getCurrentPage();
+              if (currentPage > 1) {
+                this.wvInstance.goToFirstPage()
+                pager.innerHTML = `Page 1/${TotalPageNumber}`;
+              }
+            };
+
+            /* Go to Prev Page */
+            let customPagerPrev: any = document.createElement('span');
+            customPagerPrev.id = 'customPagerPrev';
+            customPagerPrev.innerHTML = this._SubmittalService.CUSTOMPAGER_PREV();
+            customPagerPrev.onclick = () => {
+              let currentPage = docViewer.getCurrentPage();
+              if (currentPage > 1) {
+                this.wvInstance.goToPrevPage();
+                let currentPage = docViewer.getCurrentPage();
+                pager.innerHTML = `Page ${currentPage}/${TotalPageNumber}`;
+              }
+            };
+
+            /* Go to Next Page */
+            let customPagerNext: any = document.createElement('span');
+            customPagerNext.id = 'customPagerNext';
+            customPagerNext.innerHTML = this._SubmittalService.CUSTOMPAGER_NEXT();
+            customPagerNext.onclick = () => {
+              let currentPage = docViewer.getCurrentPage();
+              if (currentPage < TotalPageNumber) {
+                this.wvInstance.goToNextPage();
+                let currentPage = docViewer.getCurrentPage();
+                pager.innerHTML = `Page ${currentPage}/${TotalPageNumber}`;
+              }
+            };
+
+            /* Go to Last Page */
+            let customPagerlast: any = document.createElement('span');
+            customPagerlast.id = 'customPagerlast';
+            customPagerlast.innerHTML = this._SubmittalService.CUSTOMPAGER_LAST()
+            customPagerlast.onclick = () => {
+              let currentPage = docViewer.getCurrentPage();
+              if (currentPage < TotalPageNumber) {
+                this.wvInstance.goToLastPage();
+                pager.innerHTML = `Page ${TotalPageNumber}/${TotalPageNumber}`;
+              }
+            };
+
+            /* Go to Preview */
+            let button: any = document.createElement('button');
+            button.innerHTML = 'Preview';
+            button.setAttribute("type", "button");
+            button.setAttribute("id", "preview");
+            button.style = "background: #e8442d; color: white;cursor: pointer; border:1px #e8442d solid; border-radius:4px";
+            button.onclick = () => {
+              this.handlePreview()
+            };
+
+            var form: any = document.createElement('div');
+            form.style = "display: flex; border-radius: 10px;padding: 10px;cursor: pointer;";
+            form.appendChild(pager);
+            form.appendChild(customPagerFirst);
+            form.appendChild(customPagerPrev);
+            form.appendChild(customPagerNext);
+            form.appendChild(customPagerlast);
+            // form.appendChild(button);
+            return form;
+          }
+        });
+
+        header.update(items);
+      }
     });
 
     const { annotManager } = this.wvInstance;
