@@ -450,7 +450,7 @@ namespace ChelseaApp.DocHelper
                 }
             }
 
-            var desFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".pdf";          
+            //var desFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".pdf";          
 
             //PdfHelper.ManipulatePdf(model, outputFilePath, desFilePath);
 
@@ -474,8 +474,8 @@ namespace ChelseaApp.DocHelper
             //pdfBytes = System.IO.File.ReadAllBytes(outputFilePath);
 
             //pdfBytes = AddPageNumber(pdfBytes);
-            File.Delete(outputFilePath);
-            return desFilePath;
+            //File.Delete(outputFilePath);
+            return outputFilePath;
         }
 
         [Obsolete]
@@ -545,7 +545,7 @@ namespace ChelseaApp.DocHelper
             //CreateIndexPage(outputFilePath);
             pdfBytes = System.IO.File.ReadAllBytes(outputFilePath);
 
-            //pdfBytes = AddPageNumber(pdfBytes);
+            //pdfBytes = AddPageNumber(pdfBytes);            
             //File.Delete(outputFilePath);
             return pdfBytes;
         }

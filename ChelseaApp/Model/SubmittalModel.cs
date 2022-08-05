@@ -32,6 +32,8 @@ namespace ChelseaApp.Model
         public bool? IsTempRecord { get; set; }
         public string FileUrl { get; set; }
         public string ThumbnailUrl { get; set; }
+        public string Status { get; set; }
+        public bool? IsDraft { get; set; }
         public List<PdfFileModel> PdfFiles { get; set; }
     }
 }

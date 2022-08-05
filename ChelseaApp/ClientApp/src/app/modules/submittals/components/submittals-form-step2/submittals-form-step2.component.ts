@@ -237,7 +237,7 @@ export class SubmittalsFormStep2Component implements OnInit {
       //item.files.forEach(async element => {
       for (let j = 0; j < item.files.length; j++) {
         const element = item.files[j];
-        let fileurl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + element.fileName;
+        let fileurl = this.httpService.getBaseUrl()+"Home/download?bloburl=" + element.fileName;
         if (element.annotations) {
           let expressObj = await this.getMergedPdfWithAnnotations(element.annotations, item, fileurl);
           item.files[j].expressKey = expressObj.key;

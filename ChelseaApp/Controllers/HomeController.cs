@@ -134,6 +134,17 @@ namespace ChelseaApp.Controllers
 
             }
 
+            if (!string.IsNullOrEmpty(coverPage.Contractor.City))
+            {
+                var cityObj = await _context.CityMaster.Where(t => t.Name == coverPage.Contractor.City).FirstOrDefaultAsync();
+                if (cityObj == null)
+                {
+                    CityMaster cityMaster = new CityMaster();
+                    cityMaster.Name = coverPage.Contractor.City;
+                    _context.CityMaster.Add(cityMaster);
+                    await _context.SaveChangesAsync();
+                }
+            }
 
             //coverPage.Contractor.CityName = cityObj.Name;
             var fileInfo = _docUtility.SaveCoverPage(coverPage, modelList);
@@ -159,6 +170,7 @@ namespace ChelseaApp.Controllers
             entity.IsTempRecord = true;
             entity.CoverPageName = fileName;
             entity.Zip = postalCode;
+            entity.Status = coverPage.Status;
             if (entity.Id > 0)
             {
                 _context.Submittal.Update(entity);
@@ -382,7 +394,7 @@ namespace ChelseaApp.Controllers
 
                 var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);
                 var fileInfo = await _azureBlobServices.UploadFile(pdfStream, pdffileUrl, _appSetting.AzureBlobDocContainer, false);
-                thumbnail = _docUtility.ConvertPDFtoJPG(pdfStream, Path.GetFileNameWithoutExtension(pdfFileName) + ".png", 2);
+                thumbnail = _docUtility.ConvertPDFtoJPG(pdfStream, Path.GetFileNameWithoutExtension(pdfFileName) + ".png", 1);
                 blobpdffileUrl = fileInfo.Path;
             }
 
@@ -399,6 +411,8 @@ namespace ChelseaApp.Controllers
             var submittalModel = this._mapper.Map<Submittal>(dataList);
             submittalModel.Thumbnail = Path.GetFileName(thumbnail);
             submittalModel.FileName = pdfFileName;
+            submittalModel.IsDraft = pdfFileMaster.IsDraft;
+            submittalModel.IsTempRecord = false;
             _context.Submittal.Update(submittalModel);
             await _context.SaveChangesAsync();
 

@@ -40,9 +40,9 @@ export class HttpService {
     return newHttpClient.post<any>(url, data, { 'headers': { ...headers }, 'params': params });
   }
 
-  // private errorHandler(error: Response | any) {
-  //   return Observable.throw(error.status);
-  // }
+  getBaseUrl() {
+    return this.baseUrl;
+  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {

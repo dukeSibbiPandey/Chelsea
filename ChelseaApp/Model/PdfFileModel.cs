@@ -21,6 +21,7 @@ namespace ChelseaApp.Model
     public class PdfFileMasterModel
     {
         public int SubmittalId { get; set; }
+        public bool IsDraft { get; set; }
         public List<PdfFileModel> PdfFiles { get; set; }
     }
     public class PdfFileModel
