@@ -1,11 +1,18 @@
 import { Injectable } from '@angular/core';
+import { HttpService } from 'src/app/components/http.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubmittalService {
+  httpService: HttpService;
+  constructor(httpService: HttpService) {
+    this.httpService = httpService;
+   };
+  getListData=(url:any)=>{
+    return this.httpService.get(url) ||[];
+  }
 
-  constructor() { };
   CUSTOMPAGER_FIRST = () => {
     return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:22px; height :22px">
     <path d="M5.825 18.675C5.54166 18.675 5.30416 18.5792 5.1125 18.3875C4.92083 18.1958 4.825 17.9583 4.825 17.675V6.32501C4.825 6.04168 4.92083 5.80418 5.1125 5.61251C5.30416 5.42085 5.54166 5.32501 5.825 5.32501C6.10833 5.32501 6.34583 5.42085 6.5375 5.61251C6.72916 5.80418 6.825 6.04168 6.825 6.32501V17.675C6.825 17.9583 6.72916 18.1958 6.5375 18.3875C6.34583 18.5792 6.10833 18.675 5.825 18.675ZM17.6 17.575L10.725 12.825C10.4083 12.625 10.25 12.35 10.25 12C10.25 11.65 10.4083 11.375 10.725 11.175L17.6 6.42501C17.9333 6.17501 18.2792 6.14585 18.6375 6.33751C18.9958 6.52918 19.175 6.82501 19.175 7.22501V16.775C19.175 17.175 18.9958 17.4667 18.6375 17.65C18.2792 17.8333 17.9333 17.8083 17.6 17.575Z"
