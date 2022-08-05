@@ -115,8 +115,12 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       });
       instance.docViewer.on('annotationsLoaded', () => {
         console.log('annotations loaded');
+        debugger;
         const annots = this.wvInstance.annotManager.getAnnotationsList;
-        this.wvInstance.annotManager.deleteAnnotations(annots);
+        if(annots.length>0)
+        {
+          this.wvInstance.annotManager.deleteAnnotations(annots);
+        }
       });
       // instance.addEventListener('annotationChanged', (annotations, action, { imported }) => {
       //   alert('aa')
@@ -282,6 +286,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
 
   handleSaveAction = async () => {
+    debugger;
     const { annotManager } = this.wvInstance;
     const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
     localStorage.setItem('annotations', xfdf);
