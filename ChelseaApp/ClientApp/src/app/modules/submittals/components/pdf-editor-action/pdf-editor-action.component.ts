@@ -257,16 +257,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
               }
             };
 
-            /* Go to Preview */
-            let button: any = document.createElement('button');
-            button.innerHTML = 'Preview';
-            button.setAttribute("type", "button");
-            button.setAttribute("id", "preview");
-            button.style = "background: #e8442d; color: white;cursor: pointer; border:1px #e8442d solid; border-radius:4px";
-            button.onclick = () => {
-              this.handlePreview()
-            };
-
             var form: any = document.createElement('div');
             form.style = "display: flex; border-radius: 10px;padding: 10px;cursor: pointer;";
             form.appendChild(pager);
@@ -274,7 +264,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
             form.appendChild(customPagerPrev);
             form.appendChild(customPagerNext);
             form.appendChild(customPagerlast);
-            // form.appendChild(button);
             return form;
           }
         });
@@ -318,7 +307,10 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     this.router.navigate([`/submittals/form/${this.id}/step/2`]);
   }
   handlePreview = () => {
-    this.router.navigate([`/submittals/preview/${this.id}`]);
+    localStorage.removeItem('submittalObject');
+    localStorage.setItem('submittalObject', JSON.stringify(this.dialogConfig));
+    this.router.navigate([`/submittals/form/preview/${this.id}/${this.dialogConfig.pdfFiles.id}`]);
+
   }
 
   createHeader = async (previewUrl, pdfFiles) => {
