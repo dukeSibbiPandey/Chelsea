@@ -564,7 +564,7 @@ namespace ChelseaApp.Controllers
         }
 
 
-        public Stream GetMergedPdf(string key, string url)
+        private Stream GetMergedPdf(string key, string url)
         {
             WebRequest myWebRequest = WebRequest.Create(url);
             myWebRequest.Method = "GET";
