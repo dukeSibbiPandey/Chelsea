@@ -22,7 +22,7 @@ const routes: Routes = [
         path: 'form/:id/step/:step', pathMatch: 'full', component: SubmittalsFormComponent
       },
       {
-        path: 'form/preview/:submittalId/:itemId', pathMatch: 'full', component: SubmittalsPreviewComponent, canDeactivate: [PendingChangesGuard]
+        path: 'form/preview/:submittalId/:itemId', pathMatch: 'full', component: SubmittalsPreviewComponent
       },
       {
         path: 'preview/:id', pathMatch: 'full', component: MergeSubmittalsComponent

@@ -99,11 +99,12 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
     }, 100);
   }
   handleBack = () => {
-    localStorage.removeItem('submittalObject');
-    localStorage.removeItem('updatedHeader');
-    setTimeout(() => {
-      this.router.navigate([`/submittals/form/${this.id}/step/2`]);
-    }, 10);
+    window.history.back()
+    // localStorage.removeItem('submittalObject');
+    // localStorage.removeItem('updatedHeader');
+    // setTimeout(() => {
+    //   this.router.navigate([`/submittals/form/${this.id}/step/2`]);
+    // }, 10);
   }
   handleDetailEditDialog = (value: boolean) => {
     this.isDetailEditDialog = value

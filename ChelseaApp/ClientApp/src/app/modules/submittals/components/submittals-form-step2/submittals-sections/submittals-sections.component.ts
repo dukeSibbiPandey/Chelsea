@@ -240,7 +240,6 @@ export class SubmittalsSectionsComponent implements OnInit {
       pdfFiles: pdfFiles,
       config: config
     }
-    debugger
     localStorage.removeItem('submittalObject');
     localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
     this.router.navigate([`/submittals/pdf-edit/${this.id}`]);

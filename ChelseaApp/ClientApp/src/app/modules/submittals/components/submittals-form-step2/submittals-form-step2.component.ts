@@ -58,7 +58,6 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
       const tempData = JSON.parse(localStorage.getItem('submittalObject'));
       const updatedHeader = JSON.parse(localStorage.getItem('updatedHeader'));
-      debugger
       if (updatedHeader) {
         const index = updatedHeader.config.submittalIndex;
         const itemIndex = updatedHeader.config.itemIndex;
