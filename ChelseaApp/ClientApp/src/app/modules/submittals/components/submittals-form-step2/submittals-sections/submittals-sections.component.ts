@@ -203,14 +203,10 @@ export class SubmittalsSectionsComponent implements OnInit {
 
 
 
-  handleViewAction = (position: string, item: any, index) => {
-    debugger
-    this.previewUrl = this.httpService.getBaseUrl()+ "Home/download?bloburl=" + item.fileName + ""
-    //this.previewUrl = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
-    // this.position = position;
-    let pdfFiles = JSON.parse(JSON.stringify(this.submittal))
+  handleViewAction = (item: any, index) => {
+    this.previewUrl = this.httpService.getBaseUrl() + "Home/download?bloburl=" + item.fileName + ""
+    let pdfFiles = JSON.parse(JSON.stringify(this.submittal));
     pdfFiles['files'] = item;
-    debugger
     let config = {
       itemIndex: index,
       submittalIndex: this.itmindex,
@@ -225,27 +221,28 @@ export class SubmittalsSectionsComponent implements OnInit {
     localStorage.removeItem('submittalObject');
     localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
     this.router.navigate([`/submittals/form/preview/${this.id}/${item.id}`]);
-    // setTimeout(() => {
-    //   this._SubmittalsPreviewComponent.ngOnInit();
-    // }, 300);
-    // this.isPreviewDialog = true;
   }
   handleActionEdit = (item: any, index: number) => {
+    this.previewUrl = this.httpService.getBaseUrl() + "Home/download?bloburl=" + item.fileName + ""
+    let pdfFiles = JSON.parse(JSON.stringify(this.submittal));
+    pdfFiles['files'] = item;
     let submitalData = JSON.parse(JSON.stringify(this.submittal))
     submitalData['files'] = item;
-    this.previewUrl = this.httpService.getBaseUrl()+ "Home/download?bloburl=" + this.submittal['files'][index]['fileName'] + "";
-    //this.previewUrl = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
     let config = {
       title: 'Edit PDF',
-      previewUrl: this.previewUrl,
       width: '90%',
-      submitalData: submitalData,
-      submittalId: this.id,
       itemIndex: index,
-      submittalIndex: this.itmindex
+      submittalIndex: this.itmindex,
+      submittalId: this.id,
+      previewUrl: this.previewUrl,
     }
+    let pdfActionConfig = {
+      pdfFiles: pdfFiles,
+      config: config
+    }
+    debugger
     localStorage.removeItem('submittalObject');
-    localStorage.setItem('submittalObject', JSON.stringify(config));
+    localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
     this.router.navigate([`/submittals/pdf-edit/${this.id}`]);
   }
 

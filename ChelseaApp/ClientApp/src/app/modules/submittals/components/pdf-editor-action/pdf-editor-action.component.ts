@@ -9,18 +9,6 @@ import { DomSanitizer, Title } from "@angular/platform-browser";
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { PdfHelperService } from '../../pdfhelper.service';
-const submittalItem: any = {
-  name: 'F1',
-  status: '',
-  mfg: '',
-  part: '',
-  description: '',
-  volt: '',
-  lamp: '',
-  dim: '',
-  runs: '',
-  files: []
-}
 @Component({
   selector: 'app-pdf-editor-action',
   templateUrl: './pdf-editor-action.component.html',
@@ -31,7 +19,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer1', { static: false }) viewer1: ElementRef;
   @HostListener('window:beforeunload')
   isEditHeader: any = false;
-  previewUrl: any;
   wvInstance: any;
   isFormSaved = false;
   id: any
@@ -39,8 +26,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   icon: any = {
     BACK_ICON: ''
   }
-  submittal: any = submittalItem;
-
   constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer, private messageService: MessageService) { }
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.params['id'];
@@ -51,8 +36,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       this.handleBack();
     } else {
       this.dialogConfig = data;
-      this.submittal = data['submitalData']
-      this.previewUrl = this.dialogConfig.previewUrl;
       this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
       this.updatePagnation = this.updatePagnation.bind(this);
       this.BACK_ICON()
@@ -79,14 +62,13 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     this.messageService.add({ key: 'pdfEditorToast', severity: severity, summary: summary, detail: detail, life: life, closable: true });
   }
   ngAfterViewInit(): void {
-    this.previewUrl = this.dialogConfig.previewUrl;
     WebViewer({
       path: '../lib',
-      initialDoc: this.previewUrl,
+      initialDoc: this.dialogConfig.config.previewUrl,
       licenseKey: 'irld89CMAcwPvMz4SJzz',
     }, this.viewer1.nativeElement).then(instance => {
       this.wvInstance = instance;
-      this.createHeader(this.previewUrl, this.submittal);
+      this.createHeader(this.dialogConfig.config.previewUrl, this.dialogConfig && this.dialogConfig['pdfFiles']);
       instance.setFitMode('FitWidth')
       instance.openElements(['notesPanel']);
       instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
@@ -303,7 +285,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
     const { annotManager } = this.wvInstance;
     //var xfdfData = localStorage.getItem('annotations');
-    let submitalData = this.submittal;
+    let submitalData = this.dialogConfig && this.dialogConfig['pdfFiles'];
     let xfdfData = submitalData.files.annotations;
     if (xfdfData) {
       annotManager.importAnnotations(xfdfData).then(importedAnnotations => { });
@@ -315,8 +297,8 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     const { annotManager } = this.wvInstance;
     const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
     localStorage.setItem('annotations', xfdf);
-    let submitalData = this.submittal;
-    submitalData.submittalId = this.dialogConfig.submittalId;
+    let submitalData = this.dialogConfig && this.dialogConfig['pdfFiles'];
+    submitalData.submittalId = this.dialogConfig.config.submittalId;
     let url = 'home/auto/save';
     let formData = {
       ...submitalData
@@ -348,16 +330,17 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     }, 100);
   }
   handleUpdateDetail = () => {
+    const tempPdfFiles = this.dialogConfig && this.dialogConfig['pdfFiles'];
     let pdfFiles = {
-      mfg: this.submittal.mfg,
-      part: this.submittal.part,
-      description: this.submittal.description,
-      volt: this.submittal.volt,
-      lamp: this.submittal.lamp,
-      dim: this.submittal.dim,
-      runs: this.submittal.runs,
+      mfg: tempPdfFiles.mfg,
+      part: tempPdfFiles.part,
+      description: tempPdfFiles.description,
+      volt: tempPdfFiles.volt,
+      lamp: tempPdfFiles.lamp,
+      dim: tempPdfFiles.dim,
+      runs: tempPdfFiles.runs,
     }
     this.isFormSaved = false
-    this.createHeader(this.previewUrl, pdfFiles);
+    this.createHeader(this.dialogConfig.config.previewUrl, pdfFiles);
   }
 }
