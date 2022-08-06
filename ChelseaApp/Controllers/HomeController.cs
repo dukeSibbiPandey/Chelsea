@@ -110,23 +110,19 @@ namespace ChelseaApp.Controllers
             var isSubmittalExists = await _context.vwSubmittals.AnyAsync(t => t.Submittals == coverPage.Submittals && t.Id != coverPage.Id);
             if (isSubmittalExists)
             {
-                return this.Ok("duplicate submittals");
+                return this.Conflict("duplicate submittals");
             }
 
             var dataList = await _context.vwAddress.AsQueryable().Where(t => t.Id == coverPage.AddressId).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<AddressModel>(dataList);
             //var cityObj = await _context.CityMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.City)).FirstOrDefaultAsync();
             int stateId = 0;
-            int postalCode = 0;
 
-            if (int.TryParse(coverPage.Contractor.State, out stateId))
+            if (coverPage.Contractor != null && coverPage.Contractor.StateId > 0)
             {
-                var stateObj = await _context.StateMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.State)).FirstOrDefaultAsync();
+                var stateObj = await _context.StateMaster.Where(t => t.Id == coverPage.Contractor.StateId).FirstOrDefaultAsync();
                 coverPage.Contractor.StateName = stateObj.Name;
-            }
-            if (int.TryParse(coverPage.Contractor.PostalCode, out postalCode))
-            {
-            }
+            }            
 
             DateTime submittalDate = DateTime.Now;
             if (DateTime.TryParse(coverPage.SubmittalDate, out submittalDate))
@@ -169,7 +165,7 @@ namespace ChelseaApp.Controllers
             entity.CreatedDate = DateTime.Now;
             entity.IsTempRecord = true;
             entity.CoverPageName = fileName;
-            entity.Zip = postalCode;
+            entity.Zip = coverPage.Contractor.PostalCode;
             entity.Status = coverPage.Status;
             if (entity.Id > 0)
             {
