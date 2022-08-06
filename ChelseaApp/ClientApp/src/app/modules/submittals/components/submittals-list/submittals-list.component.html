@@ -24,6 +24,7 @@
                         <tr>
                             <th>Output Submittals</th>
                             <th>Submittals</th>
+                            <th>Status</th>
                             <th>Created By</th>
                             <th>Date Created</th>
                             <th class="text-center">Action</th>
@@ -36,7 +37,7 @@
                                     <img class="__t_img" src="{{item.thumbnailUrl}}"
                                         onError="this.src='../../../../../assets/images/placeholder.png'" alt="">
                                     <div class="__info">
-                                        <p class="item_name">{{item.fileName}}</p>
+                                        <p class="item_name">{{item.jobName}}.pdf</p>
                                         <p class="__size" *ngIf="item.fileSize>0">{{niceBytes(item.fileSize)}}</p>
                                     </div>
                                 </div>
@@ -44,6 +45,11 @@
                             <td>
                                 <p>
                                     {{item.submittals}}
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    {{item.isDraft? 'Draft': (item.isDraft==null?'':'Merged')}}
                                 </p>
                             </td>
                             <td>

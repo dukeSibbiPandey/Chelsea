@@ -75,10 +75,10 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
         instance.disableElements(['header', 'leftPanel']);
         instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
         instance.openElements(['notesPanel']);
-        instance.docViewer.on('annotationsLoaded', () => {
-          const annots = this.wvInstance.annotManager.getAnnotationsList;
-          this.wvInstance.annotManager.deleteAnnotations(annots);
-        });
+        // instance.docViewer.on('annotationsLoaded', () => {
+        //   const annots = this.wvInstance.annotManager.getAnnotationsList;
+        //   this.wvInstance.annotManager.deleteAnnotations(annots);
+        // });
         instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
       })
   }

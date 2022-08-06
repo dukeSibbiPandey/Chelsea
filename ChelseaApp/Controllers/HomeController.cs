@@ -317,6 +317,7 @@ namespace ChelseaApp.Controllers
         {
             var dataList = await _context.vwSubmittals.AsQueryable().Where(t => t.Id == pdfFileMaster.SubmittalId).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<SubmittalModel>(dataList);
+
             //string reportPath = "Content/Scan";
             //var contentRootPath = this._environment.ContentRootPath + '\\';
             //if (!Directory.Exists(contentRootPath + reportPath))
@@ -328,70 +329,75 @@ namespace ChelseaApp.Controllers
             //string rooPath = contentRootPath + reportPath;
 
             // var outputFile = string.Format("{0}/{1}", "Content", "mergedbyitext.pdf");
-            List<Stream> files = new List<Stream>();
-            List<PdfFileModel> finalfiles = new List<PdfFileModel>();
-
-
-            var coverfileUrl = string.Format("{0}/{1}", "Content", modelList.CoverPageName);
-            var coverfileStream = await _azureBlobServices.DownloadFile(coverfileUrl, _appSetting.AzureBlobDocContainer);
-            //files.Add(coverfileStream);
-
-            var coverPageBytes = StreamHelper.ReadToEnd(coverfileStream);
-            var coverFilePath = this._environment.WebRootPath + "/TempPdf/Cover_" + Guid.NewGuid().ToString() + ".pdf";
-            System.IO.File.WriteAllBytes(coverFilePath, coverPageBytes);
-            List<string> pages = new List<string>();
-            var allfiles = pdfFileMaster.PdfFiles;//.SelectMany(t => t.Files).ToList();
-            foreach (var filesList in allfiles)
-            {
-                foreach (var fdetails in filesList.Files)
-                {
-                    if (!string.IsNullOrEmpty(fdetails.ExpressKey))
-                    {
-                        var fileStream = this.GetMergedPdf(fdetails.ExpressKey, fdetails.ExpressUrl);
-                        files.Add(fileStream);
-                    }
-                    else
-                    {
-                        var fileUrl = string.Format("{0}/{1}", "Content", !string.IsNullOrEmpty(fdetails.TempFileName) ? fdetails.TempFileName : fdetails.FileName);
-                        var fileStream = await _azureBlobServices.DownloadFile(fileUrl, _appSetting.AzureBlobTempContainer);
-                        files.Add(fileStream);
-
-                        if (!string.IsNullOrEmpty(fdetails.TempFileName))
-                        {
-                            await _azureBlobServices.DeleteFile(fileUrl, _appSetting.AzureBlobTempContainer);
-                        }
-                    }
-                }
-
-                string mergByte = _docUtility.CombineMultiplePDFs(filesList, files);
-                filesList.FileTmpPath = mergByte;
-                finalfiles.Add(filesList);
-                pages.Add(mergByte);
-                //using (MemoryStream pdfStream = new MemoryStream())
-                //{
-                //    pdfStream.Write(mergByte, 0, mergByte.Length);
-                //    finalfiles.Add(pdfStream);
-                //}
-                files = new List<Stream>();
-
-            }
-
-            // var pages = _docUtility.CreateIndexPage(finalfiles);
-            pages.Insert(0, coverFilePath);
-            files = new List<Stream>();
-
-            byte[] mergedByte = _docUtility.CombineMultiplePDFFiles(pages);
-            string pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
+            string pdfFileName = String.Empty;
             var thumbnail = string.Empty;
             var blobpdffileUrl = string.Empty;
-            using (MemoryStream pdfStream = new MemoryStream())
+            var fileSize = 0;
+            if (!pdfFileMaster.IsDraft)
             {
-                pdfStream.Write(mergedByte, 0, mergedByte.Length);
+                List<Stream> files = new List<Stream>();
+                List<PdfFileModel> finalfiles = new List<PdfFileModel>();
 
-                var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);
-                var fileInfo = await _azureBlobServices.UploadFile(pdfStream, pdffileUrl, _appSetting.AzureBlobDocContainer, false);
-                thumbnail = _docUtility.ConvertPDFtoJPG(pdfStream, Path.GetFileNameWithoutExtension(pdfFileName) + ".png", 1);
-                blobpdffileUrl = fileInfo.Path;
+
+                var coverfileUrl = string.Format("{0}/{1}", "Content", modelList.CoverPageName);
+                var coverfileStream = await _azureBlobServices.DownloadFile(coverfileUrl, _appSetting.AzureBlobDocContainer);
+                //files.Add(coverfileStream);
+
+                var coverPageBytes = StreamHelper.ReadToEnd(coverfileStream);
+                var coverFilePath = this._environment.WebRootPath + "/TempPdf/Cover_" + Guid.NewGuid().ToString() + ".pdf";
+                System.IO.File.WriteAllBytes(coverFilePath, coverPageBytes);
+                List<string> pages = new List<string>();
+                var allfiles = pdfFileMaster.PdfFiles;//.SelectMany(t => t.Files).ToList();
+                foreach (var filesList in allfiles)
+                {
+                    foreach (var fdetails in filesList.Files)
+                    {
+                        if (!string.IsNullOrEmpty(fdetails.ExpressKey))
+                        {
+                            var fileStream = this.GetMergedPdf(fdetails.ExpressKey, fdetails.ExpressUrl);
+                            files.Add(fileStream);
+                        }
+                        else
+                        {
+                            var fileUrl = string.Format("{0}/{1}", "Content", !string.IsNullOrEmpty(fdetails.TempFileName) ? fdetails.TempFileName : fdetails.FileName);
+                            var fileStream = await _azureBlobServices.DownloadFile(fileUrl, _appSetting.AzureBlobTempContainer);
+                            files.Add(fileStream);
+
+                            if (!string.IsNullOrEmpty(fdetails.TempFileName))
+                            {
+                                await _azureBlobServices.DeleteFile(fileUrl, _appSetting.AzureBlobTempContainer);
+                            }
+                        }
+                    }
+
+                    string mergByte = _docUtility.CombineMultiplePDFs(filesList, files);
+                    filesList.FileTmpPath = mergByte;
+                    finalfiles.Add(filesList);
+                    pages.Add(mergByte);
+                    //using (MemoryStream pdfStream = new MemoryStream())
+                    //{
+                    //    pdfStream.Write(mergByte, 0, mergByte.Length);
+                    //    finalfiles.Add(pdfStream);
+                    //}
+                    files = new List<Stream>();
+
+                }
+
+                // var pages = _docUtility.CreateIndexPage(finalfiles);
+                pages.Insert(0, coverFilePath);
+                files = new List<Stream>();
+
+                byte[] mergedByte = _docUtility.CombineMultiplePDFFiles(pages);
+                pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";   
+                using (MemoryStream pdfStream = new MemoryStream())
+                {
+                    pdfStream.Write(mergedByte, 0, mergedByte.Length);
+                    fileSize = mergedByte.Length;
+                    var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);
+                    var fileInfo = await _azureBlobServices.UploadFile(pdfStream, pdffileUrl, _appSetting.AzureBlobDocContainer, false);
+                    thumbnail = _docUtility.ConvertPDFtoJPG(pdfStream, Path.GetFileNameWithoutExtension(pdfFileName) + ".png", 1);
+                    blobpdffileUrl = fileInfo.Path;
+                }
             }
 
             var sectionIds = pdfFileMaster.PdfFiles.Select(t => t.Id).ToList();
@@ -407,6 +413,7 @@ namespace ChelseaApp.Controllers
             var submittalModel = this._mapper.Map<Submittal>(dataList);
             submittalModel.Thumbnail = Path.GetFileName(thumbnail);
             submittalModel.FileName = pdfFileName;
+            submittalModel.FileSize = fileSize;
             submittalModel.IsDraft = pdfFileMaster.IsDraft;
             submittalModel.IsTempRecord = false;
             _context.Submittal.Update(submittalModel);
