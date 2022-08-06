@@ -65,7 +65,7 @@ export class SubmittalsFormStep1Component implements OnInit {
           name: [''],
           addressLine1: [''],
           addressLine2: [''],
-          state: [''],
+          stateId: [''],
           city: [''],
           postalCode: ['']
         }),
@@ -95,6 +95,7 @@ export class SubmittalsFormStep1Component implements OnInit {
 
   }
   setFormData = (res) => {
+    debugger
     this.submittalDetailForm.controls['id'].setValue(res['id']);
     this.submittalDetailForm.controls['status'].setValue(res['status']);
     this.submittalDetailForm.controls['submittalDate'].setValue(res['submittedDate'] && new Date(res['submittedDate']));
@@ -116,7 +117,8 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['contractor']['controls']['name'].setValue(res['contractorName']);
     this.submittalDetailForm.controls['contractor']['controls']['addressLine1'].setValue(res['addressLine1']);
     this.submittalDetailForm.controls['contractor']['controls']['addressLine2'].setValue(res['addressLine2']);
-    //this.submittalDetailForm.controls['contractor']['controls']['state'].setValue(res['stateId']);
+    debugger
+    this.submittalDetailForm.controls['contractor']['controls']['stateId'].setValue(res['stateId']);
     this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(res['city']);
     this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue(res['zip'] || '');
   }
@@ -150,10 +152,11 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['cityName'].setValue(cityObj[0].name);
   }
   selectState = () => {
-    let stateId = this.submittalDetailForm.controls['contractor'].value.state;
+    let stateId = this.submittalDetailForm.controls['contractor'].value.stateId;
     let stateObj = this.stateMaster.filter(function (item: any) {
       return item.id >= stateId;
     });
+    debugger
     this.submittalDetailForm.controls['stateName'].setValue(stateObj[0].name);
   }
 
@@ -177,6 +180,10 @@ export class SubmittalsFormStep1Component implements OnInit {
       let postDto: any = {
         ... this.submittalDetailForm.value
       }
+      if(postDto.contractor && postDto.contractor.postalCode){
+        postDto.contractor.postalCode =  postDto.contractor.postalCode.toString();
+      }
+
       this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
         try {
           if (value) {
