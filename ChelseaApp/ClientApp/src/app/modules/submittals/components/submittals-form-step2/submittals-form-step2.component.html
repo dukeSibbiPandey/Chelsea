@@ -13,8 +13,8 @@
     </span>
   </div>
   <div class="action_wrapper form-group">
-    <button class="btn __btn __theme" (click)="handleMergePdp()">Merge</button>
-    <!-- <button class="btn __btn __default" [routerLink]="['/submittals/preview/123']">Preview</button> -->
+    <button class="btn __btn __default" (click)="handleMergePdp(true)">Save As Draft</button>
+    <button class="btn __btn __theme" (click)="handleMergePdp(false)">Merge</button>
     <button class="btn __btn __default" [routerLink]="['/submittals/list']">Cancel</button>
   </div>
 </div>

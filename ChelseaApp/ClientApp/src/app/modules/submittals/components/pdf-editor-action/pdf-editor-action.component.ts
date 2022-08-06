@@ -20,7 +20,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   @HostListener('window:beforeunload')
   isEditHeader: any = false;
   wvInstance: any;
-  isFormSaved = false;
+  isFormSaved = true;
   id: any
   dialogConfig: any = null;
   icon: any = {
