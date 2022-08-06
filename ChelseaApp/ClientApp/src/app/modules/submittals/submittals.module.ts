@@ -31,6 +31,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { TableModule } from 'primeng/table';
 import { InputMaskModule } from 'primeng/inputmask';
+import {AutoCompleteModule} from 'primeng/autocomplete';
+import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-editor-action.component';
 @NgModule({
   declarations: [
@@ -69,7 +71,9 @@ import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-edi
     ProgressBarModule,
     PdfViewerModule,
     TableModule,
-    InputMaskModule
+    InputMaskModule,
+    AutoCompleteModule,
+    AutocompleteLibModule
   ],
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'in' }

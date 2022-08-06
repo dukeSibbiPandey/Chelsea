@@ -23,6 +23,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   entity: any = {
     addressId: 0
   }
+  filteredCountries: any[];
   constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService, private _ActivatedRoute: ActivatedRoute) { }
   ngOnInit(): void {
     this.id = this._ActivatedRoute.snapshot.params['id'];
@@ -160,7 +161,18 @@ export class SubmittalsFormStep1Component implements OnInit {
   toastMsg(severity: any, summary: any, detail: any, life: any) {
     this.messageService.add({ key: 'detailFormToast', severity: severity, summary: summary, detail: detail, life: life, closable: true });
   }
+  filterCountry(event) {
+    let filtered: any[] = [];
+    let query = event.query;
+    for (let i = 0; i < this.cityMaster.length; i++) {
+      let country = this.cityMaster[i];
+      if (country.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+        filtered.push(country);
+      }
+    }
 
+    this.filteredCountries = filtered;
+  }
 
   setFormValue = () => {
     const res: any = {};
@@ -177,10 +189,9 @@ export class SubmittalsFormStep1Component implements OnInit {
       let postDto: any = {
         ... this.submittalDetailForm.value
       }
-      if(postDto.contractor && postDto.contractor.postalCode){
-        postDto.contractor.postalCode =  postDto.contractor.postalCode.toString();
+      if (postDto.contractor && postDto.contractor.postalCode) {
+        postDto.contractor.postalCode = postDto.contractor.postalCode.toString();
       }
-
       this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
         try {
           if (value) {
@@ -190,8 +201,10 @@ export class SubmittalsFormStep1Component implements OnInit {
             }, 3000);
           }
         } catch (err) {
-
+          this.toastMsg('error', 'Error', err || 'Somethign went wrong', 2000)
         }
+      }, error => {
+        this.toastMsg('error', 'Error', error, 2000)
       });
     }
   }

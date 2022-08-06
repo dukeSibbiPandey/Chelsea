@@ -168,15 +168,14 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">City</label>
-                                    <input type="text" class="form-control" placeholder="Enter Here"
-                                        formControlName="city">
-                                    <!-- <div class="__custom_select">
-                                        <select class="form-control" formControlName="city" (change)="selectCity()">
-                                            <option value="">Select</option>
-                                            <option value="{{item.id}}" *ngFor="let item of cityMaster">{{item.name}}
-                                            </option>
-                                        </select>
-                                    </div> -->
+                                    <p-autoComplete [suggestions]="filteredCountries"
+                                        (completeMethod)="filterCountry($event)" field="name" [dropdown]="true" formControlName="city">
+                                        <ng-template let-country pTemplate="item">
+                                            <div class="country-item">
+                                                <div>{{country.name}}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-autoComplete>
                                 </div>
                             </div>
                             <div class="col-sm-4">
