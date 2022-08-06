@@ -21,7 +21,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   cityMaster: any = [];
   stateMaster: any = [];
   id: any;
-  initialValue:any = ''
+  initialValue: any = ''
   entity: any = {
     addressId: 0
   }
@@ -207,6 +207,7 @@ export class SubmittalsFormStep1Component implements OnInit {
       if (postDto.contractor && postDto.contractor.city && postDto.contractor.city.name) {
         postDto.contractor.city = postDto.contractor.city.name
       }
+      postDto.contractor.stateId = parseInt(postDto.contractor.stateId) || 0;
       if (postDto.contractor) {
         postDto.contractor.state = null
       }
