@@ -400,7 +400,7 @@ namespace ChelseaApp.Controllers
                     fileSize = mergedByte.Length;
                     var pdffileUrl = string.Format("{0}/{1}", "Content", pdfFileName);
                     var fileInfo = await _azureBlobServices.UploadFile(pdfStream, pdffileUrl, _appSetting.AzureBlobDocContainer, false);
-                    thumbnail = _docUtility.ConvertPDFtoJPG(pdfStream, Path.GetFileNameWithoutExtension(pdfFileName) + ".png", 1);
+                    thumbnail = _docUtility.ConvertPDFtoJPG(pdfStream, Path.GetFileNameWithoutExtension(pdfFileName) + ".png", 2);
                     blobpdffileUrl = fileInfo.Path;
                 }
 
