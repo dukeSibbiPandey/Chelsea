@@ -345,6 +345,8 @@ namespace ChelseaApp.Controllers
 
                 var coverPageBytes = StreamHelper.ReadToEnd(coverfileStream);
                 var coverFilePath = this._environment.WebRootPath + "/TempPdf/Cover_" + Guid.NewGuid().ToString() + ".pdf";
+                finalfiles.Add(new PdfFileModel() { FileTmpPath = coverFilePath, Name = "Cover Page" });
+
                 System.IO.File.WriteAllBytes(coverFilePath, coverPageBytes);
                 List<string> pages = new List<string>();
                 var allfiles = pdfFileMaster.PdfFiles;//.SelectMany(t => t.Files).ToList();
@@ -383,12 +385,15 @@ namespace ChelseaApp.Controllers
 
                 }
 
-                // var pages = _docUtility.CreateIndexPage(finalfiles);
-                pages.Insert(0, coverFilePath);
+
+
+                pages = _docUtility.CreateIndexPage(finalfiles);
+
+                //pages.Insert(0, coverFilePath);
                 files = new List<Stream>();
 
-                byte[] mergedByte = _docUtility.CombineMultiplePDFFiles(pages);
-                pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";   
+                byte[] mergedByte = System.IO.File.ReadAllBytes(pages[0]);  //_docUtility.CombineMultiplePDFFiles(pages);
+                pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
                 using (MemoryStream pdfStream = new MemoryStream())
                 {
                     pdfStream.Write(mergedByte, 0, mergedByte.Length);
@@ -397,6 +402,21 @@ namespace ChelseaApp.Controllers
                     var fileInfo = await _azureBlobServices.UploadFile(pdfStream, pdffileUrl, _appSetting.AzureBlobDocContainer, false);
                     thumbnail = _docUtility.ConvertPDFtoJPG(pdfStream, Path.GetFileNameWithoutExtension(pdfFileName) + ".png", 1);
                     blobpdffileUrl = fileInfo.Path;
+                }
+
+                foreach(var file in finalfiles)
+                {
+                    if (System.IO.File.Exists(file.FileTmpPath))
+                    {
+                        System.IO.File.Delete(file.FileTmpPath);
+                    }
+                }
+                foreach (var file in pages)
+                {
+                    if (System.IO.File.Exists(file))
+                    {
+                        System.IO.File.Delete(file);
+                    }
                 }
             }
 

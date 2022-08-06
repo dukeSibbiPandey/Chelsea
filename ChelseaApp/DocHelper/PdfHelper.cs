@@ -24,23 +24,27 @@ namespace ChelseaApp.DocHelper
 
             PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
             Document doc = new Document(pdfDoc);
+
+            // Initialize a resultant document outlines in order to copy outlines from the source documents.
+            // Note that outlines still could be copied even if in destination document outlines
+            // are not initialized, by using PdfMerger with mergeOutlines vakue set as true
             pdfDoc.InitializeOutlines();
+
+            // Copier contains the additional logic to copy acroform fields to a new page.
+            // PdfPageFormCopier uses some caching logic which can potentially improve performance
+            // in case of the reusing of the same instance.
             PdfPageFormCopier formCopier = new PdfPageFormCopier();
 
-            doc.SetTopMargin(100);
-            doc.Add(new Paragraph("#TempText#"));
-            doc.SetTopMargin(0);
-            doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-
+            // Copy all merging file's pages to the result pdf file
             Dictionary<PdfFileModel, PdfDocument> filesToMerge = InitializeFilesToMerge(streams);
-            Dictionary<int, PdfFileModel> toc = new Dictionary<int, PdfFileModel>();
+            Dictionary<int, String> toc = new Dictionary<int, String>();
             int page = 1;
             foreach (KeyValuePair<PdfFileModel, PdfDocument> entry in filesToMerge)
             {
                 PdfDocument srcDoc = entry.Value;
                 int numberOfPages = srcDoc.GetNumberOfPages();
 
-                toc.Add(page, entry.Key);
+                toc.Add(page, entry.Key.Name);
 
                 for (int i = 1; i <= numberOfPages; i++, page++)
                 {
@@ -59,25 +63,20 @@ namespace ChelseaApp.DocHelper
                 }
             }
 
-            //PdfDocument tocDocD = new PdfDocument(new PdfWriter(tocContent));
-            //tocDoc.CopyPagesTo(1, 1, pdfDoc, formCopier);
-            //tocDoc.Close();
+            //PdfDocument tocDoc = new PdfDocument(new PdfWriter(tocContent));
+            PdfDocument tocDoc = new PdfDocument(new PdfReader(tocContent));
+            tocDoc.CopyPagesTo(1, 1, pdfDoc, formCopier);
+            tocDoc.Close();
 
             // Create a table of contents
-
-            //Document tocDoc = new Document(tocDocD);
             float tocYCoordinate = 750;
             float tocXCoordinate = doc.GetLeftMargin();
             float tocWidth = pdfDoc.GetDefaultPageSize().GetWidth() - doc.GetLeftMargin() - doc.GetRightMargin();
-            foreach (KeyValuePair<int, PdfFileModel> entry in toc)
+            foreach (KeyValuePair<int, String> entry in toc)
             {
                 Paragraph p = new Paragraph();
-                p.AddTabStops(new TabStop(100, TabAlignment.LEFT));
-                p.Add(entry.Value.Name);
-                p.Add(new Tab());
-                p.Add(entry.Value.MFG);
-                p.Add(new Tab());
-                p.Add(entry.Value.Part);
+                p.AddTabStops(new TabStop(500, TabAlignment.LEFT, new DashedLine()));
+                p.Add(entry.Value);
                 p.Add(new Tab());
                 p.Add(entry.Key.ToString());
                 p.SetAction(PdfAction.CreateGoTo("p" + entry.Key));
@@ -88,13 +87,17 @@ namespace ChelseaApp.DocHelper
                 tocYCoordinate -= 20;
             }
 
+            int totalPage = pdfDoc.GetNumberOfPages();
+            // var lastPage = pdfDoc.GetPage(totalPage);
+            pdfDoc.MovePage(totalPage, 2);
+            //pdfDoc.RemovePage(totalPage + 1);
+
             foreach (PdfDocument srcDoc in filesToMerge.Values)
             {
                 srcDoc.Close();
             }
 
             doc.Close();
-            //tocDoc.Close();
         }
 
         private static Dictionary<PdfFileModel, PdfDocument> InitializeFilesToMerge(List<PdfFileModel> streams)
@@ -103,12 +106,6 @@ namespace ChelseaApp.DocHelper
             int cnt = 1;
             foreach (var file in streams)
             {
-                //using (MemoryStream pdfStream = new MemoryStream())
-                //{
-                //    pdfStream.Write(mergByte, 0, mergByte.Length);
-
-                //}
-                //
                 filesToMerge.Add(file, new PdfDocument(new PdfReader(file.FileTmpPath)));
                 cnt = cnt + 1;
 

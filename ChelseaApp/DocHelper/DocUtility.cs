@@ -554,13 +554,15 @@ namespace ChelseaApp.DocHelper
         {
             List<string> fileNames = new List<string>();
             var desFilePath = this._environment.WebRootPath + "/TempPdf/Merge_TocFile_" + Guid.NewGuid().ToString() + ".pdf";
-            var tocFilePath = this._environment.WebRootPath + "/TempPdf/toc_" + Guid.NewGuid().ToString() + ".pdf";
+            //var tocFilePath = this._environment.WebRootPath + "/TempPdf/toc_" + Guid.NewGuid().ToString() + ".pdf";
+            var tocFilePath = this._environment.WebRootPath + "/Template/toc.pdf";
             FileInfo file = new FileInfo(desFilePath);
             file.Directory.Create();
 
-            fileNames.Add(tocFilePath);
+            //fileNames.Add(tocFilePath);
             fileNames.Add(desFilePath);
-
+            //iText.Kernel.Pdf.PdfDocument tocDoc = new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(tocFilePath));
+            //tocDoc.Close();
             PdfHelper.GeneratePdf(desFilePath, streams, tocFilePath);
             return fileNames;
         }
