@@ -9,6 +9,7 @@ namespace Chelsea.Repository
     public class CityMaster
     {
         public int Id { get; set; }
+        public int StateId { get; set; }
         public string Name { get; set; }
     }
 }

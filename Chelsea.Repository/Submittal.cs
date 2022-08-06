@@ -24,7 +24,7 @@ namespace Chelsea.Repository
         public string AddressLine2 { get; set; }
         public int? StateId { get; set; }
         public string City { get; set; }
-        public int? Zip { get; set; }
+        public string Zip { get; set; }
         public int? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public int? UpdatedBy { get; set; }
