@@ -46,6 +46,7 @@ export class SubmittalsFormStep1Component implements OnInit {
         jobName: ['', Validators.required],
         submittals: ['', Validators.required],
         addressId: ['', Validators.required],
+        status: ['', []],
         address: this._FormBuilder.group({
           addressLine1: [''],
           addressLine2: [''],
@@ -95,6 +96,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   }
   setFormData = (res) => {
     this.submittalDetailForm.controls['id'].setValue(res['id']);
+    this.submittalDetailForm.controls['status'].setValue(res['status']);
     this.submittalDetailForm.controls['submittalDate'].setValue(res['submittedDate'] && new Date(res['submittedDate']));
     this.submittalDetailForm.controls['jobName'].setValue(res['jobName']);
     this.submittalDetailForm.controls['submittals'].setValue(res['submittals']);
