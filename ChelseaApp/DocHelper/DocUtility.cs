@@ -604,7 +604,7 @@ namespace ChelseaApp.DocHelper
             _pdfDoc.LoadPDF(fileStream);
             _pdfDoc.CurrentPage = pageNumber + 1;
             var outputFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".jpg";
-            _pdfDoc.ExportJpg(outputFilePath, 1);
+            _pdfDoc.ExportJpg(outputFilePath, pageNumber + 1, pageNumber + 1, 360, 3);
             while (_pdfDoc.IsJpgBusy)
             {
                 Thread.Sleep(50);
@@ -643,7 +643,7 @@ namespace ChelseaApp.DocHelper
             _pdfDoc.LoadPDF(fileStream);
             _pdfDoc.CurrentPage = pageNumber + 1;
             var outputFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".jpg";
-            _pdfDoc.ExportJpg(outputFilePath, 1);
+            _pdfDoc.ExportJpg(outputFilePath, pageNumber + 1, pageNumber + 1, 360, 3);
             while (_pdfDoc.IsJpgBusy)
             {
                 Thread.Sleep(50);
