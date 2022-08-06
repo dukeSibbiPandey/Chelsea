@@ -168,14 +168,23 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">City</label>
-                                    <p-autoComplete [suggestions]="filteredCountries"
-                                        (completeMethod)="filterCountry($event)" field="name" [dropdown]="true" formControlName="city">
-                                        <ng-template let-country pTemplate="item">
-                                            <div class="country-item">
-                                                <div>{{country.name}}</div>
-                                            </div>
+
+                                    <div class="ng-autocomplete">
+                                        <ng-autocomplete [data]="cityMaster" [searchKeyword]="keyword"
+                                            formControlName="city" placeholder="Enter the Country Name"
+                                            (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)'
+                                            (inputFocused)='onFocused($event)' historyIdentifier="countries"
+                                            [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+                                        </ng-autocomplete>
+
+                                        <ng-template #itemTemplate let-item>
+                                            <a [innerHTML]="item.name"></a>
                                         </ng-template>
-                                    </p-autoComplete>
+
+                                        <ng-template #notFoundTemplate let-notFound>
+                                            <div [innerHTML]="notFound"></div>
+                                        </ng-template>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-4">

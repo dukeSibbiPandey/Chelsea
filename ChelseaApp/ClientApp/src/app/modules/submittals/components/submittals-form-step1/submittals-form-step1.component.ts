@@ -14,12 +14,14 @@ const emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
 })
 export class SubmittalsFormStep1Component implements OnInit {
   activeAddressInde = -1;
+  keyword = 'name';
   submittalDetailForm: FormGroup;
   submitted = false;
   addressMaster: any = [];
   cityMaster: any = [];
   stateMaster: any = [];
   id: any;
+  initialValue:any = ''
   entity: any = {
     addressId: 0
   }
@@ -79,6 +81,16 @@ export class SubmittalsFormStep1Component implements OnInit {
     }
   }
   get formControl() { return this.submittalDetailForm.controls };
+  selectEvent(item) {
+    //this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(item['name']);
+  }
+  onChangeSearch(val: string) {
+    // fetch remote data from here
+    // And reassign the 'data' which is binded to 'data' property.
+  }
+  onFocused(e) {
+    // do something
+  }
   getSubmittalData(id: any) {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
       this.entity = value
@@ -191,6 +203,9 @@ export class SubmittalsFormStep1Component implements OnInit {
       }
       if (postDto.contractor && postDto.contractor.postalCode) {
         postDto.contractor.postalCode = postDto.contractor.postalCode.toString();
+      }
+      if (postDto.contractor && postDto.contractor.city && postDto.contractor.city.name) {
+        postDto.contractor.city = postDto.contractor.city.name
       }
       this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
         try {
