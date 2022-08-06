@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../../../../components/http.service';
-import { PDFDocument } from 'pdf-lib';
 import { PdfHelperService } from '../../pdfhelper.service';
 
 const submittalItem: any = {
@@ -215,7 +214,7 @@ export class SubmittalsFormStep2Component implements OnInit {
       this.change_submittal_name(res)
     }
   }
-  handleMergePdp = async () => {
+  handleMergePdp = async (isDraft) => {
     let temp: any = [];
     //this.submittalsTpl.map((ele: any, index: number) => {
     for (let i = 0; i < this.submittalsTpl.length; i++) {
@@ -236,7 +235,7 @@ export class SubmittalsFormStep2Component implements OnInit {
       //item.files.forEach(async element => {
       for (let j = 0; j < item.files.length; j++) {
         const element = item.files[j];
-        let fileurl = this.httpService.getBaseUrl()+"Home/download?bloburl=" + element.fileName;
+        let fileurl = this.httpService.getBaseUrl() + "Home/download?bloburl=" + element.fileName;
         if (element.annotations) {
           let expressObj = await this.getMergedPdfWithAnnotations(element.annotations, item, fileurl);
           item.files[j].expressKey = expressObj.key;
@@ -255,6 +254,7 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.updateOldState();
     let postDto = {
       submittalId: this.id,
+      isDraft:isDraft,
       pdfFiles: temp
     }
     this.httpService.post("home/files/merge", postDto).toPromise().then(value => {

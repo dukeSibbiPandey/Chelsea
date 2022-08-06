@@ -95,7 +95,6 @@ export class SubmittalsFormStep1Component implements OnInit {
 
   }
   setFormData = (res) => {
-    debugger
     this.submittalDetailForm.controls['id'].setValue(res['id']);
     this.submittalDetailForm.controls['status'].setValue(res['status']);
     this.submittalDetailForm.controls['submittalDate'].setValue(res['submittedDate'] && new Date(res['submittedDate']));
@@ -117,7 +116,6 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['contractor']['controls']['name'].setValue(res['contractorName']);
     this.submittalDetailForm.controls['contractor']['controls']['addressLine1'].setValue(res['addressLine1']);
     this.submittalDetailForm.controls['contractor']['controls']['addressLine2'].setValue(res['addressLine2']);
-    debugger
     this.submittalDetailForm.controls['contractor']['controls']['stateId'].setValue(res['stateId']);
     this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(res['city']);
     this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue(res['zip'] || '');
@@ -156,7 +154,6 @@ export class SubmittalsFormStep1Component implements OnInit {
     let stateObj = this.stateMaster.filter(function (item: any) {
       return item.id >= stateId;
     });
-    debugger
     this.submittalDetailForm.controls['stateName'].setValue(stateObj[0].name);
   }
 
