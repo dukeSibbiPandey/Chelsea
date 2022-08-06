@@ -207,6 +207,9 @@ export class SubmittalsFormStep1Component implements OnInit {
       if (postDto.contractor && postDto.contractor.city && postDto.contractor.city.name) {
         postDto.contractor.city = postDto.contractor.city.name
       }
+      if (postDto.contractor) {
+        postDto.contractor.state = null
+      }
       this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
         try {
           if (value) {
