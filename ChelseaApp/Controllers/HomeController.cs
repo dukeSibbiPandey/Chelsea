@@ -118,9 +118,9 @@ namespace ChelseaApp.Controllers
             //var cityObj = await _context.CityMaster.Where(t => t.Id == Convert.ToInt32(coverPage.Contractor.City)).FirstOrDefaultAsync();
             int stateId = 0;
 
-            if (coverPage.Contractor != null && coverPage.Contractor.StateId > 0)
+            if (coverPage.Contractor != null && coverPage.Contractor.StateId.GetValueOrDefault() > 0)
             {
-                var stateObj = await _context.StateMaster.Where(t => t.Id == coverPage.Contractor.StateId).FirstOrDefaultAsync();
+                var stateObj = await _context.StateMaster.Where(t => t.Id == coverPage.Contractor.StateId.GetValueOrDefault()).FirstOrDefaultAsync();
                 coverPage.Contractor.StateName = stateObj.Name;
             }            
 
