@@ -14,15 +14,18 @@ const emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
 })
 export class SubmittalsFormStep1Component implements OnInit {
   activeAddressInde = -1;
+  keyword = 'name';
   submittalDetailForm: FormGroup;
   submitted = false;
   addressMaster: any = [];
   cityMaster: any = [];
   stateMaster: any = [];
   id: any;
+  initialValue: any = ''
   entity: any = {
     addressId: 0
   }
+  filteredCountries: any[];
   constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService, private _ActivatedRoute: ActivatedRoute) { }
   ngOnInit(): void {
     this.id = this._ActivatedRoute.snapshot.params['id'];
@@ -78,6 +81,16 @@ export class SubmittalsFormStep1Component implements OnInit {
     }
   }
   get formControl() { return this.submittalDetailForm.controls };
+  selectEvent(item) {
+    //this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(item['name']);
+  }
+  onChangeSearch(val: string) {
+    // fetch remote data from here
+    // And reassign the 'data' which is binded to 'data' property.
+  }
+  onFocused(e) {
+    // do something
+  }
   getSubmittalData(id: any) {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
       this.entity = value
@@ -160,7 +173,18 @@ export class SubmittalsFormStep1Component implements OnInit {
   toastMsg(severity: any, summary: any, detail: any, life: any) {
     this.messageService.add({ key: 'detailFormToast', severity: severity, summary: summary, detail: detail, life: life, closable: true });
   }
+  filterCountry(event) {
+    let filtered: any[] = [];
+    let query = event.query;
+    for (let i = 0; i < this.cityMaster.length; i++) {
+      let country = this.cityMaster[i];
+      if (country.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+        filtered.push(country);
+      }
+    }
 
+    this.filteredCountries = filtered;
+  }
 
   setFormValue = () => {
     const res: any = {};
@@ -177,10 +201,16 @@ export class SubmittalsFormStep1Component implements OnInit {
       let postDto: any = {
         ... this.submittalDetailForm.value
       }
-      if(postDto.contractor && postDto.contractor.postalCode){
-        postDto.contractor.postalCode =  postDto.contractor.postalCode.toString();
+      if (postDto.contractor && postDto.contractor.postalCode) {
+        postDto.contractor.postalCode = postDto.contractor.postalCode.toString();
       }
-
+      if (postDto.contractor && postDto.contractor.city && postDto.contractor.city.name) {
+        postDto.contractor.city = postDto.contractor.city.name
+      }
+      postDto.contractor.stateId = parseInt(postDto.contractor.stateId) || null;
+      if (postDto.contractor) {
+        postDto.contractor.state = null
+      }
       this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
         try {
           if (value) {
@@ -190,8 +220,10 @@ export class SubmittalsFormStep1Component implements OnInit {
             }, 3000);
           }
         } catch (err) {
-
+          this.toastMsg('error', 'Error', err || 'Somethign went wrong', 2000)
         }
+      }, error => {
+        this.toastMsg('error', 'Error', error, 2000)
       });
     }
   }

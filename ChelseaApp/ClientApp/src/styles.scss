@@ -1,0 +1,25 @@
+.ng-autocomplete {
+  width: 100% !important;
+  display: table;
+  margin: 0 auto;
+
+  .autocomplete-container {
+    height: 32px;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  .autocomplete-container .input-container input {
+    height: 32px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #333333;
+    box-shadow: none !important;
+    outline: none !important;
+    border: 1px solid #dbdcdf;
+
+    border-radius: 4px;
+  }
+}

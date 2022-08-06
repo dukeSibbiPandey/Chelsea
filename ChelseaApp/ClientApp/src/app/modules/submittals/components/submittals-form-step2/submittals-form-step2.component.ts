@@ -101,7 +101,12 @@ export class SubmittalsFormStep2Component implements OnInit {
       value.pdfFiles && value.pdfFiles.map((item, index) => {
         this.openIndex.push(index.toString())
       })
-      this.submittalsTpl = value.pdfFiles;
+      if (value.pdfFiles.length > 0) {
+        this.submittalsTpl = value.pdfFiles;
+      } else {
+        this.openIndex.push('0')
+      }
+
       this.updateOldState();
       this.submittalData = value;
     })
@@ -254,7 +259,7 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.updateOldState();
     let postDto = {
       submittalId: this.id,
-      isDraft:isDraft,
+      isDraft: isDraft,
       pdfFiles: temp
     }
     this.httpService.post("home/files/merge", postDto).toPromise().then(value => {
