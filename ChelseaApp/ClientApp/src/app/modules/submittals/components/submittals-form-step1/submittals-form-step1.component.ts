@@ -68,7 +68,7 @@ export class SubmittalsFormStep1Component implements OnInit {
           name: [''],
           addressLine1: [''],
           addressLine2: [''],
-          stateId: [''],
+          stateId: ['0'],
           city: [''],
           postalCode: ['']
         }),
@@ -207,7 +207,7 @@ export class SubmittalsFormStep1Component implements OnInit {
       if (postDto.contractor && postDto.contractor.city && postDto.contractor.city.name) {
         postDto.contractor.city = postDto.contractor.city.name
       }
-      postDto.contractor.stateId = parseInt(postDto.contractor.stateId) || null;
+      postDto.contractor.stateId = postDto.contractor.stateId && postDto.contractor.stateId!=0?  parseInt(postDto.contractor.stateId) : null;
       if (postDto.contractor) {
         postDto.contractor.state = null
       }

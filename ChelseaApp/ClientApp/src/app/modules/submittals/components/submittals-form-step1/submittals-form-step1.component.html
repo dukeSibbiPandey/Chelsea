@@ -158,7 +158,7 @@
                                     <div class="__custom_select">
                                         <select class="form-control" (change)="selectState()" name="contractor"
                                             formControlName="stateId">
-                                            <option value="">Select</option>
+                                            <option value="0">Select</option>
                                             <option value="{{item.id}}" *ngFor="let item of stateMaster">{{item.name}}
                                             </option>
                                         </select>
