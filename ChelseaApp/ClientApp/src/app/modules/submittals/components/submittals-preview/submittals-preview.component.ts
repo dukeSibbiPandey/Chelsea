@@ -1,8 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute} from '@angular/router';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
-import { HttpService } from 'src/app/components/http.service';
 import { SubmittalService } from '../../submittal.service';
 import WebViewer from '@pdftron/pdfjs-express';
 import { PdfHelperService } from '../../pdfhelper.service';
@@ -37,7 +36,7 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
   icon: any = {
     BACK_ICON: ''
   }
-  constructor(private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer, private httpService: HttpService, private messageService: MessageService) { }
+  constructor(private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     PdfHelperService.RemoveDataLocalStorage();
