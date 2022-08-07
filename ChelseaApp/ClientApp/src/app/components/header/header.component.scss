@@ -3,22 +3,44 @@
     padding: 25px 0;
     border-bottom: 1px #dbdcdf solid;
 }
-.logo{
+
+.logo {
     cursor: pointer;
 }
+
 .__h_i {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
 .__menuitem {
     display: flex;
     align-items: center;
+
     li {
         margin-left: 30px;
+
         span {
             display: inline-block;
             cursor: pointer;
         }
     }
+}
+
+.userThumb {
+    width: 32px;
+    height: 32px;
+    left: 1376px;
+    border-radius: 100%;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #E8442D;
+    cursor: pointer;
 }
