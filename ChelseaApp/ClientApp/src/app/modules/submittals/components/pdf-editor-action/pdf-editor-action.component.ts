@@ -9,6 +9,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { PdfHelperService } from '../../pdfhelper.service';
+import { CommonService } from 'src/app/common.service';
 @Component({
   selector: 'app-pdf-editor-action',
   templateUrl: './pdf-editor-action.component.html',
@@ -31,7 +32,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   icon: any = {
     BACK_ICON: ''
   }
-  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer, private messageService: MessageService) { }
+  constructor(private httpService: HttpService, private _SubmittalService: SubmittalService, public activatedRoute: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer, private messageService: MessageService, private _CustomService: CommonService) { }
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.params['id'];
     PdfHelperService.RemoveDataLocalStorage();
@@ -339,6 +340,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.wvInstance.setFitMode('FitWidth');
       this.wvInstance.openElements(['notesPanel']);
+      this._CustomService.hide();
     }, 100);
   }
   handleUpdateDetail = () => {
@@ -352,7 +354,8 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       dim: tempPdfFiles.dim,
       runs: tempPdfFiles.runs,
     }
-    this.isFormSaved = false
+    this.isFormSaved = false;
+    this._CustomService.show();
     this.createHeader(this.dialogConfig.config.previewUrl, pdfFiles);
   }
 }
