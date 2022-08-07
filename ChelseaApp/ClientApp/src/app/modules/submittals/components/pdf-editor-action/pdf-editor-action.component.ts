@@ -5,7 +5,7 @@ import { HttpService } from 'src/app/components/http.service';
 import { SubmittalService } from '../../submittal.service';
 import { HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DomSanitizer, Title } from "@angular/platform-browser";
+import { DomSanitizer } from "@angular/platform-browser";
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { PdfHelperService } from '../../pdfhelper.service';
@@ -18,10 +18,15 @@ import { PdfHelperService } from '../../pdfhelper.service';
 export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer1', { static: false }) viewer1: ElementRef;
   @HostListener('window:beforeunload')
+  isSavePdfDialog = false;
   isEditHeader: any = false;
   wvInstance: any;
   isFormSaved = true;
   id: any
+  pdfSaveForm: any = {
+    pdfFileName: ''
+  }
+
   dialogConfig: any = null;
   icon: any = {
     BACK_ICON: ''
@@ -36,6 +41,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       this.handleBack();
     } else {
       this.dialogConfig = data;
+      this.pdfSaveForm.pdfFileName = this.dialogConfig.pdfFiles.files.fileName && this.dialogConfig.pdfFiles.files.fileName.split('.pdf')[0]
       this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
       this.updatePagnation = this.updatePagnation.bind(this);
       this.BACK_ICON()
@@ -281,27 +287,41 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     }
   }
 
+  haveStep1 = () => {
+    this.isSavePdfDialog = true;
+  }
+  saveCancel = () => {
+    debugger
+    this.isSavePdfDialog = false;
+  }
 
   handleSaveAction = async () => {
-    const { annotManager } = this.wvInstance;
-    const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
-    localStorage.setItem('annotations', xfdf);
-    let submitalData = this.dialogConfig && this.dialogConfig['pdfFiles'];
-    submitalData.submittalId = this.dialogConfig.config.submittalId;
-    let url = 'home/auto/save';
-    let formData = {
-      ...submitalData
+    if (this.pdfSaveForm.pdfFileName) {
+      const fileName = `${this.pdfSaveForm.pdfFileName}.pdf`;
+      const { annotManager } = this.wvInstance;
+      const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
+      localStorage.setItem('annotations', xfdf);
+      let submitalData = this.dialogConfig && this.dialogConfig['pdfFiles'];
+      submitalData.submittalId = this.dialogConfig.config.submittalId;
+      submitalData.files.fileName = fileName;
+      let url = 'home/auto/save';
+      let formData = {
+        ...submitalData
+      }
+      formData.files.annotations = xfdf
+      formData.files.annotation = xfdf
+      this.httpService.fileupload(url, formData, null, null).subscribe(res => {
+        this.toastMsg('success', 'Success', 'PDF Submitted Successfully', 2000);
+        this.isFormSaved = true
+        setTimeout(() => {
+          localStorage.removeItem('submittalObject');
+          this.handleBack();
+        }, 3000)
+      })
+    } else {
+      this.toastMsg('error', 'Validation Error', 'PDF name cannot be empty ', 2000);
     }
-    formData.files.annotations = xfdf
-    formData.files.annotation = xfdf
-    this.httpService.fileupload(url, formData, null, null).subscribe(res => {
-      this.toastMsg('success', 'Success', 'PDF Submitted Successfully', 2000);
-      this.isFormSaved = true
-      setTimeout(() => {
-        localStorage.removeItem('submittalObject');
-        this.handleBack();
-      }, 3000)
-    })
+
   }
   handleBack = () => {
     this.router.navigate([`/submittals/form/${this.id}/step/2`]);
