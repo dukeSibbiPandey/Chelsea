@@ -75,10 +75,6 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
         instance.disableElements(['header', 'leftPanel']);
         instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
         instance.openElements(['notesPanel']);
-        // instance.docViewer.on('annotationsLoaded', () => {
-        //   const annots = this.wvInstance.annotManager.getAnnotationsList;
-        //   this.wvInstance.annotManager.deleteAnnotations(annots);
-        // });
         instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
       })
   }
@@ -100,16 +96,8 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
   }
   handleBack = () => {
     window.history.back()
-    // localStorage.removeItem('submittalObject');
-    // localStorage.removeItem('updatedHeader');
-    // setTimeout(() => {
-    //   this.router.navigate([`/submittals/form/${this.id}/step/2`]);
-    // }, 10);
   }
   handleDetailEditDialog = (value: boolean) => {
     this.isDetailEditDialog = value
-  }
-  toastMsg(severity: any, summary: any, detail: any, life: any) {
-    this.messageService.add({ key: 'pdfEditorToast', severity: severity, summary: summary, detail: detail, life: life, closable: true });
   }
 }
