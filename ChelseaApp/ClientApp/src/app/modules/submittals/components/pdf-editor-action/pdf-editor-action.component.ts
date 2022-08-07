@@ -42,7 +42,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       this.handleBack();
     } else {
       this.dialogConfig = data;
-      this.pdfSaveForm.pdfFileName = this.dialogConfig.pdfFiles.files.fileName && this.dialogConfig.pdfFiles.files.fileName.split('.pdf')[0]
+      this.pdfSaveForm.pdfFileName = this.dialogConfig.pdfFiles.files.orgFileName && this.dialogConfig.pdfFiles.files.orgFileName.split('.pdf')[0]
       this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
       this.updatePagnation = this.updatePagnation.bind(this);
       this.BACK_ICON()
@@ -292,19 +292,18 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     this.isSavePdfDialog = true;
   }
   saveCancel = () => {
-    debugger
     this.isSavePdfDialog = false;
   }
 
   handleSaveAction = async () => {
     if (this.pdfSaveForm.pdfFileName) {
-      const fileName = `${this.pdfSaveForm.pdfFileName}.pdf`;
+      const orgFileName = `${this.pdfSaveForm.pdfFileName}.pdf`;
       const { annotManager } = this.wvInstance;
       const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
       localStorage.setItem('annotations', xfdf);
       let submitalData = this.dialogConfig && this.dialogConfig['pdfFiles'];
       submitalData.submittalId = this.dialogConfig.config.submittalId;
-      submitalData.files.fileName = fileName;
+      submitalData.files.orgFileName = orgFileName;
       let url = 'home/auto/save';
       let formData = {
         ...submitalData
