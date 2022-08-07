@@ -1,7 +1,7 @@
 <!-- <pre>
     {{dialogConfig|json}}
 </pre> -->
-<div class="container" *ngIf="dialogConfig">
+<div class="container-fluid" *ngIf="dialogConfig">
     <div class="preview_page_wrapper">
         <div class="preview-form">
             <div class="flex  v_center space_between width_100 pdf--toolbar">
@@ -10,6 +10,10 @@
                     &nbsp; &nbsp;
                     <span class="pdf_name">
                         {{this.dialogConfig['pdfFiles'] && this.dialogConfig['pdfFiles'].name}}
+                        <span
+                            *ngIf="this.dialogConfig['pdfFiles'] && this.dialogConfig['pdfFiles']['files']['orgFileName']">
+                            ({{this.dialogConfig['pdfFiles']['files']['orgFileName']}})
+                        </span>
                     </span>
                 </div>
                 <div>
