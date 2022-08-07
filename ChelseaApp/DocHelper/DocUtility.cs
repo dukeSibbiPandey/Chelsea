@@ -554,13 +554,15 @@ namespace ChelseaApp.DocHelper
         {
             List<string> fileNames = new List<string>();
             var desFilePath = this._environment.WebRootPath + "/TempPdf/Merge_TocFile_" + Guid.NewGuid().ToString() + ".pdf";
-            var tocFilePath = this._environment.WebRootPath + "/TempPdf/toc_" + Guid.NewGuid().ToString() + ".pdf";
+            //var tocFilePath = this._environment.WebRootPath + "/TempPdf/toc_" + Guid.NewGuid().ToString() + ".pdf";
+            var tocFilePath = this._environment.WebRootPath + "/Template/toc.pdf";
             FileInfo file = new FileInfo(desFilePath);
             file.Directory.Create();
 
-            fileNames.Add(tocFilePath);
+            //fileNames.Add(tocFilePath);
             fileNames.Add(desFilePath);
-
+            //iText.Kernel.Pdf.PdfDocument tocDoc = new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(tocFilePath));
+            //tocDoc.Close();
             PdfHelper.GeneratePdf(desFilePath, streams, tocFilePath);
             return fileNames;
         }
@@ -604,7 +606,7 @@ namespace ChelseaApp.DocHelper
             _pdfDoc.LoadPDF(fileStream);
             _pdfDoc.CurrentPage = pageNumber + 1;
             var outputFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".jpg";
-            _pdfDoc.ExportJpg(outputFilePath, 1);
+            _pdfDoc.ExportJpg(outputFilePath, pageNumber + 1, pageNumber + 1, 360, 3);
             while (_pdfDoc.IsJpgBusy)
             {
                 Thread.Sleep(50);
@@ -643,7 +645,7 @@ namespace ChelseaApp.DocHelper
             _pdfDoc.LoadPDF(fileStream);
             _pdfDoc.CurrentPage = pageNumber + 1;
             var outputFilePath = this._environment.WebRootPath + "/TempPdf/MergedFile_" + Guid.NewGuid().ToString() + ".jpg";
-            _pdfDoc.ExportJpg(outputFilePath, 1);
+            _pdfDoc.ExportJpg(outputFilePath, pageNumber + 1, pageNumber + 1, 360, 3);
             while (_pdfDoc.IsJpgBusy)
             {
                 Thread.Sleep(50);

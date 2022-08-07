@@ -29,7 +29,8 @@ export class MergeSubmittalsComponent implements OnInit {
   }
   getSubmittalData(id: any) {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
-      this.pageUrl = "https://chelsea.skdedu.in/api/Home/download?bloburl=" + value.fileName + ""
+      this.pageUrl = this.httpService.getBaseUrl()+ "Home/download?bloburl=" + value.fileName + ""
+      //this.pageUrl = value.fileUrl
       this.entityRes = value;
     })
   }

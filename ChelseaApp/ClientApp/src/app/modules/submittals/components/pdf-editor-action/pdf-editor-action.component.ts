@@ -79,7 +79,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         'miscToolGroupButton', /* stamp, attachment, callout */
         'stickyToolButton', /* comment box */
         'signatureToolButton', /* signature */
-        'zoomOverlayButton', 'zoomInButton', 'zoomOutButton',
+        //'zoomOverlayButton', 'zoomInButton', 'zoomOutButton',
         'panToolButton',/* hand */
         'viewControlsButton', /* settings, page transition, layout, rotate */
         'selectToolButton' /* big arrow */,
@@ -116,12 +116,12 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         console.log(`Current page is ${pageNumber}`);
         this.updatePagnation(instance)
       });
-      instance.docViewer.on('annotationsLoaded', () => {
-        const annots = this.wvInstance.annotManager.getAnnotationsList;
-        if (annots.length > 0) {
-          this.wvInstance.annotManager.deleteAnnotations(annots);
-        }
-      });
+      // instance.docViewer.on('annotationsLoaded', () => {
+      //   // const annots = this.wvInstance.annotManager.getAnnotationsList;
+      //   // if (annots.length > 0) {
+      //   //   this.wvInstance.annotManager.deleteAnnotations(annots);
+      //   // }
+      // });
       instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
     })
   }
