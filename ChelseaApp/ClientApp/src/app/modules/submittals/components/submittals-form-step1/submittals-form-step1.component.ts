@@ -82,6 +82,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   }
   get formControl() { return this.submittalDetailForm.controls };
   selectEvent(item) {
+    this.submittalDetailForm.controls['cityName'].setValue(item['name']);
     //this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(item['name']);
   }
   onChangeSearch(val: string) {
@@ -132,6 +133,8 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['contractor']['controls']['stateId'].setValue(res['stateId']);
     this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(res['city']);
     this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue(res['zip'] || '');
+    this.submittalDetailForm.controls['cityName'].setValue(res['city']);
+    this.selectState();
   }
 
   bindAddressOptions() {

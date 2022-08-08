@@ -122,6 +122,7 @@ namespace ChelseaApp.Controllers
             {
                 var stateObj = await _context.StateMaster.Where(t => t.Id == coverPage.Contractor.StateId.GetValueOrDefault()).FirstOrDefaultAsync();
                 coverPage.Contractor.StateName = stateObj.Name;
+                stateId = coverPage.Contractor.StateId.GetValueOrDefault();
             }            
 
             DateTime submittalDate = DateTime.Now;
@@ -132,11 +133,12 @@ namespace ChelseaApp.Controllers
 
             if (!string.IsNullOrEmpty(coverPage.Contractor.City))
             {
-                var cityObj = await _context.CityMaster.Where(t => t.Name == coverPage.Contractor.City).FirstOrDefaultAsync();
+                var cityObj = await _context.CityMaster.Where(t => t.Name == coverPage.Contractor.City && t.StateId == stateId).FirstOrDefaultAsync();
                 if (cityObj == null)
                 {
                     CityMaster cityMaster = new CityMaster();
                     cityMaster.Name = coverPage.Contractor.City;
+                    cityMaster.StateId = stateId;
                     _context.CityMaster.Add(cityMaster);
                     await _context.SaveChangesAsync();
                 }
