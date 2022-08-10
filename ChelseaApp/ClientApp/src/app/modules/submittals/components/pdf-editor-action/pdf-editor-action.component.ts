@@ -349,6 +349,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   handleUpdateDetail = () => {
     const tempPdfFiles = this.dialogConfig && this.dialogConfig['pdfFiles'];
     let pdfFiles = {
+      name:tempPdfFiles.name,
       mfg: tempPdfFiles.mfg,
       part: tempPdfFiles.part,
       description: tempPdfFiles.description,
