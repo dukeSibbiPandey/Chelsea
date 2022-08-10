@@ -16,6 +16,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HeaderInterceptor } from './interceptors/header.interceptor';
 import { DialogService } from 'primeng/dynamicdialog';
 import { PendingChangesGuard } from './interceptors/pendingchanges.guard';
+import { DragDropComponent } from './drag-drop/drag-drop.component';
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [
@@ -26,14 +28,16 @@ import { PendingChangesGuard } from './interceptors/pendingchanges.guard';
     TncComponent,
     PrivacyComponent,
     LayoutComponent,
-    LoaderComponent
+    LoaderComponent,
+    DragDropComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    DragDropModule
   ],
   providers: [HttpService, {
     provide: HTTP_INTERCEPTORS,
