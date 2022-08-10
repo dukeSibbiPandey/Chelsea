@@ -2,7 +2,9 @@
     <div class="container">
         <div class="tabie_wrapper">
             <div class="__t_top">
-                <div class="__t_itms"></div>
+                <div class="__t_itms">
+                    <div class="list_heading">Submittals</div>
+                </div>
                 <div class="_t_right">
                     <div class="_t_sarch">
                         <input type="text" class="search_input" placeholder="Search" [(ngModel)]="searchText"
@@ -10,8 +12,7 @@
                         <img (click)="searchList()" class="search-icon" src="../../../assets/images/search_icon.png"
                             alt="search icon" />
                     </div>
-                    <button type="button" class="__a_btn __b">Submittals</button>
-                    <button [routerLink]="['/submittals/form/0/step/1']" type="button" class="__a_btn __w">New
+                    <button [routerLink]="['/submittals/form/0/step/1']" type="button" class="__a_btn __b">New
                         Submittals</button>
                 </div>
             </div>

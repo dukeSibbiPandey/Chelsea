@@ -43,14 +43,11 @@
             margin-left: 16px;
 
             &.__b {
-                background: #333333;
-                color: white;
-
-                &:hover {
-                    background: #e8442d;
+                background: #e8442d;
                     color: white;
                     border: 1px #e8442d solid;
-                }
+
+                
             }
 
             &.__w {
@@ -100,4 +97,9 @@
             }
         }
     }
+}
+
+.list_heading {
+   font-size: 20px;
+   font-weight: 600;
 }
