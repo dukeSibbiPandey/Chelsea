@@ -251,7 +251,10 @@ export class SubmittalsSectionsComponent implements OnInit {
       value: this.submittal['name'],
       action: 'change_name'
     })
-    this.handleEdit(false)
+    if (this.submittal['name']) {
+      this.handleEdit(false)
+    }
+
   }
 
   niceBytes(x: any) {

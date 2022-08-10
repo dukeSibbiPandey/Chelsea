@@ -5,7 +5,7 @@
                 {{submittal?.name}}
             </span>
             <span class="editable" *ngIf="isEdit">
-                <input type="text" class="form-control" name='name' [(ngModel)]="submittal['name']" #name="ngModel"
+                <input type="text" class="form-control" name='name' [(ngModel)]="submittal['name']" #name="ngModel" placeholder="Type"
                     (change)='handleChangeSubmittalName($event)'>
             </span>
         </div>
