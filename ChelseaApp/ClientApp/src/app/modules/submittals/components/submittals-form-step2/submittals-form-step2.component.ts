@@ -276,6 +276,7 @@ export class SubmittalsFormStep2Component implements OnInit {
       if (!isDraft) {
         this.postAjax()
       } else {
+        this.getSubmittalData(this.id);
         this.toastMsg('success', 'Success', 'Submittal saved successfully', 2000);
       }
     });

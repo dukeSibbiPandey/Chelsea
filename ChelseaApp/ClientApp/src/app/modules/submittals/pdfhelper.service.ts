@@ -18,7 +18,6 @@ export class PdfHelperService {
         let w = 60;
         let size = 7;
         let valsize = 7;
-        debugger
         try {
           page.drawImage(marioImage, { x: 30, y: height +10, width: 15, height: 70})
           // Fill in the basic info fields
@@ -39,7 +38,7 @@ export class PdfHelperService {
 
           page.drawText(`${fileData.part}`, { x: 350, y: height + 70, size: size + 3, maxWidth: width-350 });
           page.drawText(fileData.description, { x: 350, y: height + 50, size: size + 1, maxWidth: width-350, lineHeight: 8 });
-          page.drawLine({ start: { x: 0, y: height + 10 }, end: { x: width, y: height + 10 }, thickness: 1, opacity: 0.5 })
+          page.drawLine({ start: { x: 0, y: height}, end: { x: width, y: height}, thickness: 1, opacity: 0.5 })
         }
         catch { }
       });
