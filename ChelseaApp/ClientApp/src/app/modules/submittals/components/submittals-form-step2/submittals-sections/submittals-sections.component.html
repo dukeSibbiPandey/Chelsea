@@ -150,7 +150,11 @@
                                 onError="this.src='../../../../../../assets/images/placeholder.png'" alt=""
                                 class="img-responsive template_img">
                         </div>
-                        <p>{{item.orgFileName}}</p>
+                        <p>
+                            {{(item.orgFileName.length>50)?
+                            (item.orgFileName |
+                            slice:0:50)+'..':item.orgFileName }}
+                        </p>
                         <p class="__size" *ngIf="item.fileSize">{{niceBytes(item.fileSize)}}</p>
                     </div>
                 </li>
