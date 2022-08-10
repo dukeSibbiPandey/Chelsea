@@ -205,76 +205,79 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       if (undoCount == 0 && redoCount == 0 && paging == 0) {
         header.push(redoIcon);
         header.push(unduIcon);
-        items.push({
-          type: 'customElement',
-          title: 'Paging',
-          render: () => {
-            /* Paginator Nav */
-            let pager: any = document.createElement('span');
-            pager.id = 'pager';
-            pager.innerHTML = this.customPaginator(docViewer);
+        if (TotalPageNumber > 1) {
+          items.push({
+            type: 'customElement',
+            title: 'Paging',
+            render: () => {
+              /* Paginator Nav */
+              let pager: any = document.createElement('span');
+              pager.id = 'pager';
+              pager.innerHTML = this.customPaginator(docViewer);
 
 
-            /* Got to First Page */
-            let customPagerFirst: any = document.createElement('span');
-            customPagerFirst.id = 'customPagerFirst';
-            customPagerFirst.innerHTML = this._SubmittalService.CUSTOMPAGER_FIRST();
-            customPagerFirst.onclick = () => {
-              let currentPage = docViewer.getCurrentPage();
-              if (currentPage > 1) {
-                this.wvInstance.goToFirstPage()
-                pager.innerHTML = `Page 1/${TotalPageNumber}`;
-              }
-            };
-
-            /* Go to Prev Page */
-            let customPagerPrev: any = document.createElement('span');
-            customPagerPrev.id = 'customPagerPrev';
-            customPagerPrev.innerHTML = this._SubmittalService.CUSTOMPAGER_PREV();
-            customPagerPrev.onclick = () => {
-              let currentPage = docViewer.getCurrentPage();
-              if (currentPage > 1) {
-                this.wvInstance.goToPrevPage();
+              /* Got to First Page */
+              let customPagerFirst: any = document.createElement('span');
+              customPagerFirst.id = 'customPagerFirst';
+              customPagerFirst.innerHTML = this._SubmittalService.CUSTOMPAGER_FIRST();
+              customPagerFirst.onclick = () => {
                 let currentPage = docViewer.getCurrentPage();
-                pager.innerHTML = `Page ${currentPage}/${TotalPageNumber}`;
-              }
-            };
+                if (currentPage > 1) {
+                  this.wvInstance.goToFirstPage()
+                  pager.innerHTML = `Page 1/${TotalPageNumber}`;
+                }
+              };
 
-            /* Go to Next Page */
-            let customPagerNext: any = document.createElement('span');
-            customPagerNext.id = 'customPagerNext';
-            customPagerNext.innerHTML = this._SubmittalService.CUSTOMPAGER_NEXT();
-            customPagerNext.onclick = () => {
-              let currentPage = docViewer.getCurrentPage();
-              if (currentPage < TotalPageNumber) {
-                this.wvInstance.goToNextPage();
+              /* Go to Prev Page */
+              let customPagerPrev: any = document.createElement('span');
+              customPagerPrev.id = 'customPagerPrev';
+              customPagerPrev.innerHTML = this._SubmittalService.CUSTOMPAGER_PREV();
+              customPagerPrev.onclick = () => {
                 let currentPage = docViewer.getCurrentPage();
-                pager.innerHTML = `Page ${currentPage}/${TotalPageNumber}`;
-              }
-            };
+                if (currentPage > 1) {
+                  this.wvInstance.goToPrevPage();
+                  let currentPage = docViewer.getCurrentPage();
+                  pager.innerHTML = `Page ${currentPage}/${TotalPageNumber}`;
+                }
+              };
 
-            /* Go to Last Page */
-            let customPagerlast: any = document.createElement('span');
-            customPagerlast.id = 'customPagerlast';
-            customPagerlast.innerHTML = this._SubmittalService.CUSTOMPAGER_LAST()
-            customPagerlast.onclick = () => {
-              let currentPage = docViewer.getCurrentPage();
-              if (currentPage < TotalPageNumber) {
-                this.wvInstance.goToLastPage();
-                pager.innerHTML = `Page ${TotalPageNumber}/${TotalPageNumber}`;
-              }
-            };
+              /* Go to Next Page */
+              let customPagerNext: any = document.createElement('span');
+              customPagerNext.id = 'customPagerNext';
+              customPagerNext.innerHTML = this._SubmittalService.CUSTOMPAGER_NEXT();
+              customPagerNext.onclick = () => {
+                let currentPage = docViewer.getCurrentPage();
+                if (currentPage < TotalPageNumber) {
+                  this.wvInstance.goToNextPage();
+                  let currentPage = docViewer.getCurrentPage();
+                  pager.innerHTML = `Page ${currentPage}/${TotalPageNumber}`;
+                }
+              };
 
-            var form: any = document.createElement('div');
-            form.style = "display: flex; border-radius: 10px;padding: 10px;cursor: pointer;";
-            form.appendChild(pager);
-            form.appendChild(customPagerFirst);
-            form.appendChild(customPagerPrev);
-            form.appendChild(customPagerNext);
-            form.appendChild(customPagerlast);
-            return form;
-          }
-        });
+              /* Go to Last Page */
+              let customPagerlast: any = document.createElement('span');
+              customPagerlast.id = 'customPagerlast';
+              customPagerlast.innerHTML = this._SubmittalService.CUSTOMPAGER_LAST()
+              customPagerlast.onclick = () => {
+                let currentPage = docViewer.getCurrentPage();
+                if (currentPage < TotalPageNumber) {
+                  this.wvInstance.goToLastPage();
+                  pager.innerHTML = `Page ${TotalPageNumber}/${TotalPageNumber}`;
+                }
+              };
+
+              var form: any = document.createElement('div');
+              form.style = "display: flex; align-items:center; border-radius: 10px;padding: 10px;cursor: pointer;";
+              form.appendChild(pager);
+              form.appendChild(customPagerFirst);
+              form.appendChild(customPagerPrev);
+              form.appendChild(customPagerNext);
+              form.appendChild(customPagerlast);
+              return form;
+            }
+          });
+        }
+
 
         header.update(items);
       }
@@ -340,8 +343,8 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.wvInstance.setFitMode('FitWidth');
       this.wvInstance.openElements(['notesPanel']);
-      this._CustomService.hide();
-    }, 100);
+
+    }, 100); this._CustomService.hide();
   }
   handleUpdateDetail = () => {
     const tempPdfFiles = this.dialogConfig && this.dialogConfig['pdfFiles'];

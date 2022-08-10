@@ -5,13 +5,13 @@
                 {{submittal?.name}}
             </span>
             <span class="editable" *ngIf="isEdit">
-                <input type="text" class="form-control" name='name' [(ngModel)]="submittal['name']" #name="ngModel" placeholder="Type"
-                    (change)='handleChangeSubmittalName($event)'>
+                <input type="text" class="form-control" name='name' [(ngModel)]="submittal['name']" #name="ngModel"
+                    placeholder="Type" (change)='handleChangeSubmittalName($event)'>
             </span>
         </div>
         <div class="__right">
             <ul class="flex">
-                <li>
+                <!-- <li>
                     <button class="btn __btn __default flex v_center">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -21,15 +21,22 @@
                         &nbsp;
                         Edit PDFs
                     </button>
-                </li>
-                <li class="hover-btn" [innerHTML]="icon['DEL_ICON']" (click)="handleRemoveSelectedSubmittal()"></li>
-                <li class="{{itmindex=='0'?'  disabled disabled-btn':'hover-btn'}}" (click)="handleMove('up')"
+                </li> -->
+                <li tooltipPosition="top" pTooltip="Delete" class="hover-btn" [innerHTML]="icon['DEL_ICON']"
+                    (click)="handleRemoveSelectedSubmittal()"></li>
+                <li tooltipPosition="top" pTooltip="Move UP"
+                    class="{{itmindex=='0'?'  disabled disabled-btn':'hover-btn'}}" (click)="handleMove('up')"
                     [innerHTML]="icon['MOVE_UP_ICON']"></li>
-                <li class="{{itmindex==totalSubmittals?'  disabled disabled-btn':'hover-btn'}}"
+                <li tooltipPosition="top" pTooltip="Move Down"
+                    class="{{itmindex==totalSubmittals?'  disabled disabled-btn':'hover-btn'}}"
                     (click)="handleMove('down')" [innerHTML]="icon['MOVE_DOWN_ICON']"></li>
-                <li (click)="handleToggle()" class="pointer hover-btn">
-                    <i *ngIf="openIndex.indexOf(itmindex)>-1" [innerHTML]="icon['COLLAPSE_MINUS_ICON']"></i>
-                    <i *ngIf="openIndex.indexOf(itmindex)== -1" [innerHTML]="icon['COLLAPSE_PLUS_ICON']"></i>
+                <li *ngIf="openIndex.indexOf(itmindex)>-1" tooltipPosition="top" pTooltip="Collapse"
+                    (click)="handleToggle()" class="pointer hover-btn">
+                    <i [innerHTML]="icon['COLLAPSE_MINUS_ICON']"></i>
+                </li>
+                <li *ngIf="openIndex.indexOf(itmindex)== -1" tooltipPosition="top" pTooltip="Expand"
+                    (click)="handleToggle()" class="pointer hover-btn">
+                    <i [innerHTML]="icon['COLLAPSE_PLUS_ICON']"></i>
                 </li>
             </ul>
         </div>
@@ -101,7 +108,7 @@
                                 <div class="_top_b flex v_center space_between">
                                     <div class="field-checkbox"></div>
                                     <ul class="flex">
-                                        <li (click)="handleDelete(i)">
+                                        <li (click)="handleDelete(i)" tooltipPosition="top" pTooltip="Delete">
                                             <svg class="hover-btn pointer" width="32" height="32" viewBox="0 0 32 32"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <circle cx="16" cy="16" r="16" transform="rotate(90 16 16)"
@@ -111,7 +118,7 @@
                                                     fill="#333333" />
                                             </svg>
                                         </li>
-                                        <li class="_ml_10" (click)="handleActionEdit(item, i)">
+                                        <li class="_ml_10" (click)="handleActionEdit(item, i)" tooltipPosition="top" pTooltip="Edit">
                                             <svg class="hover-btn pointer bg    "
                                                 style="background: white; border-radius:100%; width:32px; height:32px; padding:4px"
                                                 width="24" height="24" viewBox="0 0 24 24" fill="none"
