@@ -148,16 +148,16 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     }, 10000);
 
   }
-  customReduIcon = (docViewer) => {
+  customRedoIcon = (docViewer) => {
     const icon = {
       type: 'actionButton',
-      title: "Redu",
-      img: this._SubmittalService.REDU_ICON(),
+      title: "Redo",
+      img: this._SubmittalService.REDO_ICON(),
       onClick: () => {
         const historyManager = docViewer.getAnnotationHistoryManager();
         historyManager.redo();
       },
-      dataElement: 'redu',
+      dataElement: 'redo',
     }
     return icon
   }
@@ -181,7 +181,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   }
   wvDocumentLoadedHandler(): void {
     const { docViewer } = this.wvInstance;
-    const reduIcon = this.customReduIcon(docViewer);
+    const redoIcon = this.customRedoIcon(docViewer);
     const unduIcon = this.customUnduIcon(docViewer);
     let TotalPageNumber = docViewer.getPageCount();
     this.wvInstance.setHeaderItems((header) => {
@@ -195,7 +195,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         if ((el.type == "actionButton" && el.title == "Undu")) {
           undoCount = undoCount + 1
         }
-        if ((el.type == "actionButton" && el.title == "Redu")) {
+        if ((el.type == "actionButton" && el.title == "redo")) {
           redoCount = redoCount + 1
         }
         if (el.type == "customElement" && el.title == "Paging") {
@@ -203,7 +203,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         }
       })
       if (undoCount == 0 && redoCount == 0 && paging == 0) {
-        header.push(reduIcon);
+        header.push(redoIcon);
         header.push(unduIcon);
         items.push({
           type: 'customElement',
