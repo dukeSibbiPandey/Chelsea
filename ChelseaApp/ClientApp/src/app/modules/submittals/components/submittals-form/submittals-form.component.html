@@ -2,8 +2,8 @@
     <div class="container">
         <div class="__title pointer" [routerLink]="['/submittals/list']">
             <span [innerHTML]="icon['BACK_ICON']"></span>
-            &nbsp; 
-            New Submittal
+            &nbsp;
+            {{title}}
         </div>
         <div class="steps_wrapper">
             <app-submittals-stepper [activeStep]=activeStep></app-submittals-stepper>

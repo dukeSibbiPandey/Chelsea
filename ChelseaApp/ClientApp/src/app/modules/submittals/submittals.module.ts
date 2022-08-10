@@ -34,6 +34,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-editor-action.component';
+import {TooltipModule} from 'primeng/tooltip';
 @NgModule({
   declarations: [
     DigitOnlyDirective,
@@ -73,7 +74,8 @@ import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-edi
     TableModule,
     InputMaskModule,
     AutoCompleteModule,
-    AutocompleteLibModule
+    AutocompleteLibModule,
+    TooltipModule
   ],
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'in' }

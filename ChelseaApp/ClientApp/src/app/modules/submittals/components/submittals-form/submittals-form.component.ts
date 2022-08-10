@@ -9,10 +9,11 @@ import { DomSanitizer } from "@angular/platform-browser";
   styleUrls: ['./submittals-form.component.scss']
 })
 export class SubmittalsFormComponent implements OnInit {
-  activeStep: any=0;
-  icon:any={
+  activeStep: any = 0;
+  icon: any = {
 
   }
+  title = 'New Submittal';
   constructor(private _ActivatedRoute: ActivatedRoute, private _SubmittalService: SubmittalService, private sanitizer: DomSanitizer,) { }
 
   ngOnInit(): void {
@@ -20,6 +21,11 @@ export class SubmittalsFormComponent implements OnInit {
     this._ActivatedRoute.params.subscribe(params => {
       this.activeStep = params.step
     });
+    let id = this._ActivatedRoute.snapshot.params['id'];
+    if (id > 0) {
+      this.title = 'Edit Submittal'
+    }
+
   }
   BACK_ICON = () => {
     const icon = this._SubmittalService.BACK_ICON();

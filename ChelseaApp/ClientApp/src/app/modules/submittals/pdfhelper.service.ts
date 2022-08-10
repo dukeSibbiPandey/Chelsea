@@ -3,7 +3,7 @@ export class PdfHelperService {
   static CreatePdfHeader = async (fileUrl: string, fileData: any): Promise<Blob> => {
     const formPdfBytes = await fetch(fileUrl).then(res => res.arrayBuffer())
     // Fetch the Mario image
-    const marioUrl = '../../../../../assets/images/Chelsea-Logo.png';
+    const marioUrl = '../../../../../assets/images/Chelsea-Logo.png?123';
     const marioImageBytes = await fetch(marioUrl).then(res => res.arrayBuffer())
     // Load a PDF with form fields
     const pdfDoc = await PDFDocument.load(formPdfBytes)
@@ -19,26 +19,26 @@ export class PdfHelperService {
         let size = 7;
         let valsize = 7;
         try {
-          page.drawImage(marioImage, { x: 30, y: height - 15, width: 15, height: 95})
+          page.drawImage(marioImage, { x: 30, y: height +10, width: 15, height: 70})
           // Fill in the basic info fields
           page.drawText(`Type`, { x: w, y: height + 70, size: size })
           page.drawText(`${fileData.mfg}`, { x: w + 30, y: height + 70, size: valsize })
 
-          page.drawText(`Voltage`, { x: w, y: height + 50, size: size });
-          page.drawText(`${fileData.volt}`, { x: w + 30, y: height + 50, size: valsize })
+          page.drawText(`Voltage`, { x: w, y: height + 60, size: size });
+          page.drawText(`${fileData.volt}`, { x: w + 30, y: height + 60, size: valsize })
 
-          page.drawText(`Lamp`, { x: w, y: height + 30, size: size });
-          page.drawText(`${fileData.lamp}`, { x: w + 30, y: height + 30, size: valsize })
+          page.drawText(`Lamp`, { x: w, y: height + 50, size: size });
+          page.drawText(`${fileData.lamp}`, { x: w + 30, y: height + 50, size: valsize })
 
-          page.drawText(`Dim`, { x: w, y: height + 10, size: size });
-          page.drawText(`${fileData.dim}`, { x: w + 30, y: height + 10, size: valsize })
+          page.drawText(`Dim`, { x: w, y: height + 40, size: size });
+          page.drawText(`${fileData.dim}`, { x: w + 30, y: height + 40, size: valsize })
 
-          page.drawText(`Runs`, { x: w, y: height - 10, size: size });
-          page.drawText(`${fileData.runs}`, { x: w + 30, y: height - 10, size: valsize })
+          page.drawText(`Runs`, { x: w, y: height + 30, size: size });
+          page.drawText(`${fileData.runs}`, { x: w + 30, y: height + 30, size: valsize })
 
           page.drawText(`${fileData.part}`, { x: 350, y: height + 70, size: size + 3, maxWidth: width-350 });
           page.drawText(fileData.description, { x: 350, y: height + 50, size: size + 1, maxWidth: width-350, lineHeight: 8 });
-          page.drawLine({ start: { x: 0, y: height - 31 }, end: { x: width, y: height - 31 }, thickness: 1, opacity: 0.5 })
+          page.drawLine({ start: { x: 0, y: height + 10 }, end: { x: width, y: height + 10 }, thickness: 1, opacity: 0.5 })
         }
         catch { }
       });
