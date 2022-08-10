@@ -5,8 +5,8 @@
                 <div class="__t_itms"></div>
                 <div class="_t_right">
                     <div class="_t_sarch">
-                        <input type="text" class="search_input" placeholder="Search" [(ngModel)]="searchText">
-                        <img (click)="this.searchList()" class="search-icon"
+                        <input type="text" class="search_input" placeholder="Search" [(ngModel)]="searchText" (keyup.enter)="searchList()">
+                        <img (click)="searchList()" class="search-icon"
                             src="../../../assets/images/search_icon.png" alt="search icon" />
                     </div>
                     <button type="button" class="__a_btn __b">Submittals</button>
