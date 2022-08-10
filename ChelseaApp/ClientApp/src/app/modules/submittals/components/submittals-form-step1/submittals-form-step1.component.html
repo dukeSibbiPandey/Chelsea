@@ -169,7 +169,7 @@
                                     <div class="ng-autocomplete">
                                         <ng-autocomplete [data]="cityMaster" [searchKeyword]="keyword"
                                             formControlName="city" placeholder="Enter the Country Name"
-                                            (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)'
+                                            (selected)='selectEvent($event)' (inputCleared)='onChangeSearch()'
                                             (inputFocused)='onFocused($event)' historyIdentifier="countries"
                                             [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
                                         </ng-autocomplete>

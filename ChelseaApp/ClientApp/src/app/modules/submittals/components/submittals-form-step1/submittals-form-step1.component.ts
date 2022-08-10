@@ -85,7 +85,8 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['cityName'].setValue(item['name']);
     //this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(item['name']);
   }
-  onChangeSearch(val: string) {
+  onChangeSearch() {
+    this.submittalDetailForm.controls['cityName'].setValue('');
     // fetch remote data from here
     // And reassign the 'data' which is binded to 'data' property.
   }
@@ -210,9 +211,9 @@ export class SubmittalsFormStep1Component implements OnInit {
       if (postDto.contractor && postDto.contractor.city && postDto.contractor.city.name) {
         postDto.contractor.city = postDto.contractor.city.name
       }
-      postDto.contractor.stateId = postDto.contractor.stateId && postDto.contractor.stateId!=0?  parseInt(postDto.contractor.stateId) : null;
+      postDto.contractor.stateId = postDto.contractor.stateId && postDto.contractor.stateId != 0 ? parseInt(postDto.contractor.stateId) : null;
       if (postDto.contractor) {
-        postDto.contractor.state = null
+        postDto.contractor.stateId = null
       }
       this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
         try {
