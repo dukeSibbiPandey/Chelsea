@@ -4,6 +4,7 @@ import { HttpService } from '../../../../components/http.service';
 import { PdfHelperService } from '../../pdfhelper.service';
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
+import { CommonService } from 'src/app/common.service';
 const submittalItem: any = {
   name: 'F1',
   status: '',
@@ -45,7 +46,7 @@ export class SubmittalsFormStep2Component implements OnInit {
     }
   ]
 
-  constructor(private route: ActivatedRoute, private messageService: MessageService, private httpService: HttpService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private messageService: MessageService, private httpService: HttpService, private router: Router, private _CustomService: CommonService) { }
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.getSubmittalData(this.id);
@@ -223,6 +224,7 @@ export class SubmittalsFormStep2Component implements OnInit {
     }
   }
   handleMergePdp = async (isDraft) => {
+    this._CustomService.show();
     let temp: any = [];
     //this.submittalsTpl.map((ele: any, index: number) => {
     for (let i = 0; i < this.submittalsTpl.length; i++) {
@@ -243,20 +245,21 @@ export class SubmittalsFormStep2Component implements OnInit {
       //item.files.forEach(async element => {
       for (let j = 0; j < item.files.length; j++) {
         const element = item.files[j];
-        if(!isDraft)
-        {
+        if (!isDraft) {
           let fileurl = this.httpService.getBaseUrl() + "Home/download?bloburl=" + element.fileName;
           if (element.annotations) {
             let expressObj = await this.getMergedPdfWithAnnotations(element.annotations, item, fileurl);
             item.files[j].expressKey = expressObj.key;
             item.files[j].expressUrl = expressObj.url;
             item.files[j].expressId = expressObj.id;
+            this._CustomService.hide();
           }
           else {
             let expressObj = await this.createPdfHeaders(item, fileurl, 2, element.orgFileName);
             item.files[j].tempFileName = expressObj.fileName;
+            this._CustomService.hide();
           }
-       }
+        }
       }
       //});
       temp.push(item)
@@ -269,10 +272,10 @@ export class SubmittalsFormStep2Component implements OnInit {
       pdfFiles: temp
     }
     this.httpService.post("home/files/merge", postDto).toPromise().then(value => {
-      if(!isDraft)
-      {
-         this.postAjax()
-      }else{
+      this._CustomService.hide();
+      if (!isDraft) {
+        this.postAjax()
+      } else {
         this.toastMsg('success', 'Success', 'Submittal saved successfully', 2000);
       }
     });
