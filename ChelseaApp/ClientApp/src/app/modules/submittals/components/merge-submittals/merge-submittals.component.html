@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
     <div class="preview_page_wrapper">
         <div class="preview-form">
             <div class="pointer flex v_center toolbar-top" (click)="handleBack()">
@@ -15,8 +15,6 @@
 <div class="container-fluid relative pdfAction">
     <div #viewer2 class="viewer_dialog mt20"></div>
 </div>
-
-
 
 <p-dialog header="{{headerDialogtitle}}" [(visible)]="isEditDialog" [position]="position" [modal]="true"
     [style]="{width: '320px', height: '100vh', maxHeight: 'none', marginRight:'-2px'}" [draggable]="false"

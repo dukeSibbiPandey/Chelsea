@@ -27,7 +27,6 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer2', { static: false }) viewer1: ElementRef;
   saveDialogTitle = 'Save PDF';
   isDetailEditDialog = false;
-  submittal: any = submittalItem;
   previewUrl: any;
   wvInstance: any;
   isFormSaved = true;
@@ -47,9 +46,6 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
       this.handleBack();
     } else {
       this.dialogConfig = data;
-      this.submittal = {
-        ...data.pdfFiles
-      }
       this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
     }
 

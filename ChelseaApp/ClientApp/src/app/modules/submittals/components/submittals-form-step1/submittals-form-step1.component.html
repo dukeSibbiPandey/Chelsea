@@ -46,7 +46,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="">Job Name <span class="required text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Enter here" formControlName="jobName">
+                            <input type="text" class="form-control" placeholder="Enter here" formControlName="jobName"
+                                maxlength="100">
                             <div class="msgError text-danger"
                                 *ngIf="formControl.jobName.invalid && (formControl.jobName.dirty || submitted)">
                                 <small class="text-danger" *ngIf="formControl.jobName.hasError('required')">
@@ -59,7 +60,7 @@
                         <div class="form-group">
                             <label for="">Submittal # <span class="required text-danger">*</span></label>
                             <input type="text" class="form-control" placeholder="Enter here"
-                                formControlName="submittals">
+                                formControlName="submittals" maxlength="50">
                             <div class="msgError text-danger"
                                 *ngIf="formControl.submittals.invalid && (formControl.submittals.dirty || submitted)">
                                 <small class="text-danger" *ngIf="formControl.submittals.hasError('required')">
@@ -77,7 +78,7 @@
                                 <div class="form-group">
                                     <label for="">Project Manager Name</label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
-                                        formControlName="name">
+                                        formControlName="name" maxlength="100">
                                     <!-- <div class="msgError text-danger"
                                         *ngIf="submittalDetailForm.get('projectManager.name').invalid && (submittalDetailForm.get('projectManager.name').dirty || submitted)">
                                         <small class="text-danger"
@@ -110,7 +111,7 @@
                                 <div class="form-group">
                                     <label for="">Email</label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
-                                        formControlName="email">
+                                        formControlName="email" maxlength="100">
                                     <div class="msgError text-danger"
                                         *ngIf="submittalDetailForm.get('projectManager.email').invalid && (submittalDetailForm.get('projectManager.email').dirty || submitted)">
                                         <small class="text-danger"
@@ -131,21 +132,21 @@
                                 <div class="form-group">
                                     <label for="">Contractor Name</label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
-                                        formControlName="name">
+                                        formControlName="name" maxlength="100">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Address Line 1</label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
-                                        formControlName="addressLine1">
+                                        formControlName="addressLine1" maxlength="200">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Address Line 2</label>
                                     <input type="text" class="form-control" placeholder="Enter Here"
-                                        formControlName="addressLine2">
+                                        formControlName="addressLine2" maxlength="200">
                                 </div>
                             </div>
                             <div class="col-sm-4">

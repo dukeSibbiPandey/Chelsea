@@ -75,6 +75,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       licenseKey: 'irld89CMAcwPvMz4SJzz',
     }, this.viewer1.nativeElement).then(instance => {
       this.wvInstance = instance;
+      this.wvInstance.annotManager.setCurrentUser('JD')
       this.createHeader(this.dialogConfig.config.previewUrl, this.dialogConfig && this.dialogConfig['pdfFiles']);
       instance.setFitMode('FitWidth')
       instance.openElements(['notesPanel']);

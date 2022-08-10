@@ -1,12 +1,17 @@
-<div class="container">
+<div class="container-fluid">
     <div class="preview_page_wrapper">
         <div class="preview-form">
             <div class="pointer flex v_center toolbar-top" (click)="handleBack()">
                 <span [innerHTML]="icon['BACK_ICON']"></span>
                 &nbsp; &nbsp;
                 <span class="pdf_name">
-                    {{submittal && submittal.files &&
-                    submittal.files.orgFileName}}
+                    {{dialogConfig['pdfFiles'] && dialogConfig['pdfFiles']['name']}}
+
+                    <span *ngIf="dialogConfig['pdfFiles'] && dialogConfig['pdfFiles']['files']['orgFileName']">
+                        ({{(dialogConfig['pdfFiles']['files']['orgFileName'].length>50)?
+                        (dialogConfig['pdfFiles']['files']['orgFileName'] |
+                        slice:0:50)+'..':(dialogConfig['pdfFiles']['files']['orgFileName']) }})
+                    </span>
                 </span>
             </div>
         </div>

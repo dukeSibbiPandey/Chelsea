@@ -9,10 +9,11 @@
                     <span [innerHTML]="icon['BACK_ICON']"></span>
                     &nbsp; &nbsp;
                     <span class="pdf_name">
-                        {{this.dialogConfig['pdfFiles'] && this.dialogConfig['pdfFiles'].name}}
-                        <span
-                            *ngIf="this.dialogConfig['pdfFiles'] && this.dialogConfig['pdfFiles']['files']['orgFileName']">
-                            ({{this.dialogConfig['pdfFiles']['files']['orgFileName']}})
+                        {{dialogConfig['pdfFiles'] && dialogConfig['pdfFiles'].name}}
+                        <span *ngIf="dialogConfig['pdfFiles'] && dialogConfig['pdfFiles']['files']['orgFileName']">
+                            ({{(dialogConfig['pdfFiles']['files']['orgFileName'].length>50)?
+                            (dialogConfig['pdfFiles']['files']['orgFileName'] |
+                            slice:0:50)+'..':(dialogConfig['pdfFiles']['files']['orgFileName']) }})
                         </span>
                     </span>
                 </div>
@@ -52,48 +53,48 @@
                                 <div class="form-group">
                                     <label for="">Manufacturer</label>
                                     <input type="text" class="form-control" placeholder="Enter here" name='mfg'
-                                        [(ngModel)]="this.dialogConfig['pdfFiles']['mfg']" #mfg="ngModel"
-                                        (ngModelChange)="modelChanged($event)">
+                                        [(ngModel)]="dialogConfig['pdfFiles']['mfg']" #mfg="ngModel"
+                                        (ngModelChange)="modelChanged($event)" maxlength="100">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Part#</label>
                                     <input type="text" class="form-control" placeholder="Enter here" name='part'
-                                        [(ngModel)]="this.dialogConfig['pdfFiles']['part']" #part="ngModel"
-                                        (ngModelChange)="modelChanged($event)">
+                                        [(ngModel)]="dialogConfig['pdfFiles']['part']" #part="ngModel"
+                                        (ngModelChange)="modelChanged($event)" maxlength="100">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Voltage</label>
                                     <input type="text" class="form-control" placeholder="Enter here" name='volt'
-                                        [(ngModel)]="this.dialogConfig['pdfFiles']['volt']" #volt="ngModel"
-                                        (ngModelChange)="modelChanged($event)">
+                                        [(ngModel)]="dialogConfig['pdfFiles']['volt']" #volt="ngModel"
+                                        (ngModelChange)="modelChanged($event)" maxlength="100">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Lamp</label>
                                     <input type="text" class="form-control" placeholder="Enter here" name='lamp'
-                                        [(ngModel)]="this.dialogConfig['pdfFiles']['lamp']" #lamp="ngModel"
-                                        (ngModelChange)="modelChanged($event)">
+                                        [(ngModel)]="dialogConfig['pdfFiles']['lamp']" #lamp="ngModel"
+                                        (ngModelChange)="modelChanged($event)" maxlength="100">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Dim</label>
                                     <input type="text" class="form-control" placeholder="Enter here" name='dim'
-                                        [(ngModel)]="this.dialogConfig['pdfFiles']['dim']" #dim="ngModel"
-                                        (ngModelChange)="modelChanged($event)">
+                                        [(ngModel)]="dialogConfig['pdfFiles']['dim']" #dim="ngModel"
+                                        (ngModelChange)="modelChanged($event)" maxlength="100">
                                 </div>
                             </div>
                             <div class="col-sm-4        ">
                                 <div class="form-group">
                                     <label for="">Runs</label>
                                     <input type="text" class="form-control" placeholder="Enter here" name='runs'
-                                        [(ngModel)]="this.dialogConfig['pdfFiles']['runs']" #runs="ngModel"
-                                        (ngModelChange)="modelChanged($event)">
+                                        [(ngModel)]="dialogConfig['pdfFiles']['runs']" #runs="ngModel"
+                                        (ngModelChange)="modelChanged($event)" maxlength="100">
                                 </div>
                             </div>
                         </div>
@@ -102,8 +103,8 @@
                         <div class="form-group">
                             <label for="">Description</label>
                             <textarea class="form-control text-area" placeholder="Enter here" name='description'
-                                [(ngModel)]="this.dialogConfig['pdfFiles']['description']" #description="ngModel"
-                                (ngModelChange)="modelChanged($event)">
+                                [(ngModel)]="dialogConfig['pdfFiles']['description']" #description="ngModel"
+                                (ngModelChange)="modelChanged($event)" maxlength="400">
 
                         </textarea>
                         </div>
