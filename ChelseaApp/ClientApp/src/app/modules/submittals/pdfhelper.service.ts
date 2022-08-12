@@ -18,10 +18,14 @@ export class PdfHelperService {
         let w = 60;
         let size = 7;
         let valsize = 7;
+        debugger
         try {
           page.drawImage(marioImage, { x: 30, y: height +10, width: 15, height: 70})
           // Fill in the basic info fields
           page.drawText(`Type`, { x: w, y: height + 70, size: size })
+          page.drawText(`${fileData.name}`, { x: w + 30, y: height + 70, size: valsize })
+
+          page.drawText(`MGF`, { x: w, y: height + 70, size: size })
           page.drawText(`${fileData.name}`, { x: w + 30, y: height + 70, size: valsize })
 
           page.drawText(`Voltage`, { x: w, y: height + 60, size: size });
