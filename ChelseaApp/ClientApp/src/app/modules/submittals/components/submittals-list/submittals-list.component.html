@@ -4,6 +4,14 @@
             <div class="__t_top">
                 <div class="__t_itms">
                     <div class="list_heading">Submittals</div>
+                    <div *ngIf="totalRecords && totalRecords>0">
+                        Showong
+                        <strong>{{pagingInfo.start}}</strong>
+                        to
+                        <strong>{{pagingInfo.end}}</strong>
+                        entries of
+                        <strong>{{totalRecords}}</strong>
+                    </div>
                 </div>
                 <div class="_t_right">
                     <div class="_t_sarch">
@@ -20,8 +28,7 @@
                 <p-table [value]="list" [lazy]="true" [paginator]="true" [rows]="pageSize" scrollHeight="65vh"
                     [totalRecords]="totalRecords" [showCurrentPageReport]="true" responsiveLayout="scroll"
                     [rowsPerPageOptions]="rowsPerPageOptions" (onLazyLoad)="nextPage($event)"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                    (onPage)="paginate($event)" class="__chelsea_tbl __submittals_table">
+                    currentPageReportTemplate=" " (onPage)="paginate($event)" class="__chelsea_tbl __submittals_table">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Output Submittals</th>
