@@ -68,18 +68,8 @@
                             <td>
                                 <p class="__date">{{item.createdDate | date:'MM/d/yyyy' }}</p>
                             </td>
-                            <td class="action-cell">
-                                <span tooltipPosition="left" pTooltip="Copy" class="__a_cta"
-                                    *ngIf="!(item.isDraft==false)">
-                                    <svg class="hover-outer pointer" width="19" height="22" viewBox="0 0 19 22"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M5.8749 18.1C5.3249 18.1 4.85407 17.9042 4.4624 17.5125C4.07074 17.1208 3.8749 16.65 3.8749 16.1V2.35C3.8749 1.81667 4.07074 1.35417 4.4624 0.9625C4.85407 0.570833 5.3249 0.375 5.8749 0.375H16.6249C17.1582 0.375 17.6207 0.570833 18.0124 0.9625C18.4041 1.35417 18.5999 1.81667 18.5999 2.35V16.1C18.5999 16.65 18.4041 17.1208 18.0124 17.5125C17.6207 17.9042 17.1582 18.1 16.6249 18.1H5.8749ZM5.8749 16.1H16.6249V2.35H5.8749V16.1ZM2.3749 21.575C1.84157 21.575 1.37907 21.3792 0.987402 20.9875C0.595736 20.5958 0.399902 20.1333 0.399902 19.6V5.625C0.399902 5.35833 0.495736 5.12917 0.687402 4.9375C0.879069 4.74583 1.11657 4.65 1.3999 4.65C1.68324 4.65 1.91657 4.74583 2.0999 4.9375C2.28324 5.12917 2.3749 5.35833 2.3749 5.625V19.6H13.1249C13.3916 19.6 13.6207 19.6958 13.8124 19.8875C14.0041 20.0792 14.0999 20.3167 14.0999 20.6C14.0999 20.8833 14.0041 21.1167 13.8124 21.3C13.6207 21.4833 13.3916 21.575 13.1249 21.575H2.3749ZM5.8749 2.35V16.1V2.35Z"
-                                            fill="#333333" />
-                                    </svg>
-                                </span>
-                                <span tooltipPosition="left" pTooltip="Copy" class="__a_cta"
-                                    *ngIf="(item.isDraft==false)" [routerLink]="'/submittals/merge/'+item.id">
+                            <td class="action-cell">                               
+                                <span tooltipPosition="left" pTooltip="Copy" class="__a_cta" (click)="fnClone(item.id)">
                                     <svg class="hover-outer pointer" width="19" height="22" viewBox="0 0 19 22"
                                         fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path

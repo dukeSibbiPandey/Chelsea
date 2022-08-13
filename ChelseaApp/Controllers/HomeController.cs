@@ -593,22 +593,27 @@ namespace ChelseaApp.Controllers
         {
             var dataList = await _context.vwSubmittals.AsQueryable().Where(t => t.Id == Convert.ToInt32(id)).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<Submittal>(dataList);
-            var fileUrl = string.Format("{0}/{1}", "Content", modelList.FileName);
-            var thuUrl = string.Format("{0}/{1}", "Content", modelList.Thumbnail);
 
-            string fileId = Guid.NewGuid().ToString();
-            string newfileName = fileId + ".pdf";
-            string newThuName = fileId + ".png";
-            var newfileUrl = string.Format("{0}/{1}", "Content", newfileName);
-            var newThumbUrl = string.Format("{0}/{1}", "Content", newThuName);
 
-            var pdfblobStream = await _azureBlobServices.DownloadFile(fileUrl, _appSetting.AzureBlobTempContainer);
-            await _azureBlobServices.UploadFile(pdfblobStream, newfileUrl, _appSetting.AzureBlobDocContainer, false);
-            var thublobStream = await _azureBlobServices.DownloadFile(thuUrl, _appSetting.AzureBlobDocContainer);
-            await _azureBlobServices.UploadFile(thublobStream, newThumbUrl, _appSetting.AzureBlobDocContainer, false);
+            if (!string.IsNullOrEmpty(modelList.FileName))
+            {
+                string fileId = "MergedFile_" + Guid.NewGuid().ToString();
+                string newfileName = fileId + ".pdf";
+                string newThuName = fileId + ".png";
+                var newfileUrl = string.Format("{0}/{1}", "Content", newfileName);
+                var newThumbUrl = string.Format("{0}/{1}", "Content", newThuName);
+
+                var fileUrl = string.Format("{0}/{1}", "Content", modelList.FileName);
+                var thuUrl = string.Format("{0}/{1}", "Content", modelList.Thumbnail);
+
+                await _azureBlobServices.CloneBlob(fileUrl, newfileUrl, _appSetting.AzureBlobDocContainer, false);
+                modelList.FileName = newfileName;
+
+                await _azureBlobServices.CloneBlob(thuUrl, newThumbUrl, _appSetting.AzureBlobDocContainer, false);
+                modelList.Thumbnail = newThuName;
+            }
+
             modelList.Id = 0;
-            modelList.Thumbnail = newThuName;
-            modelList.FileName = newfileName;
             await _context.Submittal.AddAsync(modelList);
             await _context.SaveChangesAsync();
 
@@ -618,34 +623,36 @@ namespace ChelseaApp.Controllers
 
             foreach (var pdfFile in pdfFilesList)
             {
+                var oldId = pdfFile.Id;
                 pdfFile.SubmittalId = Convert.ToInt32(modelList.Id);
                 pdfFile.Id = 0;
                 await _context.PdfFiles.AddAsync(pdfFile);
                 await _context.SaveChangesAsync();
 
-                var detailList = pdfFilesDetails.Where(t => t.PdfFileId == pdfFile.Id).ToList();
+                var detailList = pdfFilesDetails.Where(t => t.PdfFileId == oldId).ToList();
                 var files = this._mapper.Map<List<PdfFileDetails>>(detailList);
                 foreach (var model in files)
                 {
+                    if (!string.IsNullOrEmpty(model.FileName))
+                    {
+                        var fileId = Guid.NewGuid().ToString();
+                        var newfileName = fileId + ".pdf";
+                        var newThuName = fileId + ".png";
+                        var newfileUrl = string.Format("{0}/{1}", "Content", newfileName);
+                        var newThumbUrl = string.Format("{0}/{1}", "Content", newThuName);
 
-                    fileId = Guid.NewGuid().ToString();
-                    newfileName = fileId + ".pdf";
-                    newThuName = fileId + ".png";
-                    newfileUrl = string.Format("{0}/{1}", "Content", newfileName);
-                    newThumbUrl = string.Format("{0}/{1}", "Content", newThuName);
+                        var thuFileUrl = string.Format("{0}/{1}", "Content", model.Thumbnail);
+                        var fileUrl = string.Format("{0}/{1}", "Content", model.FileName);
 
-                    var thuFileUrl = string.Format("{0}/{1}", "Content", model.Thumbnail);
-                    thublobStream = await _azureBlobServices.DownloadFile(thuFileUrl, _appSetting.AzureBlobDocContainer);
-                    await _azureBlobServices.UploadFile(thublobStream, newThumbUrl, _appSetting.AzureBlobDocContainer, false);
+                        await _azureBlobServices.CloneBlob(thuFileUrl, newThumbUrl, _appSetting.AzureBlobDocContainer, false);
+                        model.Thumbnail = newThuName;
 
-                    pdfblobStream = await _azureBlobServices.DownloadFile(fileUrl, _appSetting.AzureBlobTempContainer);
-                    await _azureBlobServices.UploadFile(pdfblobStream, newfileUrl, _appSetting.AzureBlobDocContainer, false);
-
+                        await _azureBlobServices.CloneBlob(fileUrl, newfileUrl, _appSetting.AzureBlobDocContainer, false);
+                        model.FileName = newfileName;
+                    }
                     model.Id = 0;
                     model.SubmittalId = pdfFile.SubmittalId;
                     model.PdfFileId = pdfFile.Id;
-                    model.Thumbnail = newThuName;
-                    model.FileName = newfileName;
                     await _context.PdfFileDetails.AddAsync(model);
                     await _context.SaveChangesAsync();
                 }

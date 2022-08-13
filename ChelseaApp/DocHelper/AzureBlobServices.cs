@@ -58,20 +58,22 @@
             }
             return list;
         }
-        public async Task<FileUploadInfo> FinalProcess(string existfileName, string newFileName)
+        public async Task<FileUploadInfo> CloneBlob(string existfileName, string newFileName, string subdirectory = Constants.Empty, bool isTemp = false)
         {
-            var containerClient = await GetContainer(_appSetting.AzureBlobTempContainer);
+            if (string.IsNullOrWhiteSpace(subdirectory))
+                subdirectory = isTemp ? _appSetting.AzureBlobTempContainer : string.Empty;
+            var containerClient = await GetContainer(subdirectory);
+
             // Get a reference to a blob
             BlobClient blobClient = containerClient.GetBlobClient(existfileName);
             // Download the blob's contents and save it to a file
             BlobDownloadInfo download = await blobClient.DownloadAsync();
             var existingstream = download.Content;
-            var desccontainerClient = await GetContainer();
+
             // Get a reference to a blob
-            BlobClient blobClientd = desccontainerClient.GetBlobClient(newFileName);
+            BlobClient blobClientd = containerClient.GetBlobClient(newFileName);
             var d = await blobClientd.UploadAsync(existingstream);
-            //var d =  await UploadFile(existingstream, newFileName);
-            await blobClient.DeleteIfExistsAsync();
+
             return new FileUploadInfo
             {
                 Path = blobClientd.Uri.AbsoluteUri
@@ -88,19 +90,10 @@
                 BlobDownloadInfo download = await blobClient.DownloadAsync();
                 return download.Content;
             }
-            catch (Azure.RequestFailedException ex)
+            catch (Exception ex)
             {
-                if (ex.ErrorCode?.ToLower() == "BlobNotFound".ToLower())
-                {
-                    blobClient = containerClient.GetBlobClient(fileName.Replace("jpg", "jpeg"));
-                    BlobDownloadInfo download = await blobClient.DownloadAsync();
-                    return download.Content;
-                }
-                else
-                    throw ex;
+                return null;
             }
-            // Download the blob's contents and save it to a file
-
         }
         public async Task DeleteFile(string fileName, string subdirectory = Constants.Empty)
         {

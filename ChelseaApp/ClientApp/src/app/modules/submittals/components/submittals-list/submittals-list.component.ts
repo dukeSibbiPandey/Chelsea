@@ -78,4 +78,10 @@ export class SubmittalsComponent implements OnInit {
     }
     return (n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
   }
+  fnClone(id:number){
+    let url = `Home/submittal/clone/${id}`
+    this.httpService.get(url).toPromise().then((value: any) => {     
+      this.bindSubmittalsGrid();
+    });
+  }
 }

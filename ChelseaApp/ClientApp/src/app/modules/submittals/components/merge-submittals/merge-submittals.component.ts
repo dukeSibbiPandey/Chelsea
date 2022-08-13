@@ -59,8 +59,7 @@ export class MergeSubmittalsComponent implements OnInit {
         initialDoc: this.previewUrl,
         licenseKey: 'irld89CMAcwPvMz4SJzz',
       }, this.viewer3.nativeElement).then(instance => {
-        this.wvInstance3 = instance;
-        this.createHeader(this.previewUrl, this.dialogConfig.pdfFiles);
+        this.wvInstance3 = instance;        
         instance.setFitMode('FitWidth')
         instance.disableElements(['header', 'leftPanel']);
         instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);

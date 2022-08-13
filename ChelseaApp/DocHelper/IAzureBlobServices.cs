@@ -11,7 +11,7 @@ namespace ChelseaApp.DocHelper
         Task<FileUploadInfo> UploadFile(Stream stream, string fileName, string subdirectory, string connection);
         Task<IEnumerable<string>> GetListFile(string subdirectory = Constants.Empty);
         Task<Stream> DownloadFile(string fileName, string subdirectory = Constants.Empty);
-        Task<FileUploadInfo> FinalProcess(string existfileName, string newFileName);
+        Task<FileUploadInfo> CloneBlob(string existfileName, string newFileName, string subdirectory = Constants.Empty, bool isTemp = false);
         Task DeleteFile(string fileName, string subdirectory = Constants.Empty);
         Task<string> GetPath(string fileName, string subdirectory = Constants.Empty);
     }
