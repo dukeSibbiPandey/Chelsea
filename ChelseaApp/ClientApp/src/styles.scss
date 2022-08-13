@@ -19,7 +19,26 @@
     box-shadow: none !important;
     outline: none !important;
     border: 1px solid #dbdcdf;
-
     border-radius: 4px;
   }
+}
+.p-button {
+  color: #333;
+  background: transparent;
+  border: 1px solid #dbdcdf;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  border-radius: 3px;
+}
+.p-button:hover {
+  color: #fff !important;
+  background: #e8442d !important;
+  border-color: #dbdcdf !important;
+}
+.cityname .autocomplete-container .input-container div .material-icons{display:none;}
+.preview_wrapper p{margin-bottom: 0.3rem;}
+.p-paginator {
+  
+  justify-content: end !important;
 }

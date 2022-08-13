@@ -115,9 +115,11 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
           '#FF0000',
           '#0000FF',
         ],
+        defaults: [{StrokeColor:'#FF0000'}]
       });
       this.wvInstance.updateTool(ToolNames['FREEHAND'], {
-        buttonImage: this._SubmittalService.FREEHAND_ICON()
+        buttonImage: this._SubmittalService.FREEHAND_ICON(),
+        
       });
       this.viewer1.nativeElement.addEventListener('pageChanged', (e) => {
         const [pageNumber] = e.detail;
@@ -130,7 +132,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       //   //   this.wvInstance.annotManager.deleteAnnotations(annots);
       //   // }
       // });
-      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
+      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)      
     })
   }
   updatePagnation = (instance) => {
@@ -190,6 +192,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       let undoCount = 0;
       let redoCount = 0;
       let paging = 0;
+      debugger;
       console.log('items==', items)
       items && items.length > 0 && items.map((el, i) => {
         if ((el.type == "actionButton" && el.title == "Undu")) {
@@ -277,11 +280,20 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
             }
           });
         }
-
-
         header.update(items);
       }
     });
+    
+      // this.wvInstance.docViewer.setColorPalette({
+      //     StrokeColor: new this.wvInstance.Core.Annotations.Color(0, 221, 255)
+      // });
+    
+      // this.wvInstance.docViewer.getTool('AnnotationCreateFreeText').setDe({
+      //   StrokeThickness: 5,
+      //   StrokeColor: new this.wvInstance.Core.Annotations.Color(0, 0, 255),
+      //   TextColor: new this.wvInstance.Core.Annotations.Color(0, 0, 0),
+      //   FontSize: '20pt'
+      // });
 
     const { annotManager } = this.wvInstance;
     //var xfdfData = localStorage.getItem('annotations');
