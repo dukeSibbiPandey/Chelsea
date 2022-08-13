@@ -59,13 +59,13 @@ namespace ChelseaApp.Controllers
             {
                 var dataQuery = await _context.vwSubmittals.AsQueryable().ToListAsync();
                 totalCount = dataQuery.Count();
-                dataList = dataQuery.OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToList();
+                dataList = dataQuery.OrderByDescending(t => t.CreatedDate).Skip(skip).Take(Convert.ToInt32(pageSize)).ToList();
             }
             else
             {
                 var dataQuery = _context.vwSubmittals.AsQueryable().Where(t => (t.FirstName.ToLower().Contains(searchText.ToLower()) || t.LastName.ToLower().Contains(searchText.ToLower()) || t.Submittals.ToLower().Contains(searchText.ToLower())));
                 totalCount = dataQuery.Count();
-                dataList = await dataQuery.OrderBy(t => t.ContractorName).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
+                dataList = await dataQuery.OrderByDescending(t => t.CreatedDate).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
             }
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
             foreach (var model in modelList)
@@ -627,6 +627,7 @@ namespace ChelseaApp.Controllers
             }
 
             modelList.Id = 0;
+            modelList.CreatedDate = DateTime.Now;
             await _context.Submittal.AddAsync(modelList);
             await _context.SaveChangesAsync();
 
@@ -638,7 +639,7 @@ namespace ChelseaApp.Controllers
             {
                 var oldId = pdfFile.Id;
                 pdfFile.SubmittalId = Convert.ToInt32(modelList.Id);
-                pdfFile.Id = 0;
+                pdfFile.Id = 0;                
                 await _context.PdfFiles.AddAsync(pdfFile);
                 await _context.SaveChangesAsync();
 
