@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { PdfHelperService } from '../../pdfhelper.service';
 import { CommonService } from 'src/app/common.service';
+import { async } from '@angular/core/testing';
 @Component({
   selector: 'app-pdf-editor-action',
   templateUrl: './pdf-editor-action.component.html',
@@ -358,7 +359,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
     }, 100); this._CustomService.hide();
   }
-  handleUpdateDetail = () => {
+  handleUpdateDetail = async() => {
     const tempPdfFiles = this.dialogConfig && this.dialogConfig['pdfFiles'];
     let pdfFiles = {
       name:tempPdfFiles.name,
@@ -371,7 +372,10 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       runs: tempPdfFiles.runs,
     }
     this.isFormSaved = false;
-    this._CustomService.show();
+    this._CustomService.show();    
+    const { annotManager } = this.wvInstance;
+    const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
+    this.dialogConfig['pdfFiles'].files.annotations=xfdf;
     this.createHeader(this.dialogConfig.config.previewUrl, pdfFiles);
   }
 }

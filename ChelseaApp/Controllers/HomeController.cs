@@ -145,7 +145,7 @@ namespace ChelseaApp.Controllers
                 }
             }
 
-            var logoPath = this.Request.Host + "/Chelsea-logo.png";
+            var logoPath = this.Request.Headers["Origin"].ToString() + "/Chelsea-logo.png";
             //coverPage.Contractor.CityName = cityObj.Name;
             var fileInfo = _docUtility.SaveCoverPage(coverPage, modelList, logoPath);
             string fileName = Path.GetFileName(fileInfo.Path);

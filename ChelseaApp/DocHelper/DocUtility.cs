@@ -146,11 +146,11 @@ namespace ChelseaApp.DocHelper
                                         }
                                         if (para.InnerText.Contains("#CSTATE#"))
                                         {
-                                            text.Text = text.Text.Replace("#CSTATE#", coverPage.Contractor?.StateName + " " + coverPage.Contractor?.CityName + " " + coverPage.Contractor?.PostalCode);
+                                            text.Text = text.Text.Replace("#CSTATE#", coverPage.Contractor?.StateName + " " + coverPage.Contractor?.City + " " + coverPage.Contractor?.PostalCode);
                                         }
                                         if (para.InnerText.Contains("#CTITLE#"))
                                         {
-                                            if (string.IsNullOrEmpty(coverPage.Contractor?.Name) && string.IsNullOrEmpty(coverPage.Contractor?.AddressLine1 + "" + coverPage.Contractor?.AddressLine2) && string.IsNullOrEmpty(coverPage.Contractor?.StateName + "" + coverPage.Contractor?.CityName + "" + coverPage.Contractor?.PostalCode))
+                                            if (string.IsNullOrEmpty(coverPage.Contractor?.Name) && string.IsNullOrEmpty(coverPage.Contractor?.AddressLine1 + "" + coverPage.Contractor?.AddressLine2) && string.IsNullOrEmpty(coverPage.Contractor?.StateName + "" + coverPage.Contractor?.City + "" + coverPage.Contractor?.PostalCode))
                                             {
                                                 text.Text = text.Text.Replace("#CTITLE#", string.Empty);
                                             }
