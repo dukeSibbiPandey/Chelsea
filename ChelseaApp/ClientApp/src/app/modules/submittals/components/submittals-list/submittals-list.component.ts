@@ -15,6 +15,7 @@ export class SubmittalsComponent implements OnInit {
   page = 1;
   totalRecords;
   rowsPerPageOptions = [10, 20, 30];
+  pagingInfo:any;
   httpService: HttpService;
   constructor(httpService: HttpService) {
     this.httpService = httpService;
@@ -30,15 +31,23 @@ export class SubmittalsComponent implements OnInit {
       this.list = value["data"] || [];
       this.totalRecords = value.totalCount
       this.isListFetch = true;
+      this.renderPaging()
     });
+  }
+  renderPaging = () => {
+    this.pagingInfo={
+      start:((this.page - 1) * this.pageSize + 1),
+      end: (this.pageSize * this.page > this.totalRecords ? this.totalRecords : this.pageSize * this.page)
+    }
+    
   }
   searchList() {
     this.bindSubmittalsGrid()
   }
 
   paginate = (event) => {
-    if (this.page != (event.first / event.rows)) {
-      this.page = event.first / event.rows;
+    if (this.page - 1 != (event.first / event.rows)) {
+      this.page = (event.first / event.rows) + 1;
       this.bindSubmittalsGrid();
     }
 
