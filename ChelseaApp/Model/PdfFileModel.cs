@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using iText.Kernel.Pdf;
+using System.Collections.Generic;
+using System.IO;
 
 namespace ChelseaApp.Model
 {
     public class PdfFileAutoSaveModel
     {
         public int Id { get; set; }
-        public int SubmittalId { get; set; }        
+        public int SubmittalId { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
         public string MFG { get; set; }
@@ -54,5 +56,15 @@ namespace ChelseaApp.Model
         public string ExpressUrl { get; set; }
         public string ExpressId { get; set; }
         public string TempFileName { get; set; }
+        public int NumberOfPages { get; set; }
+    }
+    public class BookmarkModel
+    {
+        public string Name { get; set; }
+        public string ParentName { get; set; }
+        public Stream Stream { get; set; }
+        public PdfDocument PdfDoc { get; set; }
+        public int NumberOfPages { get; set; }
+        public List<FileModel> Files { get; set; }
     }
 }

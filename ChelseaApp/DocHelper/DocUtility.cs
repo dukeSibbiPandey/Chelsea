@@ -40,7 +40,7 @@ namespace ChelseaApp.DocHelper
         }
 
         [System.Obsolete]
-        public FileUploadInfo SaveCoverPage(CoverPageModel coverPage, AddressModel addressModel)
+        public FileUploadInfo SaveCoverPage(CoverPageModel coverPage, AddressModel addressModel, string logoPath)
         {
             string sourceDoc = this._environment.WebRootPath + "/Template/CoverPage_Pdf.docx";
             Stream document = new MemoryStream();
@@ -177,7 +177,7 @@ namespace ChelseaApp.DocHelper
             //    Directory.CreateDirectory(outputDir);
             //}
             //File.WriteAllBytes(docFile, tempms);
-            var pdfInfo = ConvertToHtml(tempms, pdfFile, "letter");
+            var pdfInfo = ConvertToHtml(tempms, pdfFile, "letter", logoPath);
             return pdfInfo;
         }
 
@@ -232,7 +232,7 @@ namespace ChelseaApp.DocHelper
             }
         }
 
-        public FileUploadInfo ConvertToHtml(byte[] byteArray, string pdfFile, string type)
+        public FileUploadInfo ConvertToHtml(byte[] byteArray, string pdfFile, string type, string logoPath)
         {
             //var fi = new FileInfo(file);
 
@@ -317,10 +317,10 @@ namespace ChelseaApp.DocHelper
                             //{
                             //    return null;
                             //}
-                            string imageSource = "https://chelsea.skdedu.in/Chelsea-logo.png";
+                            //string imageSource = "https://chelsea.skdedu.in/Chelsea-logo.png";
 
                             XElement img = new XElement(Xhtml.img,
-                                new XAttribute(NoNamespace.src, imageSource),
+                                new XAttribute(NoNamespace.src, logoPath),
                                 imageInfo.ImgStyleAttribute,
                                 imageInfo.AltText != null ?
                                     new XAttribute(NoNamespace.alt, imageInfo.AltText) : null);
@@ -403,7 +403,7 @@ namespace ChelseaApp.DocHelper
         }
 
         [Obsolete]
-        public string CombineMultiplePDFs(PdfFileModel model, List<Stream> fileNames)
+        public string CombineMultiplePDFs(PdfFileModel model, List<PdfReader> fileNames)
         {
             //if (File.Exists(outFile))
             //{
@@ -418,14 +418,14 @@ namespace ChelseaApp.DocHelper
 
             iTextSharp.text.Document document = new iTextSharp.text.Document();
             iTextSharp.text.pdf.PdfCopy pdf = new iTextSharp.text.pdf.PdfCopy(document, pdfStream);
-            iTextSharp.text.pdf.PdfReader reader = null;
+            //iTextSharp.text.pdf.PdfReader reader = null;
             try
             {
                 document.Open();
 
-                foreach (Stream file in fileNames)
+                foreach (PdfReader reader in fileNames)
                 {
-                    reader = new iTextSharp.text.pdf.PdfReader(file);
+                    //reader = new iTextSharp.text.pdf.PdfReader(file);
                     pdf.AddDocument(reader);
                     reader.Close();
                 }
@@ -437,10 +437,10 @@ namespace ChelseaApp.DocHelper
             catch (Exception ex)
             {
 
-                if (reader != null)
-                {
-                    reader.Close();
-                }
+                //if (reader != null)
+                //{
+                //    reader.Close();
+                //}
             }
             finally
             {
@@ -549,7 +549,23 @@ namespace ChelseaApp.DocHelper
             //File.Delete(outputFilePath);
             return pdfBytes;
         }
+        public List<string> CreateBookMarks(List<BookmarkModel> streams)
+        {
+            List<string> fileNames = new List<string>();
+            var desFilePath = this._environment.WebRootPath + "/TempPdf/Merge_TocFile_" + Guid.NewGuid().ToString() + ".pdf";
+            //var tocFilePath = this._environment.WebRootPath + "/TempPdf/toc_" + Guid.NewGuid().ToString() + ".pdf";
+            //var tocFilePath = this._environment.WebRootPath + "/Template/toc.pdf";
+            FileInfo file = new FileInfo(desFilePath);
+            file.Directory.Create();
 
+            //fileNames.Add(tocFilePath);
+            fileNames.Add(desFilePath);
+            //iText.Kernel.Pdf.PdfDocument tocDoc = new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(tocFilePath));
+            //tocDoc.Close();
+            //PdfHelper.CreateBookMarksPdf(desFilePath, streams);
+            //PdfHelper.GeneratePdf(desFilePath, streams, tocFilePath);
+            return fileNames;
+        }
         public List<string> CreateIndexPage(List<PdfFileModel> streams)
         {
             List<string> fileNames = new List<string>();
@@ -563,7 +579,8 @@ namespace ChelseaApp.DocHelper
             fileNames.Add(desFilePath);
             //iText.Kernel.Pdf.PdfDocument tocDoc = new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(tocFilePath));
             //tocDoc.Close();
-            PdfHelper.GeneratePdf(desFilePath, streams, tocFilePath);
+            //PdfHelper.GeneratePdf(desFilePath, streams, tocFilePath);
+            PdfHelper.CreateBookMarksPdf(desFilePath, streams);
             return fileNames;
         }
 

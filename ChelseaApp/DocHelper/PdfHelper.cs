@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ChelseaApp.Model;
 using iText.Forms;
 using iText.IO.Font.Constants;
@@ -11,6 +12,8 @@ using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Action;
 using iText.Kernel.Pdf.Canvas.Draw;
+using iText.Kernel.Pdf.Navigation;
+using iText.Kernel.Utils;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
@@ -19,6 +22,51 @@ namespace ChelseaApp.DocHelper
 {
     public class PdfHelper
     {
+        public static void CreateBookMarksPdf(string dest, List<PdfFileModel> streams)
+        {
+            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
+            List<BookmarkModel> srcDocs = new List<BookmarkModel>();
+            foreach (PdfFileModel stream in streams)
+            {
+                PdfDocument srcDoc = new PdfDocument(new PdfReader(stream.FileTmpPath));
+                int numberOfPages = srcDoc.GetNumberOfPages();
+                srcDocs.Add(new BookmarkModel() { PdfDoc = srcDoc, NumberOfPages = numberOfPages, Name = stream.Name, Files = stream.Files });
+            }
+
+            PdfMerger merger = new PdfMerger(pdfDoc);
+            merger.SetCloseSourceDocuments(true);
+            foreach (BookmarkModel stream in srcDocs)
+            {
+                merger.Merge(stream.PdfDoc, 1, stream.NumberOfPages);
+            }
+
+            PdfOutline rootOutline = pdfDoc.GetOutlines(false);
+
+            int page = 1;
+            //List<string> mainPages = srcDocs.Select(t => t.ParentName).Distinct().ToList();
+            foreach (var doc in srcDocs)
+            {
+                //var files = srcDocs.Where(t => t.ParentName == doc.Name).ToList();
+                PdfOutline mainDoc = rootOutline.AddOutline(doc.Name);
+                mainDoc.AddDestination(PdfExplicitDestination.CreateFit(pdfDoc.GetPage(page)));
+
+                if (doc.Files != null && doc.Files.Any())
+                {
+                    foreach (FileModel file in doc.Files)
+                    {
+                        PdfOutline link1 = mainDoc.AddOutline(System.IO.Path.GetFileNameWithoutExtension(file.OrgFileName));
+                        link1.AddDestination(PdfExplicitDestination.CreateFit(pdfDoc.GetPage(page)));
+                        page += file.NumberOfPages;
+                    }
+                }
+                else
+                {
+                    page += doc.NumberOfPages;
+                }
+            }
+
+            pdfDoc.Close();
+        }
         public static void GeneratePdf(string dest, List<PdfFileModel> streams, string tocContent)
         {
 

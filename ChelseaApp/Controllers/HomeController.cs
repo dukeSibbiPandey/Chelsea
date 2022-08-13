@@ -3,6 +3,7 @@ using Chelsea.Repository;
 using ChelseaApp.DocHelper;
 using ChelseaApp.Model;
 using EO.Pdf;
+using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -144,8 +145,9 @@ namespace ChelseaApp.Controllers
                 }
             }
 
+            var logoPath = this.Request.Host + "/Chelsea-logo.png";
             //coverPage.Contractor.CityName = cityObj.Name;
-            var fileInfo = _docUtility.SaveCoverPage(coverPage, modelList);
+            var fileInfo = _docUtility.SaveCoverPage(coverPage, modelList, logoPath);
             string fileName = Path.GetFileName(fileInfo.Path);
 
             //var fileInfo = await _azureBlobServices.UploadFile(stream, "/Content/"+ fileName, _appSetting.AzureBlobDocContainer, false);
@@ -337,9 +339,9 @@ namespace ChelseaApp.Controllers
             var fileSize = 0;
             if (!pdfFileMaster.IsDraft)
             {
-                List<Stream> files = new List<Stream>();
+                List<PdfReader> files = new List<PdfReader>();
                 List<PdfFileModel> finalfiles = new List<PdfFileModel>();
-
+                List<BookmarkModel> bookmarks = new List<BookmarkModel>(); 
 
                 var coverfileUrl = string.Format("{0}/{1}", "Content", modelList.CoverPageName);
                 var coverfileStream = await _azureBlobServices.DownloadFile(coverfileUrl, _appSetting.AzureBlobDocContainer);
@@ -348,6 +350,7 @@ namespace ChelseaApp.Controllers
                 var coverPageBytes = StreamHelper.ReadToEnd(coverfileStream);
                 var coverFilePath = this._environment.WebRootPath + "/TempPdf/Cover_" + Guid.NewGuid().ToString() + ".pdf";
                 finalfiles.Add(new PdfFileModel() { FileTmpPath = coverFilePath, Name = "Cover Page" });
+                bookmarks.Add(new BookmarkModel() { Name = "Cover Page", Stream = coverfileStream });
 
                 System.IO.File.WriteAllBytes(coverFilePath, coverPageBytes);
                 List<string> pages = new List<string>();
@@ -358,15 +361,25 @@ namespace ChelseaApp.Controllers
                     {
                         if (!string.IsNullOrEmpty(fdetails.ExpressKey))
                         {
-                            var fileStream = this.GetMergedPdf(fdetails.ExpressKey, fdetails.ExpressUrl);
-                            files.Add(fileStream);
+                            var fileStream = this.GetMergedPdf(fdetails.ExpressKey, fdetails.ExpressUrl);                            
+                            var reader = new iTextSharp.text.pdf.PdfReader(fileStream);
+                            var numberOfPages = reader.NumberOfPages;
+                            fdetails.NumberOfPages = numberOfPages;
+                            files.Add(reader);
+
+                            bookmarks.Add(new BookmarkModel() { Name = Path.GetFileNameWithoutExtension(fdetails.OrgFileName), Stream = fileStream, ParentName = filesList.Name });
                         }
                         else
                         {
                             var fileUrl = string.Format("{0}/{1}", "Content", !string.IsNullOrEmpty(fdetails.TempFileName) ? fdetails.TempFileName : fdetails.FileName);
                             var fileStream = await _azureBlobServices.DownloadFile(fileUrl, _appSetting.AzureBlobTempContainer);
-                            files.Add(fileStream);
+                            //files.Add(fileStream);
+                            var reader = new iTextSharp.text.pdf.PdfReader(fileStream);
+                            var numberOfPages = reader.NumberOfPages;
+                            fdetails.NumberOfPages = numberOfPages;
+                            files.Add(reader);
 
+                            bookmarks.Add(new BookmarkModel() { Name = Path.GetFileNameWithoutExtension(fdetails.OrgFileName), Stream = fileStream, ParentName = filesList.Name });
                             if (!string.IsNullOrEmpty(fdetails.TempFileName))
                             {
                                 await _azureBlobServices.DeleteFile(fileUrl, _appSetting.AzureBlobTempContainer);
@@ -383,16 +396,16 @@ namespace ChelseaApp.Controllers
                     //    pdfStream.Write(mergByte, 0, mergByte.Length);
                     //    finalfiles.Add(pdfStream);
                     //}
-                    files = new List<Stream>();
+                    files = new List<PdfReader>();
 
                 }
 
 
 
-                pages = _docUtility.CreateIndexPage(finalfiles);
+                pages = _docUtility.CreateIndexPage(finalfiles); // _docUtility.CreateBookMarks(bookmarks); //
 
                 //pages.Insert(0, coverFilePath);
-                files = new List<Stream>();
+                files = new List<PdfReader>();
 
                 byte[] mergedByte = System.IO.File.ReadAllBytes(pages[0]);  //_docUtility.CombineMultiplePDFFiles(pages);
                 pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";

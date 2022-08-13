@@ -82,6 +82,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   }
   get formControl() { return this.submittalDetailForm.controls };
   selectEvent(item) {
+    debugger;
     this.submittalDetailForm.controls['cityName'].setValue(item['name']);
     //this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(item['name']);
   }
@@ -205,16 +206,19 @@ export class SubmittalsFormStep1Component implements OnInit {
       let postDto: any = {
         ... this.submittalDetailForm.value
       }
+      debugger;
       if (postDto.contractor && postDto.contractor.postalCode) {
         postDto.contractor.postalCode = postDto.contractor.postalCode.toString();
       }
       if (postDto.contractor && postDto.contractor.city && postDto.contractor.city.name) {
         postDto.contractor.city = postDto.contractor.city.name
       }
-      postDto.contractor.stateId = postDto.contractor.stateId && postDto.contractor.stateId != 0 ? parseInt(postDto.contractor.stateId) : null;
-      if (postDto.contractor) {
-        postDto.contractor.stateId = null
+
+      postDto.contractor.stateId = postDto.contractor.stateId ? parseInt(postDto.contractor.stateId) : null;
+      if(postDto.contractor.stateId==0){
+        postDto.contractor.stateId = null;
       }
+     
       this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
         try {
           if (value) {

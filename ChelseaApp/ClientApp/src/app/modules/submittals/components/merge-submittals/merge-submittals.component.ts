@@ -61,7 +61,7 @@ export class MergeSubmittalsComponent implements OnInit {
       }, this.viewer3.nativeElement).then(instance => {
         this.wvInstance3 = instance;        
         instance.setFitMode('FitWidth')
-        instance.disableElements(['header', 'leftPanel']);
+        instance.disableElements(['header']);//, 'leftPanel'
         instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
         instance.openElements(['notesPanel']);
       })
