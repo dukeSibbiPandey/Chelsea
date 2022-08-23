@@ -67,8 +67,41 @@ export class SubmittalsPreviewComponent implements OnInit, AfterViewInit {
         this.wvInstance = instance;
         this.createHeader(this.previewUrl, this.dialogConfig.pdfFiles);
         instance.setFitMode('FitWidth')
-        instance.disableElements(['header', 'leftPanel']);
+        //instance.disableElements(['header', 'leftPanel']);
         instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
+        instance.disableElements([
+          'freeTextToolButton',
+          'eraserToolButton',
+          'shapeToolGroupButton',
+          'textToolGroupButton',
+          'freeHandToolGroupButton',
+          'menuButton', /* for menu */
+          'searchButton', /* for search */
+          'toolsButton', /* full screen */
+          'miscToolGroupButton', /* stamp, attachment, callout */
+          'stickyToolButton', /* comment box */
+          'signatureToolButton', /* signature */
+          //'zoomOverlayButton', 'zoomInButton', 'zoomOutButton',
+          'panToolButton',/* hand */
+          'viewControlsButton', /* settings, page transition, layout, rotate */
+          'selectToolButton' /* big arrow */,
+          'ellipseToolButton',
+          'arrowToolButton',
+          'polylineToolButton',
+          'polygonToolButton',
+          'cloudToolButton',
+          'freeHandToolButton2',
+          'freeHandToolButton3',
+          'freeHandToolButton4',
+          'highlightToolButton2',
+          'highlightToolButton3',
+          'highlightToolButton4',
+          'underlineToolButton',
+          'squigglyToolButton',
+          'strikeoutToolButton',
+          'outlinesPanelButton',
+          'notesPanelButton'
+        ]);
         instance.openElements(['notesPanel']);
         instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
       })

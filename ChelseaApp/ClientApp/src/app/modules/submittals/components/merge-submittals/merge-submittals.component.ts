@@ -47,7 +47,7 @@ export class MergeSubmittalsComponent implements OnInit {
   }
   getSubmittalData(id: any) {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
-      this.previewUrl = this.httpService.getBaseUrl() + "Home/download?bloburl=" + value.fileName + ""
+      this.previewUrl = this.httpService.getBaseUrl() + "Home/download?bloburl=" + value.fileName + "";
       this.dialogConfig = value;
       this.inView()
     })
@@ -61,8 +61,41 @@ export class MergeSubmittalsComponent implements OnInit {
       }, this.viewer3.nativeElement).then(instance => {
         this.wvInstance3 = instance;        
         instance.setFitMode('FitWidth')
-        instance.disableElements(['header']);//, 'leftPanel'
-        instance.disableFeatures([instance.Feature.Print, instance.Feature.FilePicker]);
+       /* instance.disableElements(['header']);//, 'leftPanel'*/
+        instance.disableElements([
+          'freeTextToolButton',
+          'eraserToolButton',
+          'shapeToolGroupButton',
+          'textToolGroupButton',
+          'freeHandToolGroupButton',
+          'menuButton', /* for menu */
+          'searchButton', /* for search */
+          'toolsButton', /* full screen */
+          'miscToolGroupButton', /* stamp, attachment, callout */
+          'stickyToolButton', /* comment box */
+          'signatureToolButton', /* signature */
+          //'zoomOverlayButton', 'zoomInButton', 'zoomOutButton',
+          'panToolButton',/* hand */
+          'viewControlsButton', /* settings, page transition, layout, rotate */
+          'selectToolButton' /* big arrow */,
+          'ellipseToolButton',
+          'arrowToolButton',
+          'polylineToolButton',
+          'polygonToolButton',
+          'cloudToolButton',
+          'freeHandToolButton2',
+          'freeHandToolButton3',
+          'freeHandToolButton4',
+          'highlightToolButton2',
+          'highlightToolButton3',
+          'highlightToolButton4',
+          'underlineToolButton',
+          'squigglyToolButton',
+          'strikeoutToolButton',
+          'outlinesPanelButton',
+          'notesPanelButton'
+        ]);
+        instance.disableFeatures([instance.Feature.FilePicker]);
         instance.openElements(['notesPanel']);
       })
   }

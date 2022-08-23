@@ -44,7 +44,7 @@ namespace ChelseaApp.Controllers
         [HttpGet("submittal/list")]
         public async Task<ActionResult> Get()
         {
-            var dataList = await _context.vwSubmittals.ToListAsync();
+            var dataList = await _context.vwSubmittals.OrderByDescending(x=>x.UpdatedDate).ToListAsync();
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
             return Ok(modelList);
         }
@@ -63,15 +63,22 @@ namespace ChelseaApp.Controllers
             }
             else
             {
-                var dataQuery = _context.vwSubmittals.AsQueryable().Where(t => (t.FirstName.ToLower().Contains(searchText.ToLower()) || t.LastName.ToLower().Contains(searchText.ToLower()) || t.Submittals.ToLower().Contains(searchText.ToLower())));
+                var dataQuery = _context.vwSubmittals.AsQueryable().Where(t => (
+                t.FirstName.ToLower().Contains(searchText.ToLower()) || 
+                t.LastName.ToLower().Contains(searchText.ToLower()) ||
+                t.JobName.ToLower().Contains(searchText.ToLower()) ||
+                t.Submittals.ToLower().Contains(searchText.ToLower())));
                 totalCount = dataQuery.Count();
                 dataList = await dataQuery.OrderByDescending(t => t.CreatedDate).Skip(skip).Take(Convert.ToInt32(pageSize)).ToListAsync();
             }
             var modelList = this._mapper.Map<List<SubmittalModel>>(dataList);
+            var fileUrl = string.Format("{0}/{1}", "Content", string.Empty);
+            var imagePath = await _azureBlobServices.GetPath(fileUrl, _appSetting.AzureBlobMainImageContainer);
+            var docPath = await _azureBlobServices.GetPath(fileUrl, _appSetting.AzureBlobDocContainer);
             foreach (var model in modelList)
             {
-                var thuUrl = string.Format("{0}/{1}", "Content", model.Thumbnail);
-                model.ThumbnailUrl = await _azureBlobServices.GetPath(thuUrl, _appSetting.AzureBlobMainImageContainer);
+                model.ThumbnailUrl = string.Format("{0}/{1}", imagePath, model.Thumbnail);
+                model.FileUrl = string.Format("{0}/{1}", docPath, model.FileName);
                 model.Thumbnail = model.ThumbnailUrl;
             }
             return Ok(new { data = modelList, totalCount = totalCount });
@@ -166,17 +173,19 @@ namespace ChelseaApp.Controllers
             entity.AddressLine2 = coverPage.Contractor.AddressLine2;
             entity.StateId = stateId;
             entity.City = coverPage.Contractor.City;
-            entity.CreatedDate = DateTime.Now;
             entity.IsTempRecord = true;
             entity.CoverPageName = fileName;
             entity.Zip = coverPage.Contractor.PostalCode;
             entity.Status = coverPage.Status;
+            
             if (entity.Id > 0)
             {
+                entity.UpdatedDate = DateTime.Now;
                 _context.Submittal.Update(entity);
             }
             else
             {
+                entity.CreatedDate = entity.UpdatedDate= DateTime.Now;
                 _context.Submittal.Add(entity);
             }
             await _context.SaveChangesAsync();
@@ -451,6 +460,7 @@ namespace ChelseaApp.Controllers
             submittalModel.FileSize = fileSize;
             submittalModel.IsDraft = pdfFileMaster.IsDraft;
             submittalModel.IsTempRecord = false;
+            submittalModel.UpdatedDate = DateTime.Now;
             _context.Submittal.Update(submittalModel);
             await _context.SaveChangesAsync();
 
@@ -606,8 +616,8 @@ namespace ChelseaApp.Controllers
         {
             var dataList = await _context.vwSubmittals.AsQueryable().Where(t => t.Id == Convert.ToInt32(id)).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<Submittal>(dataList);
-
-
+            modelList.JobName = modelList.JobName + "-Copy";
+            modelList.Submittals = modelList.Submittals + "-Copy";
             if (!string.IsNullOrEmpty(modelList.FileName))
             {
                 string fileId = "MergedFile_" + Guid.NewGuid().ToString();
@@ -618,7 +628,7 @@ namespace ChelseaApp.Controllers
 
                 var fileUrl = string.Format("{0}/{1}", "Content", modelList.FileName);
                 var thuUrl = string.Format("{0}/{1}", "Content", modelList.Thumbnail);
-
+                
                 await _azureBlobServices.CloneBlob(fileUrl, newfileUrl, _appSetting.AzureBlobDocContainer, false);
                 modelList.FileName = newfileName;
 
@@ -627,7 +637,7 @@ namespace ChelseaApp.Controllers
             }
 
             modelList.Id = 0;
-            modelList.CreatedDate = DateTime.Now;
+            modelList.CreatedDate = modelList.UpdatedDate= DateTime.Now;
             await _context.Submittal.AddAsync(modelList);
             await _context.SaveChangesAsync();
 

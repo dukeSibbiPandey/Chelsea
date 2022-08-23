@@ -81,12 +81,12 @@ namespace ChelseaApp.DocHelper
 
                                         if (para.InnerText.Contains("#STATE#"))
                                         {
-                                            text.Text = text.Text.Replace("#STATE#", addressModel.State);
+                                            text.Text = text.Text.Replace("#STATE#", addressModel.City);
                                         }
 
                                         if (para.InnerText.Contains("#CITY#"))
                                         {
-                                            text.Text = text.Text.Replace("#CITY#", addressModel.City);
+                                            text.Text = text.Text.Replace("#CITY#", addressModel.State);
                                         }
 
                                         if (para.InnerText.Contains("#ZIP#"))
