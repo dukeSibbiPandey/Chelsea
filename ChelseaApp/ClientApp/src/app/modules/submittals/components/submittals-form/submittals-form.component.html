@@ -5,9 +5,6 @@
             &nbsp;
             {{title}}
         </div>
-        <div class="steps_wrapper">
-            <app-submittals-stepper [activeStep]=activeStep></app-submittals-stepper>
-        </div>
         <app-submittals-form-step1 *ngIf="activeStep==1"></app-submittals-form-step1>
         <app-submittals-form-step2 *ngIf="activeStep==2"></app-submittals-form-step2>
     </div>
