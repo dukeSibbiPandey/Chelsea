@@ -1,3 +1,15 @@
+<div class="save_other">
+  <div class="__title pointer" [routerLink]="['/submittals/list']">
+    <span [innerHTML]="icon['BACK_ICON']" class="inherit"></span>
+    &nbsp;
+    {{title}}
+  </div>
+  <div class="action_wrapper form-group">
+    <button class="btn __btn __default min_width_100" (click)="handleMergePdp(true)">Save As Draft</button>
+    <button class="btn __btn __theme min_width_100" (click)="handleMergePdp(false)">Merge</button>
+    <button class="btn __btn __default min_width_100" [routerLink]="['/submittals/list']">Cancel</button>
+  </div>
+</div>
 <div class="steps_wrapper">
   <app-submittals-stepper [activeStep]="2"></app-submittals-stepper>
 </div>
@@ -15,11 +27,6 @@
         + Add more
       </button>
     </span>
-  </div>
-  <div class="action_wrapper form-group">
-    <button class="btn __btn __default" (click)="handleMergePdp(true)">Save As Draft</button>
-    <button class="btn __btn __theme" (click)="handleMergePdp(false)">Merge</button>
-    <button class="btn __btn __default" [routerLink]="['/submittals/list']">Cancel</button>
   </div>
 </div>
 <p-toast position="top-center" key="detailFormToast"></p-toast>

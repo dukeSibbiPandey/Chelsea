@@ -1,11 +1,13 @@
 .__more {
     position: relative;
+
     .__add {
         position: relative;
         z-index: 10;
         padding-right: 10px;
         background: #f9f9f9;
     }
+
     &::after {
         position: absolute;
         left: 0;
@@ -15,5 +17,29 @@
         height: 1px;
         width: 100%;
         background: #dcdcdc;
+    }
+}
+
+.__title {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    color: #333333;
+    display: flex;
+    align-items: center;
+
+    svg {
+        margin-right: 10px;
+    }
+}
+
+.save_other {
+    display: flex;
+    justify-content: space-between;
+
+    .action_wrapper {
+        box-shadow: none;
+        margin: 0px;
     }
 }

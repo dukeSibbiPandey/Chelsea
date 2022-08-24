@@ -1,3 +1,8 @@
+<div class="__title pointer" [routerLink]="['/submittals/list']">
+    <span [innerHTML]="icon['BACK_ICON']" class="inherit"></span>
+    &nbsp;
+    {{title}}
+</div>
 <div class="steps_wrapper">
     <app-submittals-stepper [activeStep]="1"></app-submittals-stepper>
 </div>

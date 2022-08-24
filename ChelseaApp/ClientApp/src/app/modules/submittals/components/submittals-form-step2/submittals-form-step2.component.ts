@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../../../../components/http.service';
 import { PdfHelperService } from '../../pdfhelper.service';
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { CommonService } from 'src/app/common.service';
+import { SubmittalService } from '../../submittal.service';
+import { DomSanitizer } from '@angular/platform-browser';
 const submittalItem: any = {
   name: 'Type 1',
   status: '',
@@ -24,6 +26,7 @@ const submittalItem: any = {
   providers: [PrimeNGConfig, MessageService]
 })
 export class SubmittalsFormStep2Component implements OnInit {
+  @Input() title:any;
   activeAddressInde = 1;
   id: any = 0;
   submittalData: any;
@@ -45,11 +48,21 @@ export class SubmittalsFormStep2Component implements OnInit {
       ]
     }
   ]
+  icon: any = {
 
-  constructor(private route: ActivatedRoute, private messageService: MessageService, private httpService: HttpService, private router: Router, private _CustomService: CommonService) { }
+  }
+
+  constructor(private route: ActivatedRoute, private messageService: MessageService, private httpService: HttpService, private router: Router, private _CustomService: CommonService, private _SubmittalService: SubmittalService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.getSubmittalData(this.id);
+    this.BACK_ICON();
+  }
+  BACK_ICON = () => {
+    const icon = this._SubmittalService.BACK_ICON();
+    this.icon.BACK_ICON = this.sanitizer.bypassSecurityTrustHtml(
+      icon
+    );
   }
   updateOldState = () => {
     this.tempSubmittalsTpl = JSON.parse(JSON.stringify(this.submittalsTpl))

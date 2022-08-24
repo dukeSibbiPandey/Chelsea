@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { HttpService } from '../../../../components/http.service';
+import { SubmittalService } from '../../submittal.service';
 const emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
 
 @Component({
@@ -13,6 +15,7 @@ const emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
   providers: [PrimeNGConfig, MessageService]
 })
 export class SubmittalsFormStep1Component implements OnInit {
+  @Input() title: any;
   activeAddressInde = -1;
   keyword = 'name';
   submittalDetailForm: FormGroup;
@@ -30,9 +33,13 @@ export class SubmittalsFormStep1Component implements OnInit {
     addressId: 0
   }
   filteredCountries: any[];
-  constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService, private _ActivatedRoute: ActivatedRoute) { }
+  icon: any = {
+
+  }
+  constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService, private _ActivatedRoute: ActivatedRoute, private _SubmittalService: SubmittalService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
     this.id = this._ActivatedRoute.snapshot.params['id'];
+    this.BACK_ICON();
     this.createForm(() => {
       if (this.id > 0) {
         this.getSubmittalData(this.id);
@@ -45,6 +52,12 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.bindAddressOptions();
     this.bindCityOptions();
     this.bindStateOptions();
+  }
+  BACK_ICON = () => {
+    const icon = this._SubmittalService.BACK_ICON();
+    this.icon.BACK_ICON = this.sanitizer.bypassSecurityTrustHtml(
+      icon
+    );
   }
   createForm = (callback: any): void => {
     this.submitted = false;
