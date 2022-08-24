@@ -55,7 +55,7 @@ export class SubmittalsFormStep1Component implements OnInit {
         jobName: ['', Validators.required],
         submittals: ['', Validators.required],
         addressId: ['', Validators.required],
-        status: ['', []],
+        status: ['Approval'],
         address: this._FormBuilder.group({
           addressLine1: [''],
           addressLine2: [''],
