@@ -34,12 +34,26 @@
     }
 }
 
+.is-sticky {
+    background: white;
+    z-index: 999;
+    border-bottom: 1px #dbdcdf solid;
+    padding-bottom: 10px;
+
+    .__title {
+        margin-top: 5px;
+    }
+}
+
 .save_other {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     .action_wrapper {
         box-shadow: none;
         margin: 0px;
+        background: transparent;
+        padding-top: 10px;
     }
 }

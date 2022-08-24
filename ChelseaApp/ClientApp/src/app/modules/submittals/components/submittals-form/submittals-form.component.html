@@ -1,6 +1,4 @@
 <div class="chelsa_form_wrapper">
-    <div class="container">
-        <app-submittals-form-step1 *ngIf="activeStep==1" [title]=title></app-submittals-form-step1>
-        <app-submittals-form-step2 *ngIf="activeStep==2" [title]=title></app-submittals-form-step2>
-    </div>
+    <app-submittals-form-step1 *ngIf="activeStep==1" [title]=title></app-submittals-form-step1>
+    <app-submittals-form-step2 *ngIf="activeStep==2" [title]=title></app-submittals-form-step2>
 </div>
