@@ -10,7 +10,8 @@ export class HttpService {
 
   constructor(private _http: HttpClient, private httpBackend: HttpBackend) {
     if(window.location.origin.indexOf('localhost:4200')>-1){
-      this.baseUrl = 'https://chelsea.skdedu.in/api/';  
+      //this.baseUrl = 'https://chelsea.skdedu.in/api/';  
+      this.baseUrl = 'https://submittalappstg.azurewebsites.net/api/';  
     }else{
       this.baseUrl = '/api/';
     }

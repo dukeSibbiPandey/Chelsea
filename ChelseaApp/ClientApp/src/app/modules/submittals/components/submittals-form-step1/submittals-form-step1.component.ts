@@ -21,7 +21,11 @@ export class SubmittalsFormStep1Component implements OnInit {
   cityMaster: any = [];
   stateMaster: any = [];
   id: any;
-  initialValue: any = ''
+  initialValue: any = '';
+  masters: any = {
+    projectManagers: [],
+    contractors: []
+  }
   entity: any = {
     addressId: 0
   }
@@ -36,6 +40,8 @@ export class SubmittalsFormStep1Component implements OnInit {
 
       }
     })
+    this.gerProjectManagerMasters();
+    this.gerContractorMasters();
     this.bindAddressOptions();
     this.bindCityOptions();
     this.bindStateOptions();
@@ -81,18 +87,17 @@ export class SubmittalsFormStep1Component implements OnInit {
     }
   }
   get formControl() { return this.submittalDetailForm.controls };
-  selectEvent(item) {
-    debugger;
-    this.submittalDetailForm.controls['cityName'].setValue(item['name']);
-    //this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(item['name']);
+  gerProjectManagerMasters() {
+    this.httpService.get("Global/projectManagers").toPromise().then(value => {
+      debugger
+      this.masters.projectManagers = value
+    });
   }
-  onChangeSearch() {
-    this.submittalDetailForm.controls['cityName'].setValue('');
-    // fetch remote data from here
-    // And reassign the 'data' which is binded to 'data' property.
-  }
-  onFocused(e) {
-    // do something
+  gerContractorMasters() {
+    this.httpService.get("Global/customers").toPromise().then(value => {
+      debugger
+      this.masters.contractors = value
+    });
   }
   getSubmittalData(id: any) {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
@@ -109,6 +114,30 @@ export class SubmittalsFormStep1Component implements OnInit {
       })
     }
 
+  }
+  onFocused(e) {
+    // do something
+  }
+  selectEvent(item) {
+    this.submittalDetailForm.controls['cityName'].setValue(item['name']);
+  }
+  selectProjecetManager(item) {
+    this.submittalDetailForm.controls['projectManager']['controls']['name'].setValue(item['name'])
+    this.submittalDetailForm.controls['projectManager']['controls']['phone'].setValue(item['phone'])
+    this.submittalDetailForm.controls['projectManager']['controls']['email'].setValue(item['email'])
+  }
+  selectContractor(item) {
+    this.submittalDetailForm.controls['contractor']['controls']['name'].setValue(item['name']);
+    this.submittalDetailForm.controls['contractor']['controls']['addressLine1'].setValue(item['address1']);
+    this.submittalDetailForm.controls['contractor']['controls']['addressLine2'].setValue(item['address2']);
+    this.submittalDetailForm.controls['contractor']['controls']['stateId'].setValue(item['stateId']);
+    this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(item['city']);
+    this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue(item['zip'] || '');
+  }
+  onChangeSearch() {
+    this.submittalDetailForm.controls['cityName'].setValue('');
+    // fetch remote data from here
+    // And reassign the 'data' which is binded to 'data' property.
   }
   setFormData = (res) => {
     this.submittalDetailForm.controls['id'].setValue(res['id']);
@@ -210,15 +239,21 @@ export class SubmittalsFormStep1Component implements OnInit {
       if (postDto.contractor && postDto.contractor.postalCode) {
         postDto.contractor.postalCode = postDto.contractor.postalCode.toString();
       }
+      if (postDto.projectManager && postDto.projectManager.name && postDto.projectManager.name.name) {
+        postDto.projectManager.name = postDto.projectManager.name.name
+      }
+      if (postDto.contractor && postDto.contractor.name && postDto.contractor.name.name) {
+        postDto.contractor.name = postDto.contractor.name.name
+      }
       if (postDto.contractor && postDto.contractor.city && postDto.contractor.city.name) {
         postDto.contractor.city = postDto.contractor.city.name
       }
 
       postDto.contractor.stateId = postDto.contractor.stateId ? parseInt(postDto.contractor.stateId) : null;
-      if(postDto.contractor.stateId==0){
+      if (postDto.contractor.stateId == 0) {
         postDto.contractor.stateId = null;
       }
-     
+
       this.httpService.post("Home/coverpage/save", postDto).toPromise().then(value => {
         try {
           if (value) {
@@ -242,6 +277,5 @@ export class SubmittalsFormStep1Component implements OnInit {
     }
     let url = '/submittals/form/' + id + '/step/2';
     this.router.navigate([url]);
-    // this.detailFormSubmitCallbck.emit(data)
   }
 }

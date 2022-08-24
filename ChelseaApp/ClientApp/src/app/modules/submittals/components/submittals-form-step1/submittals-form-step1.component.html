@@ -77,8 +77,13 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Project Manager Name</label>
-                                    <input type="text" class="form-control" placeholder="Enter Here"
-                                        formControlName="name" maxlength="100">
+                                    <ng-autocomplete [data]="masters && masters.projectManagers"
+                                        [searchKeyword]="keyword" formControlName="projectManager"
+                                        placeholder="Select Here" (selected)='selectProjecetManager($event)'
+                                        (inputCleared)='onChangeSearch()' (inputFocused)='onFocused($event)'
+                                        historyIdentifier="countries" [itemTemplate]="itemTemplate"
+                                        [notFoundTemplate]="notFoundTemplate">
+                                    </ng-autocomplete>
                                     <!-- <div class="msgError text-danger"
                                         *ngIf="submittalDetailForm.get('projectManager.name').invalid && (submittalDetailForm.get('projectManager.name').dirty || submitted)">
                                         <small class="text-danger"
@@ -131,8 +136,14 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Contractor Name</label>
-                                    <input type="text" class="form-control" placeholder="Enter Here"
-                                        formControlName="name" maxlength="100">
+                                    <ng-autocomplete [data]="masters && masters.contractors" [searchKeyword]="keyword"
+                                        formControlName="name" placeholder="Select Here"
+                                        (selected)='selectContractor($event)' (inputCleared)='onChangeSearch()'
+                                        (inputFocused)='onFocused($event)' [itemTemplate]="itemTemplate"
+                                        [notFoundTemplate]="notFoundTemplate">
+                                    </ng-autocomplete>
+                                    <!-- <input type="text" class="form-control" placeholder="Enter Here"
+                                        formControlName="name" maxlength="100"> -->
                                 </div>
                             </div>
                             <div class="col-sm-4">
