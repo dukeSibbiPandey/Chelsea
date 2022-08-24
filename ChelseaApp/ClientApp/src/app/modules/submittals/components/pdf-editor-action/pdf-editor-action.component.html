@@ -1,12 +1,9 @@
-<!-- <pre>
-    {{dialogConfig|json}}
-</pre> -->
 <div class="container-fluid" *ngIf="dialogConfig">
     <div class="preview_page_wrapper">
         <div class="preview-form">
             <div class="flex  v_center space_between width_100 pdf--toolbar">
                 <div class="pdf_tool_bar pointer flex v_center toolbar-top" (click)="handleBack()">
-                    <span [innerHTML]="icon['BACK_ICON']"></span>
+                    <span class="inherit" [innerHTML]="icon['BACK_ICON']"></span>
                     &nbsp; &nbsp;
                     <span class="pdf_name">
                         {{dialogConfig['pdfFiles'] && dialogConfig['pdfFiles'].name}}
