@@ -10,8 +10,8 @@
             </span>
         </div>
         <div class="__right">
-          <ul class="flex">
-            <!-- <li>
+            <ul class="flex">
+                <!-- <li>
       <button class="btn __btn __default flex v_center">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -22,26 +22,26 @@
           Edit PDFs
       </button>
   </li> -->
-            
-            <li tooltipPosition="top" pTooltip="Duplicate" class="hover-btn" [innerHTML]="icon['DUPLICATE_ICON']"
-                (click)="handleDuplicate(submittal)"></li>
-            <li tooltipPosition="top" pTooltip="Delete" class="hover-btn" [innerHTML]="icon['DEL_ICON']"
-                (click)="handleRemoveSelectedSubmittal()"></li>
-            <li tooltipPosition="top" pTooltip="Move UP"
-                class="{{itmindex=='0'?'  disabled disabled-btn':'hover-btn'}}" (click)="handleMove('up')"
-                [innerHTML]="icon['MOVE_UP_ICON']"></li>
-            <li tooltipPosition="top" pTooltip="Move Down"
-                class="{{itmindex==totalSubmittals?'  disabled disabled-btn':'hover-btn'}}"
-                (click)="handleMove('down')" [innerHTML]="icon['MOVE_DOWN_ICON']"></li>
-            <li *ngIf="openIndex.indexOf(itmindex)>-1" tooltipPosition="top" pTooltip="Collapse"
-                (click)="handleToggle()" class="pointer hover-btn">
-              <i [innerHTML]="icon['COLLAPSE_MINUS_ICON']"></i>
-            </li>
-            <li *ngIf="openIndex.indexOf(itmindex)== -1" tooltipPosition="top" pTooltip="Expand"
-                (click)="handleToggle()" class="pointer hover-btn">
-              <i [innerHTML]="icon['COLLAPSE_PLUS_ICON']"></i>
-            </li>
-          </ul>
+
+                <li tooltipPosition="top" pTooltip="Duplicate" class="hover-btn" [innerHTML]="icon['DUPLICATE_ICON']"
+                    (click)="handleDuplicate(submittal)"></li>
+                <li tooltipPosition="top" pTooltip="Delete" class="hover-btn" [innerHTML]="icon['DEL_ICON']"
+                    (click)="handleRemoveSelectedSubmittal()"></li>
+                <li tooltipPosition="top" pTooltip="Move UP"
+                    class="{{itmindex=='0'?'  disabled disabled-btn':'hover-btn'}}" (click)="handleMove('up')"
+                    [innerHTML]="icon['MOVE_UP_ICON']"></li>
+                <li tooltipPosition="top" pTooltip="Move Down"
+                    class="{{itmindex==totalSubmittals?'  disabled disabled-btn':'hover-btn'}}"
+                    (click)="handleMove('down')" [innerHTML]="icon['MOVE_DOWN_ICON']"></li>
+                <li *ngIf="openIndex.indexOf(itmindex)>-1" tooltipPosition="top" pTooltip="Collapse"
+                    (click)="handleToggle()" class="pointer hover-btn">
+                    <i [innerHTML]="icon['COLLAPSE_MINUS_ICON']"></i>
+                </li>
+                <li *ngIf="openIndex.indexOf(itmindex)== -1" tooltipPosition="top" pTooltip="Expand"
+                    (click)="handleToggle()" class="pointer hover-btn">
+                    <i [innerHTML]="icon['COLLAPSE_PLUS_ICON']"></i>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="{{openIndex.indexOf(itmindex)>-1?' ':' hidden'}}">
@@ -94,7 +94,7 @@
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
-                  <label for="">NOTES</label>
+                    <label for="">NOTES</label>
                     <textarea class="form-control text-area" placeholder="Enter here" name='description'
                         [(ngModel)]="submittal['description']" #description="ngModel" maxlength="300">
                     </textarea>
@@ -121,7 +121,8 @@
                                                     fill="#333333" />
                                             </svg>
                                         </li>
-                                        <li class="_ml_10" (click)="handleActionEdit(item, i)" tooltipPosition="top" pTooltip="Edit">
+                                        <li class="_ml_10" (click)="handleActionEdit(item, i)" tooltipPosition="top"
+                                            pTooltip="Edit">
                                             <svg class="hover-btn pointer bg    "
                                                 style="background: white; border-radius:100%; width:32px; height:32px; padding:4px"
                                                 width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -210,3 +211,4 @@
             [pdfActionConfig]=pdfActionConfig></app-submittals-preview> -->
     </div>
 </p-dialog>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

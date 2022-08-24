@@ -1,7 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { CommonService } from 'src/app/common.service';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { HttpService } from 'src/app/components/http.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { SubmittalService } from '../../../submittal.service';
@@ -11,7 +10,8 @@ import { SubmittalsPreviewComponent } from '../../submittals-preview/submittals-
 @Component({
   selector: 'app-submittals-sections',
   templateUrl: './submittals-sections.component.html',
-  styleUrls: ['./submittals-sections.component.scss']
+  styleUrls: ['./submittals-sections.component.scss'],
+  providers: [ConfirmationService]
 })
 export class SubmittalsSectionsComponent implements OnInit {
   @Input() submittal: any;
@@ -41,7 +41,7 @@ export class SubmittalsSectionsComponent implements OnInit {
     MOVE_UP_ICON: '',
     MOVE_DOWN_ICON: ''
   }
-  constructor(private httpService: HttpService, private router: Router, private _CommonService: CommonService, public dialogService: DialogService, private _SubmittalService: SubmittalService, private sanitizer: DomSanitizer) { }
+  constructor(private httpService: HttpService, private router: Router, public dialogService: DialogService, private _SubmittalService: SubmittalService, private sanitizer: DomSanitizer, private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
     this.items = [
@@ -104,11 +104,17 @@ export class SubmittalsSectionsComponent implements OnInit {
     })
   }
   handleDelete(index: number) {
-    let res = {
-      submittalIndex: this.itmindex,
-      itemIndex: index
-    }
-    this.removeFn.emit(res);
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to perform this action?',
+      accept: () => {
+        let res = {
+          submittalIndex: this.itmindex,
+          itemIndex: index
+        }
+        this.removeFn.emit(res);
+      }
+    });
+
   }
   onUpload = (event: any) => {
     this.isProgressBarIndex = this.itmindex
@@ -154,18 +160,16 @@ export class SubmittalsSectionsComponent implements OnInit {
     })
     this.selectedIndex = temp;
   }
-  handleRemoveSelected = () => {
-    this.selectedActionCallback.emit({
-      selectedIndex: this.selectedIndex,
-      itmindex: this.itmindex,
-      action: 'delete'
-    })
-  }
   handleRemoveSelectedSubmittal = () => {
-    this.selectedActionCallback.emit({
-      idx: this.itmindex,
-      action: 'delete'
-    })
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to delete this record ?',
+      accept: () => {
+        this.selectedActionCallback.emit({
+          idx: this.itmindex,
+          action: 'delete'
+        })
+      }
+    });
   }
   handleDuplicate = (item: any) => {
     this.selectedActionCallback.emit({

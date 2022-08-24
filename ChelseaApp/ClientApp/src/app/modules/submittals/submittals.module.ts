@@ -35,6 +35,8 @@ import {AutoCompleteModule} from 'primeng/autocomplete';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-editor-action.component';
 import {TooltipModule} from 'primeng/tooltip';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+
 @NgModule({
   declarations: [
     DigitOnlyDirective,
@@ -75,7 +77,8 @@ import {TooltipModule} from 'primeng/tooltip';
     InputMaskModule,
     AutoCompleteModule,
     AutocompleteLibModule,
-    TooltipModule
+    TooltipModule,
+    ConfirmDialogModule
   ],
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'in' }
