@@ -113,6 +113,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       this.wvInstance.setColorPalette({
         toolNames: [ToolNames['TEXT'], ToolNames['FREETEXT'], ToolNames['LINE'], ToolNames['RECTANGLE'], ToolNames['FREEHAND'], ToolNames['HIGHLIGHT']],
         colors: [
+          '#ffffff',
           '#FF0000',
           '#0000FF',
         ],
@@ -281,6 +282,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
             }
           });
         }
+        
         header.update(items);
       }
     });

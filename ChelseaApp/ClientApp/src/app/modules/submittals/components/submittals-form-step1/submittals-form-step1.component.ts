@@ -235,7 +235,6 @@ export class SubmittalsFormStep1Component implements OnInit {
       let postDto: any = {
         ... this.submittalDetailForm.value
       }
-      debugger;
       if (postDto.contractor && postDto.contractor.postalCode) {
         postDto.contractor.postalCode = postDto.contractor.postalCode.toString();
       }

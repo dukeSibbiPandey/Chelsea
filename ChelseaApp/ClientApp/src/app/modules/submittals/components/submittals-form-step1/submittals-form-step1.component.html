@@ -12,8 +12,10 @@
                                     <p class="__title">
                                         <strong>{{item.name}}</strong>
                                     </p>
-                                    <p class="__address">{{item.address}}, {{item.state}}, {{item.city}}
-                                        {{item.zipCode}}</p>
+                                    <p class="__address">
+                                      {{item.address}}, {{item.city}}, {{item.state}}
+                                      {{item.zipCode}}
+                                    </p>
                                     <p class="__contact"><strong>Phone:</strong> {{item.phone}}</p>
                                     <p class="__contact"><strong>Fax:</strong> {{item.fax}}</p>
                                 </div>
@@ -235,8 +237,9 @@
         </div>
     </div>
     <div class="action_wrapper">
-        <button class="btn __btn __theme" (click)="handleSubmit()">Save & Next</button>
-        <button class="btn __btn __default" [routerLink]="['/submittals/list']">Cancel</button>
+      <button class="btn __btn __theme" (click)="handleSubmit()">Save & Next</button>
+      <button class="btn __btn __default" *ngIf="id >0" [routerLink]="['/submittals/form/' + id + '/step/2']">Next</button>
+      <button class="btn __btn __default" [routerLink]="['/submittals/list']">Cancel</button>
     </div>
 </form>
 

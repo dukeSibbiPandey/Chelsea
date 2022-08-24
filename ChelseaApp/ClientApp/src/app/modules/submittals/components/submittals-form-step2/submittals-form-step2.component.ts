@@ -6,7 +6,7 @@ import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { CommonService } from 'src/app/common.service';
 const submittalItem: any = {
-  name: 'F1',
+  name: 'Type 1',
   status: '',
   mfg: '',
   part: '',
@@ -31,7 +31,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   openIndex = []
   submittalsTpl: any = [
     {
-      name: 'F1',
+      name: 'Type 1',
       status: '',
       mfg: '',
       part: '',
@@ -127,7 +127,7 @@ export class SubmittalsFormStep2Component implements OnInit {
 
   addMoreOption = () => {
     let item = JSON.parse(JSON.stringify(submittalItem));
-    let name = "F" + (this.submittalsTpl.length + 1);
+    let name = "Type " + (this.submittalsTpl.length + 1);
     let arr = this.tempSubmittalsTpl;
     let temp = 0;
     arr.map((ele: any, index: number) => {
@@ -164,7 +164,8 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
   duplicateSubmittals = (res: any) => {
     let item = JSON.parse(JSON.stringify(res.submittal));
-    item.name = "F" + (this.submittalsTpl.length + 1);
+    item.name = "Type " + (this.submittalsTpl.length + 1);
+    item.files = [];
     this.submittalsTpl.push(item);
     this.updateOldState();
   }
@@ -211,6 +212,8 @@ export class SubmittalsFormStep2Component implements OnInit {
   selectedActionCallbackAction = (res: any) => {
     if (res.action == 'delete') {
       this.removeSubmittals(res)
+    } else if (res.action == 'SaveAsDraft') {
+      this.handleMergePdp(true);
     } else if (res.action == 'duplicate') {
       this.duplicateSubmittals(res)
     } else if (res.action == 'move') {

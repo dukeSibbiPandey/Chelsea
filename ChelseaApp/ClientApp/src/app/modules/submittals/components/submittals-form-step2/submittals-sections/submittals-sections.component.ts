@@ -55,6 +55,7 @@ export class SubmittalsSectionsComponent implements OnInit {
     this.MOVE_DOWN_ICON();
     this.COLLAPSE_MINUS_ICON();
     this.COLLAPSE_PLUS_ICON();
+    this.DUPLICATE_ICON();
   }
   DEL_ICON = () => {
     const icon = this._SubmittalService.DEL_ICON();
@@ -87,9 +88,20 @@ export class SubmittalsSectionsComponent implements OnInit {
       icon
     );
   }
+  DUPLICATE_ICON = () => {
+    const icon = this._SubmittalService.DUPLICATE_ICON();
+    this.icon.DUPLICATE_ICON = this.sanitizer.bypassSecurityTrustHtml(
+      icon
+    );
+  }
 
   handleEdit = (value: boolean) => {
     this.isEdit = value
+  }
+  callSaveAsDraft() {
+    this.selectedActionCallback.emit({
+      action: 'SaveAsDraft'
+    })
   }
   handleDelete(index: number) {
     let res = {
@@ -220,6 +232,9 @@ export class SubmittalsSectionsComponent implements OnInit {
     }
     localStorage.removeItem('submittalObject');
     localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
+    if (!(item.id > 0)) {
+      this.callSaveAsDraft();
+    }
     this.router.navigate([`/submittals/form/preview/${this.id}/${item.id}`]);
   }
   handleActionEdit = (item: any, index: number) => {
@@ -242,6 +257,9 @@ export class SubmittalsSectionsComponent implements OnInit {
     }
     localStorage.removeItem('submittalObject');
     localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
+    if (!(item.id > 0)) {
+      this.callSaveAsDraft();
+    }
     this.router.navigate([`/submittals/pdf-edit/${this.id}`]);
   }
 

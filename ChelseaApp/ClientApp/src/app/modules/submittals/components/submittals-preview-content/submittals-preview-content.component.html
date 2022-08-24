@@ -35,16 +35,16 @@
                 {{formValueOne?.address?.addressLine1}}
             </p>
             <p>
-                {{formValueOne?.address?.addressLine2}}
-                <span *ngIf="formValueOne?.address?.state">
-                    , {{formValueOne?.address?.state}}
-                </span>
-                <span *ngIf="formValueOne?.address?.city">
-                    , {{formValueOne?.address?.city}}
-                </span>
-                <span *ngIf="formValueOne?.address?.postalCode">
-                    {{formValueOne?.address?.postalCode}}
-                </span>
+              {{formValueOne?.address?.addressLine2}}
+              <span *ngIf="formValueOne?.address?.city">
+                , {{formValueOne?.address?.city}}
+              </span>
+              <span *ngIf="formValueOne?.address?.state">
+                , {{formValueOne?.address?.state}}
+              </span>
+              <span *ngIf="formValueOne?.address?.postalCode">
+                {{formValueOne?.address?.postalCode}}
+              </span>
             </p>
             <p>
                 <span *ngIf="formValueOne?.address?.phone">
@@ -79,9 +79,9 @@
             <p class="value">{{formValueOne?.contractor?.name}}</p>
             <p class="value">{{formValueOne?.contractor?.addressLine1}} {{formValueOne?.contractor?.addressLine2}}</p>
             <p class="value">
-                {{formValueOne?.stateName}}
-                {{formValueOne?.cityName}}
-                {{formValueOne?.contractor?.postalCode}}
+              {{formValueOne?.cityName}}
+              {{formValueOne?.stateName}}
+              {{formValueOne?.contractor?.postalCode}}
             </p>
         </div>
     </div>

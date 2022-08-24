@@ -22,6 +22,21 @@ namespace Chelsea.Repository
         public virtual DbSet<AddressMasterList> vwAddress { get; set; }
         public virtual DbSet<PdfFiles> PdfFiles { get; set; }
         public virtual DbSet<PdfFileDetails> PdfFileDetails { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<ProjectManager> PMs { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Customer>(entity =>
+            {
+                entity.HasKey(x => x.Name);
+            });
+            modelBuilder.Entity<ProjectManager>(entity =>
+            {
+                entity.HasKey(x => x.Name);
+            });
+        }
     }
     
 }
