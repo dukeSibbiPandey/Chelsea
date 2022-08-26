@@ -91,7 +91,7 @@
                                         <ng-autocomplete [data]="masters && masters.projectManagers"
                                             [searchKeyword]="keyword" formControlName="projectManager"
                                             placeholder="Select Here" (selected)='selectProjecetManager($event)'
-                                            (inputCleared)='onChangeSearch()' (inputFocused)='onFocused($event)'
+                                            (inputCleared)='onClearProjectManager()' (inputFocused)='onFocused($event)'
                                             historyIdentifier="countries" [itemTemplate]="itemTemplate"
                                             [notFoundTemplate]="notFoundTemplate">
                                         </ng-autocomplete>
@@ -149,7 +149,7 @@
                                         <label for="">Contractor Name</label>
                                         <ng-autocomplete [data]="masters && masters.contractors"
                                             [searchKeyword]="keyword" formControlName="name" placeholder="Select Here"
-                                            (selected)='selectContractor($event)' (inputCleared)='onChangeSearch()'
+                                            (selected)='selectContractor($event)' (inputCleared)='onClearContractorManager()'
                                             (inputFocused)='onFocused($event)' [itemTemplate]="itemTemplate"
                                             [notFoundTemplate]="notFoundTemplate">
                                         </ng-autocomplete>

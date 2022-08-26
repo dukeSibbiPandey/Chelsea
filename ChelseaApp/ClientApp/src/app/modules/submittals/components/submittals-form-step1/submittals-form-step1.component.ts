@@ -139,6 +139,11 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['projectManager']['controls']['phone'].setValue(item['phone'])
     this.submittalDetailForm.controls['projectManager']['controls']['email'].setValue(item['email'])
   }
+  onClearProjectManager() {
+    this.submittalDetailForm.controls['projectManager']['controls']['name'].setValue('')
+    this.submittalDetailForm.controls['projectManager']['controls']['phone'].setValue('')
+    this.submittalDetailForm.controls['projectManager']['controls']['email'].setValue('')
+  }
   selectContractor(item) {
     this.submittalDetailForm.controls['contractor']['controls']['name'].setValue(item['name']);
     this.submittalDetailForm.controls['contractor']['controls']['addressLine1'].setValue(item['address1']);
@@ -147,6 +152,15 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(item['city']);
     this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue(item['zip'] || '');
   }
+  onClearContractorManager = () => {
+    this.submittalDetailForm.controls['contractor']['controls']['name'].setValue('');
+    this.submittalDetailForm.controls['contractor']['controls']['addressLine1'].setValue('');
+    this.submittalDetailForm.controls['contractor']['controls']['addressLine2'].setValue('');
+    this.submittalDetailForm.controls['contractor']['controls']['stateId'].setValue('');
+    this.submittalDetailForm.controls['contractor']['controls']['city'].setValue('');
+    this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue('');
+  }
+
   onChangeSearch() {
     this.submittalDetailForm.controls['cityName'].setValue('');
     // fetch remote data from here
