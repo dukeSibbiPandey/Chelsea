@@ -33,12 +33,12 @@ namespace ChelseaApp.DocHelper
                 srcDocs.Add(new BookmarkModel() { PdfDoc = srcDoc, NumberOfPages = numberOfPages, Name = stream.Name, Files = stream.Files });
             }
 
-            PdfMerger merger = new PdfMerger(pdfDoc);
+            /*PdfMerger merger = new PdfMerger(pdfDoc);
             merger.SetCloseSourceDocuments(true);
             foreach (BookmarkModel stream in srcDocs)
             {
                 merger.Merge(stream.PdfDoc, 1, stream.NumberOfPages);
-            }
+            }*/
 
             PdfOutline rootOutline = pdfDoc.GetOutlines(false);
 
@@ -85,14 +85,14 @@ namespace ChelseaApp.DocHelper
 
             // Copy all merging file's pages to the result pdf file
             Dictionary<PdfFileModel, PdfDocument> filesToMerge = InitializeFilesToMerge(streams);
-            Dictionary<int, String> toc = new Dictionary<int, String>();
+            Dictionary<int, PdfFileModel> toc = new Dictionary<int, PdfFileModel>();
             int page = 1;
             foreach (KeyValuePair<PdfFileModel, PdfDocument> entry in filesToMerge)
             {
                 PdfDocument srcDoc = entry.Value;
                 int numberOfPages = srcDoc.GetNumberOfPages();
-
-                toc.Add(page, entry.Key.Name);
+              
+                toc.Add(page, entry.Key);
 
                 for (int i = 1; i <= numberOfPages; i++, page++)
                 {
@@ -120,11 +120,22 @@ namespace ChelseaApp.DocHelper
             float tocYCoordinate = 750;
             float tocXCoordinate = doc.GetLeftMargin();
             float tocWidth = pdfDoc.GetDefaultPageSize().GetWidth() - doc.GetLeftMargin() - doc.GetRightMargin();
-            foreach (KeyValuePair<int, String> entry in toc)
+            foreach (KeyValuePair<int, PdfFileModel> entry in toc)
             {
+
                 Paragraph p = new Paragraph();
-                p.AddTabStops(new TabStop(500, TabAlignment.LEFT, new DashedLine()));
-                p.Add(entry.Value);
+                p.Add(entry.Value.Name);
+                p.Add(new Tab());
+                if (!string.IsNullOrEmpty(entry.Value.MFG))
+                {
+                    p.Add(entry.Value.MFG);
+                    p.Add(new Tab());
+                }
+                if (!string.IsNullOrEmpty(entry.Value.Part))
+                {
+                    p.Add(entry.Value.Part);
+                }
+                p.AddTabStops(new TabStop(200, TabAlignment.LEFT, new DashedLine()));
                 p.Add(new Tab());
                 p.Add(entry.Key.ToString());
                 p.SetAction(PdfAction.CreateGoTo("p" + entry.Key));
@@ -133,6 +144,7 @@ namespace ChelseaApp.DocHelper
                     .SetMultipliedLeading(1));
 
                 tocYCoordinate -= 20;
+
             }
 
             int totalPage = pdfDoc.GetNumberOfPages();
@@ -146,6 +158,7 @@ namespace ChelseaApp.DocHelper
             }
 
             doc.Close();
+            //CreateBookMarksPdf(dest, streams);
         }
 
         private static Dictionary<PdfFileModel, PdfDocument> InitializeFilesToMerge(List<PdfFileModel> streams)

@@ -579,8 +579,8 @@ namespace ChelseaApp.DocHelper
             fileNames.Add(desFilePath);
             //iText.Kernel.Pdf.PdfDocument tocDoc = new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(tocFilePath));
             //tocDoc.Close();
-            //PdfHelper.GeneratePdf(desFilePath, streams, tocFilePath);
-            PdfHelper.CreateBookMarksPdf(desFilePath, streams);
+            PdfHelper.GeneratePdf(desFilePath, streams, tocFilePath);
+            //PdfHelper.CreateBookMarksPdf(desFilePath, streams);
             return fileNames;
         }
 
