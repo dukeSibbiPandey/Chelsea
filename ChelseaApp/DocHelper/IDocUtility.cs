@@ -12,7 +12,7 @@ namespace ChelseaApp.DocHelper
         FileUploadInfo SaveCoverPage(CoverPageModel coverPage, AddressModel addressModel, string logoPath);
         string CombineMultiplePDFs(PdfFileModel model, List<PdfReader> fileNames);
         string ConvertPDFtoJPG(Stream fileStream, string fileName, int pageNumber);
-        List<string> CreateIndexPage(List<PdfFileModel> streams, SubmittalList submittal);
+        List<string> CreateIndexPage(List<PdfFileModel> streams, SubmittalList submittalList);
         byte[] CombineMultiplePDFFiles(List<string> fileNames);
         List<string> CreateBookMarks(List<BookmarkModel> streams);
     }

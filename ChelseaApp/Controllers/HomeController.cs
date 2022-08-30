@@ -115,7 +115,7 @@ namespace ChelseaApp.Controllers
         [HttpPost("coverpage/save")]
         public async Task<ActionResult> SaveCoverPage(CoverPageModel coverPage)
         {
-            var isSubmittalExists = await _context.vwSubmittals.AnyAsync(t => t.Submittals == coverPage.Submittals && t.Id != coverPage.Id);
+            var isSubmittalExists = await _context.vwSubmittals.AnyAsync(t => t.Submittals == coverPage.Submittals && t.JobName == coverPage.JobName && t.Id != coverPage.Id);
             if (isSubmittalExists)
             {
                 return this.Conflict("duplicate submittals");

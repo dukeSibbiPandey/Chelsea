@@ -68,7 +68,7 @@ namespace ChelseaApp.DocHelper
 
             pdfDoc.Close();
         }
-        public static void GeneratePdf(string dest, List<PdfFileModel> streams, string tocContent, SubmittalList submittal)
+        public static void GeneratePdf(string dest, List<PdfFileModel> streams, string tocContent, SubmittalList submittalList)
         {
 
             PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
@@ -105,7 +105,6 @@ namespace ChelseaApp.DocHelper
                     {
                         text.SetDestination("p" + page);
                     }
-
                     doc.Add(new Paragraph(text).SetFixedPosition(page, 549, 810, 40)
                         .SetMargin(0)
                         .SetMultipliedLeading(1));
@@ -117,53 +116,121 @@ namespace ChelseaApp.DocHelper
             tocDoc.CopyPagesTo(1, 1, pdfDoc, formCopier);
             tocDoc.Close();
 
-
             // Create a table of contents
-            float tocYCoordinate = 750;
+            float tocYCoordinate = 530;
             float tocXCoordinate = doc.GetLeftMargin();
-            float tocWidth = pdfDoc.GetDefaultPageSize().GetWidth() - doc.GetLeftMargin() - doc.GetRightMargin();
-
-            //Shipment Status
-
-            Paragraph p = new Paragraph();
-            p.Add("These are Transmitted for");
-
-            doc.Add(p.SetFixedPosition(pdfDoc.GetNumberOfPages(), tocXCoordinate, 820, tocWidth)
-                    .SetMargin(0)
+            float defaultWidth = pdfDoc.GetDefaultPageSize().GetWidth();
+            float defaultHeight = pdfDoc.GetDefaultPageSize().GetHeight();
+            int pages = pdfDoc.GetNumberOfPages();
+            float tocWidth = defaultWidth - doc.GetLeftMargin() - doc.GetRightMargin();
+            int numtoc = 0;
+            Paragraph ptDate = new();
+            ptDate.SetFontSize(8)
+                //.SetBold()
+                .Add(submittalList.SubmittedDate?.ToString("MMM dd,yyyy"));
+            doc.Add(ptDate.SetFixedPosition(pages, tocXCoordinate + 20, defaultHeight - 85, tocWidth)
+                 .SetMargin(0)
+                    .SetMultipliedLeading(1));
+            Paragraph ptTransmittedFor = new();
+            ptTransmittedFor.SetFontSize(8)
+                //.SetBold()
+                .Add(submittalList.Status);
+            doc.Add(ptTransmittedFor.SetFixedPosition(pages, tocXCoordinate + 10, tocYCoordinate + 100, tocWidth)
+                 .SetMargin(0)
+                    .SetMultipliedLeading(1));
+            Paragraph ptproject = new();
+            ptproject.SetFontSize(8)
+                //.SetBold()
+                .Add(submittalList.JobName);
+            doc.Add(ptproject.SetFixedPosition(pages, 46, defaultHeight -135, tocWidth)
+                 .SetMargin(0)
+                    .SetMultipliedLeading(1));
+            Paragraph ptquote = new();
+            ptquote.SetFontSize(8)
+                // .SetBold()
+                .Add(submittalList.Submittals);
+            doc.Add(ptquote.SetFixedPosition(pages, 245, defaultHeight - 135, tocWidth)
+                 .SetMargin(0)
                     .SetMultipliedLeading(1));
 
-            p = new Paragraph();
-            p.Add(submittal.Status);
-            doc.Add(p.SetFixedPosition(pdfDoc.GetNumberOfPages(), tocXCoordinate, 800, tocWidth)
-                    .SetMargin(0)
+            Paragraph ptadress = new();
+            ptadress.SetFontSize(6)
+                // .SetBold()
+                .Add(submittalList.AddressLine1+" "+ submittalList.AddressLine1 + ", " + submittalList.State + ", " + submittalList.City + " " + submittalList.Zip);
+            doc.Add(ptadress.SetFixedPosition(pages, 440, defaultHeight - 65, tocWidth)
+                 .SetMargin(0)
+                    .SetMultipliedLeading(1));
+
+            Paragraph ptphone = new();
+            ptphone.SetFontSize(8)
+                // .SetBold()
+                .Add(submittalList.Phone);
+            doc.Add(ptphone.SetFixedPosition(pages, 472, defaultHeight - 73, tocWidth)
+                 .SetMargin(0)
+                    .SetMultipliedLeading(1));
+
+            Paragraph ptfax = new();
+            ptfax.SetFontSize(8)
+                //.SetBold()
+                .Add("NA");
+            doc.Add(ptfax.SetFixedPosition(pages, 550, defaultHeight - 73, tocWidth)
+                 .SetMargin(0)
+                    .SetMultipliedLeading(1));
+
+            Paragraph ptcity = new();
+            ptcity.SetFontSize(8)
+                //.SetBold()
+                .Add(submittalList.State + " " + submittalList.City);
+            doc.Add(ptcity.SetFixedPosition(pages, 445, defaultHeight - 135, tocWidth)
+                 .SetMargin(0)
+                    .SetMultipliedLeading(1));
+
+            Paragraph ptPhone = new();
+            ptPhone.SetFontSize(8)
+                //.SetBold()
+                .Add(submittalList.Phone);
+            doc.Add(ptPhone.SetFixedPosition(pages, 477, defaultHeight - 145, tocWidth)
+                 .SetMargin(0)
                     .SetMultipliedLeading(1));
 
 
             foreach (KeyValuePair<int, PdfFileModel> entry in toc)
             {
-
-                p = new Paragraph();
+                if (numtoc == 0)
+                {
+                    numtoc++; continue;
+                }
+                    
+                Paragraph p = new Paragraph();
+                p.SetFontSize(8);
                 p.Add(entry.Value.Name);
                 p.Add(new Tab());
                 if (!string.IsNullOrEmpty(entry.Value.MFG))
                 {
+                    p.AddTabStops(new TabStop(130, TabAlignment.LEFT));
                     p.Add(entry.Value.MFG);
                     p.Add(new Tab());
                 }
                 if (!string.IsNullOrEmpty(entry.Value.Part))
                 {
-                    p.Add(entry.Value.Part);
+                    p.AddTabStops(new TabStop(300, TabAlignment.LEFT));
+                    Text text = new Text(entry.Value.Part)
+                    .SetFontColor(ColorConstants.BLUE)
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .SetHorizontalAlignment(HorizontalAlignment.CENTER);                    
+                    p.Add(text);
                 }
-                p.AddTabStops(new TabStop(200, TabAlignment.LEFT, new DashedLine()));
-                p.Add(new Tab());
-                p.Add(entry.Key.ToString());
+                
+                //p.Add(new Tab());
+                //p.Add(entry.Key.ToString());
                 p.SetAction(PdfAction.CreateGoTo("p" + entry.Key));
-                doc.Add(p.SetFixedPosition(pdfDoc.GetNumberOfPages(), tocXCoordinate, tocYCoordinate, tocWidth)
+                
+                doc.Add(p.SetFixedPosition(pages, tocXCoordinate+10, tocYCoordinate, tocWidth)
                     .SetMargin(0)
                     .SetMultipliedLeading(1));
 
                 tocYCoordinate -= 20;
-
+                numtoc++;
             }
 
             int totalPage = pdfDoc.GetNumberOfPages();
@@ -179,7 +246,6 @@ namespace ChelseaApp.DocHelper
             doc.Close();
             //CreateBookMarksPdf(dest, streams);
         }
-
         private static Dictionary<PdfFileModel, PdfDocument> InitializeFilesToMerge(List<PdfFileModel> streams)
         {
             Dictionary<PdfFileModel, PdfDocument> filesToMerge = new Dictionary<PdfFileModel, PdfDocument>();
