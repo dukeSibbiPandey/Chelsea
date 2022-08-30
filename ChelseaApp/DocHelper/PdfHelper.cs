@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Chelsea.Repository;
 using ChelseaApp.Model;
 using iText.Forms;
 using iText.IO.Font.Constants;
@@ -67,7 +68,7 @@ namespace ChelseaApp.DocHelper
 
             pdfDoc.Close();
         }
-        public static void GeneratePdf(string dest, List<PdfFileModel> streams, string tocContent)
+        public static void GeneratePdf(string dest, List<PdfFileModel> streams, string tocContent, SubmittalList submittal)
         {
 
             PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
@@ -116,14 +117,32 @@ namespace ChelseaApp.DocHelper
             tocDoc.CopyPagesTo(1, 1, pdfDoc, formCopier);
             tocDoc.Close();
 
+
             // Create a table of contents
             float tocYCoordinate = 750;
             float tocXCoordinate = doc.GetLeftMargin();
             float tocWidth = pdfDoc.GetDefaultPageSize().GetWidth() - doc.GetLeftMargin() - doc.GetRightMargin();
+
+            //Shipment Status
+
+            Paragraph p = new Paragraph();
+            p.Add("These are Transmitted for");
+
+            doc.Add(p.SetFixedPosition(pdfDoc.GetNumberOfPages(), tocXCoordinate, 820, tocWidth)
+                    .SetMargin(0)
+                    .SetMultipliedLeading(1));
+
+            p = new Paragraph();
+            p.Add(submittal.Status);
+            doc.Add(p.SetFixedPosition(pdfDoc.GetNumberOfPages(), tocXCoordinate, 800, tocWidth)
+                    .SetMargin(0)
+                    .SetMultipliedLeading(1));
+
+
             foreach (KeyValuePair<int, PdfFileModel> entry in toc)
             {
 
-                Paragraph p = new Paragraph();
+                p = new Paragraph();
                 p.Add(entry.Value.Name);
                 p.Add(new Tab());
                 if (!string.IsNullOrEmpty(entry.Value.MFG))

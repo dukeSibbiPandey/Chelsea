@@ -1,4 +1,5 @@
-﻿using ChelseaApp.Model;
+﻿using Chelsea.Repository;
+using ChelseaApp.Model;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using iTextSharp.text;
@@ -566,7 +567,7 @@ namespace ChelseaApp.DocHelper
             //PdfHelper.GeneratePdf(desFilePath, streams, tocFilePath);
             return fileNames;
         }
-        public List<string> CreateIndexPage(List<PdfFileModel> streams)
+        public List<string> CreateIndexPage(List<PdfFileModel> streams, SubmittalList submittal)
         {
             List<string> fileNames = new List<string>();
             var desFilePath = this._environment.WebRootPath + "/TempPdf/Merge_TocFile_" + Guid.NewGuid().ToString() + ".pdf";
@@ -579,7 +580,7 @@ namespace ChelseaApp.DocHelper
             fileNames.Add(desFilePath);
             //iText.Kernel.Pdf.PdfDocument tocDoc = new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(tocFilePath));
             //tocDoc.Close();
-            PdfHelper.GeneratePdf(desFilePath, streams, tocFilePath);
+            PdfHelper.GeneratePdf(desFilePath, streams, tocFilePath, submittal);
             //PdfHelper.CreateBookMarksPdf(desFilePath, streams);
             return fileNames;
         }

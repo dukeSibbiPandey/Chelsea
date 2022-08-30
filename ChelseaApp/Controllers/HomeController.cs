@@ -411,7 +411,7 @@ namespace ChelseaApp.Controllers
 
 
 
-                pages = _docUtility.CreateIndexPage(finalfiles); // _docUtility.CreateBookMarks(bookmarks); //
+                pages = _docUtility.CreateIndexPage(finalfiles, dataList); // _docUtility.CreateBookMarks(bookmarks); //
 
                 //pages.Insert(0, coverFilePath);
                 files = new List<PdfReader>();
