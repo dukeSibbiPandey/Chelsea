@@ -179,6 +179,8 @@ export class SubmittalsFormStep2Component implements OnInit {
     let item = JSON.parse(JSON.stringify(res.submittal));
     item.name = "Type " + (this.submittalsTpl.length + 1);
     item.files = [];
+    const nextIndex = this.submittalsTpl.length
+    this.openIndex.push(nextIndex.toString())
     this.submittalsTpl.push(item);
     this.updateOldState();
   }
