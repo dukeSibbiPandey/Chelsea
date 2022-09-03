@@ -145,28 +145,28 @@ namespace ChelseaApp.DocHelper
             int numtoc = 0;
             Paragraph ptDate = new();
             ptDate.SetFontSize(8)
-                //.SetBold()
-                .Add(submittalList.SubmittedDate?.ToString("MMM dd,yyyy"));
+                .SetBold()
+                .Add(submittalList.SubmittedDate?.ToString("MMM dd, yyyy"));
             doc.Add(ptDate.SetFixedPosition(pages, tocXCoordinate + 20, defaultHeight - 85, tocWidth)
                  .SetMargin(0)
                     .SetMultipliedLeading(1));
             Paragraph ptTransmittedFor = new();
             ptTransmittedFor.SetFontSize(8)
-                //.SetBold()
+                .SetBold()
                 .Add(submittalList.Status);
             doc.Add(ptTransmittedFor.SetFixedPosition(pages, tocXCoordinate + 10, tocYCoordinate + 100, tocWidth)
                  .SetMargin(0)
                     .SetMultipliedLeading(1));
             Paragraph ptproject = new();
             ptproject.SetFontSize(8)
-                //.SetBold()
+                .SetBold()
                 .Add(submittalList.JobName);
             doc.Add(ptproject.SetFixedPosition(pages, 46, defaultHeight -135, tocWidth)
                  .SetMargin(0)
                     .SetMultipliedLeading(1));
             Paragraph ptquote = new();
             ptquote.SetFontSize(8)
-                // .SetBold()
+                 .SetBold()
                 .Add(submittalList.Submittals);
             doc.Add(ptquote.SetFixedPosition(pages, 245, defaultHeight - 135, tocWidth)
                  .SetMargin(0)
@@ -204,7 +204,7 @@ namespace ChelseaApp.DocHelper
             string sdetails = submittalList.State + " " + submittalList.City;
             sdetails = sdetails.Replace("\r\n", "");
             ptcity.SetFontSize(8)
-                //.SetBold()
+                .SetBold()
                 .Add(sdetails);
             doc.Add(ptcity.SetFixedPosition(pages, 445, defaultHeight - 135, tocWidth)
                  .SetMargin(0)
@@ -212,7 +212,7 @@ namespace ChelseaApp.DocHelper
 
             Paragraph ptPhone = new();
             ptPhone.SetFontSize(8)
-                //.SetBold()
+                .SetBold()
                 .Add(submittalList.Phone);
             doc.Add(ptPhone.SetFixedPosition(pages, 477, defaultHeight - 145, tocWidth)
                  .SetMargin(0)

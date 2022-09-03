@@ -1,4 +1,4 @@
-import { PDFDocument } from 'pdf-lib';
+import { lineSplit, PDFDocument } from 'pdf-lib';
 export class PdfHelperService {
   static CreatePdfHeader = async (fileUrl: string, fileData: any): Promise<Blob> => {
     const formPdfBytes = await fetch(fileUrl).then(res => res.arrayBuffer())
@@ -36,7 +36,7 @@ export class PdfHelperService {
           page.drawText(`Runs`, { x: w, y: height + 30, size: size });
           page.drawText(`${fileData.runs}`, { x: w + 30, y: height + 30, size: valsize })
 
-          page.drawText(`${fileData.part}`, { x: 350, y: height + 70, size: size + 3, maxWidth: width-350 });
+          page.drawText(`${fileData.part}`,  { x: 350, y: height + 70, size: size + 3, maxWidth: width-350 } );
           page.drawText(fileData.description, { x: 350, y: height + 50, size: size + 1, maxWidth: width-350, lineHeight: 8 });
           page.drawLine({ start: { x: 0, y: height}, end: { x: width, y: height}, thickness: 1, opacity: 0.5 })
         }
