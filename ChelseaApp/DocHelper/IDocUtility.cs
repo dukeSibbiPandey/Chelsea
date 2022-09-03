@@ -14,6 +14,6 @@ namespace ChelseaApp.DocHelper
         string ConvertPDFtoJPG(Stream fileStream, string fileName, int pageNumber);
         List<string> CreateIndexPage(List<PdfFileModel> streams, SubmittalList submittalList);
         byte[] CombineMultiplePDFFiles(List<string> fileNames);
-        List<string> CreateBookMarks(List<BookmarkModel> streams);
+        string CreateBookMarks(List<PdfFileModel> streams, byte[] filebyte);
     }
 }

@@ -417,6 +417,8 @@ namespace ChelseaApp.Controllers
                 files = new List<PdfReader>();
 
                 byte[] mergedByte = System.IO.File.ReadAllBytes(pages[0]);  //_docUtility.CombineMultiplePDFFiles(pages);
+                //string bfile = _docUtility.CreateBookMarks(finalfiles, mergedByte);
+                //mergedByte = System.IO.File.ReadAllBytes(bfile);
                 pdfFileName = "MergedFile_" + Guid.NewGuid().ToString() + ".pdf";
                 using (MemoryStream pdfStream = new MemoryStream())
                 {
@@ -616,8 +618,8 @@ namespace ChelseaApp.Controllers
         {
             var dataList = await _context.vwSubmittals.AsQueryable().Where(t => t.Id == Convert.ToInt32(id)).FirstOrDefaultAsync();
             var modelList = this._mapper.Map<Submittal>(dataList);
-            modelList.JobName = modelList.JobName + "-Copy";
-            modelList.Submittals = modelList.Submittals + "-Copy";
+            modelList.JobName = modelList.JobName + "-Duplicate";
+            modelList.Submittals = modelList.Submittals + "-Duplicate";
             if (!string.IsNullOrEmpty(modelList.FileName))
             {
                 string fileId = "MergedFile_" + Guid.NewGuid().ToString();
