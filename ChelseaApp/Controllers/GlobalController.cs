@@ -1,6 +1,8 @@
 ﻿using Chelsea.Repository;
+using ChelseaApp.DocHelper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +15,11 @@ namespace ChelseaApp.Controllers
     public class GlobalController : ControllerBase
     {
         private readonly ChelseaContext _context;
-        public GlobalController(ChelseaContext context)
+        private readonly AppConfig _appSetting;
+        public GlobalController(ChelseaContext context, IOptions<AppConfig> appSettings)
         {
             _context = context;
+            _appSetting = appSettings.Value;
         }
         [HttpGet("customers")]
         public async Task<ActionResult> GetCustomers()
@@ -28,6 +32,11 @@ namespace ChelseaApp.Controllers
         {
             var dataList = await _context.PMs.ToListAsync();
             return Ok(dataList);
+        }
+        [HttpGet("con")]
+        public  ActionResult GetConfiguration()
+        {
+            return Ok(_appSetting.AzureAd);
         }
     }
 }
