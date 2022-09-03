@@ -19,6 +19,8 @@
     "@angular/platform-browser": "^14.0.0",
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
+    "@azure/msal-angular": "^2.4.0",
+    "@azure/msal-browser": "^2.28.0",
     "@pdftron/pdfjs-express": "^6.2.1",
     "@pdftron/webviewer-html": "^4.5.6",
     "@w11k/angular-sticky-things": "^1.5.2",
@@ -34,6 +36,7 @@
     "primeicons": "^5.0.0",
     "primeng": "^13.4.1",
     "rxjs": "~7.5.0",
+    "rxjs-compat": "^6.6.7",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

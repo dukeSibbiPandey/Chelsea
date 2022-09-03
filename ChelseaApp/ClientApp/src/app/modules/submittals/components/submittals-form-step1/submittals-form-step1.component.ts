@@ -6,7 +6,7 @@ import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { HttpService } from '../../../../components/http.service';
 import { SubmittalService } from '../../submittal.service';
-const emailPattern = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
+const emailPattern = "^[a-zA-Z0-9][\-_\.\+\!\#\$\%\&\'\*\/\=\?\^\`\{\|]{0,1}([a-zA-Z0-9][\-_\.\+\!\#\$\%\&\'\*\/\=\?\^\`\{\|]{0,1})*[a-zA-Z0-9]@[a-zA-Z0-9][-\.]{0,1}([a-zA-Z][-\.]{0,1})*[a-zA-Z0-9]\.[a-zA-Z0-9]{1,}([\.\-]{0,1}[a-zA-Z]){0,}[a-zA-Z0-9]{0,}$";
 
 @Component({
   selector: 'app-submittals-form-step1',
@@ -139,11 +139,6 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['projectManager']['controls']['phone'].setValue(item['phone'])
     this.submittalDetailForm.controls['projectManager']['controls']['email'].setValue(item['email'])
   }
-  onClearProjectManager() {
-    this.submittalDetailForm.controls['projectManager']['controls']['name'].setValue('')
-    this.submittalDetailForm.controls['projectManager']['controls']['phone'].setValue('')
-    this.submittalDetailForm.controls['projectManager']['controls']['email'].setValue('')
-  }
   selectContractor(item) {
     this.submittalDetailForm.controls['contractor']['controls']['name'].setValue(item['name']);
     this.submittalDetailForm.controls['contractor']['controls']['addressLine1'].setValue(item['address1']);
@@ -152,19 +147,20 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['contractor']['controls']['city'].setValue(item['city']);
     this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue(item['zip'] || '');
   }
-  onClearContractorManager = () => {
-    this.submittalDetailForm.controls['contractor']['controls']['name'].setValue('');
-    this.submittalDetailForm.controls['contractor']['controls']['addressLine1'].setValue('');
-    this.submittalDetailForm.controls['contractor']['controls']['addressLine2'].setValue('');
-    this.submittalDetailForm.controls['contractor']['controls']['stateId'].setValue('');
-    this.submittalDetailForm.controls['contractor']['controls']['city'].setValue('');
-    this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue('');
-  }
-
   onChangeSearch() {
     this.submittalDetailForm.controls['cityName'].setValue('');
     // fetch remote data from here
     // And reassign the 'data' which is binded to 'data' property.
+  }
+  onChangeProjecetManager() {
+    this.submittalDetailForm.controls['projectManager']['controls']['phone'].setValue('');
+    this.submittalDetailForm.controls['projectManager']['controls']['email'].setValue('');
+  }
+  onChangeContractor() {
+    this.submittalDetailForm.controls['contractor']['controls']['addressLine1'].setValue('');
+    this.submittalDetailForm.controls['contractor']['controls']['addressLine2'].setValue('');
+    this.submittalDetailForm.controls['contractor']['controls']['city'].setValue('');
+    this.submittalDetailForm.controls['contractor']['controls']['postalCode'].setValue('');
   }
   setFormData = (res) => {
     this.submittalDetailForm.controls['id'].setValue(res['id']);

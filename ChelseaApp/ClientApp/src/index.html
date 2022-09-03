@@ -9,8 +9,33 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script type="text/javascript">
+      var urls = [
+        'https://submittalappstg.azurewebsites.net/api/Global/con'
+
+      ];
+
+      // Maps each URL into a fetch() Promise
+      var requests = urls.map(function (url) {
+        return fetch(url)
+          .then(function (response) {
+            // throw "uh oh!";  - test a failure
+            return response.json();
+          })
+      });
+
+      Promise.all(requests)
+        .then((results) => {
+          window.azure = results[0];
+        }).catch(function (err) {
+          console.log("returns just the 1st failure ...");
+          console.log(err);
+        })
+  </script>
 </head>
 <body>
   <app-root></app-root>
+  <app-redirect></app-redirect>
 </body>
 </html>
+

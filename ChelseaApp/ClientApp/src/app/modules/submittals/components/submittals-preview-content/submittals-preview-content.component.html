@@ -69,17 +69,17 @@
         <div class="form-group text-center"
             *ngIf="formValueOne?.projectManager?.name || formValueOne?.projectManager?.phone || formValueOne?.projectManager?.email">
             <label for="">Project Manager</label>
-            <p class="value">{{formValueOne?.projectManager?.name}}</p>
+            <p class="value">{{formValueOne?.projectManager?.name?.name || formValueOne?.projectManager?.name}}</p>
             <p class="value">{{formValueOne?.projectManager?.phone}}</p>
             <p class="value">{{formValueOne?.projectManager?.email}}</p>
         </div>
         <div class="form-group text-center"
             *ngIf="formValueOne?.contractor?.name || formValueOne?.contractor?.addressLine1 || formValueOne?.contractor?.addressLine2 || formValueOne?.contractor?.state || formValueOne?.contractor?.city || formValueOne?.contractor?.postalCode">
             <label for="">Contractor</label>
-            <p class="value">{{formValueOne?.contractor?.name}}</p>
+            <p class="value">{{formValueOne?.contractor?.name?.name || formValueOne?.contractor?.name}}</p>
             <p class="value">{{formValueOne?.contractor?.addressLine1}} {{formValueOne?.contractor?.addressLine2}}</p>
             <p class="value">
-              {{formValueOne?.cityName}}
+              {{formValueOne?.contractor?.city}}
               {{formValueOne?.stateName}}
               {{formValueOne?.contractor?.postalCode}}
             </p>
