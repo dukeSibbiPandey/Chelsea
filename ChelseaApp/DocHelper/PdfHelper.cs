@@ -34,12 +34,12 @@ namespace ChelseaApp.DocHelper
                 srcDocs.Add(new BookmarkModel() { PdfDoc = srcDoc, NumberOfPages = numberOfPages, Name = stream.Name, Files = stream.Files });
             }
 
-            /*PdfMerger merger = new PdfMerger(pdfDoc);
+            PdfMerger merger = new PdfMerger(pdfDoc);
             merger.SetCloseSourceDocuments(true);
             foreach (BookmarkModel stream in srcDocs)
             {
                 merger.Merge(stream.PdfDoc, 1, stream.NumberOfPages);
-            }*/
+            }
 
             PdfOutline rootOutline = pdfDoc.GetOutlines(false);
 
@@ -49,14 +49,14 @@ namespace ChelseaApp.DocHelper
             {
                 //var files = srcDocs.Where(t => t.ParentName == doc.Name).ToList();
                 PdfOutline mainDoc = rootOutline.AddOutline(doc.Name);
-                mainDoc.AddDestination(PdfExplicitDestination.CreateFit(pdfDoc.GetPage(page)));
+                mainDoc.AddDestination(PdfDestination.MakeDestination(pdfDoc.GetPage(page).GetPdfObject()));
 
                 if (doc.Files != null && doc.Files.Any())
                 {
                     foreach (FileModel file in doc.Files)
                     {
                         PdfOutline link1 = mainDoc.AddOutline(System.IO.Path.GetFileNameWithoutExtension(file.OrgFileName));
-                        link1.AddDestination(PdfExplicitDestination.CreateFit(pdfDoc.GetPage(page)));
+                        link1.AddDestination(PdfDestination.MakeDestination(pdfDoc.GetPage(page).GetPdfObject()));
                         page += file.NumberOfPages;
                     }
                 }
@@ -83,11 +83,12 @@ namespace ChelseaApp.DocHelper
             // PdfPageFormCopier uses some caching logic which can potentially improve performance
             // in case of the reusing of the same instance.
             PdfPageFormCopier formCopier = new PdfPageFormCopier();
-
+            PdfOutline rootOutline = pdfDoc.GetOutlines(false);
             // Copy all merging file's pages to the result pdf file
             Dictionary<PdfFileModel, PdfDocument> filesToMerge = InitializeFilesToMerge(streams);
             Dictionary<int, PdfFileModel> toc = new Dictionary<int, PdfFileModel>();
             int page = 1;
+            int bpage = 1;
             foreach (KeyValuePair<PdfFileModel, PdfDocument> entry in filesToMerge)
             {
                 PdfDocument srcDoc = entry.Value;
@@ -97,7 +98,7 @@ namespace ChelseaApp.DocHelper
 
                 for (int i = 1; i <= numberOfPages; i++, page++)
                 {
-                    Text text = new Text(String.Format("Page {0}", page));
+                    Text text = new Text("");
                     srcDoc.CopyPagesTo(i, i, pdfDoc, formCopier);
 
                     // Put the destination at the very first page of each merged document
@@ -108,6 +109,24 @@ namespace ChelseaApp.DocHelper
                     doc.Add(new Paragraph(text).SetFixedPosition(page, 549, 810, 40)
                         .SetMargin(0)
                         .SetMultipliedLeading(1));
+                }
+
+                string bname = entry.Key.Name + (!string.IsNullOrEmpty(entry.Key.MFG) ? "-" + entry.Key.MFG : "") + (!string.IsNullOrEmpty(entry.Key.Part) ? "-" + entry.Key.Part : "");
+
+                PdfOutline mainDoc = rootOutline.AddOutline(entry.Key.Name);
+                mainDoc.AddDestination(PdfExplicitDestination.CreateFit(pdfDoc.GetPage(bpage)));
+                if (entry.Key.Files != null && entry.Key.Files.Any())
+                {
+                    foreach (FileModel file in entry.Key.Files)
+                    {
+                        PdfOutline link1 = mainDoc.AddOutline(System.IO.Path.GetFileNameWithoutExtension(file.OrgFileName));
+                        link1.AddDestination(PdfExplicitDestination.CreateFit(pdfDoc.GetPage(bpage)));
+                        bpage += file.NumberOfPages;
+                    }
+                }
+                else
+                {
+                    bpage += numberOfPages;
                 }
             }
 
@@ -154,33 +173,39 @@ namespace ChelseaApp.DocHelper
                     .SetMultipliedLeading(1));
 
             Paragraph ptadress = new();
-            ptadress.SetFontSize(6)
+            string sadetails = submittalList.State;
+            sadetails = sadetails.Replace("\r\n", "");
+            sadetails = sadetails + ", " + submittalList.City;
+            ptadress.SetFontSize(8)
                 // .SetBold()
-                .Add(submittalList.AddressLine1+" "+ submittalList.AddressLine1 + ", " + submittalList.State + ", " + submittalList.City + " " + submittalList.Zip);
-            doc.Add(ptadress.SetFixedPosition(pages, 440, defaultHeight - 65, tocWidth)
+                .SetFontColor(Color.ConvertRgbToCmyk(new DeviceRgb(132, 132, 132)))
+                .Add(submittalList.AddressLine1+", " + sadetails + " " + submittalList.Zip);
+            doc.Add(ptadress.SetFixedPosition(pages, 442, defaultHeight - 62, tocWidth)
                  .SetMargin(0)
                     .SetMultipliedLeading(1));
 
             Paragraph ptphone = new();
             ptphone.SetFontSize(8)
-                // .SetBold()
+                .SetFontColor(Color.ConvertRgbToCmyk(new DeviceRgb(132, 132, 132)))
                 .Add(submittalList.Phone);
-            doc.Add(ptphone.SetFixedPosition(pages, 472, defaultHeight - 73, tocWidth)
+            doc.Add(ptphone.SetFixedPosition(pages, 472, defaultHeight - 74, tocWidth)
                  .SetMargin(0)
                     .SetMultipliedLeading(1));
 
             Paragraph ptfax = new();
             ptfax.SetFontSize(8)
-                //.SetBold()
+                .SetFontColor(Color.ConvertRgbToCmyk(new DeviceRgb(132, 132, 132)))
                 .Add("NA");
-            doc.Add(ptfax.SetFixedPosition(pages, 550, defaultHeight - 73, tocWidth)
+            doc.Add(ptfax.SetFixedPosition(pages, 550, defaultHeight - 74, tocWidth)
                  .SetMargin(0)
                     .SetMultipliedLeading(1));
 
             Paragraph ptcity = new();
+            string sdetails = submittalList.State + " " + submittalList.City;
+            sdetails = sdetails.Replace("\r\n", "");
             ptcity.SetFontSize(8)
                 //.SetBold()
-                .Add(submittalList.State + " " + submittalList.City);
+                .Add(sdetails);
             doc.Add(ptcity.SetFixedPosition(pages, 445, defaultHeight - 135, tocWidth)
                  .SetMargin(0)
                     .SetMultipliedLeading(1));
@@ -213,8 +238,13 @@ namespace ChelseaApp.DocHelper
                 }
                 if (!string.IsNullOrEmpty(entry.Value.Part))
                 {
+                    var part = entry.Value.Part;
+                    if(part.Length>45)
+                    {
+                        part = part.Insert(45, "\r\n");
+                    }
                     p.AddTabStops(new TabStop(300, TabAlignment.LEFT));
-                    Text text = new Text(entry.Value.Part)
+                    Text text = new Text(part)
                     .SetFontColor(ColorConstants.BLUE)
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetHorizontalAlignment(HorizontalAlignment.CENTER);                    
@@ -228,7 +258,6 @@ namespace ChelseaApp.DocHelper
                 doc.Add(p.SetFixedPosition(pages, tocXCoordinate+10, tocYCoordinate, tocWidth)
                     .SetMargin(0)
                     .SetMultipliedLeading(1));
-
                 tocYCoordinate -= 20;
                 numtoc++;
             }

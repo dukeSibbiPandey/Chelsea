@@ -1,13 +1,17 @@
 <div class="__s_s_wrapper">
     <div class="__t_b">
         <div class="__left">
-            <span (click)="handleEdit(true)" *ngIf="!isEdit">
+            <span (click)="handleEdit(true)" *ngIf="!submittal['isEdit']">
                 {{submittal?.name}}
             </span>
-            <span class="editable" *ngIf="isEdit">
-                <input type="text" class="form-control" name='name' [(ngModel)]="submittal['name']" #name="ngModel"
+            <span class="editable" *ngIf="submittal['isEdit']">
+                <input type="text" autofocus class="form-control" #publicSearchBox name='name' [(ngModel)]="submittal['name']" #name="ngModel"
                     placeholder="Type" (change)='handleChangeSubmittalName($event)'>
             </span>
+            <span></span>
+            <!-- <span *ngIf="submittal['isDuplicate']">
+                Duplicate
+            </span> -->
         </div>
         <div class="__right">
             <ul class="flex v_center">

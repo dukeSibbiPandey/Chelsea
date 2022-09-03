@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Xml.Linq;
+using Document = iTextSharp.text.Document;
 using Font = iTextSharp.text.Font;
 using Image = System.Drawing.Image;
 using Paragraph = DocumentFormat.OpenXml.Wordprocessing.Paragraph;
@@ -550,22 +551,24 @@ namespace ChelseaApp.DocHelper
             //File.Delete(outputFilePath);
             return pdfBytes;
         }
-        public List<string> CreateBookMarks(List<BookmarkModel> streams)
+        public string CreateBookMarks(List<PdfFileModel> streams, byte[] filebyte)
         {
             List<string> fileNames = new List<string>();
-            var desFilePath = this._environment.WebRootPath + "/TempPdf/Merge_TocFile_" + Guid.NewGuid().ToString() + ".pdf";
+            var desFilePath = this._environment.WebRootPath + "/TempPdf/Merge_FinalFile_" + Guid.NewGuid().ToString() + ".pdf";
             //var tocFilePath = this._environment.WebRootPath + "/TempPdf/toc_" + Guid.NewGuid().ToString() + ".pdf";
             //var tocFilePath = this._environment.WebRootPath + "/Template/toc.pdf";
-            FileInfo file = new FileInfo(desFilePath);
-            file.Directory.Create();
+            //FileInfo file = new FileInfo(desFilePath);
+            //file.Directory.Create();
 
-            //fileNames.Add(tocFilePath);
-            fileNames.Add(desFilePath);
+            ////fileNames.Add(tocFilePath);
+            //fileNames.Add(desFilePath);
+            File.WriteAllBytes(desFilePath, filebyte);
             //iText.Kernel.Pdf.PdfDocument tocDoc = new iText.Kernel.Pdf.PdfDocument(new iText.Kernel.Pdf.PdfWriter(tocFilePath));
             //tocDoc.Close();
-            //PdfHelper.CreateBookMarksPdf(desFilePath, streams);
+            PdfHelper.CreateBookMarksPdf(desFilePath, streams);
             //PdfHelper.GeneratePdf(desFilePath, streams, tocFilePath);
-            return fileNames;
+
+            return desFilePath;
         }
         public List<string> CreateIndexPage(List<PdfFileModel> streams, SubmittalList submittalList )
         {

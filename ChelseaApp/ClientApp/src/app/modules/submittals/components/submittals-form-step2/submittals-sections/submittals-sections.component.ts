@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { HttpService } from 'src/app/components/http.service';
@@ -24,6 +24,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   @Output() uploadSubmittalsCallback: EventEmitter<any> = new EventEmitter();
   @Output() toggleCallback: EventEmitter<any> = new EventEmitter();
   @Output() selectedActionCallback: EventEmitter<any> = new EventEmitter();
+  @ViewChild('publicSearchBox') searchBoxField: ElementRef;
   selectedIndex: any = [];
   position: string = "right";
   isProgressBarIndex: any = -1
@@ -56,6 +57,9 @@ export class SubmittalsSectionsComponent implements OnInit {
     this.COLLAPSE_MINUS_ICON();
     this.COLLAPSE_PLUS_ICON();
     this.DUPLICATE_ICON();
+  }
+  ngAfterViewInit(): void {
+    this.searchBoxField.nativeElement.focus();
   }
   DEL_ICON = () => {
     const icon = this._SubmittalService.DEL_ICON();
@@ -96,7 +100,10 @@ export class SubmittalsSectionsComponent implements OnInit {
   }
 
   handleEdit = (value: boolean) => {
-    this.isEdit = value
+    this.selectedActionCallback.emit({
+      subIdx: this.itmindex,
+      action: 'edit_name'
+    })
   }
   callSaveAsDraft() {
     this.selectedActionCallback.emit({
@@ -273,9 +280,9 @@ export class SubmittalsSectionsComponent implements OnInit {
       value: this.submittal['name'],
       action: 'change_name'
     })
-    if (this.submittal['name']) {
-      this.handleEdit(false)
-    }
+    // if (this.submittal['name']) {
+    //   this.handleEdit(false)
+    // }
 
   }
 

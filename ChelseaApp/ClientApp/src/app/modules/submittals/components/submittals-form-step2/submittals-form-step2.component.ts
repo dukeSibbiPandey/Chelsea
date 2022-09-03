@@ -43,6 +43,8 @@ export class SubmittalsFormStep2Component implements OnInit {
       lamp: '',
       dim: '',
       runs: '',
+      isEdit: true,
+      isDuplicate: false,
       files: [
 
       ]
@@ -140,20 +142,21 @@ export class SubmittalsFormStep2Component implements OnInit {
 
   addMoreOption = () => {
     let item = JSON.parse(JSON.stringify(submittalItem));
-    let name = "Type " + (this.submittalsTpl.length + 1);
-    let arr = this.tempSubmittalsTpl;
-    let temp = 0;
-    arr.map((ele: any, index: number) => {
-      if (ele['name'] == name) {
-        temp = temp + 1
-      }
-    })
-    if (temp == 0) {
-      item.name = name
-    } else {
-      item.name = name + `_` + new Date().getTime()
-    }
-
+    //let name = " "; //"Type " + (this.submittalsTpl.length + 1);
+    // let arr = this.tempSubmittalsTpl;
+    // let temp = 0;
+    // arr.map((ele: any, index: number) => {
+    //   if (ele['name'] == name) {
+    //     temp = temp + 1
+    //   }
+    // })
+    // if (temp == 0) {
+    //   item.name = name
+    // } else {
+    //   item.name = name + `_` + new Date().getTime()
+    // }
+    item.name = " ";
+    item.isEdit = true;
     this.openIndex.push(this.submittalsTpl.length.toString());
     this.submittalsTpl.push(item);
     this.updateOldState();
@@ -178,6 +181,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   duplicateSubmittals = (res: any) => {
     let item = JSON.parse(JSON.stringify(res.submittal));
     item.name = "Type " + (this.submittalsTpl.length + 1);
+    item.isDuplicate = true;
     item.files = [];
     const nextIndex = this.submittalsTpl.length
     this.openIndex.push(nextIndex.toString())
@@ -216,6 +220,7 @@ export class SubmittalsFormStep2Component implements OnInit {
         temp = temp + 1
       }
     })
+    this.submittalsTpl[res.subIdx]['isEdit'] = false;
     if (temp == 0) {
       this.submittalsTpl[res.subIdx]['name'] = res.value
     } else {
@@ -239,7 +244,10 @@ export class SubmittalsFormStep2Component implements OnInit {
       this.duplicateSubmittalItem(res)
     } else if (res.action == 'change_name') {
       this.change_submittal_name(res)
+    }else if (res.action == 'edit_name') {
+      this.submittalsTpl[res.subIdx]['isEdit'] = true;
     }
+    
   }
   handleMergePdp = async (isDraft) => {
     this._CustomService.show();
