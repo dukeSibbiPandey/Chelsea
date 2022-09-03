@@ -26,7 +26,7 @@ const submittalItem: any = {
   providers: [PrimeNGConfig, MessageService]
 })
 export class SubmittalsFormStep2Component implements OnInit {
-  @Input() title:any;
+  @Input() title: any;
   activeAddressInde = 1;
   id: any = 0;
   submittalData: any;
@@ -183,9 +183,9 @@ export class SubmittalsFormStep2Component implements OnInit {
     item.name = "Type " + (this.submittalsTpl.length + 1);
     item.isDuplicate = true;
     item.files = [];
+    this.submittalsTpl.push(item);
     const nextIndex = this.submittalsTpl.length;
     this.openIndex.push(nextIndex.toString())
-    this.submittalsTpl.push(item);
     this.updateOldState();
   }
   duplicateSubmittalItem = (res: any) => {
@@ -233,7 +233,8 @@ export class SubmittalsFormStep2Component implements OnInit {
     if (res.action == 'delete') {
       this.removeSubmittals(res)
     } else if (res.action == 'SaveAsDraft') {
-      this.handleMergePdp(true);
+      this.handleSaveAction(res.data)
+      // this.handleMergePdp(true);
     } else if (res.action == 'duplicate') {
       this.duplicateSubmittals(res)
     } else if (res.action == 'move') {
@@ -248,6 +249,28 @@ export class SubmittalsFormStep2Component implements OnInit {
       this.submittalsTpl[res.subIdx]['isEdit'] = true;
     }
     
+  }
+
+  handleSaveAction = async (config) => {
+    const pdfFiles = config.pdfActionConfig.pdfFiles;
+    const fileObj = config.pdfActionConfig.pdfFiles.files;
+    const orgFileName = fileObj.orgFileName;
+    let submitalData = pdfFiles;
+    submitalData.submittalId = config.pdfActionConfig.config.submittalId;
+    submitalData.files.orgFileName = orgFileName;
+    let url = 'home/auto/save';
+    let formData = {
+      ...submitalData
+    }
+    formData.files.annotations = ''
+    formData.files.annotation = ''
+    this.httpService.fileupload(url, formData, null, null).subscribe(res => {
+      config.pdfActionConfig.pdfFiles = res;
+      localStorage.removeItem('submittalObject');
+      localStorage.setItem('submittalObject', JSON.stringify(config.pdfActionConfig));
+      this.router.navigate([config.pdfActionConfig.config.returnUrl]);
+    })
+
   }
   handleMergePdp = async (isDraft) => {
     this._CustomService.show();

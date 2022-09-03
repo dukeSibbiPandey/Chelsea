@@ -194,8 +194,6 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       let undoCount = 0;
       let redoCount = 0;
       let paging = 0;
-      debugger;
-      console.log('items==', items)
       items && items.length > 0 && items.map((el, i) => {
         if ((el.type == "actionButton" && el.title == "Undu")) {
           undoCount = undoCount + 1

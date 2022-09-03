@@ -102,13 +102,11 @@ export class SubmittalsFormStep1Component implements OnInit {
   get formControl() { return this.submittalDetailForm.controls };
   gerProjectManagerMasters() {
     this.httpService.get("Global/projectManagers").toPromise().then(value => {
-      debugger
       this.masters.projectManagers = value
     });
   }
   gerContractorMasters() {
     this.httpService.get("Global/customers").toPromise().then(value => {
-      debugger
       this.masters.contractors = value
     });
   }

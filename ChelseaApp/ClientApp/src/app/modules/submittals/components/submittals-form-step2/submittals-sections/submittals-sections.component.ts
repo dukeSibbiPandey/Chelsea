@@ -105,9 +105,14 @@ export class SubmittalsSectionsComponent implements OnInit {
       action: 'edit_name'
     })
   }
-  callSaveAsDraft() {
+  callSaveAsDraft(pdfActionConfig, actionType) {
     this.selectedActionCallback.emit({
-      action: 'SaveAsDraft'
+      action: 'SaveAsDraft',
+      data: {
+        pdfActionConfig: pdfActionConfig,
+        actionType: actionType,
+        action: 'SaveAsDraft',
+      }
     })
   }
   handleDelete(index: number) {
@@ -236,18 +241,20 @@ export class SubmittalsSectionsComponent implements OnInit {
       submittalId: this.id,
       previewUrl: this.previewUrl,
       title: 'Preview',
+      returnUrl: `/submittals/form/preview/${this.id}/${item.id}`
     }
     let pdfActionConfig = {
       pdfFiles: pdfFiles,
       config: config
     }
-    localStorage.removeItem('submittalObject');
-    localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
-    //if (!(item.id > 0)) {
-    //  this.callSaveAsDraft();
-    //}
-    this.callSaveAsDraft();
-    this.router.navigate([`/submittals/form/preview/${this.id}/${item.id}`]);
+    if (pdfFiles.files.id) {
+      localStorage.removeItem('submittalObject');
+      localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
+      this.router.navigate([`/submittals/form/preview/${this.id}/${item.id}`]);
+    } else {
+      this.callSaveAsDraft(pdfActionConfig, 'view');
+    }
+
   }
   handleActionEdit = (item: any, index: number) => {
     this.previewUrl = this.httpService.getBaseUrl() + "Home/download?bloburl=" + item.fileName + ""
@@ -262,18 +269,20 @@ export class SubmittalsSectionsComponent implements OnInit {
       submittalIndex: this.itmindex,
       submittalId: this.id,
       previewUrl: this.previewUrl,
+      returnUrl: `/submittals/pdf-edit/${this.id}`
     }
     let pdfActionConfig = {
       pdfFiles: pdfFiles,
-      config: config
+      config: config,
+
     }
-    localStorage.removeItem('submittalObject');
-    localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
-    this.callSaveAsDraft();
-    //if (!(item.id > 0)) {
-    //  this.callSaveAsDraft();
-    //}
-    this.router.navigate([`/submittals/pdf-edit/${this.id}`]);
+    if (pdfFiles.files.id) {
+      localStorage.removeItem('submittalObject');
+      localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
+      this.router.navigate([`/submittals/pdf-edit/${this.id}`]);
+    } else {
+      this.callSaveAsDraft(pdfActionConfig, 'edit');
+    }
   }
 
   handleChangeSubmittalName = (event: any) => {
