@@ -65,7 +65,7 @@ export class PdfHelperService {
     PdfHelperService.SetDefaultDataLocalStorage();
   }
   static SetDefaultDataLocalStorage = () => {
-    let defaultColor = { "R": 255, "G": 0, "B": 0, "A": 1 }
+    let defaultColor = { "R": 0, "G": 0, "B": 255, "A": 1 }
     localStorage.setItem("toolData-AnnotationCreateTextHighlight",
       JSON.stringify({
         "Opacity": 1,

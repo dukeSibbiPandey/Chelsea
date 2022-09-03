@@ -243,9 +243,10 @@ export class SubmittalsSectionsComponent implements OnInit {
     }
     localStorage.removeItem('submittalObject');
     localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
-    if (!(item.id > 0)) {
-      this.callSaveAsDraft();
-    }
+    //if (!(item.id > 0)) {
+    //  this.callSaveAsDraft();
+    //}
+    this.callSaveAsDraft();
     this.router.navigate([`/submittals/form/preview/${this.id}/${item.id}`]);
   }
   handleActionEdit = (item: any, index: number) => {
@@ -268,9 +269,10 @@ export class SubmittalsSectionsComponent implements OnInit {
     }
     localStorage.removeItem('submittalObject');
     localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
-    if (!(item.id > 0)) {
-      this.callSaveAsDraft();
-    }
+    this.callSaveAsDraft();
+    //if (!(item.id > 0)) {
+    //  this.callSaveAsDraft();
+    //}
     this.router.navigate([`/submittals/pdf-edit/${this.id}`]);
   }
 

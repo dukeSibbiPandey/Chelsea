@@ -28,12 +28,13 @@ namespace ChelseaApp
             services.AddControllersWithViews();
             var appSettingsSection = this.Configuration.GetSection("AppSettings");
             var appSettings = appSettingsSection.Get<AppConfig>();
-
+            appSettings.ConnectionStrings = Configuration.GetSection("ConnectionStrings").Get<ConnectionString>();
+            appSettings.AzureAd = Configuration.GetSection("AzureAd").Get<AzureAd>();
             services.AddScoped<IAzureBlobServices, AzureBlobServices>();
             services.AddScoped<IDocUtility, DocUtility>();
             services.AddSingleton<IOptions<AppConfig>>(x => Options.Create<AppConfig>(appSettings));
             services.AddDbContext<ChelseaContext>(options =>
-                              options.UseSqlServer(appSettings.DatabaseConnection));
+                              options.UseSqlServer(appSettings.ConnectionStrings.DefaultDatabaseConnection));
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

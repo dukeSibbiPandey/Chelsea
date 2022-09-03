@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/Api</Controller_SelectedScaffolderCategoryPath>
-    <NameOfLastUsedPublishProfile>D:\Projects\Tejpal\Chelsea\ChelseaApp\Properties\PublishProfiles\submittalappstg - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>D:\Projects\Tejpal\Chelsea\ChelseaApp\Properties\PublishProfiles\chelseasubmittals - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Update="ClientApp\src\app\components\http.service.ts">

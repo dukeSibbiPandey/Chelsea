@@ -183,7 +183,7 @@ export class SubmittalsFormStep2Component implements OnInit {
     item.name = "Type " + (this.submittalsTpl.length + 1);
     item.isDuplicate = true;
     item.files = [];
-    const nextIndex = this.submittalsTpl.length
+    const nextIndex = this.submittalsTpl.length;
     this.openIndex.push(nextIndex.toString())
     this.submittalsTpl.push(item);
     this.updateOldState();

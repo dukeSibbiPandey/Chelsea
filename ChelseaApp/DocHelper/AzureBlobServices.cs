@@ -23,10 +23,8 @@
         }
         public async Task<BlobContainerClient> GetContainer(string subdirectory = Constants.Empty)
         {
-            BlobServiceClient blobServiceClient = new(_appSetting.AzureBlobConnection);
-            string containerName = _appSetting.AzureBlobContainer;
-            if (!string.IsNullOrWhiteSpace(subdirectory))
-                containerName = subdirectory;
+            BlobServiceClient blobServiceClient = new(_appSetting.ConnectionStrings.AzureBlobConnection);
+            string containerName = subdirectory;
             // Create the container and return a container client object
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
             await containerClient.CreateIfNotExistsAsync(PublicAccessType.BlobContainer);
