@@ -107,7 +107,8 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         'squigglyToolButton',
         'strikeoutToolButton',
         'outlinesPanelButton',
-        'notesPanelButton'
+        'documentControl'
+        
       ]);
       const ToolNames = this.wvInstance.Tools.ToolNames;
       this.wvInstance.setColorPalette({
