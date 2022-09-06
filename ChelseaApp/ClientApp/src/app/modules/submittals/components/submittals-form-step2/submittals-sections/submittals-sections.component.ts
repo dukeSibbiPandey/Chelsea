@@ -289,12 +289,21 @@ export class SubmittalsSectionsComponent implements OnInit {
     this.selectedActionCallback.emit({
       subIdx: this.itmindex,
       value: this.submittal['name'],
-      action: 'change_name'
+      action: 'change_name',
+      event:event
     })
-    // if (this.submittal['name']) {
-    //   this.handleEdit(false)
-    // }
-
+  }
+  handleBlue = (event) => {
+    debugger
+    const value = event.target.value || '';
+    if (!value) {
+      this.selectedActionCallback.emit({
+        subIdx: this.itmindex,
+        value: this.submittal['name'],
+        action: 'change_name',
+        event:event
+      })
+    }
   }
 
   niceBytes(x: any) {

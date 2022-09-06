@@ -53,6 +53,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   icon: any = {
 
   }
+  isDisabled=false;
 
   constructor(private route: ActivatedRoute, private messageService: MessageService, private httpService: HttpService, private router: Router, private _CustomService: CommonService, private _SubmittalService: SubmittalService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
@@ -213,20 +214,27 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
 
   change_submittal_name = (res: any) => {
-    let arr = this.tempSubmittalsTpl;
-    let temp = 0;
-    arr.map((item: any, index: number) => {
-      if (item['name'] == res.value) {
-        temp = temp + 1
+    if (res.value) {
+      let arr = this.tempSubmittalsTpl;
+      let temp = 0;
+      arr.map((item: any, index: number) => {
+        if (item['name'] == res.value) {
+          temp = temp + 1
+        }
+      })
+      this.submittalsTpl[res.subIdx]['isEdit'] = false;
+      if (temp == 0) {
+        this.submittalsTpl[res.subIdx]['name'] = res.value
+      } else {
+        this.submittalsTpl[res.subIdx]['name'] = this.tempSubmittalsTpl[res.subIdx]['name'];
       }
-    })
-    this.submittalsTpl[res.subIdx]['isEdit'] = false;
-    if (temp == 0) {
-      this.submittalsTpl[res.subIdx]['name'] = res.value
+      this.isDisabled=false
+      this.updateOldState();
     } else {
-      this.submittalsTpl[res.subIdx]['name'] = this.tempSubmittalsTpl[res.subIdx]['name'];
+      res.event.target.focus();
+      this.isDisabled=true
     }
-    this.updateOldState();
+
 
   }
   selectedActionCallbackAction = (res: any) => {
@@ -245,10 +253,10 @@ export class SubmittalsFormStep2Component implements OnInit {
       this.duplicateSubmittalItem(res)
     } else if (res.action == 'change_name') {
       this.change_submittal_name(res)
-    }else if (res.action == 'edit_name') {
+    } else if (res.action == 'edit_name') {
       this.submittalsTpl[res.subIdx]['isEdit'] = true;
     }
-    
+
   }
 
   handleSaveAction = async (config) => {

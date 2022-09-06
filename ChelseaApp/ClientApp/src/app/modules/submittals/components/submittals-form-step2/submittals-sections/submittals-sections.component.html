@@ -5,8 +5,9 @@
                 {{submittal?.name}}
             </span>
             <span class="editable" *ngIf="submittal['isEdit']">
-                <input type="text" autofocus class="form-control" #publicSearchBox name='name' [(ngModel)]="submittal['name']" #name="ngModel"
-                    placeholder="Type" (change)='handleChangeSubmittalName($event)'>
+                <input type="text" autofocus class="form-control" #publicSearchBox name='name'
+                    [(ngModel)]="submittal['name']" #name="ngModel" placeholder="Type"
+                    (change)='handleChangeSubmittalName($event)' (blur)="handleBlue($event)">
             </span>
             <span></span>
             <!-- <span *ngIf="submittal['isDuplicate']">

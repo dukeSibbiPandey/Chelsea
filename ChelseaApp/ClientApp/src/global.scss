@@ -281,6 +281,9 @@ a {
 .pointer {
     cursor: pointer;
 }
+.no-pointer{
+    pointer-events: none;
+}
 
 .steps_wrapper {
     max-width: 600px;
