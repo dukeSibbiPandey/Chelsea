@@ -290,18 +290,17 @@ export class SubmittalsSectionsComponent implements OnInit {
       subIdx: this.itmindex,
       value: this.submittal['name'],
       action: 'change_name',
-      event:event
+      event: event
     })
   }
   handleBlue = (event) => {
-    debugger
     const value = event.target.value || '';
-    if (!value) {
+    if (!value || value == ' ') {
       this.selectedActionCallback.emit({
         subIdx: this.itmindex,
         value: this.submittal['name'],
         action: 'change_name',
-        event:event
+        event: event
       })
     }
   }
