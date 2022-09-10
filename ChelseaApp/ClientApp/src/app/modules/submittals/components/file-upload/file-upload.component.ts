@@ -1,19 +1,23 @@
 import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
-  styleUrls: ['./file-upload.component.scss']
+  styleUrls: ['./file-upload.component.scss'],
+  providers: [PrimeNGConfig, MessageService]
 })
 export class FileUploadComponent {
   @Output() uploadCallback: EventEmitter<any> = new EventEmitter();
   @Input() itmindex = '0';
   @Input() isProgressBarIndex = '0';
   files: any[] = [];
+  constructor(private messageService: MessageService) { }
   /**
    * on file drop handler
    */
   onFileDropped($event) {
+    debugger
     this.prepareFilesList($event);
   }
 
@@ -58,8 +62,7 @@ export class FileUploadComponent {
    * @param files (Files List)
    */
   prepareFilesList(files: Array<any>) {
-    debugger
-    this.files =[]
+    this.files = []
     for (const item of files) {
       item.progress = 0;
       this.files.push(item);
@@ -67,8 +70,14 @@ export class FileUploadComponent {
     let data = {
       files: this.files
     };
-    this.uploadCallback.emit(data)
-    this.uploadFilesSimulator(0);
+    if (this.files[0].type.match('application/pdf')) {
+      this.uploadCallback.emit(data)
+      this.uploadFilesSimulator(0);
+    } else {
+      this.files = []
+      this.toastMsg('error', 'Error', 'Invalid file type', 2000);
+    }
+
   }
 
   /**
@@ -85,5 +94,9 @@ export class FileUploadComponent {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  toastMsg(severity: any, summary: any, detail: any, life: any) {
+    this.messageService.add({ key: 'fileUploadToast', severity: severity, summary: summary, detail: detail, life: life, closable: true });
   }
 }
