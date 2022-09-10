@@ -129,6 +129,7 @@ export class SubmittalsSectionsComponent implements OnInit {
 
   }
   onUpload = (event: any) => {
+    this.uploadedFiles=[];
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }

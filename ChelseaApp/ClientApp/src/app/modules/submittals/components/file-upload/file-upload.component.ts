@@ -58,6 +58,8 @@ export class FileUploadComponent {
    * @param files (Files List)
    */
   prepareFilesList(files: Array<any>) {
+    debugger
+    this.files =[]
     for (const item of files) {
       item.progress = 0;
       this.files.push(item);
