@@ -15,7 +15,7 @@ export class SubmittalsComponent implements OnInit {
   page = 1;
   totalRecords;
   rowsPerPageOptions = [10, 20, 30];
-  pagingInfo:any;
+  pagingInfo: any;
   httpService: HttpService;
   constructor(httpService: HttpService) {
     this.httpService = httpService;
@@ -35,11 +35,11 @@ export class SubmittalsComponent implements OnInit {
     });
   }
   renderPaging = () => {
-    this.pagingInfo={
-      start:((this.page - 1) * this.pageSize + 1),
+    this.pagingInfo = {
+      start: ((this.page - 1) * this.pageSize + 1),
       end: (this.pageSize * this.page > this.totalRecords ? this.totalRecords : this.pageSize * this.page)
     }
-    
+
   }
   searchList() {
     this.bindSubmittalsGrid()
@@ -78,9 +78,9 @@ export class SubmittalsComponent implements OnInit {
     }
     return (n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
   }
-  fnClone(id:number){
+  fnClone(id: number) {
     let url = `Home/submittal/clone/${id}`
-    this.httpService.get(url).toPromise().then((value: any) => {     
+    this.httpService.get(url).toPromise().then((value: any) => {
       this.bindSubmittalsGrid();
     });
   }

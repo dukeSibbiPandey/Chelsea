@@ -39,6 +39,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { DndDirective } from 'src/app/directives/dnd.directive';
+import { DownloadDirective } from 'src/app/directives/download.directive';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { DndDirective } from 'src/app/directives/dnd.directive';
     PdfEditorActionComponent,
     FileUploadComponent,
     DndDirective,
+    DownloadDirective
   ],
   imports: [
     CommonModule,
