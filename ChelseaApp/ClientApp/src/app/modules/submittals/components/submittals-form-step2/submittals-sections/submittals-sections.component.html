@@ -5,8 +5,8 @@
                 {{submittal?.name}}
             </span>
             <span class="editable" *ngIf="submittal['isEdit']">
-                <input tooltipPosition="top" pTooltip="Enter type here first" type="text" autofocus class="form-control" #publicSearchBox name='name'
-                    [(ngModel)]="submittal['name']" #name="ngModel" placeholder="Type"
+                <input tooltipPosition="top" pTooltip="Enter type here first" type="text" autofocus class="form-control"
+                    #publicSearchBox name='name' [(ngModel)]="submittal['name']" #name="ngModel" placeholder="Type"
                     (change)='handleChangeSubmittalName($event)' (blur)="handleBlue($event)">
             </span>
             <span></span>
