@@ -5,7 +5,7 @@
                 {{submittal?.name}}
             </span>
             <span class="editable" *ngIf="submittal['isEdit']">
-                <input type="text" autofocus class="form-control" #publicSearchBox name='name'
+                <input tooltipPosition="top" pTooltip="Enter type here first" type="text" autofocus class="form-control" #publicSearchBox name='name'
                     [(ngModel)]="submittal['name']" #name="ngModel" placeholder="Type"
                     (change)='handleChangeSubmittalName($event)' (blur)="handleBlue($event)">
             </span>
@@ -30,8 +30,8 @@
 
                 <li tooltipPosition="top" pTooltip="Duplicate" class="hover-btn" [innerHTML]="icon['DUPLICATE_ICON']"
                     (click)="handleDuplicate(submittal)"></li>
-                <li tooltipPosition="top" pTooltip="Delete" class="hover-btn" [innerHTML]="icon['DEL_ICON']"
-                    (click)="handleRemoveSelectedSubmittal()"></li>
+                <li tooltipPosition="top" pTooltip="Delete" class="hover-btn pointer-enavle"
+                    [innerHTML]="icon['DEL_ICON']" (click)="handleRemoveSelectedSubmittal()"></li>
                 <li tooltipPosition="top" pTooltip="Move UP"
                     class="{{itmindex=='0'?'  disabled disabled-btn':'hover-btn'}}" (click)="handleMove('up')"
                     [innerHTML]="icon['MOVE_UP_ICON']"></li>

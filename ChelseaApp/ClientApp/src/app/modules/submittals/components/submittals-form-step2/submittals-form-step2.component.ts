@@ -34,7 +34,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   openIndex = []
   submittalsTpl: any = [
     {
-      name: 'Type 1',
+      name: ' ',
       status: '',
       mfg: '',
       part: '',
@@ -165,6 +165,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   removeSubmittals = (res: any) => {
     this.toggleCallbackHandler(res.idx)
     this.submittalsTpl.splice(res.idx, 1);
+    this.isDisabled = false
   }
   duplicateSubmittals = (res: any) => {
     let item = JSON.parse(JSON.stringify(res.submittal));
@@ -203,7 +204,6 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
 
   change_submittal_name = (res: any) => {
-    debugger
     if (res.value && res.value !== ' ' && res.value !== " ") {
       let arr = this.tempSubmittalsTpl;
       let temp = 0;

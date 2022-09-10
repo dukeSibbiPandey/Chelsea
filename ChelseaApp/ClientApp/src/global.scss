@@ -284,7 +284,9 @@ a {
 .no-pointer{
     pointer-events: none;
 }
-
+.pointer-enavle{
+    pointer-events: auto;
+}
 .steps_wrapper {
     max-width: 600px;
     margin: 0px auto;
