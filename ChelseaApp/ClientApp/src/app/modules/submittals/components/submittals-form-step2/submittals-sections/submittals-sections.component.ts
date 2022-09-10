@@ -129,11 +129,11 @@ export class SubmittalsSectionsComponent implements OnInit {
 
   }
   onUpload = (event: any) => {
-    this.isProgressBarIndex = this.itmindex
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
     let url = 'home/upload';
+    this.isProgressBarIndex = this.itmindex
     event.files.forEach((element: any, index: any) => {
       this.fileData = <File>event.files[index];
       const formData = new FormData();

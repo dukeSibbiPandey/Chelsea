@@ -1,0 +1,20 @@
+<div class="upload-container" appDnd (fileDropped)="onFileDropped($event)">
+    <input type="file" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event)" />
+    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M15 29.5C14.4333 29.5 13.9583 29.3083 13.575 28.925C13.1917 28.5417 13 28.0667 13 27.5V17H2.5C1.93333 17 1.45833 16.8083 1.075 16.425C0.691666 16.0417 0.5 15.5667 0.5 15C0.5 14.4333 0.691666 13.9583 1.075 13.575C1.45833 13.1917 1.93333 13 2.5 13H13V2.5C13 1.93333 13.1917 1.45833 13.575 1.075C13.9583 0.691666 14.4333 0.5 15 0.5C15.5667 0.5 16.0417 0.691666 16.425 1.075C16.8083 1.45833 17 1.93333 17 2.5V13H27.5C28.0667 13 28.5417 13.1917 28.925 13.575C29.3083 13.9583 29.5 14.4333 29.5 15C29.5 15.5667 29.3083 16.0417 28.925 16.425C28.5417 16.8083 28.0667 17 27.5 17H17V27.5C17 28.0667 16.8083 28.5417 16.425 28.925C16.0417 29.3083 15.5667 29.5 15 29.5Z"
+            fill="#333333" />
+    </svg>
+    <h3 class="placeholder-text">Drag and drop file here</h3>
+    <div class="seprator">
+        <span>OR</span>
+    </div>
+    <label for="fileDropRef" class="btn __btn __theme">Browse for PDF</label>
+    <p-progressBar mode="indeterminate" [style]="{'height': '6px'}" *ngIf="isProgressBarIndex == itmindex">
+    </p-progressBar>
+    <!-- <div class="files-list">
+        <div class="single-file" *ngFor="let file of files; let i = index">
+            <app-progress [progress]="file?.progress"></app-progress>
+        </div>
+    </div> -->
+</div>

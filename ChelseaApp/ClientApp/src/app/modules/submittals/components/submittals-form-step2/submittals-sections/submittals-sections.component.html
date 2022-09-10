@@ -137,17 +137,6 @@
                                                     fill="#333333" />
                                             </svg>
                                         </li>
-                                        <!-- <li class="_ml_10">
-                                            <svg class="hover-btn pointer" (click)="handleMoveItem(i, 'right')"
-                                                width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="16" cy="16" r="16" transform="rotate(90 16 16)"
-                                                    fill="#EEEEEE" />
-                                                <path
-                                                    d="M16.5999 19.45L19.3749 16.7C19.5749 16.5 19.6749 16.2667 19.6749 16C19.6749 15.7333 19.5749 15.5 19.3749 15.3L16.5749 12.525C16.3916 12.3417 16.1666 12.2542 15.8999 12.2625C15.6332 12.2708 15.4082 12.3667 15.2249 12.55C15.0249 12.75 14.9249 12.9833 14.9249 13.25C14.9249 13.5167 15.0249 13.75 15.2249 13.95L16.2999 15H12.8999C12.6332 15 12.4041 15.1 12.2124 15.3C12.0207 15.5 11.9249 15.7333 11.9249 16C11.9249 16.2833 12.0207 16.5208 12.2124 16.7125C12.4041 16.9042 12.6416 17 12.9249 17H16.2999L15.1999 18.075C15.0166 18.275 14.9291 18.5083 14.9374 18.775C14.9457 19.0417 15.0416 19.2667 15.2249 19.45C15.4249 19.65 15.6582 19.75 15.9249 19.75C16.1916 19.75 16.4166 19.65 16.5999 19.45ZM15.9999 26.35C14.5332 26.35 13.1707 26.0875 11.9124 25.5625C10.6541 25.0375 9.55824 24.3083 8.6249 23.375C7.69157 22.4417 6.9624 21.3458 6.4374 20.0875C5.9124 18.8292 5.6499 17.4667 5.6499 16C5.6499 14.55 5.9124 13.1917 6.4374 11.925C6.9624 10.6583 7.69157 9.5625 8.6249 8.6375C9.55824 7.7125 10.6541 6.97917 11.9124 6.4375C13.1707 5.89583 14.5332 5.625 15.9999 5.625C17.4499 5.625 18.8082 5.89583 20.0749 6.4375C21.3416 6.97917 22.4374 7.7125 23.3624 8.6375C24.2874 9.5625 25.0207 10.6542 25.5624 11.9125C26.1041 13.1708 26.3749 14.5333 26.3749 16C26.3749 17.4667 26.1041 18.8292 25.5624 20.0875C25.0207 21.3458 24.2874 22.4417 23.3624 23.375C22.4374 24.3083 21.3416 25.0375 20.0749 25.5625C18.8082 26.0875 17.4499 26.35 15.9999 26.35ZM15.9999 24.375C18.3832 24.375 20.3749 23.5792 21.9749 21.9875C23.5749 20.3958 24.3749 18.4 24.3749 16C24.3749 13.6167 23.5749 11.625 21.9749 10.025C20.3749 8.425 18.3832 7.625 15.9999 7.625C13.6166 7.625 11.6249 8.42083 10.0249 10.0125C8.4249 11.6042 7.6249 13.6 7.6249 16C7.6249 18.3833 8.4249 20.375 10.0249 21.975C11.6249 23.575 13.6166 24.375 15.9999 24.375Z"
-                                                    fill="#333333" />
-                                            </svg>
-                                        </li> -->
                                     </ul>
                                 </div>
                                 <button type="button" class="btn __btn __default _view"
@@ -175,6 +164,13 @@
                     </div>
                 </li>
                 <li class="col-same-height col-sm-3 custom-file-upload">
+                    <div class="content">
+                        <app-file-upload [itmindex]=itmindex [isProgressBarIndex]=isProgressBarIndex
+                            (uploadCallback)="onUpload($event)"></app-file-upload>
+                    </div>
+
+                </li>
+                <!-- <li class="col-same-height col-sm-3 custom-file-upload">
                     <p-fileUpload class="_img_wrap" name="myfile[]" [auto]="true" [customUpload]="true"
                         (uploadHandler)="onUpload($event)" accept="application/pdf">
                         <ng-template pTemplate="toolbar">
@@ -190,9 +186,9 @@
                                 <div class="placehonder">
                                     Upload your PDF file here
                                 </div>
-                                <!-- <div class="seprator">
+                                <div class="seprator">
                                     <span>OR</span>
-                                </div> -->
+                                </div>
                                 <div>
                                     <button type="button" class="btn __btn __theme">Upload PDF</button>
                                 </div>
@@ -203,17 +199,9 @@
                         <ng-template let-file pTemplate="file"></ng-template>
                         <ng-template pTemplate="content" let-files></ng-template>
                     </p-fileUpload>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>
 </div>
-<p-dialog header="{{pdfActionConfig && pdfActionConfig['title']}}" [(visible)]="isPreviewDialog" [position]="position"
-    [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false"
-    [style]="{ width: '100vw', height: '100vh', overflow:'hidden', maxHeight: 'none', marginRight:'-5px'}">
-    <div id="outerContainer">
-        <!-- <app-submittals-preview (previewSubmitCallback)="previewSubmitCallbackHandler($event)"
-            [pdfActionConfig]=pdfActionConfig></app-submittals-preview> -->
-    </div>
-</p-dialog>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

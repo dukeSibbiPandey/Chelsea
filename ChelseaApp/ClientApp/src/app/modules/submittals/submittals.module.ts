@@ -31,12 +31,14 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { TableModule } from 'primeng/table';
 import { InputMaskModule } from 'primeng/inputmask';
-import {AutoCompleteModule} from 'primeng/autocomplete';
-import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-editor-action.component';
-import {TooltipModule} from 'primeng/tooltip';
-import {ConfirmDialogModule} from 'primeng/confirmdialog';
-import {AngularStickyThingsModule} from '@w11k/angular-sticky-things';
+import { TooltipModule } from 'primeng/tooltip';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { DndDirective } from 'src/app/directives/dnd.directive';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import {AngularStickyThingsModule} from '@w11k/angular-sticky-things';
     MergeSubmittalsComponent,
     EditHeaderComponent,
     SubmittalsDetailFormComponent,
-    PdfEditorActionComponent
+    PdfEditorActionComponent,
+    FileUploadComponent,
+    DndDirective,
   ],
   imports: [
     CommonModule,
