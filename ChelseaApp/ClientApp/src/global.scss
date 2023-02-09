@@ -562,3 +562,7 @@ a {
 .inherit {
     display: inherit;
 }
+.custom-drop .form-control {
+  -webkit-appearance: initial;
+  appearance: initial;
+}

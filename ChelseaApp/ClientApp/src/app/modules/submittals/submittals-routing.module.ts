@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PendingChangesGuard } from 'src/app/interceptors/pendingchanges.guard';
+import { MergePreviewSubmittalsComponent } from './components/merge-preview-submittals/merge-preview-submittals';
 import { MergeSubmittalsComponent } from './components/merge-submittals/merge-submittals.component';
 import { PdfEditorActionComponent } from './components/pdf-editor-action/pdf-editor-action.component';
 import { SubmittalsFormComponent } from './components/submittals-form/submittals-form.component';
@@ -31,7 +32,8 @@ const routes: Routes = [
         path: 'pdf-edit/:id', pathMatch: 'full', component: PdfEditorActionComponent, canDeactivate: [PendingChangesGuard]
       },
       {
-        path: 'merge/:id', pathMatch: 'full', component: MergeSubmittalsComponent
+        path: 'merge/:id', pathMatch: 'full', component: MergePreviewSubmittalsComponent
+       // path: 'merge/:id', pathMatch: 'full', component: MergeSubmittalsComponent
       },
     ]
   }

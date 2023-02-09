@@ -1,38 +1,76 @@
 <div #spacer></div>
 <div stickyThing [spacer]="spacer" class="{{isDisabled?' no-pointer':''}}">
   <div class="container save_other">
-    <div class="__title pointer" [routerLink]="['/submittals/list']">
+    <div class="__title pointer" [routerLink]="['/submittals/form/'+id+'/step/1']">
       <span [innerHTML]="icon['BACK_ICON']" class="inherit"></span>
       &nbsp;
       {{title}}
     </div>
-    <div class="action_wrapper form-group">
+    <div class="action_wrapper form-group custom-drop">
       <button class="btn __btn __default min_width_100" (click)="handleMergePdp(true)">Save As Draft</button>
       <button class="btn __btn __theme min_width_100" (click)="handleMergePdp(false)">Merge</button>
       <button class="btn __btn __default min_width_100" [routerLink]="['/submittals/list']">Cancel</button>
+      <div class="dropdown pull-right">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          Collapse/Expand
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><button class="dropdown-item" (click)="doAllCollapseOrExpand(true)">Collapse All</button></li>
+          <li><button class="dropdown-item" (click)="doAllCollapseOrExpand(false)">Expand All</button></li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
 <div class="container {{isDisabled?' no-pointer':''}}">
   <div class="steps_wrapper">
+    <div class="text-center ">
+    <!--<table>
+      <tr>
+        <td>Job Name :</td>
+        <td class="texthide">Test TestTes test test test test testtTest TestTes test test test test testt</td>
+        <td style="padding-left:20px;padding-right:20px;width:50px;">|</td>
+        <td>Submittal :</td>
+        <td>123</td>
+      </tr>
+    </table>-->
+    <div class="text-center titletext"><strong>Job Name :</strong> <div class="texthide">{{submittalData?.jobName}}</div><span class="spacefix"></span><span><strong>Submittal :</strong> {{submittalData?.submittals}}</span></div></div>
+
     <app-submittals-stepper [activeStep]="2"></app-submittals-stepper>
   </div>
-  <div class="form_wrapper">
-    <div class="form-group" *ngFor="let item of submittalsTpl;let i = index">
-      <app-submittals-sections [openIndex]=openIndex [id]=id [submittal]=item itmindex={{i}}
-        (removeFn)="removePdfOption($event)" totalSubmittals={{submittalsTpl.length-1}}
-        (uploadSubmittalsCallback)="uploadSubmittalsCallbackHandler($event)"
-        (toggleCallback)="toggleCallbackHandler($event)"
-        (selectedActionCallback)="selectedActionCallbackAction($event)">
-      </app-submittals-sections>
+  <div class="row custom-drop">
+    <div class="col-9"></div>
+    <div class="col-3 pull-right">
+      <!--<select class="form-control">
+    <option>Collapse/Expand</option>
+    <option>Collapse All</option>
+    <option>Expend All</option>
+  </select>-->
+     
     </div>
-    <div class="__more">
-      <span class="__add">
-        <button class="btn __btn __gray" (click)="addMoreOption()">
-          + Add more
-        </button>
-      </span>
     </div>
+
+    <div class="text-center" *ngIf="isMerged">
+      <p class="mt-4"><img src="../../../assets/images/success.png" alt="success"></p>
+      <p class="mt-4">All Files Merged Successfully! </p>
+      <a href="{{mergedURL}}" target="_blank" class="btn __btn __theme min_width_100 mt-4">Download & Preview</a>
+    </div>
+    <div class="form_wrapper" *ngIf="!isMerged">
+      <div class="form-group" *ngFor="let item of submittalsTpl;let i = index">
+        <app-submittals-sections [openIndex]=openIndex [id]=id [submittal]=item itmindex={{i}}
+                                 (removeFn)="removePdfOption($event)" totalSubmittals={{submittalsTpl.length-1}}
+                                 (uploadSubmittalsCallback)="uploadSubmittalsCallbackHandler($event)"
+                                 (toggleCallback)="toggleCallbackHandler($event)"
+                                 (selectedActionCallback)="selectedActionCallbackAction($event)">
+        </app-submittals-sections>
+      </div>
+      <div class="__more">
+        <span class="__add">
+          <button class="btn __btn __gray" (click)="addMoreOption()">
+            + Add more
+          </button>
+        </span>
+      </div>
+    </div>
+    <p-toast position="top-center" key="detailFormToast"></p-toast>
   </div>
-  <p-toast position="top-center" key="detailFormToast"></p-toast>
-</div>

@@ -7,8 +7,12 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class SubmittalsPreviewContentComponent implements OnInit {
   @Input() formValueOne: any
+  @Input() address2: any
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { }
+
+  displayAddressText(text): string {  
+    return text && text.replaceAll('\n', '<br>');
   }
 }

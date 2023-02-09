@@ -36,7 +36,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   isPreviewDialog = false;
   previewUrl: any = '';
   pdfActionConfig: any = {};
-
+  uploadfileData: any = [];
   icon: any = {
     DEL_ICON: '',
     MOVE_UP_ICON: '',
@@ -59,7 +59,7 @@ export class SubmittalsSectionsComponent implements OnInit {
     this.DUPLICATE_ICON();
   }
   ngAfterViewInit(): void {
-    this.searchBoxField.nativeElement.focus();
+    this.searchBoxField && this.searchBoxField.nativeElement && this.searchBoxField.nativeElement.focus();
   }
   DEL_ICON = () => {
     const icon = this._SubmittalService.DEL_ICON();
@@ -105,14 +105,15 @@ export class SubmittalsSectionsComponent implements OnInit {
       action: 'edit_name'
     })
   }
-  callSaveAsDraft(pdfActionConfig, actionType) {
+  callSaveAsDraft(pdfActionConfig, actionType, callback?) {
     this.selectedActionCallback.emit({
       action: 'SaveAsDraft',
       data: {
         pdfActionConfig: pdfActionConfig,
         actionType: actionType,
         action: 'SaveAsDraft',
-      }
+      },
+      callback: callback
     })
   }
   handleDelete(index: number) {
@@ -129,11 +130,11 @@ export class SubmittalsSectionsComponent implements OnInit {
 
   }
   onUpload = (event: any) => {
-    this.uploadedFiles=[];
+    this.uploadedFiles = [];
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
-    let url = 'home/upload';
+    let url = 'home/upload?isFixRotate=true';
     this.isProgressBarIndex = this.itmindex
     event.files.forEach((element: any, index: any) => {
       this.fileData = <File>event.files[index];
@@ -151,6 +152,8 @@ export class SubmittalsSectionsComponent implements OnInit {
             itmindex: this.itmindex
           }
         }
+        debugger
+        this.uploadfileData.push(data.formData);
         this.isProgressBarIndex = -1;
         this.uploadSubmittalsCallback.emit(data)
       })
@@ -162,6 +165,10 @@ export class SubmittalsSectionsComponent implements OnInit {
   handleToggle = () => {
     this.toggleCallback.emit({
       idx: this.itmindex
+    })
+    this.selectedActionCallback.emit({
+      idx: this.itmindex,
+      action: 'change_collapse'
     })
   }
   handleSelectTiles = () => {
@@ -215,7 +222,7 @@ export class SubmittalsSectionsComponent implements OnInit {
     })
   }
   handleMove = (action: any) => {
-    let fIdx: any = this.itmindex;
+    let fIdx: any = parseInt(this.itmindex);
     let toIdx: any;
     if (action == 'down') {
       toIdx = fIdx + 1
@@ -248,16 +255,21 @@ export class SubmittalsSectionsComponent implements OnInit {
       pdfFiles: pdfFiles,
       config: config
     }
-    if (pdfFiles.files.id) {
+    var redirectUrl = `/submittals/form/preview/${this.id}`;
+    this.callSaveAsDraft(pdfActionConfig, 'view', (res) => {
+      if (!pdfFiles.files.id) {
+        var pdf = res.pdfFiles.filter(x => x.name == pdfActionConfig.pdfFiles.name && x.files.filter(y => y.fileName == pdfActionConfig.pdfFiles.files.fileName))[0];
+        pdfActionConfig.pdfFiles.id = pdf.id;
+        pdfActionConfig.pdfFiles.files.id = pdf.files.filter(y => y.fileName == pdfActionConfig.pdfFiles.files.fileName)[0].id;
+      }
+      redirectUrl = redirectUrl + "/" + pdfActionConfig.pdfFiles.files.id;
       localStorage.removeItem('submittalObject');
       localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
-      this.router.navigate([`/submittals/form/preview/${this.id}/${item.id}`]);
-    } else {
-      this.callSaveAsDraft(pdfActionConfig, 'view');
-    }
-
+      this.router.navigate([redirectUrl]);
+    });
   }
   handleActionEdit = (item: any, index: number) => {
+    debugger
     this.previewUrl = this.httpService.getBaseUrl() + "Home/download?bloburl=" + item.fileName + ""
     let pdfFiles = JSON.parse(JSON.stringify(this.submittal));
     pdfFiles['files'] = item;
@@ -277,13 +289,17 @@ export class SubmittalsSectionsComponent implements OnInit {
       config: config,
 
     }
-    if (pdfFiles.files.id) {
+    var redirectUrl = [`/submittals/pdf-edit/${this.id}`];
+    this.callSaveAsDraft(pdfActionConfig, 'edit', (res) => {
+      if (!pdfFiles.files.id) {
+        var pdf = res.pdfFiles.filter(x => x.name == pdfActionConfig.pdfFiles.name && x.files.filter(y => y.fileName == pdfActionConfig.pdfFiles.files.fileName))[0];
+        pdfActionConfig.pdfFiles.id = pdf.id;
+        pdfActionConfig.pdfFiles.files.id = pdf.files.filter(y => y.fileName == pdfActionConfig.pdfFiles.files.fileName)[0].id;
+      }
       localStorage.removeItem('submittalObject');
       localStorage.setItem('submittalObject', JSON.stringify(pdfActionConfig));
-      this.router.navigate([`/submittals/pdf-edit/${this.id}`]);
-    } else {
-      this.callSaveAsDraft(pdfActionConfig, 'edit');
-    }
+      this.router.navigate(redirectUrl);
+    });
   }
 
   handleChangeSubmittalName = (event: any) => {
@@ -296,7 +312,7 @@ export class SubmittalsSectionsComponent implements OnInit {
   }
   handleBlue = (event) => {
     const value = event.target.value || '';
-    if (!value || value == ' ') {
+    if (!value || value == '') {
       this.selectedActionCallback.emit({
         subIdx: this.itmindex,
         value: this.submittal['name'],

@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
+import { AuthService } from '../../../../auth.service';
 import { HttpService } from '../../../../components/http.service';
 import { SubmittalService } from '../../submittal.service';
 const emailPattern = "^[a-zA-Z0-9][\-_\.\+\!\#\$\%\&\'\*\/\=\?\^\`\{\|]{0,1}([a-zA-Z0-9][\-_\.\+\!\#\$\%\&\'\*\/\=\?\^\`\{\|]{0,1})*[a-zA-Z0-9]@[a-zA-Z0-9][-\.]{0,1}([a-zA-Z][-\.]{0,1})*[a-zA-Z0-9]\.[a-zA-Z0-9]{1,}([\.\-]{0,1}[a-zA-Z]){0,}[a-zA-Z0-9]{0,}$";
@@ -17,7 +18,7 @@ const emailPattern = "^[a-zA-Z0-9][\-_\.\+\!\#\$\%\&\'\*\/\=\?\^\`\{\|]{0,1}([a-
 export class SubmittalsFormStep1Component implements OnInit {
   @Input() title: any;
   activeAddressInde = -1;
-  keyword = 'name';
+  keyword = 'formatedName';
   submittalDetailForm: FormGroup;
   submitted = false;
   addressMaster: any = [];
@@ -36,7 +37,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   icon: any = {
 
   }
-  constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService, private _ActivatedRoute: ActivatedRoute, private _SubmittalService: SubmittalService, private sanitizer: DomSanitizer) { }
+  constructor(private _FormBuilder: FormBuilder, private messageService: MessageService, private router: Router, private httpService: HttpService, private _ActivatedRoute: ActivatedRoute, private _SubmittalService: SubmittalService, private sanitizer: DomSanitizer, private authService: AuthService) { }
   ngOnInit(): void {
     this.id = this._ActivatedRoute.snapshot.params['id'];
     this.BACK_ICON();
@@ -59,6 +60,13 @@ export class SubmittalsFormStep1Component implements OnInit {
       icon
     );
   }
+  public noWhitespaceValidator() {
+    return (control: FormControl) => {
+      const isWhitespace = ((control && control.value) || '').trim().length === 0;
+      const isValid = !isWhitespace;
+      return isValid ? null : { 'whitespace': true };
+    }
+  }
   createForm = (callback: any): void => {
     this.submitted = false;
     this.submittalDetailForm = this._FormBuilder.group(
@@ -67,11 +75,13 @@ export class SubmittalsFormStep1Component implements OnInit {
         submittalDate: ['', Validators.required],
         jobName: ['', Validators.required],
         submittals: ['', Validators.required],
+        jobAddress: [''],
         addressId: ['', Validators.required],
         status: ['Approval'],
         address: this._FormBuilder.group({
           addressLine1: [''],
           addressLine2: [''],
+          addressLine3: [''],
           state: [''],
           city: [''],
           postalCode: [''],
@@ -79,6 +89,11 @@ export class SubmittalsFormStep1Component implements OnInit {
           fax: [''],
         }),
         projectManager: this._FormBuilder.group({
+          name: [''],
+          phone: [''],
+          email: ['', [Validators.pattern(emailPattern)]],
+        }),
+        additionalProjectManager: this._FormBuilder.group({
           name: [''],
           phone: [''],
           email: ['', [Validators.pattern(emailPattern)]],
@@ -106,7 +121,7 @@ export class SubmittalsFormStep1Component implements OnInit {
     });
   }
   gerContractorMasters() {
-    this.httpService.get("Global/customers").toPromise().then(value => {
+    this.httpService.get("Global/contractors").toPromise().then(value => {
       this.masters.contractors = value
     });
   }
@@ -133,9 +148,28 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['cityName'].setValue(item['name']);
   }
   selectProjecetManager(item) {
-    this.submittalDetailForm.controls['projectManager']['controls']['name'].setValue(item['name'])
-    this.submittalDetailForm.controls['projectManager']['controls']['phone'].setValue(item['phone'])
-    this.submittalDetailForm.controls['projectManager']['controls']['email'].setValue(item['email'])
+    if (this.ValidatePM(item, this.submittalDetailForm.value.additionalProjectManager)){
+      this.submittalDetailForm.controls['projectManager']['controls']['name'].setValue(item['name'])
+      this.submittalDetailForm.controls['projectManager']['controls']['phone'].setValue(item['phone'])
+      this.submittalDetailForm.controls['projectManager']['controls']['email'].setValue(item['email'])
+    }
+    else {
+      this.submittalDetailForm.controls['projectManager']['controls']['name'].setValue('');
+      if (this.submittalDetailForm.value.projectManager.name?.name) this.submittalDetailForm.value.projectManager.name.name = ''
+      else this.submittalDetailForm.value.projectManager.name = ''
+    }
+  }
+  selectAdditionalProjecetManager(item) {
+    if (this.ValidatePM(item, this.submittalDetailForm.value.additionalProjectManager)) {
+      this.submittalDetailForm.controls['additionalProjectManager']['controls']['name'].setValue(item['name'])
+      this.submittalDetailForm.controls['additionalProjectManager']['controls']['phone'].setValue(item['phone'])
+      this.submittalDetailForm.controls['additionalProjectManager']['controls']['email'].setValue(item['email'])
+    }
+    else {
+      this.submittalDetailForm.controls['additionalProjectManager']['controls']['name'].setValue('');
+      if (this.submittalDetailForm.value.additionalProjectManager.name?.name) this.submittalDetailForm.value.additionalProjectManager.name.name = ''
+      else this.submittalDetailForm.value.additionalProjectManager.name = ''
+    }
   }
   selectContractor(item) {
     this.submittalDetailForm.controls['contractor']['controls']['name'].setValue(item['name']);
@@ -154,6 +188,10 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['projectManager']['controls']['phone'].setValue('');
     this.submittalDetailForm.controls['projectManager']['controls']['email'].setValue('');
   }
+  onChangeAdditionalProjectManager() {
+    this.submittalDetailForm.controls['additionalProjectManager']['controls']['phone'].setValue('');
+    this.submittalDetailForm.controls['additionalProjectManager']['controls']['email'].setValue('');
+  }
   onChangeContractor() {
     this.submittalDetailForm.controls['contractor']['controls']['addressLine1'].setValue('');
     this.submittalDetailForm.controls['contractor']['controls']['addressLine2'].setValue('');
@@ -163,6 +201,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   setFormData = (res) => {
     this.submittalDetailForm.controls['id'].setValue(res['id']);
     this.submittalDetailForm.controls['status'].setValue(res['status']);
+    this.submittalDetailForm.controls['jobAddress'].setValue(res['jobAddress']);
     this.submittalDetailForm.controls['submittalDate'].setValue(res['submittedDate'] && new Date(res['submittedDate']));
     this.submittalDetailForm.controls['jobName'].setValue(res['jobName']);
     this.submittalDetailForm.controls['submittals'].setValue(res['submittals']);
@@ -176,6 +215,10 @@ export class SubmittalsFormStep1Component implements OnInit {
     this.submittalDetailForm.controls['projectManager']['controls']['phone'].setValue(res['phone'])
     this.submittalDetailForm.controls['projectManager']['controls']['email'].setValue(res['email'])
 
+    /* additional project manager */
+    this.submittalDetailForm.controls['additionalProjectManager']['controls']['name'].setValue(res['additionalProjectManager']?.name)
+    this.submittalDetailForm.controls['additionalProjectManager']['controls']['phone'].setValue(res['additionalProjectManager']?.phone)
+    this.submittalDetailForm.controls['additionalProjectManager']['controls']['email'].setValue(res['additionalProjectManager']?.email)
 
     /* contractor */
 
@@ -208,7 +251,7 @@ export class SubmittalsFormStep1Component implements OnInit {
   selectAddress = (item: any) => {
     this.entity['addressId'] = item.id;
     this.submittalDetailForm.controls['addressId'].setValue(item.id);
-    this.submittalDetailForm.controls['address'].setValue({ addressLine1: item.address, addressLine2: item.name, state: item.state, city: item.city, postalCode: item.zipCode, phone: item.phone, fax: item.fax });
+    this.submittalDetailForm.controls['address'].setValue({ addressLine1: item.address, addressLine3: item.address2, addressLine2: item.name, state: item.state, city: item.city, postalCode: item.zipCode, phone: item.phone, fax: item.fax });
   }
   selectCity = () => {
     let cityId = this.submittalDetailForm.controls['contractor'].value.city;
@@ -245,22 +288,33 @@ export class SubmittalsFormStep1Component implements OnInit {
     const res: any = {};
     // this.submittalDetailForm.controls['types'].setValue(res['types']);
   }
-
+  ValidatePM = (item, validatefrom) => {
+    if (validatefrom && item['name']?.toUpperCase() === (validatefrom?.name?.name || validatefrom?.name).toUpperCase()) {
+      this.toastMsg('error', 'Form Validation Error', 'Project Manager alredy added please select another one.', 1000)
+      return false;
+    }
+    return true;
+  }
   handleSubmit = () => {
-    if (this.submittalDetailForm.invalid) {
+    debugger;
+    if (this.submittalDetailForm.invalid || (this.submittalDetailForm.value.submittals.trim() == '' || this.submittalDetailForm.value.jobName.trim() == '')) {
       this.toastMsg('error', 'Form Validation Error', 'Please fill all required fields', 1000)
       this.submitted = true;
       return
     } else {
       this.submitted = false;
       let postDto: any = {
-        ... this.submittalDetailForm.value
+        ... this.submittalDetailForm.value,
+        "CreateBy":this.authService.getUserName()
       }
       if (postDto.contractor && postDto.contractor.postalCode) {
         postDto.contractor.postalCode = postDto.contractor.postalCode.toString();
       }
       if (postDto.projectManager && postDto.projectManager.name && postDto.projectManager.name.name) {
         postDto.projectManager.name = postDto.projectManager.name.name
+      }
+      if (postDto.additionalProjectManager && postDto.additionalProjectManager.name && postDto.additionalProjectManager.name.name) {
+        postDto.additionalProjectManager.name = postDto.additionalProjectManager.name.name
       }
       if (postDto.contractor && postDto.contractor.name && postDto.contractor.name.name) {
         postDto.contractor.name = postDto.contractor.name.name
@@ -283,7 +337,7 @@ export class SubmittalsFormStep1Component implements OnInit {
             }, 3000);
           }
         } catch (err) {
-          this.toastMsg('error', 'Error', err || 'Somethign went wrong', 2000)
+          this.toastMsg('error', 'Error', err || 'Something went wrong', 2000)
         }
       }, error => {
         this.toastMsg('error', 'Error', error, 2000)

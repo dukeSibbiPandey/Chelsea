@@ -1,102 +1,109 @@
 .submittals_wrapper {
-    .__t_top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 26px 0;
+  .__t_top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 26px 0;
 
-        ._t_right {
-            display: flex;
-            align-items: center;
-        }
-
-        ._t_sarch {
-            width: 296px;
-            height: 32px;
-            margin-right: 16px;
-            position: relative;
-
-            .search-icon {
-                position: absolute;
-                right: 10px;
-                top: 6px;
-                z-index: 10;
-                cursor: pointer;
-            }
-
-            input {
-                background: #ffffff;
-                border: 1px solid #dbdcdf;
-                border-radius: 4px;
-                width: 100%;
-                height: 100%;
-                padding: 2px 30px 2px 10px;
-            }
-        }
-
-        .__a_btn {
-            line-height: 40px;
-            border: 1px solid #333333;
-            box-shadow: 0px 4px 8px rgba(219, 220, 223, 0.6);
-            border-radius: 40px;
-            padding: 0 25px;
-            margin-left: 16px;
-
-            &.__b {
-                background: #e8442d;
-                    color: white;
-                    border: 1px #e8442d solid;
-
-                
-            }
-
-            &.__w {
-                color: #333333;
-                background: white;
-
-                &:hover {
-                    color: #e8442d;
-                    border: 1px #e8442d solid;
-                }
-            }
-        }
+    ._t_right {
+      display: flex;
+      align-items: center;
     }
 
-    .__submittals_table {
-        p {
-            margin: 0px;
-            font-style: normal;
-            font-weight: 500;
-            font-size: 14px;
-            line-height: 22px;
-            color: #333333;
-        }
+    ._t_sarch {
+      width: 296px;
+      height: 32px;
+      margin-right: 16px;
+      position: relative;
 
-        .__t_img {
-            width: 120px;
-        }
+      .search-icon {
+        position: absolute;
+        right: 10px;
+        top: 6px;
+        z-index: 10;
+        cursor: pointer;
+      }
 
-        .__size {
-            color: #707070;
-        }
-
-        .__info {
-            margin-left: 30px;
-        }
-
-        .action-cell {
-            text-align: center;
-
-            .__a_cta {
-                margin-left: 10px;
-                cursor: pointer;
-
-                &:first-child {
-                    margin-left: 0px;
-                }
-            }
-        }
+      input {
+        background: #ffffff;
+        border: 1px solid #dbdcdf;
+        border-radius: 4px;
+        width: 100%;
+        height: 100%;
+        padding: 2px 30px 2px 10px;
+      }
     }
+
+    .__a_btn {
+      line-height: 40px;
+      border: 1px solid #333333;
+      box-shadow: 0px 4px 8px rgba(219, 220, 223, 0.6);
+      border-radius: 40px;
+      padding: 0 25px;
+      margin-left: 16px;
+
+      &.__b {
+        background: #e8442d;
+        color: white;
+        border: 1px #e8442d solid;
+      }
+
+      &.__w {
+        color: #333333;
+        background: white;
+
+        &:hover {
+          color: #e8442d;
+          border: 1px #e8442d solid;
+        }
+      }
+    }
+  }
+
+  .__submittals_table .__t_img:hover {
+    width: 120px;
+    border: 1px solid #E8442D;
+    border-radius: 4px;
+  }
+
+  .__submittals_table {
+    p {
+      margin: 0px;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 22px;
+      color: #333333;
+    }
+
+    .__t_img {
+      width: 120px;
+      border: 1px solid #D1D1D1;
+      border-radius: 4px;
+      
+    }
+
+    .__size {
+      color: #707070;
+    }
+
+    .__info {
+      margin-left: 30px;
+    }
+
+    .action-cell {
+      text-align: center;
+
+      .__a_cta {
+        margin-left: 10px;
+        cursor: pointer;
+
+        &:first-child {
+          margin-left: 0px;
+        }
+      }
+    }
+  }
 }
 
 .list_heading {

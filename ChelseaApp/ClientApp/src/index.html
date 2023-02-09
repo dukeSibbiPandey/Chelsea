@@ -10,27 +10,45 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <script type="text/javascript">
-      var urls = [
-        'https://submittalappstg.azurewebsites.net/api/Global/con'
-
-      ];
-
-      // Maps each URL into a fetch() Promise
-      var requests = urls.map(function (url) {
-        return fetch(url)
-          .then(function (response) {
-            // throw "uh oh!";  - test a failure
-            return response.json();
-          })
-      });
-
-      Promise.all(requests)
-        .then((results) => {
-          window.azure = results[0];
-        }).catch(function (err) {
-          console.log("returns just the 1st failure ...");
-          console.log(err);
-        })
+    function isEmpty(prop) {
+      if (prop) {
+        if (prop == '' || prop.includes("{{"))
+          return true;
+        else return false;
+      }
+      return true;
+    }
+    window.isLocal = '{{isLocal}}';
+    if (window.isLocal == '{{isLocal}}') {
+      window.azure = {
+        authority: "https://login.microsoftonline.com/e6008c01-40e7-4192-897c-43891c1d8fac",
+        cacheLocation: "sessionStorage",
+        clientId: "4b85dede-5bb5-48b5-a879-7f8637706923",
+        redirectUri: "/submittals",
+        isOn:'{{isOn}}'
+      };
+      window.pdf = {
+        mu: "{{mu}}",
+        ml: "{{ml}}",
+        ul: "irld89CMAcwPvMz4SJzz",
+        uu:"../lib"
+      };
+    }
+    else {
+      window.azure = {
+        authority: "{{authority}}",
+        cacheLocation: "{{cacheLocation}}",
+        clientId: "{{clientId}}",
+        redirectUri: "{{redirectUri}}",
+        isOn: '{{isOn}}'
+      };
+      window.pdf = {
+        mu: "{{mu}}",
+        ml: "{{ml}}",
+        ul: "{{ul}}",
+        uu: "{{uu}}"
+      };
+    }
   </script>
 </head>
 <body>

@@ -16,6 +16,7 @@ import { DialogModule } from 'primeng/dialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { ToastModule } from 'primeng/toast';
+import { MergePreviewSubmittalsComponent, SafePipe } from './components/merge-preview-submittals/merge-preview-submittals';
 import { MergeSubmittalsComponent } from './components/merge-submittals/merge-submittals.component';
 import { EditHeaderComponent } from './components/edit-header/edit-header.component';
 import { SubmittalsDetailFormComponent } from './components/submittals-detail-form/submittals-detail-form.component';
@@ -54,12 +55,14 @@ import { DownloadDirective } from 'src/app/directives/download.directive';
     SubmittalsPreviewComponent,
     SubmittalsPreviewContentComponent,
     MergeSubmittalsComponent,
+    MergePreviewSubmittalsComponent,
     EditHeaderComponent,
     SubmittalsDetailFormComponent,
     PdfEditorActionComponent,
     FileUploadComponent,
     DndDirective,
-    DownloadDirective
+    DownloadDirective,
+    SafePipe
   ],
   imports: [
     CommonModule,

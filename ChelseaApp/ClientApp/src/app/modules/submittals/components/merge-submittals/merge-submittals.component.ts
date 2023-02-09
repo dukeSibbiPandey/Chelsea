@@ -47,7 +47,7 @@ export class MergeSubmittalsComponent implements OnInit {
   }
   getSubmittalData(id: any) {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
-      this.previewUrl = this.httpService.getBaseUrl() + "Home/download?bloburl=" + value.fileName + "";
+      this.previewUrl = value.fileUrl;
       this.dialogConfig = value;
       this.inView()
     })

@@ -1,13 +1,14 @@
 <div class="__s_s_wrapper">
     <div class="__t_b">
         <div class="__left">
-            <span (click)="handleEdit(true)" *ngIf="!submittal['isEdit']">
+            <span (click)="handleEdit(true)" id="{{submittal.id}}" *ngIf="!submittal['isEdit'] && submittal.name!=''">
                 {{submittal?.name}}
             </span>
-            <span class="editable" *ngIf="submittal['isEdit']">
+            <span class="editable" *ngIf="submittal['isEdit'] || submittal.name==''">
                 <input tooltipPosition="top" pTooltip="Enter type here first" type="text" autofocus class="form-control"
                     #publicSearchBox name='name' [(ngModel)]="submittal['name']" #name="ngModel" placeholder="Type"
-                    (change)='handleChangeSubmittalName($event)' (blur)="handleBlue($event)">
+                    (change)='handleChangeSubmittalName($event)' >
+                    <!-- (blur)="handleBlue($event)" -->
             </span>
             <span></span>
             <!-- <span *ngIf="submittal['isDuplicate']">
@@ -38,105 +39,127 @@
                 <li tooltipPosition="top" pTooltip="Move Down"
                     class="{{itmindex==totalSubmittals?'  disabled disabled-btn':'hover-btn'}}"
                     (click)="handleMove('down')" [innerHTML]="icon['MOVE_DOWN_ICON']"></li>
-                <li *ngIf="openIndex.indexOf(itmindex)>-1" tooltipPosition="top" pTooltip="Collapse"
+                <li *ngIf="!submittal['isCollapse']" tooltipPosition="top" pTooltip="Collapse"
                     (click)="handleToggle()" class="pointer hover-btn">
                     <i [innerHTML]="icon['COLLAPSE_MINUS_ICON']"></i>
                 </li>
-                <li *ngIf="openIndex.indexOf(itmindex)== -1" tooltipPosition="top" pTooltip="Expand"
+                <li *ngIf="submittal['isCollapse']" tooltipPosition="top" pTooltip="Expand"
                     (click)="handleToggle()" class="pointer hover-btn">
                     <i [innerHTML]="icon['COLLAPSE_PLUS_ICON']"></i>
                 </li>
             </ul>
         </div>
     </div>
-    <div class="{{openIndex.indexOf(itmindex)>-1?' ':' hidden'}}">
-        <ul class="row">
-            <div class="col-sm-8">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="">Manufacturer</label>
-                            <input type="text" class="form-control" placeholder="Enter here" name='mfg'
-                                [(ngModel)]="submittal['mfg']" #mfg="ngModel" maxlength="40">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="">Part #</label>
-                            <input type="text" class="form-control" placeholder="Enter here" name='part'
-                                [(ngModel)]="submittal['part']" #part="ngModel" maxlength="40">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="">Voltage</label>
-                            <input type="text" class="form-control" placeholder="Enter here" name='volt'
-                                [(ngModel)]="submittal['volt']" #volt="ngModel" maxlength="40">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="">Lamp</label>
-                            <input type="text" class="form-control" placeholder="Enter here" name='lamp'
-                                [(ngModel)]="submittal['lamp']" #lamp="ngModel" maxlength="40">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="">Dim</label>
-                            <input type="text" class="form-control" placeholder="Enter here" name='dim'
-                                [(ngModel)]="submittal['dim']" #dim="ngModel" maxlength="40">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="">Runs</label>
-                            <input type="text" class="form-control" placeholder="Enter here" name='runs'
-                                [(ngModel)]="submittal['runs']" #runs="ngModel" maxlength="40">
-                        </div>
-                    </div>
-                </div>
+    <div class="{{submittal['isCollapse']?' hidden':' '}}">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="">Manufacturer</label>
+                <input type="text" class="form-control" placeholder="Enter here" name='mfg'
+                       [(ngModel)]="submittal['mfg']" #mfg="ngModel" maxlength="40">
+              </div>
             </div>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label for="">NOTES</label>
-                    <textarea class="form-control text-area" placeholder="Enter here" name='description'
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Voltage</label>
+                <input type="text" class="form-control" placeholder="Enter here" name='volt'
+                       [(ngModel)]="submittal['volt']" #volt="ngModel" maxlength="40">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Dim</label>
+                <input type="text" class="form-control" placeholder="Enter here" name='dim'
+                       [(ngModel)]="submittal['dim']" #dim="ngModel" maxlength="40">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="">Lamp</label>
+                <input type="text" class="form-control" placeholder="Enter here" name='lamp'
+                       [(ngModel)]="submittal['lamp']" #lamp="ngModel" maxlength="40">
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="">Runs</label>
+                <input type="text" class="form-control" autocomplete="off" placeholder="Enter here" name='runs'
+                       [(ngModel)]="submittal['runs']" #runs="ngModel" maxlength="40">
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label for="">Part #</label>
+              <textarea class="form-control text-area" autocomplete="off" placeholder="Enter here" name='part'
+                        [(ngModel)]="submittal['part']" #part="ngModel">
+              </textarea>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label for="">NOTES</label>
+              <textarea class="form-control text-area" placeholder="Enter here" name='description'
                         [(ngModel)]="submittal['description']" #description="ngModel" maxlength="300">
                     </textarea>
-                </div>
             </div>
-        </ul>
+          </div>
+      </div>
 
         <div class="__template_wrapper">
             <ul class="row-same-height row">
-                <li class="col-same-height col-sm-3" *ngFor="let item of submittal.files; ;let i = index">
+                <li class="col-same-height col-sm-3" id="{{submittal.id}}-{{item.id}}" *ngFor="let item of submittal.files; ;let i = index">
                     <div class="content">
                         <div class="_img_wrap">
                             <div class="__overlay">
                                 <div class="_top_b flex v_center space_between">
                                     <div class="field-checkbox"></div>
                                     <ul class="flex">
-                                        <li (click)="handleDelete(i)" tooltipPosition="top" pTooltip="Delete">
-                                            <svg class="hover-btn pointer" width="32" height="32" viewBox="0 0 32 32"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="16" cy="16" r="16" transform="rotate(90 16 16)"
-                                                    fill="#EEEEEE" />
-                                                <path
-                                                    d="M10.3999 25.35C9.86657 25.35 9.40407 25.1542 9.0124 24.7625C8.62074 24.3708 8.4249 23.9083 8.4249 23.375V9.375H8.1499C7.86657 9.375 7.62907 9.27917 7.4374 9.0875C7.24574 8.89583 7.1499 8.65833 7.1499 8.375C7.1499 8.09167 7.24574 7.85417 7.4374 7.6625C7.62907 7.47083 7.86657 7.375 8.1499 7.375H12.4749C12.4749 7.09167 12.5707 6.85417 12.7624 6.6625C12.9541 6.47083 13.1916 6.375 13.4749 6.375H18.5249C18.8082 6.375 19.0499 6.475 19.2499 6.675C19.4499 6.875 19.5499 7.10833 19.5499 7.375H23.8499C24.1332 7.375 24.3707 7.47083 24.5624 7.6625C24.7541 7.85417 24.8499 8.09167 24.8499 8.375C24.8499 8.65833 24.7541 8.89583 24.5624 9.0875C24.3707 9.27917 24.1332 9.375 23.8499 9.375H23.5749V23.375C23.5749 23.9083 23.3791 24.3708 22.9874 24.7625C22.5957 25.1542 22.1332 25.35 21.5999 25.35H10.3999ZM10.3999 9.375V23.375H21.5999V9.375H10.3999ZM12.9999 20.475C12.9999 20.7083 13.0832 20.9083 13.2499 21.075C13.4166 21.2417 13.6166 21.325 13.8499 21.325C14.0999 21.325 14.3082 21.2417 14.4749 21.075C14.6416 20.9083 14.7249 20.7083 14.7249 20.475V12.25C14.7249 12 14.6374 11.7875 14.4624 11.6125C14.2874 11.4375 14.0832 11.35 13.8499 11.35C13.5999 11.35 13.3957 11.4375 13.2374 11.6125C13.0791 11.7875 12.9999 12 12.9999 12.25V20.475ZM17.2749 20.475C17.2749 20.7083 17.3624 20.9083 17.5374 21.075C17.7124 21.2417 17.9166 21.325 18.1499 21.325C18.3999 21.325 18.6082 21.2417 18.7749 21.075C18.9416 20.9083 19.0249 20.7083 19.0249 20.475V12.25C19.0249 12 18.9374 11.7875 18.7624 11.6125C18.5874 11.4375 18.3832 11.35 18.1499 11.35C17.8999 11.35 17.6916 11.4375 17.5249 11.6125C17.3582 11.7875 17.2749 12 17.2749 12.25V20.475ZM10.3999 9.375V23.375V9.375Z"
-                                                    fill="#333333" />
-                                            </svg>
-                                        </li>
-                                        <li class="_ml_10" (click)="handleActionEdit(item, i)" tooltipPosition="top"
-                                            pTooltip="Edit">
-                                            <svg class="hover-btn pointer bg    "
-                                                style="background: white; border-radius:100%; width:32px; height:32px; padding:4px"
-                                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M19.9 7.47513L16.625 4.20013L17.625 3.20013C17.9417 2.88346 18.3292 2.72929 18.7875 2.73763C19.2459 2.74596 19.6417 2.90846 19.975 3.22513L20.925 4.15013C21.2584 4.48346 21.4125 4.87512 21.3876 5.32512C21.3626 5.77513 21.1917 6.15846 20.875 6.47513L19.9 7.47513ZM3.92505 21.1751C3.64172 21.1751 3.40422 21.0793 3.21255 20.8876C3.02088 20.696 2.92505 20.4585 2.92505 20.1751V18.3001C2.92505 18.1835 2.95005 18.0668 3.00005 17.9501C3.05005 17.8335 3.12505 17.7251 3.22505 17.6251L15.575 5.25013L18.85 8.50013L6.50005 20.8751C6.38338 20.9751 6.26672 21.0501 6.15005 21.1001C6.03338 21.1501 5.90838 21.1751 5.77505 21.1751H3.92505Z"
-                                                    fill="#333333" />
-                                            </svg>
-                                        </li>
+                                      <li (click)="handleDelete(i)" tooltipPosition="top" pTooltip="Delete">
+                                        <svg class="hover-btn pointer" width="32" height="32" viewBox="0 0 32 32"
+                                             fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <circle cx="16" cy="16" r="16" transform="rotate(90 16 16)"
+                                                  fill="#EEEEEE" />
+                                          <path d="M10.3999 25.35C9.86657 25.35 9.40407 25.1542 9.0124 24.7625C8.62074 24.3708 8.4249 23.9083 8.4249 23.375V9.375H8.1499C7.86657 9.375 7.62907 9.27917 7.4374 9.0875C7.24574 8.89583 7.1499 8.65833 7.1499 8.375C7.1499 8.09167 7.24574 7.85417 7.4374 7.6625C7.62907 7.47083 7.86657 7.375 8.1499 7.375H12.4749C12.4749 7.09167 12.5707 6.85417 12.7624 6.6625C12.9541 6.47083 13.1916 6.375 13.4749 6.375H18.5249C18.8082 6.375 19.0499 6.475 19.2499 6.675C19.4499 6.875 19.5499 7.10833 19.5499 7.375H23.8499C24.1332 7.375 24.3707 7.47083 24.5624 7.6625C24.7541 7.85417 24.8499 8.09167 24.8499 8.375C24.8499 8.65833 24.7541 8.89583 24.5624 9.0875C24.3707 9.27917 24.1332 9.375 23.8499 9.375H23.5749V23.375C23.5749 23.9083 23.3791 24.3708 22.9874 24.7625C22.5957 25.1542 22.1332 25.35 21.5999 25.35H10.3999ZM10.3999 9.375V23.375H21.5999V9.375H10.3999ZM12.9999 20.475C12.9999 20.7083 13.0832 20.9083 13.2499 21.075C13.4166 21.2417 13.6166 21.325 13.8499 21.325C14.0999 21.325 14.3082 21.2417 14.4749 21.075C14.6416 20.9083 14.7249 20.7083 14.7249 20.475V12.25C14.7249 12 14.6374 11.7875 14.4624 11.6125C14.2874 11.4375 14.0832 11.35 13.8499 11.35C13.5999 11.35 13.3957 11.4375 13.2374 11.6125C13.0791 11.7875 12.9999 12 12.9999 12.25V20.475ZM17.2749 20.475C17.2749 20.7083 17.3624 20.9083 17.5374 21.075C17.7124 21.2417 17.9166 21.325 18.1499 21.325C18.3999 21.325 18.6082 21.2417 18.7749 21.075C18.9416 20.9083 19.0249 20.7083 19.0249 20.475V12.25C19.0249 12 18.9374 11.7875 18.7624 11.6125C18.5874 11.4375 18.3832 11.35 18.1499 11.35C17.8999 11.35 17.6916 11.4375 17.5249 11.6125C17.3582 11.7875 17.2749 12 17.2749 12.25V20.475ZM10.3999 9.375V23.375V9.375Z"
+                                                fill="#333333" />
+                                        </svg>
+                                      </li>
+                                      <li class="_ml_10" (click)="handleActionEdit(item, i)" tooltipPosition="top"
+                                          pTooltip="Edit">
+                                        <svg class="hover-btn pointer bg    "
+                                             style="background: white; border-radius:100%; width:32px; height:32px; padding:4px"
+                                             width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M19.9 7.47513L16.625 4.20013L17.625 3.20013C17.9417 2.88346 18.3292 2.72929 18.7875 2.73763C19.2459 2.74596 19.6417 2.90846 19.975 3.22513L20.925 4.15013C21.2584 4.48346 21.4125 4.87512 21.3876 5.32512C21.3626 5.77513 21.1917 6.15846 20.875 6.47513L19.9 7.47513ZM3.92505 21.1751C3.64172 21.1751 3.40422 21.0793 3.21255 20.8876C3.02088 20.696 2.92505 20.4585 2.92505 20.1751V18.3001C2.92505 18.1835 2.95005 18.0668 3.00005 17.9501C3.05005 17.8335 3.12505 17.7251 3.22505 17.6251L15.575 5.25013L18.85 8.50013L6.50005 20.8751C6.38338 20.9751 6.26672 21.0501 6.15005 21.1001C6.03338 21.1501 5.90838 21.1751 5.77505 21.1751H3.92505Z"
+                                                fill="#333333" />
+                                        </svg>
+                                      </li>
+                                      <li class="_ml_10">
+                                        <svg (click)="handleMoveItem(i, 'left')" class="rotate_180" width="32"
+                                             height="32" viewBox="0 0 32 32" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                          <circle cx="16" cy="16" r="16" transform="rotate(90 16 16)"
+                                                  fill="#EEEEEE" />
+                                          <path d="M16.5999 19.45L19.3749 16.7C19.5749 16.5 19.6749 16.2667 19.6749 16C19.6749 15.7333 19.5749 15.5 19.3749 15.3L16.5749 12.525C16.3916 12.3417 16.1666 12.2542 15.8999 12.2625C15.6332 12.2708 15.4082 12.3667 15.2249 12.55C15.0249 12.75 14.9249 12.9833 14.9249 13.25C14.9249 13.5167 15.0249 13.75 15.2249 13.95L16.2999 15H12.8999C12.6332 15 12.4041 15.1 12.2124 15.3C12.0207 15.5 11.9249 15.7333 11.9249 16C11.9249 16.2833 12.0207 16.5208 12.2124 16.7125C12.4041 16.9042 12.6416 17 12.9249 17H16.2999L15.1999 18.075C15.0166 18.275 14.9291 18.5083 14.9374 18.775C14.9457 19.0417 15.0416 19.2667 15.2249 19.45C15.4249 19.65 15.6582 19.75 15.9249 19.75C16.1916 19.75 16.4166 19.65 16.5999 19.45ZM15.9999 26.35C14.5332 26.35 13.1707 26.0875 11.9124 25.5625C10.6541 25.0375 9.55824 24.3083 8.6249 23.375C7.69157 22.4417 6.9624 21.3458 6.4374 20.0875C5.9124 18.8292 5.6499 17.4667 5.6499 16C5.6499 14.55 5.9124 13.1917 6.4374 11.925C6.9624 10.6583 7.69157 9.5625 8.6249 8.6375C9.55824 7.7125 10.6541 6.97917 11.9124 6.4375C13.1707 5.89583 14.5332 5.625 15.9999 5.625C17.4499 5.625 18.8082 5.89583 20.0749 6.4375C21.3416 6.97917 22.4374 7.7125 23.3624 8.6375C24.2874 9.5625 25.0207 10.6542 25.5624 11.9125C26.1041 13.1708 26.3749 14.5333 26.3749 16C26.3749 17.4667 26.1041 18.8292 25.5624 20.0875C25.0207 21.3458 24.2874 22.4417 23.3624 23.375C22.4374 24.3083 21.3416 25.0375 20.0749 25.5625C18.8082 26.0875 17.4499 26.35 15.9999 26.35ZM15.9999 24.375C18.3832 24.375 20.3749 23.5792 21.9749 21.9875C23.5749 20.3958 24.3749 18.4 24.3749 16C24.3749 13.6167 23.5749 11.625 21.9749 10.025C20.3749 8.425 18.3832 7.625 15.9999 7.625C13.6166 7.625 11.6249 8.42083 10.0249 10.0125C8.4249 11.6042 7.6249 13.6 7.6249 16C7.6249 18.3833 8.4249 20.375 10.0249 21.975C11.6249 23.575 13.6166 24.375 15.9999 24.375Z"
+                                                fill="#333333" />
+                                        </svg>
+                                      </li>
+                                      <li class="_ml_10">
+                                        <svg (click)="handleMoveItem(i, 'right')" width="32" height="32"
+                                             viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <circle cx="16" cy="16" r="16" transform="rotate(90 16 16)"
+                                                  fill="#EEEEEE" />
+                                          <path d="M16.5999 19.45L19.3749 16.7C19.5749 16.5 19.6749 16.2667 19.6749 16C19.6749 15.7333 19.5749 15.5 19.3749 15.3L16.5749 12.525C16.3916 12.3417 16.1666 12.2542 15.8999 12.2625C15.6332 12.2708 15.4082 12.3667 15.2249 12.55C15.0249 12.75 14.9249 12.9833 14.9249 13.25C14.9249 13.5167 15.0249 13.75 15.2249 13.95L16.2999 15H12.8999C12.6332 15 12.4041 15.1 12.2124 15.3C12.0207 15.5 11.9249 15.7333 11.9249 16C11.9249 16.2833 12.0207 16.5208 12.2124 16.7125C12.4041 16.9042 12.6416 17 12.9249 17H16.2999L15.1999 18.075C15.0166 18.275 14.9291 18.5083 14.9374 18.775C14.9457 19.0417 15.0416 19.2667 15.2249 19.45C15.4249 19.65 15.6582 19.75 15.9249 19.75C16.1916 19.75 16.4166 19.65 16.5999 19.45ZM15.9999 26.35C14.5332 26.35 13.1707 26.0875 11.9124 25.5625C10.6541 25.0375 9.55824 24.3083 8.6249 23.375C7.69157 22.4417 6.9624 21.3458 6.4374 20.0875C5.9124 18.8292 5.6499 17.4667 5.6499 16C5.6499 14.55 5.9124 13.1917 6.4374 11.925C6.9624 10.6583 7.69157 9.5625 8.6249 8.6375C9.55824 7.7125 10.6541 6.97917 11.9124 6.4375C13.1707 5.89583 14.5332 5.625 15.9999 5.625C17.4499 5.625 18.8082 5.89583 20.0749 6.4375C21.3416 6.97917 22.4374 7.7125 23.3624 8.6375C24.2874 9.5625 25.0207 10.6542 25.5624 11.9125C26.1041 13.1708 26.3749 14.5333 26.3749 16C26.3749 17.4667 26.1041 18.8292 25.5624 20.0875C25.0207 21.3458 24.2874 22.4417 23.3624 23.375C22.4374 24.3083 21.3416 25.0375 20.0749 25.5625C18.8082 26.0875 17.4499 26.35 15.9999 26.35ZM15.9999 24.375C18.3832 24.375 20.3749 23.5792 21.9749 21.9875C23.5749 20.3958 24.3749 18.4 24.3749 16C24.3749 13.6167 23.5749 11.625 21.9749 10.025C20.3749 8.425 18.3832 7.625 15.9999 7.625C13.6166 7.625 11.6249 8.42083 10.0249 10.0125C8.4249 11.6042 7.6249 13.6 7.6249 16C7.6249 18.3833 8.4249 20.375 10.0249 21.975C11.6249 23.575 13.6166 24.375 15.9999 24.375Z"
+                                                fill="#333333" />
+                                        </svg>
+                                      </li>
                                     </ul>
                                 </div>
                                 <button type="button" class="btn __btn __default _view"

@@ -69,4 +69,10 @@ export class HttpService {
     });
     return promise;
   }
+
+  delete(apiUrl: any) {
+    const url = this.baseUrl + apiUrl;
+    return this._http.delete(url, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
 }

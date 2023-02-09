@@ -1,0 +1,28 @@
+<div class="container-fluid">
+    <div class="preview_page_wrapper">
+        <div class="preview-form">
+            <div class="pointer flex v_center toolbar-top" (click)="handleBack()">
+                <span class="inherit" [innerHTML]="icon['BACK_ICON']"></span>
+                &nbsp; &nbsp;
+                <!-- <span class="pdf_name">
+                   
+                </span> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid relative pdfAction">
+  <div class="viewer_dialog mt20" *ngIf="previewUrl">
+      <!--<iframe [src]="previewUrl | safe" width="100%" height="500px"
+              frameborder="0">
+      </iframe>
+      <object [data]="previewUrl | safe" type="application/pdf">
+        <embed  [src]="previewUrl | safe" type="application/pdf" />
+      </object>-->
+    <!--<embed id="fgh" [src]="previewUrl | safe" type="application/pdf" width="400" height="400">-->
+    <iframe [src]="previewUrl | safe"  type="application/pdf" download ="test.pdf" title="test.pdf"  width="100%" height="500px"></iframe>
+  </div>
+</div>
+
+

@@ -30,7 +30,7 @@
                                 fill="#333333" />
                         </svg>
                     </button>
-                    <button type="button" class="btn __btn __default _ml_10 flex v_center h_center min_width_150" (click)="handlePreview()">Preview</button>
+                    <button type="button" class="btn __btn __default _ml_10 flex v_center h_center min_width_150" (click)="handlePreview()">Save & Preview</button>
                     <button type="button" class="btn __btn __theme _ml_10 flex v_center h_center min_width_150" (click)="haveStep1()">
                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -43,76 +43,81 @@
                 </div>
             </div>
             <div *ngIf="isEditHeader">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Manufacturer</label>
-                                    <input type="text" class="form-control" placeholder="Enter here" name='mfg'
-                                        [(ngModel)]="dialogConfig['pdfFiles']['mfg']" #mfg="ngModel"
-                                        (ngModelChange)="modelChanged($event)" maxlength="40">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Part#</label>
-                                    <input type="text" class="form-control" placeholder="Enter here" name='part'
-                                        [(ngModel)]="dialogConfig['pdfFiles']['part']" #part="ngModel"
-                                        (ngModelChange)="modelChanged($event)" maxlength="40">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Voltage</label>
-                                    <input type="text" class="form-control" placeholder="Enter here" name='volt'
-                                        [(ngModel)]="dialogConfig['pdfFiles']['volt']" #volt="ngModel"
-                                        (ngModelChange)="modelChanged($event)" maxlength="40">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Lamp</label>
-                                    <input type="text" class="form-control" placeholder="Enter here" name='lamp'
-                                        [(ngModel)]="dialogConfig['pdfFiles']['lamp']" #lamp="ngModel"
-                                        (ngModelChange)="modelChanged($event)" maxlength="40">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Dim</label>
-                                    <input type="text" class="form-control" placeholder="Enter here" name='dim'
-                                        [(ngModel)]="dialogConfig['pdfFiles']['dim']" #dim="ngModel"
-                                        (ngModelChange)="modelChanged($event)" maxlength="40">
-                                </div>
-                            </div>
-                            <div class="col-sm-4        ">
-                                <div class="form-group">
-                                    <label for="">Runs</label>
-                                    <input type="text" class="form-control" placeholder="Enter here" name='runs'
-                                        [(ngModel)]="dialogConfig['pdfFiles']['runs']" #runs="ngModel"
-                                        (ngModelChange)="modelChanged($event)" maxlength="40">
-                                </div>
-                            </div>
-                        </div>
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label for="">Manufacturer</label>
+                        <input type="text" class="form-control" placeholder="Enter here" name='mfg'
+                               [(ngModel)]="dialogConfig['pdfFiles']['mfg']" #mfg="ngModel"
+                               (ngModelChange)="modelChanged($event)" maxlength="40">
+                      </div>
+                      </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="">Voltage</label>
+                        <input type="text" class="form-control" placeholder="Enter here" name='volt'
+                               [(ngModel)]="dialogConfig['pdfFiles']['volt']" #volt="ngModel"
+                               (ngModelChange)="modelChanged($event)" maxlength="40">
+                      </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                          <label for="">NOTES</label>
-                            <textarea class="form-control text-area" placeholder="Enter here" name='description'
-                                [(ngModel)]="dialogConfig['pdfFiles']['description']" #description="ngModel"
-                                (ngModelChange)="modelChanged($event)" maxlength="300">
-
-                        </textarea>
-                        </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="">Dim</label>
+                        <input type="text" class="form-control" placeholder="Enter here" name='dim'
+                               [(ngModel)]="dialogConfig['pdfFiles']['dim']" #dim="ngModel"
+                               (ngModelChange)="modelChanged($event)" maxlength="40">
+                      </div>
                     </div>
+                  </div>
                 </div>
-                <div class="form-group flex v_center space_between">
-                    <div></div>
-                    <button class="btn __btn __theme" (click)="handleUpdateDetail()">
-                        Refresh Header
-                    </button>
+                 
+                <div class="col-sm-3">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label for="">Lamp</label>
+                        <input type="text" class="form-control" placeholder="Enter here" name='lamp'
+                               [(ngModel)]="dialogConfig['pdfFiles']['lamp']" #lamp="ngModel"
+                               (ngModelChange)="modelChanged($event)" maxlength="40">
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label for="">Runs</label>
+                        <input type="text" autocomplete="off" class="form-control" placeholder="Enter here" name='runs'
+                               [(ngModel)]="dialogConfig['pdfFiles']['runs']" #runs="ngModel"
+                               (ngModelChange)="modelChanged($event)" maxlength="40">
+                      </div>
+                    </div>
+                  </div>
                 </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="">Part#</label>
+                    <textarea type="text" autocomplete="off" class="form-control text-area" placeholder="Enter here" name='part'
+                              [(ngModel)]="dialogConfig['pdfFiles']['part']" #part="ngModel"
+                              (ngModelChange)="modelChanged($event)">
+                    </textarea>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="">NOTES</label>
+                    <textarea class="form-control text-area" placeholder="Enter here" name='description'
+                              [(ngModel)]="dialogConfig['pdfFiles']['description']" #description="ngModel"
+                              (ngModelChange)="modelChanged($event)" maxlength="300">
+                    </textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group flex v_center space_between">
+                <div></div>
+                <button class="btn __btn __theme" (click)="handleUpdateDetail()">
+                  Refresh Header
+                </button>
+              </div>
             </div>
 
         </div>
@@ -145,5 +150,5 @@
         </div>
     </ng-template>
 </p-dialog>
-
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <p-toast position="top-center" key="pdfEditorToast"></p-toast>

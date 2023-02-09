@@ -32,9 +32,11 @@ export class SubmittalsFormStep2Component implements OnInit {
   submittalData: any;
   tempSubmittalsTpl: any = [];
   openIndex = []
+  isMerged: boolean = false;
+  mergedURL: string = "";
   submittalsTpl: any = [
     {
-      name: ' ',
+      name: '',
       status: '',
       mfg: '',
       part: '',
@@ -54,7 +56,7 @@ export class SubmittalsFormStep2Component implements OnInit {
 
   }
   isDisabled = false;
-
+  isEdit = undefined;
   constructor(private route: ActivatedRoute, private messageService: MessageService, private httpService: HttpService, private router: Router, private _CustomService: CommonService, private _SubmittalService: SubmittalService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
@@ -68,6 +70,10 @@ export class SubmittalsFormStep2Component implements OnInit {
     );
   }
   updateOldState = () => {
+    if (this.isEdit == undefined)
+      this.isEdit = false;
+    else this.isEdit = true;
+    console.log(this.isEdit);
     this.tempSubmittalsTpl = JSON.parse(JSON.stringify(this.submittalsTpl))
   }
   updateLocalVariables = () => {
@@ -75,6 +81,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
   getSubmittalData(id: any) {
     this.httpService.get("Home/submittal/get/" + id + "").toPromise().then((value: any) => {
+      debugger;
       const tempData = JSON.parse(localStorage.getItem('submittalObject'));
       const updatedHeader = JSON.parse(localStorage.getItem('updatedHeader'));
       if (updatedHeader) {
@@ -95,28 +102,6 @@ export class SubmittalsFormStep2Component implements OnInit {
           localStorage.removeItem('updatedHeader');
         }
       }
-      // if (tempData) {
-      //   const index = tempData.submittalIndex;
-      //   const itemIndex = tempData.itemIndex;
-      //   const item = tempData.submitalData;
-      //   if (item) {
-      //     value.pdfFiles[index]['description'] = item['description'];
-      //     value.pdfFiles[index]['dim'] = item['dim'];
-      //     value.pdfFiles[index]['fileTmpPath'] = item['fileTmpPath'];
-      //     value.pdfFiles[index]['id'] = item['id'];
-      //     value.pdfFiles[index]['mfg'] = item['mfg'];
-      //     value.pdfFiles[index]['name'] = item['name'];
-      //     value.pdfFiles[index]['part'] = item['part'];
-      //     value.pdfFiles[index]['runs'] = item['runs'];
-      //     value.pdfFiles[index]['status'] = item['status'];
-      //     value.pdfFiles[index]['volt'] = item['volt'];
-      //     if (value.pdfFiles[index]['files'].length >= itemIndex) {
-      //       value.pdfFiles[index]['files'][itemIndex] = item['files']
-      //     } else {
-      //       value.pdfFiles[index]['files'][itemIndex].push(item['files'])
-      //     }
-      //   }
-      // }
       this.openIndex = [];
       value.pdfFiles && value.pdfFiles.map((item, index) => {
         this.openIndex.push(index.toString())
@@ -126,7 +111,21 @@ export class SubmittalsFormStep2Component implements OnInit {
       } else {
         this.openIndex.push('0')
       }
-
+      if (tempData && tempData.pdfFiles && tempData.pdfFiles.files) {
+        setTimeout(() => {
+          //let b = document.createElement('a');
+          //b.href = `${document.location.href}#${tempData.pdfFiles.id}`;
+          //b.click();
+          const julie = document.getElementById(tempData.pdfFiles.id);
+          const d:any = {
+            behavior: "smooth",
+            block: "center" ,
+            inline: "center" 
+          };
+          julie.scrollIntoView(d);
+          localStorage.removeItem('submittalObject');
+        }, 1000);
+      }
       this.updateOldState();
       this.submittalData = value;
     })
@@ -143,7 +142,7 @@ export class SubmittalsFormStep2Component implements OnInit {
 
   addMoreOption = () => {
     let item = JSON.parse(JSON.stringify(submittalItem));
-    item.name = " ";
+    item.name = "";
     item.isEdit = true;
     this.openIndex.push(this.submittalsTpl.length.toString());
     this.submittalsTpl.push(item);
@@ -168,15 +167,23 @@ export class SubmittalsFormStep2Component implements OnInit {
     this.isDisabled = false
   }
   duplicateSubmittals = (res: any) => {
+    debugger
     let item = JSON.parse(JSON.stringify(res.submittal));
     // item.name = "Type " + (this.submittalsTpl.length + 1);
-    item.name = " ";
+    item.name = "";
+    item.id=0;
     item.isDuplicate = true;
-    item.files = [];
+    for(var i=0; i < item.files.length;i++)
+    {
+      item.files[i].id=0;
+      item.files[i].pdfFileId=0;
+    }
     item.isEdit = true;
+    item.isCollapse = false;
     const nextIndex = this.submittalsTpl.length;
     this.openIndex.push(nextIndex.toString())
-    this.submittalsTpl.push(item);
+    this.submittalsTpl.splice(parseInt(res.itmindex)  + 1, 0, item);
+   // this.submittalsTpl.push(item);
     this.updateOldState();
   }
   duplicateSubmittalItem = (res: any) => {
@@ -204,7 +211,7 @@ export class SubmittalsFormStep2Component implements OnInit {
   }
 
   change_submittal_name = (res: any) => {
-    if (res.value && res.value !== ' ' && res.value !== " ") {
+    if (res.value && res.value.trim() !== '' && res.value.trim() !== "") {
       let arr = this.tempSubmittalsTpl;
       let temp = 0;
       arr.map((item: any, index: number) => {
@@ -216,6 +223,8 @@ export class SubmittalsFormStep2Component implements OnInit {
       if (temp == 0) {
         this.submittalsTpl[res.subIdx]['name'] = res.value
       } else {
+        this.toastMsg('error', 'Error', 'Name Already Exists', 2000);
+        res.event.target.focus();
         this.submittalsTpl[res.subIdx]['name'] = this.tempSubmittalsTpl[res.subIdx]['name'];
       }
       this.isDisabled = false
@@ -231,20 +240,24 @@ export class SubmittalsFormStep2Component implements OnInit {
     if (res.action == 'delete') {
       this.removeSubmittals(res)
     } else if (res.action == 'SaveAsDraft') {
-      this.handleSaveAction(res.data)
-      // this.handleMergePdp(true);
+      if (this.isEdit)
+        this.handleMergePdp(true, res.callback);
+      else res?.callback && res?.callback({});
     } else if (res.action == 'duplicate') {
       this.duplicateSubmittals(res)
     } else if (res.action == 'move') {
-      this.arraymove(res)
+      this.arraymove(res);
     } else if (res.action == 'move_item') {
-      this.move_sub_itms(res)
+      this.move_sub_itms(res);
     } else if (res.action == 'copyItem') {
-      this.duplicateSubmittalItem(res)
+      this.duplicateSubmittalItem(res);
     } else if (res.action == 'change_name') {
       this.change_submittal_name(res)
     } else if (res.action == 'edit_name') {
       this.submittalsTpl[res.subIdx]['isEdit'] = true;
+    } else if (res.action == 'change_collapse') {
+      this.submittalsTpl[res.idx]['isCollapse'] = !this.submittalsTpl[res.idx]['isCollapse'];
+      this.updateOldState();
     }
 
   }
@@ -263,19 +276,31 @@ export class SubmittalsFormStep2Component implements OnInit {
     formData.files.annotations = ''
     formData.files.annotation = ''
     this.httpService.fileupload(url, formData, null, null).subscribe(res => {
-      config.pdfActionConfig.pdfFiles = res;
-      localStorage.removeItem('submittalObject');
+      config.pdfActionConfig.pdfFiles = res;      
       localStorage.setItem('submittalObject', JSON.stringify(config.pdfActionConfig));
-      this.router.navigate([config.pdfActionConfig.config.returnUrl]);
+      this.router.navigate([config.pdfActionConfig.config.returnUrl]);    
     })
 
   }
-  handleMergePdp = async (isDraft) => {
+  handleMergePdp = async (isDraft,callback?) => {
     this._CustomService.show();
+    debugger;
     let temp: any = [];
     //this.submittalsTpl.map((ele: any, index: number) => {
+    let files = this.submittalsTpl.filter(x => (x.files?.length || 0) > 0);
+    if (!isDraft && files.length <= 0) {
+      this.toastMsg('error', 'Error', 'The system should only merge if the user uploads a pdf.', 2000);
+      this._CustomService.hide();
+      return;
+    }
     for (let i = 0; i < this.submittalsTpl.length; i++) {
       let ele = this.submittalsTpl[i];
+      if (ele.name.trim() == '') {
+        this.toastMsg('error', 'Error', 'Section name should not blank', 2000);
+        this._CustomService.hide();
+        return;
+      }
+     
       let item: any = {
         name: ele.name,
         status: ele.status,
@@ -287,30 +312,42 @@ export class SubmittalsFormStep2Component implements OnInit {
         lamp: ele.lamp,
         dim: ele.dim,
         runs: ele.runs,
-        files: ele.files
+        files: ele.files,
+        order: i,
+        isCollapse: ele.isCollapse
       }
       //item.files.forEach(async element => {
       for (let j = 0; j < item.files.length; j++) {
+        item.files[j].order = j;
         const element = item.files[j];
+        item.reorderData = null;
+        if (element.reorderIndexes) {
+          try {
+            let reorder = JSON.parse(element.reorderIndexes)
+            if (Array.isArray(reorder)) {
+              item.reorderData = reorder
+            }
+          }
+          catch { }
+        }
         if (!isDraft) {
           let fileurl = this.httpService.getBaseUrl() + "Home/download?bloburl=" + element.fileName;
           if (element.annotations) {
-            let expressObj = await this.getMergedPdfWithAnnotations(element.annotations, item, fileurl);
+            let expressObj = await this.getMergedPdfWithAnnotations(element.annotations, item, fileurl, element.orgFileName);
             item.files[j].expressKey = expressObj.key;
             item.files[j].expressUrl = expressObj.url;
             item.files[j].expressId = expressObj.id;
-            this._CustomService.hide();
           }
           else {
             let expressObj = await this.createPdfHeaders(item, fileurl, 2, element.orgFileName);
             item.files[j].tempFileName = expressObj.fileName;
-            this._CustomService.hide();
           }
         }
       }
       //});
       temp.push(item)
     }
+    this._CustomService.hide();
     //})
     this.updateOldState();
     let postDto = {
@@ -318,40 +355,72 @@ export class SubmittalsFormStep2Component implements OnInit {
       isDraft: isDraft,
       pdfFiles: temp
     }
-    this.httpService.post("home/files/merge", postDto).toPromise().then(value => {
+    this.httpService.post("home/files/merge", postDto).toPromise().catch((reason) => { this.toastMsg('error', 'Error', 'Something went wrong.', 2000);}).then(value=>{
       this._CustomService.hide();
-      if (!isDraft) {
-        this.postAjax()
-      } else {
-        this.getSubmittalData(this.id);
-        this.toastMsg('success', 'Success', 'Submittal saved successfully', 2000);
+      if (value) {
+        if (!isDraft) {
+          this.postAjax(value)
+        } else {
+          this.getSubmittalData(this.id);
+          if (callback) callback(value);
+          this.toastMsg('success', 'Success', 'Submittal saved successfully', 2000);
+        }
       }
+     
     });
   }
   toastMsg(severity: any, summary: any, detail: any, life: any) {
     this.messageService.add({ key: 'detailFormToast', severity: severity, summary: summary, detail: detail, life: life, closable: true });
   }
-  postAjax = () => {
+  postAjax = (val: any = null) => {
+    if (val.fileUrl) {
+      this.isMerged = true;
+      this.mergedURL = val.fileUrl;
+      return;
+    }
     let url = `/submittals/merge/${this.id}`;
     this.router.navigate([url]);
   }
-  getMergedPdfWithAnnotations = async (xfdf: string, item: any, fileUrl: string): Promise<any> => {
+  getMergedPdfWithAnnotations = async (xfdf: string, item: any, fileUrl: string,fileName:string): Promise<any> => {
     // const fileData = await fetch(fileUrl).then(res => res.arrayBuffer());
     // const blob = new Blob([fileData], {type: 'application/pdf'});
     const blob = await this.createPdfHeaders(item, fileUrl, 1, "");
-
+    debugger;
+    const win = (window as any);
+    const pdfcon = win.pdf;
     const data = new FormData();
     data.append('xfdf', xfdf);
-    data.append('file', blob);
-    //data.append('license', my_license_key);
+    console.log('blob'+blob.size);
+    if (blob.size < 5000000)
+      data.append('file', blob);
+    else {
+      let response = { filePath:""};
+      const data1 = new FormData();
+      data1.append('fileName', fileName);
+      data1.append('file', blob);
+      await this.httpService.fileupload('home/upload/header', data1, null, null).toPromise().then(value => {
+        response = value;
+      });
+      data.append('file', response.filePath );
+    }
+    if (!win.isEmpty(pdfcon.ml))
+      data.append('license', pdfcon.ml);
 
     // Process the file
-    const response = await fetch('https://api.pdfjs.express/xfdf/merge', {
+    const response = await fetch(win.isEmpty(pdfcon.mu) ? 'https://api.pdfjs.express/xfdf/merge':pdfcon.mu, {
       method: 'post',
       body: data
-    }).then(resp => resp.json());
+    }).then(resp => {
+      if (resp.ok) {
+        return resp.json();
+      } throw new Error('Something went wrong');
+    }).catch((error) => {
+        this._CustomService.hide();
+        this.toastMsg('error', 'Error', 'Something went wrong.', 2000);
 
-    const { url, key, id } = response;
+    });;
+
+    
 
     // Download the file
     /*const mergedFileBlob = await fetch(url, {
@@ -378,5 +447,10 @@ export class SubmittalsFormStep2Component implements OnInit {
       return response;
     }
     return blobDoc;
+  }
+  doAllCollapseOrExpand = (isCollapse: boolean) =>
+  {
+    this.submittalsTpl.map(x => x['isCollapse'] = isCollapse);
+    this.updateOldState();
   }
 }

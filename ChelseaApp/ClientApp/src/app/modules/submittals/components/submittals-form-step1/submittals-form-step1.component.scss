@@ -56,16 +56,17 @@
 .__address_grid {
     margin: 0 -15px;
     .col-same-height {
-        width: auto;
+        width:50%;
         padding: 0 15px;
         .__a_list {
-            width: 238px;
+            width: 100%;
             background: #ffffff;
             border: 1px solid #dbdcdf;
             border-radius: 2px;
             padding: 10px 10px 10px 30px;
             cursor: pointer;
             position: relative;
+            margin-bottom:20px;
             .__r_btn {
                 position: absolute;
                 left: 15px;

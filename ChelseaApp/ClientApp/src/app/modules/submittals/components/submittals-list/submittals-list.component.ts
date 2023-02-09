@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../../../../components/http.service';
-
+import { ConfirmationService, MessageService } from 'primeng/api';
 @Component({
   selector: 'app-submittals-list',
   templateUrl: './submittals-list.component.html',
-  styleUrls: ['./submittals-list.component.scss']
+  styleUrls: ['./submittals-list.component.scss'],
+  providers: [ConfirmationService,MessageService]
 })
 export class SubmittalsComponent implements OnInit {
   list: any = [];
@@ -15,9 +16,9 @@ export class SubmittalsComponent implements OnInit {
   page = 1;
   totalRecords;
   rowsPerPageOptions = [10, 20, 30];
-  pagingInfo: any;
+  pagingInfo:any;
   httpService: HttpService;
-  constructor(httpService: HttpService) {
+  constructor(httpService: HttpService,private confirmationService: ConfirmationService, private messageService: MessageService) {
     this.httpService = httpService;
 
   }
@@ -35,11 +36,11 @@ export class SubmittalsComponent implements OnInit {
     });
   }
   renderPaging = () => {
-    this.pagingInfo = {
-      start: ((this.page - 1) * this.pageSize + 1),
+    this.pagingInfo={
+      start:((this.page - 1) * this.pageSize + 1),
       end: (this.pageSize * this.page > this.totalRecords ? this.totalRecords : this.pageSize * this.page)
     }
-
+    
   }
   searchList() {
     this.bindSubmittalsGrid()
@@ -78,10 +79,28 @@ export class SubmittalsComponent implements OnInit {
     }
     return (n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
   }
-  fnClone(id: number) {
+  fnClone(id:number){
     let url = `Home/submittal/clone/${id}`
     this.httpService.get(url).toPromise().then((value: any) => {
+      this.toastMsg('success', 'Success', 'Copied successfully', 2000);
       this.bindSubmittalsGrid();
     });
+  }
+
+  handleRemoveSelectedSubmittal = (id:number) => {  
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to delete this record ?',
+      accept: () => {
+        let url = `Home/${id}`
+        this.httpService.delete(url).toPromise().then((value: any) => {  
+          this.toastMsg('success', 'Success', 'Delete successfully', 2000);   
+          this.bindSubmittalsGrid();
+        });
+      }
+    });
+  }
+
+  toastMsg(severity: any, summary: any, detail: any, life: any) {
+    this.messageService.add({ key: 'list', severity: severity, summary: summary, detail: detail, life: life, closable: true });
   }
 }

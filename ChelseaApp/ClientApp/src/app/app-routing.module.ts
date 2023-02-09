@@ -4,6 +4,15 @@ import { LoginComponent } from './components/login/login.component';
 import { TncComponent } from './components/tnc/tnc.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
 import { MsalGuard } from '@azure/msal-angular';
+const win = (window as any);
+const authpath = (win.azure.isOn == 'true' || win.azure.isOn == "true" || win.azure.isOn == "True") ? {
+  path: 'submittals',
+  loadChildren: () => import('./modules/submittals/submittals.module').then(mod => mod.SubmittalsModule),
+  canActivate: [MsalGuard]
+} : {
+  path: 'submittals',
+  loadChildren: () => import('./modules/submittals/submittals.module').then(mod => mod.SubmittalsModule),
+};
 const routes: Routes = [
   {
     path: '', redirectTo: 'login', pathMatch: 'full'
@@ -11,11 +20,7 @@ const routes: Routes = [
   {
     path: 'login', component: LoginComponent
   },
-  {
-    path: 'submittals',
-    loadChildren: () => import('./modules/submittals/submittals.module').then(mod => mod.SubmittalsModule),
-    canActivate: [MsalGuard]
-  },
+  authpath,
   {
     path: 'tnc', component: TncComponent
   },

@@ -24,13 +24,8 @@ const protectedResourceMap = new Map<string, Array<string>>();
 protectedResourceMap.set("https://graph.microsoft.com/v1.0/me", ["user.read"]);
 /*protectedResourceMap.set('/Home', ['api://099f3f1c-b126-4930-80ff-497c03969be5/access_as_user']);*/
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
-/*const azure = (window as any).azure || {} ;*/
-const azure = {
-  authority: "https://login.microsoftonline.com/e6008c01-40e7-4192-897c-43891c1d8fac",
-  cacheLocation: "sessionStorage",
-  clientId: "4b85dede-5bb5-48b5-a879-7f8637706923",
-  redirectUri: "/submittals"
-};
+const azure = (window as any).azure || {} ;
+
 @NgModule({
   declarations: [
     AppComponent,
