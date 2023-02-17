@@ -17,7 +17,7 @@ import { from } from 'rxjs';
   selector: 'app-pdf-editor-action',
   templateUrl: './pdf-editor-action.component.html',
   styleUrls: ['./pdf-editor-action.component.scss'],
-  providers: [PrimeNGConfig, MessageService,ConfirmationService]
+  providers: [PrimeNGConfig, MessageService, ConfirmationService]
 })
 export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer1', { static: false }) viewer1: ElementRef;
@@ -26,13 +26,13 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   isEditHeader: any = true;
   wvInstance: any;
   isFormSaved = true;
-  fileBytes:ArrayBuffer;
+  fileBytes: ArrayBuffer;
   id: any
   reorderData = []
   pdfSaveForm: any = {
     pdfFileName: ''
   }
-  user:string = 'JD'
+  user: string = 'JD'
   dialogConfig: any = null;
   icon: any = {
     BACK_ICON: ''
@@ -59,8 +59,8 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
     return this.isFormSaved
   }
-  okCallback = async() => {
-     this.handleSaveAction();
+  okCallback = async () => {
+    this.handleSaveAction();
   }
   toggleEditHeader = () => {
     this.isEditHeader = !this.isEditHeader
@@ -86,7 +86,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     }, this.viewer1.nativeElement).then(instance => {
       this.wvInstance = instance;
       this.wvInstance.annotManager.setCurrentUser(this.user)
-      var files = this.dialogConfig  && this.dialogConfig['pdfFiles'];
+      var files = this.dialogConfig && this.dialogConfig['pdfFiles'];
       if (files && files.files && files.files.reorderIndexes) {
         try {
           let reorder = JSON.parse(files.files.reorderIndexes)
@@ -126,8 +126,11 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         'squigglyToolButton',
         'strikeoutToolButton',
         'outlinesPanelButton',
-        'documentControl'
-        
+        'documentControl',
+        'toolbarGroup-Shapes',
+        'toolbarGroup-Insert',
+        'toolbarGroup-FillAndSign'
+
       ]);
       const ToolNames = this.wvInstance.Tools.ToolNames;
       this.wvInstance.setColorPalette({
@@ -138,7 +141,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
           '#0000FF',
           'transparency'
         ],
-        defaults: [{StrokeColor:'#FF0000'}]
+        defaults: [{ StrokeColor: '#FF0000' }]
       });
       this.wvInstance.setColorPalette({
         toolNames: [ToolNames['HIGHLIGHT']],
@@ -147,18 +150,18 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         ],
         defaults: [{ StrokeColor: '#FFFF00' }]
       });
-     this.wvInstance.setColorPalette({
+      this.wvInstance.setColorPalette({
         toolNames: [ToolNames['RECTANGLE']],
         colors: [
           '#ffffff',
           '#FF0000',
-          '#0000FF','#008000' 
+          '#0000FF', '#008000'
         ],
         defaults: [{ StrokeColor: '#008000' }]
       });
       this.wvInstance.updateTool(ToolNames['FREEHAND'], {
         buttonImage: this._SubmittalService.FREEHAND_ICON(),
-        
+
       });
       this.viewer1.nativeElement.addEventListener('pageChanged', (e) => {
         const [pageNumber] = e.detail;
@@ -171,7 +174,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       //   //   this.wvInstance.annotManager.deleteAnnotations(annots);
       //   // }
       // });
-      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)      
+      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
     })
   }
   updatePagnation = (instance) => {
@@ -179,7 +182,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
   }
   adjustSelectedAnnot = (x, y, event) => {
-   const { annotManager } = this.wvInstance;
+    const { annotManager } = this.wvInstance;
     const selectedAnnots = annotManager.getSelectedAnnotations();
 
     if (!selectedAnnots || selectedAnnots.length === 0) {
@@ -247,9 +250,9 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
         //  }
         //});
         if (confirm(`Are you sure that you want to delete page ${currentPage} from document ?`)) {
-              this.wvInstance.openElements(['loadingModal']);
-              await this.setDelete(currentPage);
-              await this.handleUpdateDetail();
+          this.wvInstance.openElements(['loadingModal']);
+          await this.setDelete(currentPage);
+          await this.handleUpdateDetail();
         }
       },
       dataElement: 'delete',
@@ -334,7 +337,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
               customPagerFirst.id = 'customPagerFirst';
               customPagerFirst.innerHTML = this._SubmittalService.CUSTOMPAGER_FIRST();
               customPagerFirst.onclick = () => {
-                
+
                 let currentPage = docViewer.getCurrentPage();
                 if (currentPage > 1) {
                   this.wvInstance.goToFirstPage()
@@ -385,8 +388,8 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
               input.style = "width:30px; border:1px solid gray; margin-right:5px;";
               let customReorderButton: any = document.createElement('div');
               customReorderButton.id = 'customReorderButton';
-              customReorderButton.classList.add("Button", "hide-in-tablet", "hide-in-mobile",'down-arrow');
-              customReorderButton.innerHTML = '<span style="background: rgb(117, 117, 117);color: rgb(255, 255, 255);border: 1px solid rgb(117, 117, 117);border-radius: 2px;height: 18px;font-size: 12px;padding: 6px 6px 3px 6px;margin-right: 3px;">Change Page #</span>'
+              customReorderButton.classList.add("Button", "hide-in-tablet", "hide-in-mobile", 'down-arrow');
+              customReorderButton.innerHTML = '<span style="background: rgb(117, 117, 117);color: rgb(255, 255, 255);border: 1px solid rgb(117, 117, 117);border-radius: 2px;height: 30px;font-size: 12px;padding: 3px; margin-right: 3px; white-space:nowrap; line-height:20px">Change Page #</span>'
               customReorderButton.onclick = (evt) => {
                 let currentPage = docViewer.getCurrentPage();
                 input.value = currentPage;
@@ -398,11 +401,11 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
                   tool[0].classList.toggle("open");
                 }
                 else {
-                  var div : any = document.createElement('div');
+                  var div: any = document.createElement('div');
                   div.style = "position: absolute;right: 20px;background: #fff;padding: 15px;";
                   div.classList.add("Overlay", "ToolsOverlay", "open");
                   div.dataset.element = "toolsOverlays";
-                  
+
                   div.appendChild(input);
 
                   var span: any = document.createElement('span');
@@ -441,31 +444,31 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
                           s > d && annot.setPageNumber(d + 1);
                         }
                         else if (s < d && pageno > s && pageno < d) {
-                          annot.setPageNumber(pageno-1);
+                          annot.setPageNumber(pageno - 1);
                         }
                         else if (s > d && pageno < s && pageno > d) {
                           annot.setPageNumber(pageno + 1);
                         }
                       });
-                    
-                   await this.setReorderData(s, d);
+
+                    await this.setReorderData(s, d);
                     input.value = input1.value;
                     input1.value = '';
-                   await this.handleUpdateDetail();
+                    await this.handleUpdateDetail();
                     return true;
                   }
                   div.appendChild(button);
 
                   evt.currentTarget.closest('#app').querySelectorAll('div')[0].appendChild(div);
                 }
-               
-               
-               
+
+
+
               };
 
               var form: any = document.createElement('div');
               form.style = "display: flex; align-items:center; border-radius: 10px;padding: 10px;cursor: pointer;";
-             // form.appendChild(rotade);
+              // form.appendChild(rotade);
               form.appendChild(pager);
               form.appendChild(customPagerFirst);
               form.appendChild(customPagerPrev);
@@ -473,42 +476,42 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
               form.appendChild(customPagerlast);
               form.appendChild(partition);
               form.appendChild(customReorderButton);
-              
+
               return form;
             }
           });
         }
-        
+
         header.update(items);
       }
     });
-    
-      // this.wvInstance.docViewer.setColorPalette({
-      //     StrokeColor: new this.wvInstance.Core.Annotations.Color(0, 221, 255)
-      // });
-    
-      // this.wvInstance.docViewer.getTool('AnnotationCreateFreeText').setDe({
-      //   StrokeThickness: 5,
-      //   StrokeColor: new this.wvInstance.Core.Annotations.Color(0, 0, 255),
-      //   TextColor: new this.wvInstance.Core.Annotations.Color(0, 0, 0),
-      //   FontSize: '20pt'
-      // });
+
+    // this.wvInstance.docViewer.setColorPalette({
+    //     StrokeColor: new this.wvInstance.Core.Annotations.Color(0, 221, 255)
+    // });
+
+    // this.wvInstance.docViewer.getTool('AnnotationCreateFreeText').setDe({
+    //   StrokeThickness: 5,
+    //   StrokeColor: new this.wvInstance.Core.Annotations.Color(0, 0, 255),
+    //   TextColor: new this.wvInstance.Core.Annotations.Color(0, 0, 0),
+    //   FontSize: '20pt'
+    // });
 
     const { annotManager } = this.wvInstance;
     //var xfdfData = localStorage.getItem('annotations');
     let submitalData = this.dialogConfig && this.dialogConfig['pdfFiles'];
     let xfdfData = submitalData.files.annotations;
-      if (xfdfData) {
+    if (xfdfData) {
       //xfdfData = xfdfData.replaceAll(",readonly,locked,lockedcontents", "");
-          await annotManager.importAnnotations(xfdfData);
-          const list = annotManager.getAnnotationsList();
-          list.forEach((item) => {
-              item.ReadOnly = false;
-              item.Locked = false;
-              item.LockedContents = false;
-           });
-          //annotManager.setReadOnly(list);
-          annotManager.setIsAdminUser(list);
+      await annotManager.importAnnotations(xfdfData);
+      const list = annotManager.getAnnotationsList();
+      list.forEach((item) => {
+        item.ReadOnly = false;
+        item.Locked = false;
+        item.LockedContents = false;
+      });
+      //annotManager.setReadOnly(list);
+      annotManager.setIsAdminUser(list);
       //const list = annotManager.getAnnotationsList();
       //list.forEach((item) => {
       //  item.ReadOnly = false;
@@ -530,7 +533,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
               this.adjustSelectedAnnot(-1, 0, event)
             else if (angle == 270 && angle % 270 == 0)
               this.adjustSelectedAnnot(0, 1, event)
-            else 
+            else
               this.adjustSelectedAnnot(1, 0, event)
 
             break;
@@ -544,7 +547,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
             else if (angle == 270 && angle % 270 == 0)
               this.adjustSelectedAnnot(0, -1, event)
             else
-            this.adjustSelectedAnnot(-1, 0, event)
+              this.adjustSelectedAnnot(-1, 0, event)
             break;
           }
         case 'ArrowUp':
@@ -556,7 +559,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
             else if (angle == 270 && angle % 270 == 0)
               this.adjustSelectedAnnot(1, 0, event)
             else
-            this.adjustSelectedAnnot(0, -1, event)
+              this.adjustSelectedAnnot(0, -1, event)
             break
           }
         case 'ArrowDown':
@@ -568,7 +571,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
             else if (angle == 270 && angle % 270 == 0)
               this.adjustSelectedAnnot(-1, 0, event)
             else
-            this.adjustSelectedAnnot(0, 1, event)
+              this.adjustSelectedAnnot(0, 1, event)
             break;
           }
       }
@@ -577,7 +580,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
   haveStep1 = async () => {
     //this.isSavePdfDialog = true;
-   await this.handleSaveAction();
+    await this.handleSaveAction();
   }
   saveCancel = () => {
     this.isSavePdfDialog = false;
@@ -595,7 +598,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       //  item.LockedContents = true;
       // });
       //annotManager.setReadOnly(list);
-        annotManager.setIsAdminUser(list);
+      annotManager.setIsAdminUser(list);
       const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
       localStorage.setItem('annotations', xfdf);
       let submitalData = this.dialogConfig && this.dialogConfig['pdfFiles'];
@@ -632,7 +635,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
 
   }
   setReorderData = async (fromSource: number, fromTo: number) => {
-    
+
     if (!this.fileBytes) {
       this.fileBytes = await PdfHelperService.GetPdfBytes(this.dialogConfig.config.previewUrl);
     }
@@ -677,7 +680,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
   createHeader = async (previewUrl, pdfFiles) => {
     let blobDoc;
     if (this.fileBytes) {
-      blobDoc  = await PdfHelperService.SetPdfHeader(this.fileBytes, pdfFiles);
+      blobDoc = await PdfHelperService.SetPdfHeader(this.fileBytes, pdfFiles);
     }
     else {
       blobDoc = await PdfHelperService.CreatePdfHeader(previewUrl, pdfFiles);
@@ -700,7 +703,7 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
     }, 5000)
     const tempPdfFiles = this.dialogConfig && this.dialogConfig['pdfFiles'];
     let pdfFiles = {
-      name:tempPdfFiles.name,
+      name: tempPdfFiles.name,
       mfg: tempPdfFiles.mfg,
       part: tempPdfFiles.part,
       description: tempPdfFiles.description,
@@ -711,10 +714,10 @@ export class PdfEditorActionComponent implements OnInit, AfterViewInit {
       reorderData: this.reorderData
     }
     this.isFormSaved = false;
-    this._CustomService.show();    
+    this._CustomService.show();
     const { annotManager } = this.wvInstance;
     const xfdf = await annotManager.exportAnnotations({ links: false, widgets: false });
-    this.dialogConfig['pdfFiles'].files.annotations=xfdf;
+    this.dialogConfig['pdfFiles'].files.annotations = xfdf;
     this.createHeader(this.dialogConfig.config.previewUrl, pdfFiles);
   }
 }
